@@ -3,6 +3,8 @@ package com.shaolonger.monitorplatform.utils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class PageResultBase<T> {
@@ -14,4 +16,6 @@ public class PageResultBase<T> {
     private long pageNum;
     // 每页数目
     private long pageSize;
+    // 返回的数据
+    private List<T> records;
 }

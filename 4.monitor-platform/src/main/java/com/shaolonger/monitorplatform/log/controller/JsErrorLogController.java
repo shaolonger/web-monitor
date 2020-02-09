@@ -17,7 +17,7 @@ public class JsErrorLogController {
     private JsErrorLogService jsErrorLogService;
 
     @RequestMapping(value = "/findByQueries", method = RequestMethod.GET)
-    public Object findByQueries(HttpServletRequest request) throws Exception {
+    public Object findByQueries(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(jsErrorLogService.findByQueries(request));
     }
 }
