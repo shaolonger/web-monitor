@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/2/8 8:55:53                             */
+/* Created on:     2020/2/9 18:28:45                            */
 /*==============================================================*/
 
 
@@ -16,6 +16,8 @@ drop table if exists pms_project;
 
 drop table if exists ums_user;
 
+drop table if exists ums_user_project_relation;
+
 /*==============================================================*/
 /* Table: lms_custom_error_log                                  */
 /*==============================================================*/
@@ -23,6 +25,7 @@ create table lms_custom_error_log
 (
    id                   bigint not null,
    log_type             varchar(50) not null,
+   project_id           bigint not null,
    create_time          datetime not null,
    user_id              bigint not null,
    user_name            varchar(64),
@@ -47,6 +50,7 @@ create table lms_http_error_log
 (
    id                   bigint not null comment '主键',
    log_type             varchar(50) not null comment '日志类型',
+   project_id           bigint not null,
    create_time          datetime not null,
    user_id              bigint not null,
    user_name            varchar(64),
@@ -75,6 +79,7 @@ create table lms_js_error_log
 (
    id                   bigint not null,
    log_type             varchar(50) not null,
+   project_id           bigint not null,
    create_time          datetime not null,
    user_id              bigint not null,
    user_name            varchar(64),
@@ -100,6 +105,7 @@ create table lms_resource_load_error_log
 (
    id                   bigint not null comment '主键',
    log_type             varchar(50) not null comment '日志类型',
+   project_id           bigint not null,
    create_time          datetime not null,
    user_id              bigint not null,
    user_name            varchar(64),
@@ -151,4 +157,35 @@ create table ums_user
 );
 
 alter table ums_user comment '用户表';
+
+/*==============================================================*/
+/* Table: ums_user_project_relation                             */
+/*==============================================================*/
+create table ums_user_project_relation
+(
+   id                   bigint not null,
+   user_id              bigint not null,
+   project_id           bigint not null,
+   primary key (id)
+);
+
+alter table ums_user_project_relation comment '用户与项目的关系表';
+
+alter table lms_custom_error_log add constraint FK_Reference_4 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
+
+alter table lms_http_error_log add constraint FK_Reference_2 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
+
+alter table lms_js_error_log add constraint FK_Reference_1 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
+
+alter table lms_resource_load_error_log add constraint FK_Reference_3 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
+
+alter table ums_user_project_relation add constraint FK_Reference_5 foreign key (user_id)
+      references ums_user (id) on delete restrict on update restrict;
+
+alter table ums_user_project_relation add constraint FK_Reference_6 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
 
