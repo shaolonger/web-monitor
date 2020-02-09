@@ -31,10 +31,10 @@ public class JsErrorLogService {
         String logType = request.getParameter("logType");
         Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
-        String userName = request.getParameter("userName");
-        String pageUrl = request.getParameter("pageUrl");
-        String errorType = request.getParameter("errorType");
-        String errorMessage = request.getParameter("errorMessage");
+        String userName = "%" + request.getParameter("userName") + "%";
+        String pageUrl = "%" + request.getParameter("pageUrl") + "%";
+        String errorType = "%" + request.getParameter("errorType") + "%";
+        String errorMessage = "%" + request.getParameter("errorMessage") + "%";
 
         // 分页查询
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
@@ -53,26 +53,24 @@ public class JsErrorLogService {
 
     /**
      * 新增
-     * @param request
+     * @param jsErrorLog
      * @return
      */
-    public Object add(HttpServletRequest request) {
-        JsErrorLog jsErrorLog = new JsErrorLog();
-
+    public Object add(JsErrorLog jsErrorLog) {
         // 获取请求参数
-        String logType = request.getParameter("logType");
-        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
-        String userName = request.getParameter("userName");
-        String pageUrl = request.getParameter("pageUrl");
-        String pageKey = request.getParameter("pageKey");
-        String deviceName = request.getParameter("deviceName");
-        String os = request.getParameter("os");
-        String browserName = request.getParameter("browserName");
-        String browserVersion = request.getParameter("browserVersion");
-        String ipAddress = request.getParameter("ipAddress");
-        String errorType = request.getParameter("errorType");
-        String errorMessage = request.getParameter("errorMessage");
-        String errorStack = request.getParameter("errorStack");
+        String logType = jsErrorLog.getLogType();
+        Long userId = jsErrorLog.getUserId();
+        String userName = jsErrorLog.getUserName();
+        String pageUrl = jsErrorLog.getPageUrl();
+        String pageKey = jsErrorLog.getPageKey();
+        String deviceName = jsErrorLog.getDeviceName();
+        String os = jsErrorLog.getOs();
+        String browserName = jsErrorLog.getBrowserName();
+        String browserVersion = jsErrorLog.getBrowserVersion();
+        String ipAddress = jsErrorLog.getIpAddress();
+        String errorType = jsErrorLog.getErrorType();
+        String errorMessage = jsErrorLog.getErrorMessage();
+        String errorStack = jsErrorLog.getErrorStack();
 
         // 创建时间
         Date createTime = new Date();
