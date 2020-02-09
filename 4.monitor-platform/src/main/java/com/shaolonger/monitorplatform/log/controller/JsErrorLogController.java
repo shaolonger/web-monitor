@@ -16,8 +16,23 @@ public class JsErrorLogController {
     @Autowired
     private JsErrorLogService jsErrorLogService;
 
+    /**
+     * 多条件查询
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/findByQueries", method = RequestMethod.GET)
     public Object findByQueries(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(jsErrorLogService.findByQueries(request));
+    }
+
+    /**
+     * 新增或编辑
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Object add(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(jsErrorLogService.add(request));
     }
 }

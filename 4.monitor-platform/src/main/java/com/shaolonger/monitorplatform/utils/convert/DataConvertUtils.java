@@ -37,4 +37,19 @@ public class DataConvertUtils {
         }
         return i;
     }
+
+    /**
+     * String转Long
+     * @param str 字符串
+     * @return int
+     */
+    public static Long strToLong(String str) {
+        Long l = null;
+        try {
+            l = Long.parseLong(str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
 }

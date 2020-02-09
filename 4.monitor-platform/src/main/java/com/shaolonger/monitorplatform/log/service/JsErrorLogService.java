@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +19,11 @@ public class JsErrorLogService {
     @Autowired
     private JsErrorLogDao jsErrorLogDao;
 
+    /**
+     * 条件查询
+     * @param request
+     * @return
+     */
     public Object findByQueries(HttpServletRequest request) {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
@@ -45,5 +49,51 @@ public class JsErrorLogService {
         pageResultBase.setPageSize(pageSize);
         pageResultBase.setRecords(page.getContent());
         return pageResultBase;
+    }
+
+    /**
+     * 新增
+     * @param request
+     * @return
+     */
+    public Object add(HttpServletRequest request) {
+        JsErrorLog jsErrorLog = new JsErrorLog();
+
+        // 获取请求参数
+        String logType = request.getParameter("logType");
+        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String pageKey = request.getParameter("pageKey");
+        String deviceName = request.getParameter("deviceName");
+        String os = request.getParameter("os");
+        String browserName = request.getParameter("browserName");
+        String browserVersion = request.getParameter("browserVersion");
+        String ipAddress = request.getParameter("ipAddress");
+        String errorType = request.getParameter("errorType");
+        String errorMessage = request.getParameter("errorMessage");
+        String errorStack = request.getParameter("errorStack");
+
+        // 创建时间
+        Date createTime = new Date();
+
+        // 保存实体
+        jsErrorLog.setLogType(logType);
+        jsErrorLog.setUserId(userId);
+        jsErrorLog.setUserName(userName);
+        jsErrorLog.setPageUrl(pageUrl);
+        jsErrorLog.setPageKey(pageKey);
+        jsErrorLog.setDeviceName(deviceName);
+        jsErrorLog.setOs(os);
+        jsErrorLog.setBrowserName(browserName);
+        jsErrorLog.setBrowserVersion(browserVersion);
+        jsErrorLog.setIpAddress(ipAddress);
+        jsErrorLog.setErrorType(errorType);
+        jsErrorLog.setErrorMessage(errorMessage);
+        jsErrorLog.setErrorStack(errorStack);
+        jsErrorLog.setCreateTime(createTime);
+        jsErrorLogDao.save(jsErrorLog);
+
+        return jsErrorLog;
     }
 }
