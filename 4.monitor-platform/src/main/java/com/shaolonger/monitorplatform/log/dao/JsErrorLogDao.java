@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 
 public interface JsErrorLogDao extends JpaRepository<JsErrorLog, Long> {
-    @Query(value = "select l from JsErrorLog l where (l.logType=?1) and (l.createTime>=?2 and l.createTime<=?3) and (l.userName like ?4) and (l.pageUrl like ?5) and (l.errorType like ?6) and (l.errorMessage like ?7)")
-    Page<JsErrorLog> findByQueries(String logType, Date startTime, Date endTime, String userName, String pageUrl, String errorType, String errorMessage, Pageable pageable);
+    @Query(value = "select l from JsErrorLog l where (l.logType=?2) and (l.createTime>=?3 and l.createTime<=?4) and (l.userName like ?5) and (l.pageUrl like ?6) and (l.errorType like ?7) and (l.errorMessage like ?8)")
+    Page<JsErrorLog> findByQueries(Long projectId, String logType, Date startTime, Date endTime, String userName, String pageUrl, String errorType, String errorMessage, Pageable pageable);
 }

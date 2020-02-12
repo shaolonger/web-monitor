@@ -17,6 +17,11 @@ public class JsErrorLog {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     private Long id;
+    /**
+     * 项目ID
+     */
+    @NotNull(message = "projectId不能为空")
+    private Long projectId;
 
     /**
      * 日志类型

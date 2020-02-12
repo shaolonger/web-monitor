@@ -28,6 +28,7 @@ public class JsErrorLogService {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
+        Long projectId = DataConvertUtils.strToLong(request.getParameter("projectId"));
         String logType = request.getParameter("logType");
         Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
@@ -36,9 +37,9 @@ public class JsErrorLogService {
         String errorType = "%" + request.getParameter("errorType") + "%";
         String errorMessage = "%" + request.getParameter("errorMessage") + "%";
 
-        // 分页查询
+        // 拼接sql，分页查询
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<JsErrorLog> page = jsErrorLogDao.findByQueries(logType, startTime, endTime, userName, pageUrl, errorType, errorMessage, pageable);
+        Page<JsErrorLog> page = jsErrorLogDao.findByQueries(projectId, logType, startTime, endTime, userName, pageUrl, errorType, errorMessage, pageable);
         List<JsErrorLog> resultList = page.getContent();
 
         // 返回
