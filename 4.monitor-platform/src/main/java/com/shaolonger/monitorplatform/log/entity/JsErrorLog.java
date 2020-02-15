@@ -16,7 +16,9 @@ public class JsErrorLog {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
+
     /**
      * 项目ID
      */

@@ -17,7 +17,7 @@ public class DataConvertUtils {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
                 date = sdf.parse(str);
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
         return date;
@@ -33,7 +33,7 @@ public class DataConvertUtils {
         try {
             i = Integer.parseInt(str);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return i;
     }
@@ -48,7 +48,7 @@ public class DataConvertUtils {
         try {
             l = Long.parseLong(str);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         return l;
     }
