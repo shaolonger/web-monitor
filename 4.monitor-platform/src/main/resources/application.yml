@@ -10,3 +10,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+logging:
+  file:
+    path: ./logs
+    max-history: 30
+  level:
+    root: info

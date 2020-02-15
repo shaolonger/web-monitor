@@ -5,6 +5,8 @@ import com.shaolonger.monitorplatform.log.entity.JsErrorLog;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,8 @@ public class JsErrorLogService extends ServiceBase {
 
     @Autowired
     private JsErrorLogDao jsErrorLogDao;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 条件查询
@@ -111,6 +115,9 @@ public class JsErrorLogService extends ServiceBase {
      * @return
      */
     public Object add(JsErrorLog jsErrorLog) {
+
+        logger.info("--------[JsErrorLogService]保存开始--------");
+
         // 获取请求参数
         String logType = jsErrorLog.getLogType();
         Long userId = jsErrorLog.getUserId();
@@ -145,6 +152,8 @@ public class JsErrorLogService extends ServiceBase {
         jsErrorLog.setErrorStack(errorStack);
         jsErrorLog.setCreateTime(createTime);
         jsErrorLogDao.save(jsErrorLog);
+
+        logger.info("--------[JsErrorLogService]保存结束--------");
 
         return jsErrorLog;
     }
