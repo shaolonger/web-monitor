@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,8 +28,9 @@ public class JsErrorLogService extends ServiceBase {
 
     /**
      * 条件查询
-     * @param request
-     * @return
+     *
+     * @param request request
+     * @return Object
      */
     public Object findByQueries(HttpServletRequest request) {
         // 获取请求参数
@@ -97,7 +97,6 @@ public class JsErrorLogService extends ServiceBase {
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
         Page<JsErrorLog> page = this.findPageBySqlAndParam(JsErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
-        List<JsErrorLog> resultList = page.getContent();
 
         // 返回
         PageResultBase<JsErrorLog> pageResultBase = new PageResultBase<>();
@@ -111,8 +110,9 @@ public class JsErrorLogService extends ServiceBase {
 
     /**
      * 新增
-     * @param jsErrorLog
-     * @return
+     *
+     * @param jsErrorLog jsErrorLog
+     * @return Object
      */
     public Object add(JsErrorLog jsErrorLog) {
 

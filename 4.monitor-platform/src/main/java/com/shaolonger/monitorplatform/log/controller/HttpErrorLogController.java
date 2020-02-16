@@ -1,22 +1,24 @@
 package com.shaolonger.monitorplatform.log.controller;
 
-import com.shaolonger.monitorplatform.log.entity.JsErrorLog;
-import com.shaolonger.monitorplatform.log.service.JsErrorLogService;
+import com.shaolonger.monitorplatform.log.entity.HttpErrorLog;
+import com.shaolonger.monitorplatform.log.service.HttpErrorLogService;
 import com.shaolonger.monitorplatform.utils.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/jsErrorLog")
-public class JsErrorLogController {
+@RequestMapping("/httpErrorLog")
+public class HttpErrorLogController {
     @Autowired
-    private JsErrorLogService jsErrorLogService;
+    private HttpErrorLogService httpErrorLogService;
 
     /**
      * 多条件查询
@@ -26,18 +28,18 @@ public class JsErrorLogController {
      */
     @RequestMapping(value = "/findByQueries", method = RequestMethod.GET)
     public Object findByQueries(HttpServletRequest request) {
-        return ResponseResultBase.getResponseResultBase(jsErrorLogService.findByQueries(request));
+        return ResponseResultBase.getResponseResultBase(httpErrorLogService.findByQueries(request));
     }
 
     /**
      * 新增
      *
-     * @param jsErrorLog    jsErrorLog
+     * @param httpErrorLog  httpErrorLog
      * @param bindingResult bindingResult
      * @return Object
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object add(@Valid JsErrorLog jsErrorLog, BindingResult bindingResult) {
+    public Object add(@Valid HttpErrorLog httpErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -45,7 +47,7 @@ public class JsErrorLogController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(jsErrorLogService.add(jsErrorLog));
+            return ResponseResultBase.getResponseResultBase(httpErrorLogService.add(httpErrorLog));
         }
     }
 }
