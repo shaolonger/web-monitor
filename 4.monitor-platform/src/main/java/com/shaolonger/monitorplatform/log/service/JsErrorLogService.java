@@ -54,7 +54,7 @@ public class JsErrorLogService extends ServiceBase {
 
         // 项目id
         if (projectId != null) {
-            paramSqlBuilder.append(" and t.projectId = :projectId");
+            paramSqlBuilder.append(" and t.project_id = :projectId");
             paramMap.put("projectId", projectId);
         }
         // 日志类型
@@ -76,22 +76,22 @@ public class JsErrorLogService extends ServiceBase {
         }
         // 用户名
         if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.userName = :userName");
+            paramSqlBuilder.append(" and t.user_name = :userName");
             paramMap.put("userName", "%" + userName + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
-            paramSqlBuilder.append(" and t.pageUrl like :pageUrl");
+            paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // JS错误类型
         if (errorType != null && !errorType.isEmpty()) {
-            paramSqlBuilder.append(" and t.errorType like :errorType");
+            paramSqlBuilder.append(" and t.error_type like :errorType");
             paramMap.put("errorType", "%" + errorType + "%");
         }
         // JS错误信息
         if (errorMessage != null && !errorMessage.isEmpty()) {
-            paramSqlBuilder.append(" and t.errorMessage like :errorMessage");
+            paramSqlBuilder.append(" and t.error_message like :errorMessage");
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");

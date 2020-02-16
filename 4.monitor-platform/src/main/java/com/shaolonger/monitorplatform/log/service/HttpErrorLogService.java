@@ -57,7 +57,7 @@ public class HttpErrorLogService extends ServiceBase {
 
         // 项目id
         if (projectId != null) {
-            paramSqlBuilder.append(" and t.projectId = :projectId");
+            paramSqlBuilder.append(" and t.project_id = :projectId");
             paramMap.put("projectId", projectId);
         }
         // 日志类型
@@ -79,23 +79,28 @@ public class HttpErrorLogService extends ServiceBase {
         }
         // 用户名
         if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.userName = :userName");
+            paramSqlBuilder.append(" and t.user_name = :userName");
             paramMap.put("userName", "%" + userName + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
-            paramSqlBuilder.append(" and t.pageUrl like :pageUrl");
+            paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // Http类型，如request、response
         if (httpType != null && !httpType.isEmpty()) {
-            paramSqlBuilder.append(" and t.httpType like :httpType");
+            paramSqlBuilder.append(" and t.http_type like :httpType");
             paramMap.put("httpType", "%" + httpType + "%");
         }
         // 完整的Http请求地址
         if (httpUrlComplete != null && !httpUrlComplete.isEmpty()) {
-            paramSqlBuilder.append(" and t.httpUrlComplete like :httpUrlComplete");
+            paramSqlBuilder.append(" and t.http_url_complete like :httpUrlComplete");
             paramMap.put("httpUrlComplete", "%" + httpUrlComplete + "%");
+        }
+        // 缩写的Http请求地址
+        if (httpUrlShort != null && !httpUrlShort.isEmpty()) {
+            paramSqlBuilder.append(" and t.http_url_short like :httpUrlShort");
+            paramMap.put("httpUrlShort", "%" + httpUrlShort + "%");
         }
         // 状态
         if (status != null && !status.isEmpty()) {
@@ -104,13 +109,8 @@ public class HttpErrorLogService extends ServiceBase {
         }
         // 状态的文字描述
         if (statusText != null && !statusText.isEmpty()) {
-            paramSqlBuilder.append(" and t.statusText like :statusText");
+            paramSqlBuilder.append(" and t.status_text like :statusText");
             paramMap.put("statusText", "%" + statusText + "%");
-        }
-        // 缩写的Http请求地址
-        if (httpUrlShort != null && !httpUrlShort.isEmpty()) {
-            paramSqlBuilder.append(" and t.httpUrlShort like :httpUrlShort");
-            paramMap.put("httpUrlShort", "%" + httpUrlShort + "%");
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
