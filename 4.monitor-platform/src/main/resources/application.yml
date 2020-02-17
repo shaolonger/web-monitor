@@ -1,8 +1,8 @@
 server:
-  port: 4567
+  port: 6001
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/null-monitor-platform?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    url: jdbc:mysql://localhost:3306/null_monitor_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
