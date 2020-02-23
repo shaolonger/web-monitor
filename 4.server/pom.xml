@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.shaolonger</groupId>
-    <artifactId>monitor-platform</artifactId>
+    <artifactId>monitor-platform-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>monitor-platform</name>
+    <name>monitor-platform-server</name>
     <description>A Monitor Platform</description>
 
     <properties>
