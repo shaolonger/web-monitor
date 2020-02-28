@@ -4,6 +4,11 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
     mode: 'development',
     entry: path.resolve(__dirname, '../src/index.js'),
+    resolve: {
+        alias: {
+            static: path.resolve(__dirname, '../src/static/'),
+        }
+    },
     module: {
         rules: [
             {
@@ -14,9 +19,26 @@ module.exports = {
                 }
             },
             {
+                test: /\.s[ac]ss$/i,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+            {
                 test: /\.html$/,
                 use: {
                     loader: "html-loader"
+                }
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192
+                    }
                 }
             },
         ]
