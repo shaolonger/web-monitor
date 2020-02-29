@@ -1,19 +1,19 @@
-.login-container {
-  .login-container-bg {
+.register-container {
+  .register-container-bg {
     display: block;
     margin: 10vh auto;
     width: 16vw;
   }
 
-  .login-container-form {
+  .register-container-form {
     margin: 0 auto;
     width: 20vw;
 
-    .login-container-btnWrapper {
+    .register-container-btnWrapper {
       display: flex;
       justify-content: space-between;
 
-      .login-container-btnItem {
+      .register-container-btnItem {
         flex: 1;
         margin-right: 10px;
 
