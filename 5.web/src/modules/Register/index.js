@@ -29,8 +29,7 @@ const Register = props => {
     return (
         <div className='register-container'>
             <img className='register-container-bg' src={imgBgRegister}/>
-            <Form className='register-container-form'
-                  onFinish={onFinish}>
+            <Form className='register-container-form' onFinish={onFinish}>
                 <Form.Item name="username" rules={[{required: true, message: '请输入用户名'}]}>
                     <Input prefix={<UserOutlined/>} placeholder="用户名"/>
                 </Form.Item>

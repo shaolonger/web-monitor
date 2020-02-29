@@ -7,6 +7,7 @@ module.exports = {
     resolve: {
         alias: {
             static: path.resolve(__dirname, '../src/static/'),
+            service: path.resolve(__dirname, '../src/service/'),
         }
     },
     module: {
