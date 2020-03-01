@@ -54,7 +54,13 @@ module.exports = {
     devServer: {
         contentBase: path.resolve(__dirname, '../dist'),
         port: 5000,
-        hot: true
+        hot: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:6001',
+                pathRewrite: {'^/api' : ''}
+            }
+        }
     },
     devtool: "source-map"
 };

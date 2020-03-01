@@ -26,14 +26,14 @@ const Login = props => {
         message.loading({content: '登录中，请稍等', duration: 0, key: 'login'});
         loginService.login({username, password})
             .then(res => {
+                console.log('[成功]登录', res);
                 setSpinning(false);
                 message.success({content: '登录成功，即将跳转', key: 'login'});
-                console.log('[成功]登录', res);
             })
             .catch(err => {
+                console.log('[失败]登录', err);
                 setSpinning(false);
                 message.error({content: '登录失败', key: 'login'});
-                console.log('[失败]登录', err);
             });
     };
 

@@ -22,17 +22,6 @@ public class UserRegisterRecordService extends ServiceBase {
 
         logger.info("--------[UserRegisterRecordService]保存开始--------");
 
-        // 获取请求参数
-        String userName = userRegisterRecordEntity.getUsername();
-        String password = userRegisterRecordEntity.getPassword();
-        String phone = userRegisterRecordEntity.getPhone();
-        String icon = userRegisterRecordEntity.getIcon();
-        Integer gender = userRegisterRecordEntity.getGender();
-        String email = userRegisterRecordEntity.getEmail();
-        Integer hasAudit = userRegisterRecordEntity.getHasAudit();
-        Long auditUser = userRegisterRecordEntity.getAuditUser();
-        Integer auditResult = userRegisterRecordEntity.getAuditResult();
-
         // 创建时间
         Date nowTime = new Date();
 
