@@ -52,4 +52,17 @@ public class DataConvertUtils {
         }
         return l;
     }
+
+    /**
+     * String转String，返回字符串或空字符串
+     * @param str 字符串
+     * @return String
+     */
+    public static String getStrOrEmpty(String str) {
+        if (str == null) {
+            return "";
+        } else {
+            return str;
+        }
+    }
 }
