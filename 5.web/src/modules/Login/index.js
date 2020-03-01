@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-// 组件
+import {useHistory} from 'react-router-dom';
 import {Spin, Form, Input, Button, Checkbox, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 
@@ -14,6 +13,8 @@ import './index.scss';
 import loginService from 'service/loginService';
 
 const Login = props => {
+
+    const history = useHistory();
     const [spinning, setSpinning] = useState(false);
     const [form] = Form.useForm();
 
@@ -54,7 +55,7 @@ const Login = props => {
                     message.success({
                         content: '登录成功，即将跳转', key: 'login',
                         onClose: () => {
-                            props.history.replace('/');
+                            history.replace('/');
                         }
                     });
                 } else {
@@ -72,7 +73,7 @@ const Login = props => {
      * 注册
      */
     const onRegister = () => {
-        props.history.push('/register');
+        history.push('/register');
     };
 
     return (

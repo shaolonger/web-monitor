@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
 
 // 图片资源
 import imgIconAvatar from 'static/images/Home/icon_avatar.png';
@@ -7,7 +8,9 @@ import imgBgSystemManage from 'static/images/Main/systemManage/bg_systemManage.p
 // css
 import './index.scss';
 
-const Home = props => {
+const Home = () => {
+
+    const history = useHistory();
     // TODO 这里的模块列表，后期需要改为从角色菜单中获取
     const [moduleList, setModuleList] = useState([]);
 
@@ -15,7 +18,7 @@ const Home = props => {
         // 判断用户是否登录，否则跳转至登录页
         const userInfo = window.sessionStorage.getItem('ump-userInfo');
         if (!userInfo) {
-            props.history.replace('/login');
+            history.replace('/login');
             return;
         }
     }, []);
@@ -42,10 +45,15 @@ const Home = props => {
 
     /**
      * 跳转至模块
-     * @param routerName
+     * @param module
      */
-    const navigateTo = routerName => {
-        props.history.push(routerName);
+    const navigateTo = module => {
+        const {pageUrl} = module;
+        const location = {
+            pathname: pageUrl,
+            state: {module}
+        };
+        history.push(location);
     };
 
     return (
@@ -54,7 +62,7 @@ const Home = props => {
             <ul className='home-modules-list'>
                 {
                     moduleList && moduleList.map((module, index) => (
-                        <li key={index} className='home-modules-listItem' onClick={() => navigateTo(module.pageUrl)}>
+                        <li key={index} className='home-modules-listItem' onClick={() => navigateTo(module)}>
                             <div className='home-modules-iconWrapper'
                                  style={{backgroundImage: `url(${imgBgSystemManage})`}}></div>
                             <p>{module.name}</p>

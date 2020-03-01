@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-
-// 组件
 import {Spin, Form, Input, Button, CheckboxSelect, Select, message} from 'antd';
 import {UserOutlined, LockOutlined, MailOutlined, MobileOutlined} from '@ant-design/icons';
 

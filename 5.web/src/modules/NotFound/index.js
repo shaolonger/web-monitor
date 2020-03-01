@@ -1,6 +1,4 @@
 import React from 'react';
-
-// 组件
 import {Result} from 'antd';
 
 // css
