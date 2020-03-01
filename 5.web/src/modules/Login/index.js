@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 // 组件
 import {Spin, Form, Input, Button, Checkbox, message} from 'antd';
@@ -15,6 +15,17 @@ import loginService from 'service/loginService';
 
 const Login = props => {
     const [spinning, setSpinning] = useState(false);
+    const [form] = Form.useForm();
+
+    useEffect(() => {
+        console.log('[Login]useEffect', props);
+        // 判断本地是否有登录信息，有则还原
+        const loginInfo = window.localStorage.getItem('ump-loginInfo');
+        if (loginInfo) {
+            const {username, password, remember} = JSON.parse(loginInfo);
+            form.setFieldsValue({username, password, remember});
+        }
+    }, []);
 
     /**
      * 登录
@@ -28,7 +39,27 @@ const Login = props => {
             .then(res => {
                 console.log('[成功]登录', res);
                 setSpinning(false);
-                message.success({content: '登录成功，即将跳转', key: 'login'});
+                const {success, data, msg} = res;
+                if (success) {
+                    // 将用户信息存入本地
+                    window.sessionStorage.setItem('ump-userInfo', JSON.stringify(data));
+                    // 若选择了记住密码，则将用户名、密码存入本地
+                    if (remember) {
+                        window.localStorage.setItem('ump-loginInfo', JSON.stringify({
+                            username, password, remember
+                        }));
+                    } else {
+                        window.localStorage.removeItem('ump-loginInfo');
+                    }
+                    message.success({
+                        content: '登录成功，即将跳转', key: 'login',
+                        onClose: () => {
+                            props.history.replace('/');
+                        }
+                    });
+                } else {
+                    message.error({content: msg || '登录失败', key: 'login'});
+                }
             })
             .catch(err => {
                 console.log('[失败]登录', err);
@@ -48,12 +79,12 @@ const Login = props => {
         <div className='login-container'>
             <img className='login-container-bg' src={imgBgMonitor}/>
             <Spin spinning={spinning}>
-                <Form className='login-container-form' initialValues={{remember: true}} onFinish={onFinish}>
+                <Form form={form} className='login-container-form' onFinish={onFinish}>
                     <Form.Item name="username" rules={[{required: true, message: '请输入用户名'}]}>
-                        <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="用户名"/>
+                        <Input prefix={<UserOutlined/>} placeholder="用户名" allowClear/>
                     </Form.Item>
                     <Form.Item name="password" rules={[{required: true, message: '请输入密码'}]}>
-                        <Input prefix={<LockOutlined/>} type="password" placeholder="密码"/>
+                        <Input prefix={<LockOutlined/>} type="password" placeholder="密码" allowClear/>
                     </Form.Item>
                     <Form.Item name="remember" valuePropName="checked">
                         <Checkbox>记住密码</Checkbox>
