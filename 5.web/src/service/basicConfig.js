@@ -35,13 +35,13 @@ const errorHandler = (status, message) => {
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 10000;
 axios.interceptors.response.use(
-    res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
+    res => res.status === 200 ? Promise.resolve(res.data) : Promise.reject(res.data),
     error => {
         const {response} = error;
         if (response) {
             // 请求已发出，但是不在2xx的范围
             errorHandler(response.status, response.data.message);
-            return Promise.reject(response);
+            return Promise.reject(response.data);
         } else {
             // 处理断网的情况
             return Promise.reject(error);
