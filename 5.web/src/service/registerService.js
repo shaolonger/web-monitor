@@ -10,6 +10,10 @@ const RegisterService = {
     register(params) {
         return axios.put('/userRegisterRecord/add', qs.stringify(params));
     },
+    // 用户注册记录审批
+    audit(params) {
+        return axios.post('/userRegisterRecord/audit', qs.stringify(params));
+    },
 };
 
 export default RegisterService;

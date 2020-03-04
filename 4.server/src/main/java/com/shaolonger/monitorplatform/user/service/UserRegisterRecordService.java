@@ -78,7 +78,7 @@ public class UserRegisterRecordService extends ServiceBase {
         if (auditResult == null) {
             throw new Exception("auditResult参数不能为空");
         }
-        if (!auditResult.equals(1) && !auditResult.equals(2)) {
+        if (!auditResult.equals(0) && !auditResult.equals(1)) {
             throw new Exception("auditResult参数不正确");
         }
 
