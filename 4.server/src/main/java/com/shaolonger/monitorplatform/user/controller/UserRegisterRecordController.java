@@ -41,6 +41,21 @@ public class UserRegisterRecordController {
     }
 
     /**
+     * 审批
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/audit", method = RequestMethod.POST)
+    public Object audit(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(userRegisterRecordService.audit(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
      * 多条件查询
      *
      * @param request request

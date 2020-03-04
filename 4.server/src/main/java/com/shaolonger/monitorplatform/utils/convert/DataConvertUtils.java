@@ -39,6 +39,21 @@ public class DataConvertUtils {
     }
 
     /**
+     * String转int或null
+     * @param str 字符串
+     * @return int
+     */
+    public static Integer strToIntegerOrNull(String str) {
+        Integer i = null;
+        try {
+            i = Integer.valueOf(str);
+        } catch (Exception e) {
+            // e.printStackTrace();
+        }
+        return i;
+    }
+
+    /**
      * String转Long
      * @param str 字符串
      * @return int

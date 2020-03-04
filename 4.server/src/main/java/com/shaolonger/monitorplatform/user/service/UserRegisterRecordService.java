@@ -1,6 +1,7 @@
 package com.shaolonger.monitorplatform.user.service;
 
 import com.shaolonger.monitorplatform.user.dao.UserRegisterRecordDao;
+import com.shaolonger.monitorplatform.user.entity.UserEntity;
 import com.shaolonger.monitorplatform.user.entity.UserRegisterRecordEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
@@ -17,14 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserRegisterRecordService extends ServiceBase {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private UserRegisterRecordDao userRegisterRecordDao;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private UserService userService;
 
     /**
      * 新增
@@ -50,6 +55,55 @@ public class UserRegisterRecordService extends ServiceBase {
     }
 
     /**
+     * 审批
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object audit(HttpServletRequest request) throws Exception {
+
+        Long auditId = DataConvertUtils.strToLong(request.getParameter("auditId"));
+        Integer auditResult = DataConvertUtils.strToIntegerOrNull(request.getParameter("auditResult"));
+
+        // 找到要审批的对象
+        Optional<UserRegisterRecordEntity> optional = userRegisterRecordDao.findById(auditId);
+        UserRegisterRecordEntity entity = optional.orElseThrow(() -> new Exception("找不到要审批的记录"));
+
+        // 若已审批
+        if (entity.getAuditResult() == 0 || entity.getAuditResult() == 1) {
+            throw new Exception("该记录已审批");
+        }
+
+        // 校验审批结果参数
+        if (auditResult == null) {
+            throw new Exception("auditResult参数不能为空");
+        }
+        if (!auditResult.equals(1) && !auditResult.equals(2)) {
+            throw new Exception("auditResult参数不正确");
+        }
+
+        // 保存用户记录审批表
+        Date updateTime = new Date();
+        entity.setAuditResult(auditResult);
+        entity.setUpdateTime(updateTime);
+        userRegisterRecordDao.save(entity);
+
+        // 若为审批通过，则需在用户表中新增用户
+        if (auditResult == 1) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUsername(entity.getUsername());
+            userEntity.setPassword(entity.getPassword());
+            userEntity.setPhone(entity.getPhone());
+            userEntity.setIcon(entity.getIcon());
+            userEntity.setGender(entity.getGender());
+            userEntity.setEmail(entity.getEmail());
+            userService.add(userEntity);
+        }
+
+        return entity;
+    }
+
+    /**
      * 条件查询
      *
      * @param request request
@@ -59,7 +113,7 @@ public class UserRegisterRecordService extends ServiceBase {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
-        String auditResult = request.getParameter("auditResult");
+        Integer auditResult = DataConvertUtils.strToIntegerOrNull(request.getParameter("auditResult"));
         Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
 
@@ -71,7 +125,7 @@ public class UserRegisterRecordService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 审核结果
-        if (auditResult != null && !auditResult.isEmpty()) {
+        if (auditResult != null) {
             paramSqlBuilder.append(" and t.audit_result = :auditResult");
             paramMap.put("auditResult", auditResult);
         }

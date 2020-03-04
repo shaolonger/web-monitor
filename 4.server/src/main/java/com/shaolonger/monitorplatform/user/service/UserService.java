@@ -21,6 +21,13 @@ public class UserService extends ServiceBase {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 登录
+     *
+     * @param request request
+     * @return Object
+     * @throws Exception Exception
+     */
     public Object login(HttpServletRequest request) throws Exception {
         String username = DataConvertUtils.getStrOrEmpty(request.getParameter("username"));
         String password = DataConvertUtils.getStrOrEmpty(request.getParameter("password"));
@@ -39,16 +46,21 @@ public class UserService extends ServiceBase {
         return userEntityList.get(0);
     }
 
+    /**
+     * 新增
+     *
+     * @param userEntity userEntity
+     * @return Object
+     */
     public Object add(UserEntity userEntity) {
 
         logger.info("--------[UserService]保存开始--------");
 
         // 创建时间
-        Date nowTime = new Date();
+        Date createTime = new Date();
 
         // 保存实体
-        userEntity.setCreateTime(nowTime);
-        userEntity.setUpdateTime(nowTime);
+        userEntity.setCreateTime(createTime);
         userDao.save(userEntity);
 
         logger.info("--------[UserService]保存结束--------");
