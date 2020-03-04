@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
@@ -19,7 +20,14 @@ public class UserRegisterRecordController {
     @Autowired
     private UserRegisterRecordService userRegisterRecordService;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    /**
+     * 新增
+     *
+     * @param userRegisterRecordEntity
+     * @param bindingResult
+     * @return Object Object
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(@Valid UserRegisterRecordEntity userRegisterRecordEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -30,5 +38,16 @@ public class UserRegisterRecordController {
         } else {
             return ResponseResultBase.getResponseResultBase(userRegisterRecordService.add(userRegisterRecordEntity));
         }
+    }
+
+    /**
+     * 多条件查询
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public Object get(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(userRegisterRecordService.get(request));
     }
 }
