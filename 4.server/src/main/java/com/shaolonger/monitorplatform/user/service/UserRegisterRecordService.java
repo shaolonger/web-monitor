@@ -26,8 +26,8 @@ public class UserRegisterRecordService extends ServiceBase {
         Date nowTime = new Date();
 
         // 保存实体
+        userRegisterRecordEntity.setAuditResult(-1);
         userRegisterRecordEntity.setCreateTime(nowTime);
-        userRegisterRecordEntity.setUpdateTime(nowTime);
         userRegisterRecordDao.save(userRegisterRecordEntity);
 
         logger.info("--------[UserRegisterRecordService]保存结束--------");

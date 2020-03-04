@@ -64,12 +64,6 @@ public class UserRegisterRecordEntity {
     private Date updateTime;
 
     /**
-     * 是否已审批
-     * 0-否，1-是
-     */
-    private Integer hasAudit;
-
-    /**
      * 审批人ID
      */
     private Long auditUser;
