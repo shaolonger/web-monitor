@@ -1,3 +1,22 @@
 .systemManage-container {
+  padding: 1vw;
 
+  .systemManage-topBanner {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .systemManage-topBanner-radio {
+      margin-left: 1vw;
+    }
+  }
+
+  .systemManage-table {
+    margin-top: 1vw;
+    .systemManage-table-handleBtn {
+      button:nth-child(2) {
+        margin-left: 1vw;
+      }
+    }
+  }
 }

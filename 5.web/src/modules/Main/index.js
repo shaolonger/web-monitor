@@ -63,7 +63,7 @@ const Main = () => {
                 </div>
                 <div className='main-router'>
                     <Switch>
-                        <Route path='/main/systemManage/userRegisterAudit' children={SystemManage} />
+                        <Route path='/main/systemManage/userRegisterAudit' component={SystemManage} />
                     </Switch>
                 </div>
             </div>
