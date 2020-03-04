@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/2/29 22:51:05                           */
+/* Created on:     2020/3/4 8:56:50                             */
 /*==============================================================*/
 
 
@@ -187,9 +187,8 @@ create table ums_user_register_record
    gender               int(1) comment '性别，0-未知，1-男，2-女',
    create_time          datetime not null comment '创建时间',
    update_time          datetime not null comment '更新时间',
-   has_audit            int(1) default 0 comment '是否已审批，0-否，1-是',
    audit_user           bigint comment '审批人',
-   audit_result         int(1) comment '审批结果，0-不通过，1-通过',
+   audit_result         int(1) default -1 comment '审批结果，-1-未审核，0-不通过，1-通过',
    primary key (id)
 );
 
