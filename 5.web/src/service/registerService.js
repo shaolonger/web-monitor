@@ -2,9 +2,9 @@ import axios from './basicConfig';
 import qs from 'qs';
 
 const RegisterService = {
-    // 注册
-    register(params) {
-        return axios.post('/user/register', qs.stringify(params));
+    // 查询用户注册记录
+    get(params) {
+        return axios.get('/userRegisterRecord/get?' + qs.stringify(params));
     },
     // 注册
     register(params) {

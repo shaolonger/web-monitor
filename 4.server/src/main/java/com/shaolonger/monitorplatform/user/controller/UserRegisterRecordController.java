@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/userRegisterRecord")
 public class UserRegisterRecordController {
     @Autowired
     private UserRegisterRecordService userRegisterRecordService;
