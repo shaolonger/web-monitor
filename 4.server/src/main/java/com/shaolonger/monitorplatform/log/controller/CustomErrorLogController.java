@@ -26,9 +26,9 @@ public class CustomErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/findByQueries", method = RequestMethod.GET)
-    public Object findByQueries(HttpServletRequest request) {
-        return ResponseResultBase.getResponseResultBase(customErrorLogService.findByQueries(request));
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public Object get(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(customErrorLogService.get(request));
     }
 
     /**
@@ -38,7 +38,7 @@ public class CustomErrorLogController {
      * @param bindingResult  bindingResult
      * @return Object
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(@Valid CustomErrorLog customErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();

@@ -32,7 +32,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      * @param request request
      * @return Object
      */
-    public Object findByQueries(HttpServletRequest request) {
+    public Object get(HttpServletRequest request) {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
