@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/4 8:56:50                             */
+/* Created on:     2020/3/5 13:15:37                            */
 /*==============================================================*/
 
 
@@ -153,7 +153,7 @@ create table ums_user
    icon                 varchar(500) comment '头像',
    gender               int(1) comment '性别，0-未知，1-男，2-女',
    email                varchar(100) comment '邮箱',
-   create_time          datetime comment '创建时间',
+   create_time          datetime not null comment '创建时间',
    update_time          datetime comment '更新时间',
    primary key (id)
 );
@@ -186,7 +186,7 @@ create table ums_user_register_record
    icon                 varchar(500) comment '头像',
    gender               int(1) comment '性别，0-未知，1-男，2-女',
    create_time          datetime not null comment '创建时间',
-   update_time          datetime not null comment '更新时间',
+   update_time          datetime comment '更新时间',
    audit_user           bigint comment '审批人',
    audit_result         int(1) default -1 comment '审批结果，-1-未审核，0-不通过，1-通过',
    primary key (id)
