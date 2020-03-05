@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/5 13:15:37                            */
+/* Created on:     2020/3/6 9:25:51                             */
 /*==============================================================*/
 
 
@@ -38,7 +38,7 @@ create table lms_custom_error_log
    browser_name         varchar(20) comment '浏览器名',
    browser_version      text comment '浏览器版本',
    ip_address           varchar(50) comment 'IP地址',
-   error_type           varchar(30) not null comment '错误类型',
+   error_type           varchar(30) comment '错误类型',
    error_message        text not null comment '错误信息',
    primary key (id)
 );
@@ -92,7 +92,7 @@ create table lms_js_error_log
    browser_name         varchar(20) comment '浏览器名',
    browser_version      text comment '浏览器版本',
    ip_address           varchar(50) comment 'IP地址',
-   error_type           varchar(30) not null comment '错误类型',
+   error_type           varchar(30) comment '错误类型',
    error_message        text not null comment '错误信息',
    error_stack          text comment '错误堆栈信息',
    primary key (id)

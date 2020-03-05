@@ -86,7 +86,6 @@ public class CustomErrorLog {
     /**
      * 异常类型
      */
-    @NotEmpty(message = "errorType不能为空")
     private String errorType;
 
     /**
