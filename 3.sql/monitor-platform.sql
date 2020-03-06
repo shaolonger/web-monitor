@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/6 9:25:51                             */
+/* Created on:     2020/3/6 22:24:35                            */
 /*==============================================================*/
 
 
@@ -133,6 +133,7 @@ create table pms_project
 (
    id                   bigint not null comment 'ID',
    project_name         varchar(100) not null comment '项目名',
+   project_identifier   varchar(200) not null comment '项目标识符',
    description          varchar(200) comment '项目描述',
    create_time          datetime comment '创建时间',
    update_time          datetime comment '更新时间',
