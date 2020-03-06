@@ -1,0 +1,26 @@
+.login-container {
+  .login-container-bg {
+    display: block;
+    margin: 10vh auto;
+    width: 16vw;
+  }
+
+  .login-container-form {
+    margin: 0 auto;
+    width: 20vw;
+
+    .login-container-btnWrapper {
+      display: flex;
+      justify-content: space-between;
+
+      .login-container-btnItem {
+        flex: 1;
+        margin-right: 10px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

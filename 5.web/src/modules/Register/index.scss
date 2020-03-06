@@ -1,0 +1,26 @@
+.register-container {
+  .register-container-bg {
+    display: block;
+    margin: 10vh auto;
+    width: 16vw;
+  }
+
+  .register-container-form {
+    margin: 0 auto;
+    width: 20vw;
+
+    .register-container-btnWrapper {
+      display: flex;
+      justify-content: space-between;
+
+      .register-container-btnItem {
+        flex: 1;
+        margin-right: 10px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

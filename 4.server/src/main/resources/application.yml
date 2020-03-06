@@ -1,0 +1,18 @@
+server:
+  port: 6001
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/nuall_monitor_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+logging:
+  file:
+    path: ./logs
+    max-history: 30
+  level:
+    root: info
