@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/7 15:08:29                            */
+/* Created on:     2020/3/7 15:31:22                            */
 /*==============================================================*/
 
 
@@ -137,7 +137,8 @@ create table pms_project
    description          varchar(200) comment '项目描述',
    create_time          datetime comment '创建时间',
    update_time          datetime comment '更新时间',
-   primary key (id)
+   primary key (id),
+   key AK_Key_2 (project_identifier)
 );
 
 alter table pms_project comment '项目表';
