@@ -79,7 +79,7 @@ public class HttpErrorLogService extends ServiceBase {
         }
         // 用户名
         if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.user_name = :userName");
+            paramSqlBuilder.append(" and t.user_name like :userName");
             paramMap.put("userName", "%" + userName + "%");
         }
         // 页面URL

@@ -23,8 +23,8 @@ public class UserRegisterRecordController {
     /**
      * 新增
      *
-     * @param userRegisterRecordEntity
-     * @param bindingResult
+     * @param userRegisterRecordEntity userRegisterRecordEntity
+     * @param bindingResult bindingResult
      * @return Object Object
      */
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
