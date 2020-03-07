@@ -53,7 +53,7 @@ public class CustomErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !logType.isEmpty()) {
+        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }

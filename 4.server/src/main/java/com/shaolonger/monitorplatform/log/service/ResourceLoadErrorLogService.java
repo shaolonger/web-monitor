@@ -53,8 +53,8 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from lms_resource_load_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
-        // 项目id
-        if (projectIdentifier != null && !logType.isEmpty()) {
+        // 项目标识
+        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }

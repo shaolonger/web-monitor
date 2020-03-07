@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/7 15:31:22                            */
+/* Created on:     2020/3/7 15:59:07                            */
 /*==============================================================*/
 
 
@@ -138,7 +138,8 @@ create table pms_project
    create_time          datetime comment '创建时间',
    update_time          datetime comment '更新时间',
    primary key (id),
-   key AK_Key_2 (project_identifier)
+   unique key AK_Key_2 (project_identifier),
+   unique key AK_Key_3 (project_name)
 );
 
 alter table pms_project comment '项目表';
@@ -157,7 +158,8 @@ create table ums_user
    email                varchar(100) comment '邮箱',
    create_time          datetime not null comment '创建时间',
    update_time          datetime comment '更新时间',
-   primary key (id)
+   primary key (id),
+   unique key AK_Key_2 (username)
 );
 
 alter table ums_user comment '用户表';
@@ -191,7 +193,8 @@ create table ums_user_register_record
    update_time          datetime comment '更新时间',
    audit_user           bigint comment '审批人',
    audit_result         int(1) default -1 comment '审批结果，-1-未审核，0-不通过，1-通过',
-   primary key (id)
+   primary key (id),
+   key AK_Key_2 (username)
 );
 
 alter table ums_user_register_record comment '用户表注册记录表';

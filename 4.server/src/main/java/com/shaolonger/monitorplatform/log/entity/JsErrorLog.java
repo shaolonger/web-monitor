@@ -1,6 +1,8 @@
 package com.shaolonger.monitorplatform.log.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
