@@ -36,7 +36,7 @@ public class HttpErrorLogService extends ServiceBase {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
-        Long projectId = DataConvertUtils.strToLong(request.getParameter("projectId"));
+        String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
         Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
@@ -56,9 +56,9 @@ public class HttpErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目id
-        if (projectId != null) {
-            paramSqlBuilder.append(" and t.project_id = :projectId");
-            paramMap.put("projectId", projectId);
+        if (projectIdentifier != null && !logType.isEmpty()) {
+            paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
+            paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
         if (logType != null && !logType.isEmpty()) {

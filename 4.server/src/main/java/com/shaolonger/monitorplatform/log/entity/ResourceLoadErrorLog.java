@@ -19,10 +19,10 @@ public class ResourceLoadErrorLog {
     private Long id;
 
     /**
-     * 项目ID
+     * 项目标识
      */
-    @NotNull(message = "projectId不能为空")
-    private Long projectId;
+    @NotNull(message = "projectIdentifier不能为空")
+    private String projectIdentifier;
 
     /**
      * 日志类型
