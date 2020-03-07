@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/6 22:24:35                            */
+/* Created on:     2020/3/7 15:08:29                            */
 /*==============================================================*/
 
 
@@ -27,7 +27,7 @@ create table lms_custom_error_log
 (
    id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
-   project_id           bigint not null comment '关联的项目ID',
+   project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) comment '用户名',
@@ -52,7 +52,7 @@ create table lms_http_error_log
 (
    id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
-   project_id           bigint not null comment '关联的项目ID',
+   project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) comment '用户名',
@@ -81,7 +81,7 @@ create table lms_js_error_log
 (
    id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
-   project_id           bigint not null comment '关联的项目ID',
+   project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '关联的用户ID',
    user_name            varchar(64) comment '用户名',
@@ -107,7 +107,7 @@ create table lms_resource_load_error_log
 (
    id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
-   project_id           bigint not null comment '关联的项目ID',
+   project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) comment '用户名',
@@ -195,17 +195,17 @@ create table ums_user_register_record
 
 alter table ums_user_register_record comment '用户表注册记录表';
 
-alter table lms_custom_error_log add constraint FK_Reference_4 foreign key (project_id)
-      references pms_project (id) on delete restrict on update restrict;
+alter table lms_custom_error_log add constraint FK_Reference_4 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
 
-alter table lms_http_error_log add constraint FK_Reference_2 foreign key (project_id)
-      references pms_project (id) on delete restrict on update restrict;
+alter table lms_http_error_log add constraint FK_Reference_2 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
 
-alter table lms_js_error_log add constraint FK_Reference_1 foreign key (project_id)
-      references pms_project (id) on delete restrict on update restrict;
+alter table lms_js_error_log add constraint FK_Reference_1 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
 
-alter table lms_resource_load_error_log add constraint FK_Reference_3 foreign key (project_id)
-      references pms_project (id) on delete restrict on update restrict;
+alter table lms_resource_load_error_log add constraint FK_Reference_3 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
 
 alter table ums_user_project_relation add constraint FK_Reference_5 foreign key (user_id)
       references ums_user (id) on delete restrict on update restrict;
