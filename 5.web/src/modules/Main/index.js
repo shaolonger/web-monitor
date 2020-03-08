@@ -4,7 +4,8 @@ import {Menu} from "antd";
 import {LeftOutlined} from '@ant-design/icons';
 
 // children
-import SystemManage from "./children/SystemManage";
+import UserRegisterAudit from "./children/UserRegisterAudit";
+import ProjectManage from "./children/ProjectManage";
 
 // css
 import './index.scss';
@@ -63,7 +64,8 @@ const Main = () => {
                 </div>
                 <div className='main-router'>
                     <Switch>
-                        <Route path='/main/systemManage/userRegisterAudit' component={SystemManage} />
+                        <Route path='/main/systemManage/userRegisterAudit' component={UserRegisterAudit} />
+                        <Route path='/main/systemManage/projectManage' component={ProjectManage} />
                     </Switch>
                 </div>
             </div>
