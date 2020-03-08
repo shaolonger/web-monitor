@@ -10,6 +10,10 @@ const ProjectService = {
     get(params) {
         return axios.get('/project/get?' + qs.stringify(params));
     },
+    // 删除
+    delete(params) {
+        return axios.delete('/project/delete/' + params);
+    },
 };
 
 export default ProjectService;

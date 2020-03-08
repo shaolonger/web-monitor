@@ -96,6 +96,35 @@ const ProjectManage = () => {
             setModalTitle('编辑');
         }
     }, [mode]);
+    const deleteProjectById = id => {
+        setSpinning(true);
+        message.loading({content: '数据删除中，请稍等', duration: 0, key: 'delete'});
+        projectService.delete(id)
+            .then(res => {
+                const {success, msg} = res;
+                if (success) {
+                    console.log('[成功]删除', res);
+                    setSpinning(false);
+                    message.success({
+                        content: '删除成功',
+                        key: 'delete',
+                        onClose: () => {
+                            getTableList(filterForm);
+                            setIsModalVisible(false);
+                        }
+                    });
+                } else {
+                    console.log('[失败]删除', res);
+                    setSpinning(false);
+                    message.error({content: '删除失败' + (msg || ''), key: 'delete'});
+                }
+            })
+            .catch(err => {
+                console.log('[失败]删除', err);
+                setSpinning(false);
+                message.error({content: '删除失败' + (err.msg || ''), key: 'delete'});
+            });
+    };
 
     // 表格数据
     const columns = [
@@ -156,6 +185,7 @@ const ProjectManage = () => {
                     setIsModalVisible(true);
                 }} type='primary'>编辑</Button>
                 <Button onClick={() => {
+                    deleteProjectById(row.id);
                 }} type="primary" danger>删除</Button>
             </div>)
         },
