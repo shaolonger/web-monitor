@@ -8,6 +8,14 @@ import './index.scss';
 // service
 import projectService from 'service/projectService';
 
+// init const
+const defaultProjectDetail = {
+    projectName: '',
+    projectIdentifier: '',
+    description: '',
+    userList: [],
+};
+
 const ProjectManage = () => {
 
     const [dataSource, setDataSource] = useState([]);
@@ -33,14 +41,43 @@ const ProjectManage = () => {
         {label: '李四', value: 2},
         {label: '王五', value: 3},
     ]);
-    const [projectDetail, setProjectDetail] = useState({
-        projectName: '',
-        projectIdentifier: '',
-        description: '',
-        userList: [],
-    });
+    const [projectDetail, setProjectDetail] = useState({...defaultProjectDetail});
     const handleModalOnOk = () => {
-        setIsModalVisible(false);
+        if (mode === 'add') {
+            // 新增
+            // 校验表单数据
+            if (!projectDetail.projectName || !projectDetail.projectName.trim()) {
+                return message.error('请输入项目名');
+            }
+            if (!projectDetail.projectIdentifier || !projectDetail.projectIdentifier.trim()) {
+                return message.error('请输入项目标识');
+            }
+
+            setSpinning(true);
+            message.loading({content: '数据提交中，请稍等', duration: 0, key: 'add'});
+            projectService.add({...projectDetail, userList: JSON.stringify(projectDetail.userList)})
+                .then(res => {
+                    console.log('[成功]新增', res);
+                    setSpinning(false);
+                    message.success({
+                        content: '新增成功',
+                        key: 'add',
+                        onClose: () => {
+                            // 重置表单数据
+                            setProjectDetail({...defaultProjectDetail});
+                            getTableList(filterForm);
+                            setIsModalVisible(false);
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.log('[失败]新增', err);
+                    setSpinning(false);
+                    message.error({content: '新增失败' + (err.msg || ''), key: 'add'});
+                });
+        } else if (mode === 'edit') {
+            // 编辑
+        }
     };
     const handleModalOnCancel = () => {
         setMode('add');
@@ -50,12 +87,7 @@ const ProjectManage = () => {
         if (mode === 'add') {
             // 新增
             setModalTitle('新增');
-            setProjectDetail({
-                projectName: '',
-                projectIdentifier: '',
-                description: '',
-                userList: [],
-            });
+            setProjectDetail({...defaultProjectDetail});
         } else if (mode === 'view') {
             // 查看
             setModalTitle('查看');
