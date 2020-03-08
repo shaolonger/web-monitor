@@ -5,6 +5,7 @@ import com.shaolonger.monitorplatform.project.entity.ProjectEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ProjectService extends ServiceBase {
@@ -82,5 +84,24 @@ public class ProjectService extends ServiceBase {
         pageResultBase.setPageSize(pageSize);
         pageResultBase.setRecords(page.getContent());
         return pageResultBase;
+    }
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return Object
+     */
+    public Object delete(Long id) throws Exception {
+
+        logger.info("--------[ProjectService]删除开始--------");
+
+        Optional<ProjectEntity> optional = projectDao.findById(id);
+        ProjectEntity entity = optional.orElseThrow(() -> new Exception("找不到要删除的项目"));
+        projectDao.delete(entity);
+
+        logger.info("--------[ProjectService]删除结束--------");
+
+        return true;
     }
 }

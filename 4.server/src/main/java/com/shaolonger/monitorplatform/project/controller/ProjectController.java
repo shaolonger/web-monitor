@@ -6,6 +6,7 @@ import com.shaolonger.monitorplatform.utils.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +44,19 @@ public class ProjectController {
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(projectService.get(request));
+    }
+
+    /**
+     * 删除
+     *
+     * @return Object
+     */
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public Object delete(@PathVariable("id") Long id) {
+        try {
+            return ResponseResultBase.getResponseResultBase(projectService.delete(id));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
     }
 }
