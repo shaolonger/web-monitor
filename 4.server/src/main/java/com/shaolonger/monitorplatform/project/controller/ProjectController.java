@@ -23,7 +23,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
-    public Object add(@Valid ProjectEntity projectEntity, BindingResult bindingResult) {
+    public Object add(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -31,7 +31,11 @@ public class ProjectController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(projectService.add(projectEntity));
+            try {
+                return ResponseResultBase.getResponseResultBase(projectService.add(request, projectEntity));
+            } catch (Exception e) {
+                return ResponseResultBase.getErrorResponseResult(e);
+            }
         }
     }
 

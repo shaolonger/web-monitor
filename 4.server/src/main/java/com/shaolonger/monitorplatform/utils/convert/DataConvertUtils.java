@@ -1,9 +1,15 @@
 package com.shaolonger.monitorplatform.utils.convert;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.rmi.CORBA.ValueHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DataConvertUtils {
+
     /**
      * String转Date
      * @param str 时间字符串
@@ -79,5 +85,19 @@ public class DataConvertUtils {
         } else {
             return str;
         }
+    }
+
+    /**
+     * JSON字符串转对象
+     *
+     * @param jsonStr jsonStr
+     * @param tClass tClass
+     * @param <T> T
+     * @return T
+     * @throws JsonProcessingException
+     */
+    public static <T> T jsonStrToObject(String jsonStr, Class<T> tClass) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonStr, tClass);
     }
 }

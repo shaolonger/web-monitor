@@ -1,7 +1,10 @@
 package com.shaolonger.monitorplatform.project.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shaolonger.monitorplatform.project.dao.ProjectDao;
 import com.shaolonger.monitorplatform.project.entity.ProjectEntity;
+import com.shaolonger.monitorplatform.user.dao.UserProjectRelationDao;
+import com.shaolonger.monitorplatform.user.entity.UserProjectRelationEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
@@ -15,10 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class ProjectService extends ServiceBase {
@@ -28,13 +29,17 @@ public class ProjectService extends ServiceBase {
     @Autowired
     private ProjectDao projectDao;
 
+    @Autowired
+    private UserProjectRelationDao userProjectRelationDao;
+
     /**
      * 新增
      *
      * @param projectEntity projectEntity
      * @return Object
      */
-    public Object add(ProjectEntity projectEntity) {
+    @Transactional(rollbackOn = {Exception.class})
+    public Object add(HttpServletRequest request, ProjectEntity projectEntity) throws JsonProcessingException {
 
         logger.info("--------[ProjectService]保存开始--------");
 
@@ -42,6 +47,16 @@ public class ProjectService extends ServiceBase {
         Date createTime = new Date();
         projectEntity.setCreateTime(createTime);
         projectDao.save(projectEntity);
+
+        // 保存关联用户
+        String userListStr = request.getParameter("userList");
+        List<Integer> userList = DataConvertUtils.jsonStrToObject(userListStr, List.class);
+        for (Integer userId : userList) {
+            UserProjectRelationEntity userProjectRelationEntity = new UserProjectRelationEntity();
+            userProjectRelationEntity.setUserId(userId.longValue());
+            userProjectRelationEntity.setProjectId(projectEntity.getId());
+            userProjectRelationDao.save(userProjectRelationEntity);
+        }
 
         logger.info("--------[ProjectService]保存结束--------");
 
