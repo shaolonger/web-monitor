@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Input, Select, Table, Button, message, Spin} from 'antd';
+import {Modal, Input, Select, Table, Button, message, Spin} from 'antd';
 import moment from "moment";
 
 // css
@@ -23,6 +23,47 @@ const ProjectManage = () => {
         console.log('[useCallback]filterForm', filterForm);
         getTableList(filterForm);
     }, [filterForm]);
+
+    // 详情页
+    const [mode, setMode] = useState('add');
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('新增');
+    const [userList, setUserList] = useState([
+        {label: '张三', value: 1},
+        {label: '李四', value: 2},
+        {label: '王五', value: 3},
+    ]);
+    const [projectDetail, setProjectDetail] = useState({
+        projectName: '',
+        projectIdentifier: '',
+        description: '',
+        userList: [],
+    });
+    const handleModalOnOk = () => {
+        setIsModalVisible(false);
+    };
+    const handleModalOnCancel = () => {
+        setMode('add');
+        setIsModalVisible(false);
+    };
+    useEffect(() => {
+        if (mode === 'add') {
+            // 新增
+            setModalTitle('新增');
+            setProjectDetail({
+                projectName: '',
+                projectIdentifier: '',
+                description: '',
+                userList: [],
+            });
+        } else if (mode === 'view') {
+            // 查看
+            setModalTitle('查看');
+        } else if (mode === 'edit') {
+            // 编辑
+            setModalTitle('编辑');
+        }
+    }, [mode]);
 
     // 表格数据
     const columns = [
@@ -61,10 +102,29 @@ const ProjectManage = () => {
             dataIndex: 'handle',
             key: 'handle',
             align: 'center',
-            render: () => (<div className='projectManage-table-handleBtn'>
-                <Button onClick={() => {}} type='primary'>查看</Button>
-                <Button onClick={() => {}} type='primary'>编辑</Button>
-                <Button onClick={() => {}} type="primary" danger>删除</Button>
+            render: row => (<div className='projectManage-table-handleBtn'>
+                <Button onClick={() => {
+                    setProjectDetail({
+                        projectName: row.projectName,
+                        projectIdentifier: row.projectIdentifier,
+                        description: row.description,
+                        userList: [],
+                    });
+                    setMode('view');
+                    setIsModalVisible(true);
+                }} type='primary'>查看</Button>
+                <Button onClick={() => {
+                    setProjectDetail({
+                        projectName: row.projectName,
+                        projectIdentifier: row.projectIdentifier,
+                        description: row.description,
+                        userList: [],
+                    });
+                    setMode('edit');
+                    setIsModalVisible(true);
+                }} type='primary'>编辑</Button>
+                <Button onClick={() => {
+                }} type="primary" danger>删除</Button>
             </div>)
         },
     ];
@@ -93,6 +153,7 @@ const ProjectManage = () => {
                         description: item.description,
                         createTime: item.createTime && moment(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
                         updateTime: item.updateTime && moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
+                        handle: item,
                     }));
                     setDataSource(dataSource);
                 }
@@ -124,11 +185,19 @@ const ProjectManage = () => {
         <div className='projectManage-container'>
             <div className='projectManage-topBanner'>
                 <div className='projectManage-topBanner-add'>
-                    <Button onClick={() => {}} type='primary'>新增</Button>
+                    <Button onClick={() => {
+                        setMode('add');
+                        setIsModalVisible(true);
+                    }} type='primary'>新增</Button>
                 </div>
                 <div className='projectManage-topBanner-input'>
-                    <Input placeholder="请输入项目名" onChange={e => e && e.target &&
-                        setFilterForm({...filterForm, projectName: e.target.value || ''})} allowClear />
+                    <Input
+                        placeholder="请输入项目名"
+                        onChange={e => e && e.target &&
+                            setFilterForm({...filterForm, projectName: e.target.value || ''})
+                        }
+                        allowClear
+                    />
                 </div>
             </div>
             <div className='projectManage-table'>
@@ -136,6 +205,103 @@ const ProjectManage = () => {
                     <Table dataSource={dataSource} columns={columns} pagination={pagination}/>
                 </Spin>
             </div>
+            <Modal
+                title={modalTitle} visible={isModalVisible} onOk={handleModalOnOk} onCancel={handleModalOnCancel}
+            >
+                <ul className='projectManage-modal-list' style={{
+                    listStyle: 'none',
+                    paddingLeft: '0'
+                }}>
+                    <li className='projectManage-modal-listItem' style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: '2em',
+                    }}>
+                        <span className='projectManage-modal-key' style={{
+                            marginRight: '1em',
+                            minWidth: '4em',
+                        }}>项目名</span>
+                        <div className='projectManage-modal-value' style={{
+                            flex: 1,
+                        }}>
+                            <Input
+                                placeholder="请输入项目名"
+                                value={projectDetail.projectName}
+                                disabled={mode === 'view'}
+                                onChange={e => e && e.target &&
+                                    setProjectDetail({...projectDetail, projectName: e.target.value || ''})}
+                                allowClear/>
+                        </div>
+                    </li>
+                    <li className='projectManage-modal-listItem' style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: '2em',
+                    }}>
+                        <span className='projectManage-modal-key' style={{
+                            marginRight: '1em',
+                            minWidth: '4em',
+                        }}>项目标识</span>
+                        <div className='projectManage-modal-value' style={{
+                            flex: 1,
+                        }}>
+                            <Input
+                                placeholder="请输入项目名"
+                                value={projectDetail.projectIdentifier}
+                                disabled={mode === 'view'}
+                                onChange={e => e && e.target &&
+                                    setProjectDetail({...projectDetail, projectIdentifier: e.target.value || ''})}
+                                allowClear/>
+                        </div>
+                    </li>
+                    <li className='projectManage-modal-listItem' style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: '2em',
+                    }}>
+                        <span className='projectManage-modal-key' style={{
+                            marginRight: '1em',
+                            minWidth: '4em',
+                        }}>项目描述</span>
+                        <div className='projectManage-modal-value' style={{
+                            flex: 1,
+                        }}>
+                            <Input
+                                placeholder="请输入项目名"
+                                value={projectDetail.description} disabled={mode === 'view'}
+                                onChange={e => e && e.target &&
+                                    setProjectDetail({...projectDetail, description: e.target.value || ''})}
+                                allowClear/>
+                        </div>
+                    </li>
+                    <li className='projectManage-modal-listItem' style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: '2em',
+                    }}>
+                        <span className='projectManage-modal-key' style={{
+                            marginRight: '1em',
+                            minWidth: '4em',
+                        }}>关联用户</span>
+                        <div className='projectManage-modal-value' style={{
+                            flex: 1,
+                        }}>
+                            <Select
+                                mode="multiple"
+                                placeholder="请选择用户"
+                                value={projectDetail.userList}
+                                onChange={value => setProjectDetail({...projectDetail, userList: value})}
+                                style={{width: '100%'}}
+                                disabled={mode === 'view'}
+                            >
+                                {userList.map(user => (
+                                    <Select.Option key={user.value} value={user.value}>{user.label}</Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </li>
+                </ul>
+            </Modal>
         </div>
     );
 };
