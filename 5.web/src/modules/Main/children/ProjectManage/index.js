@@ -6,6 +6,7 @@ import moment from "moment";
 import './index.scss';
 
 // service
+import userService from 'service/userService';
 import projectService from 'service/projectService';
 
 // init const
@@ -36,11 +37,30 @@ const ProjectManage = () => {
     const [mode, setMode] = useState('add');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState('新增');
-    const [userList, setUserList] = useState([
-        {label: '张三', value: 1},
-        {label: '李四', value: 2},
-        {label: '王五', value: 3},
-    ]);
+    const [userList, setUserList] = useState([]);
+
+    useEffect(() => {
+        // 获取用户列表
+        userService.get({isNeedPaging: 0})
+            .then(res => {
+                setSpinning(false);
+                console.log('[成功]获取用户列表', res);
+                const {success, data} = res;
+                if (!success) {
+                    message.error({content: '获取用户列表失败' + (res.msg || '')});
+                } else {
+                    setUserList(data.map(item => ({
+                        label: item.username, value: item.id
+                    })));
+                }
+            })
+            .catch(err => {
+                console.log('[失败]新增', err);
+                setSpinning(false);
+                message.error({content: '获取用户列表失败' + (err.msg || '')});
+            });
+    }, []);
+
     const [projectDetail, setProjectDetail] = useState({...defaultProjectDetail});
     const handleModalOnOk = () => {
         if (mode === 'add') {

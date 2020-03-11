@@ -10,7 +10,7 @@ import imgBgMonitor from 'static/images/Login/bg_monitor.png';
 import './index.scss';
 
 // service
-import loginService from 'service/loginService';
+import userService from 'service/userService';
 
 const Login = props => {
 
@@ -36,7 +36,7 @@ const Login = props => {
         const {username, password, remember} = values;
         setSpinning(true);
         message.loading({content: '登录中，请稍等', duration: 0, key: 'login'});
-        loginService.login({username, password})
+        userService.login({username, password})
             .then(res => {
                 console.log('[成功]登录', res);
                 setSpinning(false);
