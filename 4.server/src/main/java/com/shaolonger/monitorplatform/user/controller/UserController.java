@@ -15,6 +15,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public Object get(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(userService.get(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(HttpServletRequest request) {
         try {

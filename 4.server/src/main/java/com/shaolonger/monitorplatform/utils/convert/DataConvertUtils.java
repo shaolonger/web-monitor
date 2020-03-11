@@ -45,7 +45,7 @@ public class DataConvertUtils {
     }
 
     /**
-     * String转int或null
+     * String转Integer或null
      * @param str 字符串
      * @return int
      */
