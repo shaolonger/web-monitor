@@ -47,7 +47,11 @@ public class ProjectController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
-        return ResponseResultBase.getResponseResultBase(projectService.get(request));
+        try {
+            return ResponseResultBase.getResponseResultBase(projectService.get(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
     }
 
     /**

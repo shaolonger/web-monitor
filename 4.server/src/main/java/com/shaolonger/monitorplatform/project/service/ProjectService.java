@@ -3,6 +3,7 @@ package com.shaolonger.monitorplatform.project.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shaolonger.monitorplatform.project.dao.ProjectDao;
 import com.shaolonger.monitorplatform.project.entity.ProjectEntity;
+import com.shaolonger.monitorplatform.project.vo.ProjectVO;
 import com.shaolonger.monitorplatform.user.dao.UserProjectRelationDao;
 import com.shaolonger.monitorplatform.user.entity.UserProjectRelationEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService extends ServiceBase {
@@ -69,7 +71,7 @@ public class ProjectService extends ServiceBase {
      * @param request request
      * @return Object
      */
-    public Object get(HttpServletRequest request) {
+    public Object get(HttpServletRequest request) throws Exception {
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
@@ -78,8 +80,7 @@ public class ProjectService extends ServiceBase {
         // 拼接sql，分页查询
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Map<String, Object> paramMap = new HashMap<>();
-        StringBuilder dataSqlBuilder = new StringBuilder("select t.*, group_concat(t1.user_id) from pms_project t " +
-                "left join ums_user_project_relation t1 on t.id=t1.project_id where 1=1");
+        StringBuilder dataSqlBuilder = new StringBuilder("select * from pms_project t where 1=1");
         StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from pms_project t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
@@ -92,13 +93,16 @@ public class ProjectService extends ServiceBase {
         countSqlBuilder.append(paramSqlBuilder);
         Page<ProjectEntity> page = this.findPageBySqlAndParam(ProjectEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
+        // 转换vo
+        List<ProjectVO> resultList = this.getProjectVOList(page.getContent());
+
         // 返回
-        PageResultBase<ProjectEntity> pageResultBase = new PageResultBase<>();
+        PageResultBase<ProjectVO> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
         pageResultBase.setPageSize(pageSize);
-        pageResultBase.setRecords(page.getContent());
+        pageResultBase.setRecords(resultList);
         return pageResultBase;
     }
 
@@ -119,5 +123,27 @@ public class ProjectService extends ServiceBase {
         logger.info("--------[ProjectService]删除结束--------");
 
         return true;
+    }
+
+    /**
+     * entity转vo
+     *
+     * @param list list
+     * @return List List
+     */
+    private List<ProjectVO> getProjectVOList(List<ProjectEntity> list) throws Exception {
+        ArrayList<ProjectVO> returnList = new ArrayList<>();
+        for (ProjectEntity entity : list) {
+            String jsonStr = DataConvertUtils.objectToJsonStr(entity);
+            ProjectVO projectVO = DataConvertUtils.jsonStrToObject(jsonStr, ProjectVO.class);
+            returnList.add(projectVO);
+
+            // 获取项目关联的用户
+            List<UserProjectRelationEntity> relatedUserList = userProjectRelationDao.findByProjectId(projectVO.getId());
+            String userList = relatedUserList.stream().map(UserProjectRelationEntity::getUserId)
+                    .map(userId -> String.valueOf(userId)).collect(Collectors.joining(","));
+            projectVO.setUserList(userList);
+        }
+        return returnList;
     }
 }
