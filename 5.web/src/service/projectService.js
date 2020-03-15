@@ -14,6 +14,10 @@ const ProjectService = {
     delete(params) {
         return axios.delete('/project/delete/' + params);
     },
+    // 更新
+    update(params) {
+        return axios.post('/project/update', qs.stringify(params));
+    },
 };
 
 export default ProjectService;

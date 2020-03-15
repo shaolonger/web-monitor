@@ -97,6 +97,41 @@ const ProjectManage = () => {
                 });
         } else if (mode === 'edit') {
             // 编辑
+            // 校验表单数据
+            if (!projectDetail.projectName || !projectDetail.projectName.trim()) {
+                return message.error('请输入项目名');
+            }
+            if (!projectDetail.projectIdentifier || !projectDetail.projectIdentifier.trim()) {
+                return message.error('请输入项目标识');
+            }
+
+            setSpinning(true);
+            message.loading({content: '数据提交中，请稍等', duration: 0, key: 'update'});
+            projectService.update({...projectDetail, userList: JSON.stringify(projectDetail.userList)})
+                .then(res => {
+                    console.log('[成功]更新', res);
+                    setSpinning(false);
+                    const {success, msg} = res;
+                    if (!success) {
+                        message.error({content: '更新失败' + (msg || ''), key: 'update'});
+                    } else {
+                        message.success({
+                            content: '更新成功',
+                            key: 'update',
+                            onClose: () => {
+                                // 重置表单数据
+                                setProjectDetail({...defaultProjectDetail});
+                                getTableList(filterForm);
+                                setIsModalVisible(false);
+                            }
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log('[失败]更新', err);
+                    setSpinning(false);
+                    message.error({content: '更新失败' + (err.msg || ''), key: 'update'});
+                });
         }
     };
     const handleModalOnCancel = () => {
@@ -198,6 +233,7 @@ const ProjectManage = () => {
                 <Button onClick={() => {
                     const userList = row.userList.length ? row.userList.split(',').map(user => Number(user)) : [];
                     setProjectDetail({
+                        id: row.id,
                         projectName: row.projectName,
                         projectIdentifier: row.projectIdentifier,
                         description: row.description,
@@ -330,7 +366,7 @@ const ProjectManage = () => {
                             flex: 1,
                         }}>
                             <Input
-                                placeholder="请输入项目名"
+                                placeholder="请输入项目标识"
                                 value={projectDetail.projectIdentifier}
                                 disabled={mode === 'view'}
                                 onChange={e => e && e.target &&
@@ -351,7 +387,7 @@ const ProjectManage = () => {
                             flex: 1,
                         }}>
                             <Input
-                                placeholder="请输入项目名"
+                                placeholder="请输入项目描述"
                                 value={projectDetail.description} disabled={mode === 'view'}
                                 onChange={e => e && e.target &&
                                     setProjectDetail({...projectDetail, description: e.target.value || ''})}
