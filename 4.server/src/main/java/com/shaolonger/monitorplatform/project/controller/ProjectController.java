@@ -22,6 +22,14 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    /**
+     * 新增
+     *
+     * @param request request
+     * @param projectEntity projectEntity
+     * @param bindingResult bindingResult
+     * @return Object
+     */
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -33,6 +41,31 @@ public class ProjectController {
         } else {
             try {
                 return ResponseResultBase.getResponseResultBase(projectService.add(request, projectEntity));
+            } catch (Exception e) {
+                return ResponseResultBase.getErrorResponseResult(e);
+            }
+        }
+    }
+
+    /**
+     * 更新
+     *
+     * @param request request
+     * @param projectEntity projectEntity
+     * @param bindingResult bindingResult
+     * @return Object
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Object update(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (ObjectError objectError : bindingResult.getAllErrors()) {
+                stringBuilder.append(objectError.getDefaultMessage()).append(",");
+            }
+            throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
+        } else {
+            try {
+                return ResponseResultBase.getResponseResultBase(projectService.update(request, projectEntity));
             } catch (Exception e) {
                 return ResponseResultBase.getErrorResponseResult(e);
             }

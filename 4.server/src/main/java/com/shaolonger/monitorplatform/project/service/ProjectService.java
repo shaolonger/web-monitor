@@ -41,7 +41,7 @@ public class ProjectService extends ServiceBase {
      * @return Object
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object add(HttpServletRequest request, ProjectEntity projectEntity) throws JsonProcessingException {
+    public Object add(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
 
         logger.info("--------[ProjectService]保存开始--------");
 
@@ -63,6 +63,67 @@ public class ProjectService extends ServiceBase {
         logger.info("--------[ProjectService]保存结束--------");
 
         return projectEntity;
+    }
+
+    /**
+     * 更新
+     *
+     * @param projectEntity projectEntity
+     * @return Object
+     */
+    @Transactional(rollbackOn = {Exception.class})
+    public Object update(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
+
+        logger.info("--------[ProjectService]更新开始--------");
+        
+        // 获取要更新的实体
+        Long id = DataConvertUtils.strToLong(request.getParameter("id"));
+        String projectName = request.getParameter("projectName");
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String description = request.getParameter("description");
+        if (id == null || id < 1) throw new Exception("id格式不正确");
+        Optional<ProjectEntity> optional = projectDao.findById(id);
+        ProjectEntity entity = optional.orElseThrow(() -> new Exception("项目不存在"));
+
+        // 处理关联用户
+        String requestUserListStr = request.getParameter("userList");
+        List<Integer> requestUserList = DataConvertUtils.jsonStrToObject(requestUserListStr, List.class);
+        List<UserProjectRelationEntity> relatedUserList = userProjectRelationDao.findByProjectId(entity.getId());
+        List<Long> dbUserList = relatedUserList.stream().map(UserProjectRelationEntity::getUserId).collect(Collectors.toList());
+        // 找出差异的关联用户
+        List<Long> shouldAddUserList = new ArrayList<>();
+        List<Long> shouldDelUserList = new ArrayList<>();
+        for (Integer userId : requestUserList) {
+            if (!dbUserList.contains(userId.longValue())) {
+                shouldAddUserList.add(userId.longValue());
+            } else {
+                dbUserList.remove(userId.longValue());
+            }
+        }
+        shouldDelUserList = dbUserList;
+        for (Long userId : shouldAddUserList) {
+            UserProjectRelationEntity userProjectRelationEntity = new UserProjectRelationEntity();
+            userProjectRelationEntity.setUserId(userId);
+            userProjectRelationEntity.setProjectId(entity.getId());
+            userProjectRelationDao.save(userProjectRelationEntity);
+        }
+        for (Long userId : shouldDelUserList) {
+            userProjectRelationDao.deleteByUserIdAndProjectId(userId, entity.getId());
+        }
+
+        // 修改时间
+        Date updateTime = new Date();
+
+        // 保存实体
+        entity.setUpdateTime(updateTime);
+        entity.setProjectName(projectName);
+        entity.setProjectIdentifier(projectIdentifier);
+        entity.setDescription(description);
+        projectDao.save(entity);
+
+        logger.info("--------[ProjectService]更新结束--------");
+
+        return entity;
     }
 
     /**
