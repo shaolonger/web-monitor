@@ -10,4 +10,6 @@ public interface UserProjectRelationDao extends JpaRepository<UserProjectRelatio
     List<UserProjectRelationEntity> findByProjectId(Long projectId);
 
     void deleteByUserIdAndProjectId(Long userId, Long projectId);
+
+    void deleteAllByProjectId(Long projectId);
 }

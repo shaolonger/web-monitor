@@ -173,12 +173,17 @@ public class ProjectService extends ServiceBase {
      * @param id id
      * @return Object
      */
+    @Transactional(rollbackOn = {Exception.class})
     public Object delete(Long id) throws Exception {
 
         logger.info("--------[ProjectService]删除开始--------");
 
         Optional<ProjectEntity> optional = projectDao.findById(id);
         ProjectEntity entity = optional.orElseThrow(() -> new Exception("找不到要删除的项目"));
+
+        // 删除用户项目关联表中的数据
+        userProjectRelationDao.deleteAllByProjectId(id);
+
         projectDao.delete(entity);
 
         logger.info("--------[ProjectService]删除结束--------");
