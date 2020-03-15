@@ -185,21 +185,23 @@ const ProjectManage = () => {
             align: 'center',
             render: row => (<div className='projectManage-table-handleBtn'>
                 <Button onClick={() => {
+                    const userList = row.userList.length ? row.userList.split(',').map(user => Number(user)) : [];
                     setProjectDetail({
                         projectName: row.projectName,
                         projectIdentifier: row.projectIdentifier,
                         description: row.description,
-                        userList: [],
+                        userList
                     });
                     setMode('view');
                     setIsModalVisible(true);
                 }} type='primary'>查看</Button>
                 <Button onClick={() => {
+                    const userList = row.userList.length ? row.userList.split(',').map(user => Number(user)) : [];
                     setProjectDetail({
                         projectName: row.projectName,
                         projectIdentifier: row.projectIdentifier,
                         description: row.description,
-                        userList: [],
+                        userList
                     });
                     setMode('edit');
                     setIsModalVisible(true);
