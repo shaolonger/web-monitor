@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/15 12:11:47                           */
+/* Created on:     2020/3/15 12:18:19                           */
 /*==============================================================*/
 
 
@@ -31,12 +31,12 @@ create table lms_custom_error_log
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) default "" comment '用户名',
-   page_url             text default "" comment '页面URL',
+   page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
    os                   varchar(20) default "" comment '操作系统',
    browser_name         varchar(20) default "" comment '浏览器名',
-   browser_version      text default "" comment '浏览器版本',
+   browser_version      text comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
    error_type           varchar(30) default "" comment '错误类型',
    error_message        text not null comment '错误信息',
@@ -56,16 +56,16 @@ create table lms_http_error_log
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) default "" comment '用户名',
-   page_url             text default "" comment '页面URL',
+   page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
    os                   varchar(20) default "" comment '操作系统',
    browser_name         varchar(20) default "" comment '浏览器名',
-   browser_version      text default "" comment '浏览器版本',
+   browser_version      text comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
    http_type            varchar(20) default "" comment 'http请求类型，如"request"、"response"',
    http_url_complete    text not null comment '完整的http请求地址',
-   http_url_short       text default "" comment '缩写的http请求地址',
+   http_url_short       text comment '缩写的http请求地址',
    status               varchar(20) not null comment '请求状态',
    status_text          varchar(50) default "" comment '请求状态文字描述',
    res_time             varchar(13) default "" comment '响应时间',
@@ -85,16 +85,16 @@ create table lms_js_error_log
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '关联的用户ID',
    user_name            varchar(64) default "" comment '用户名',
-   page_url             text default "" comment '页面URL',
+   page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
    os                   varchar(20) default "" comment '操作系统',
    browser_name         varchar(20) default "" comment '浏览器名',
-   browser_version      text default "" comment '浏览器版本',
+   browser_version      text comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
    error_type           varchar(30) default "" comment '错误类型',
    error_message        text not null comment '错误信息',
-   error_stack          text default "" comment '错误堆栈信息',
+   error_stack          text comment '错误堆栈信息',
    primary key (id)
 );
 
@@ -111,12 +111,12 @@ create table lms_resource_load_error_log
    create_time          datetime not null comment '创建时间',
    user_id              bigint not null comment '用户ID',
    user_name            varchar(64) default "" comment '用户名',
-   page_url             text default "" comment '页面URL',
+   page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
    os                   varchar(20) default "" comment '操作系统',
    browser_name         varchar(20) default "" comment '浏览器名',
-   browser_version      text default "" comment '浏览器版本',
+   browser_version      text comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
    resource_url         text not null comment '资源URL',
    resource_type        varchar(20) not null comment '资源类型',
