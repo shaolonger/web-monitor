@@ -39,6 +39,22 @@ public class DataConvertUtils {
     }
 
     /**
+     * Date转String
+     *
+     * @param date    日期
+     * @param pattern 转换日期格式，如"yyyy-MM-dd HH:mm:ss"
+     * @return String
+     */
+    public static String dateToStr(Date date, String pattern) {
+        String dateStr = null;
+        if (date != null && pattern != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            dateStr = sdf.format(date);
+        }
+        return dateStr;
+    }
+
+    /**
      * String转int
      *
      * @param str 字符串

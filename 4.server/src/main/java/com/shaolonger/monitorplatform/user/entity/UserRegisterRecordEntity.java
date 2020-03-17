@@ -70,7 +70,7 @@ public class UserRegisterRecordEntity {
 
     /**
      * 审批结果
-     * 0-不通过，1-通过
+     * -1-未审核 0-不通过，1-通过
      */
     private Integer auditResult;
 }

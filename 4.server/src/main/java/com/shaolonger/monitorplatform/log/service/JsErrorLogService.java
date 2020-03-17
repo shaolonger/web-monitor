@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -161,11 +162,22 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * 查询某个时间段内的日志总数
      *
-     * @param startTime
-     * @param endTime
-     * @return
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return int
      */
     public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
         return jsErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    }
+
+    /**
+     * 获取日志统计信息
+     *
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return int
+     */
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
+        return jsErrorLogDao.getLogCountByHours(startTime, endTime);
     }
 }
