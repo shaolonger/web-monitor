@@ -1,6 +1,7 @@
 package com.shaolonger.monitorplatform.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -53,5 +54,19 @@ public class DateUtils {
      */
     public static long getHoursBetweenDateRange(Date startDate, Date endDate) {
         return Math.abs((endDate.getTime() - startDate.getTime()) / (3600 * 1000));
+    }
+
+    /**
+     * 获取在参考日期相隔days天的日期
+     *
+     * @param date 参考日期
+     * @param days 相隔天数
+     * @return Date
+     */
+    public static Date getDateBeforeOrAfterByDays(Date date, int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, days);
+        return calendar.getTime();
     }
 }
