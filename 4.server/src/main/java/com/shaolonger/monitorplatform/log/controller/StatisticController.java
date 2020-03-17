@@ -32,15 +32,15 @@ public class StatisticController {
     }
 
     /**
-     * 获取JsErrorLog日志统计信息
+     * 获取日志统计信息
      *
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getJsErrorLogCountByHours", method = RequestMethod.GET)
-    public Object getJsErrorLogCountByHours(HttpServletRequest request) {
+    @RequestMapping(value = "/getLogCountByHours", method = RequestMethod.GET)
+    public Object getLogCountByHours(HttpServletRequest request) {
         try {
-            return ResponseResultBase.getResponseResultBase(statisticService.getJsErrorLogCountByHours(request));
+            return ResponseResultBase.getResponseResultBase(statisticService.getLogCountByHours(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }

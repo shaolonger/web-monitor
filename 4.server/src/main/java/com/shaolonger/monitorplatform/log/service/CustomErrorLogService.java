@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -166,5 +167,16 @@ public class CustomErrorLogService extends ServiceBase {
      */
     public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
         return customErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    }
+
+    /**
+     * 获取日志统计信息
+     *
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return List
+     */
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
+        return customErrorLogDao.getLogCountByHours(startTime, endTime);
     }
 }

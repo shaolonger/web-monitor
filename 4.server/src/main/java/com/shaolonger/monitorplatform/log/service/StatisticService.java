@@ -12,13 +12,13 @@ import java.util.*;
 public class StatisticService {
 
     @Autowired
-    CustomErrorLogService customErrorLogService;
+    JsErrorLogService jsErrorLogService;
     @Autowired
     HttpErrorLogService httpErrorLogService;
     @Autowired
-    JsErrorLogService jsErrorLogService;
-    @Autowired
     ResourceLoadErrorLogService resourceLoadErrorLogService;
+    @Autowired
+    CustomErrorLogService customErrorLogService;
 
     /**
      * 获取总览统计信息
@@ -54,13 +54,15 @@ public class StatisticService {
      * @param request request
      * @return Object
      */
-    public Object getJsErrorLogCountByHours(HttpServletRequest request) throws Exception {
+    public Object getLogCountByHours(HttpServletRequest request) throws Exception {
         // 获取查询参数
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String logType = request.getParameter("logType");
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (logType == null || logType.isEmpty()) throw new Exception("logType错误");
 
         Map<String, Map<String, Object>> resultMap = new HashMap<>();
         long hoursGap = DateUtils.getHoursBetweenDateRange(startTime, endTime);
@@ -76,16 +78,38 @@ public class StatisticService {
             agoMap.put(DateUtils.dateToStr(agoStartDate, "yyyy-MM-dd HH"), 0);
         }
 
-        List<Map<String, Object>> nowSearchList = jsErrorLogService.getLogCountByHours(startTime, endTime);
-        for (Map<String, Object> map : nowSearchList) {
-            nowMap.put((String) map.get("hour"), map.get("count"));
-        }
-
+        List<Map<String, Object>> nowSearchList = null;
+        List<Map<String, Object>> agoSearchList = null;
         Date agoStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -7);
         Date agoEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -7);
-        List<Map<String, Object>> agoSearchList = jsErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
-        for (Map<String, Object> map : agoSearchList) {
-            agoMap.put((String) map.get("hour"), map.get("count"));
+
+        switch (logType) {
+            case "jsErrorLog":
+                nowSearchList = jsErrorLogService.getLogCountByHours(startTime, endTime);
+                agoSearchList = jsErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                break;
+            case "httpErrorLog":
+                nowSearchList = httpErrorLogService.getLogCountByHours(startTime, endTime);
+                agoSearchList = httpErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                break;
+            case "resourceLoadErrorLog":
+                nowSearchList = resourceLoadErrorLogService.getLogCountByHours(startTime, endTime);
+                agoSearchList = resourceLoadErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                break;
+            case "customErrorLog":
+                nowSearchList = customErrorLogService.getLogCountByHours(startTime, endTime);
+                agoSearchList = customErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                break;
+            default:
+                break;
+        }
+        if (nowSearchList != null && agoSearchList != null) {
+            for (Map<String, Object> map : nowSearchList) {
+                nowMap.put((String) map.get("hour"), map.get("count"));
+            }
+            for (Map<String, Object> map : agoSearchList) {
+                agoMap.put((String) map.get("hour"), map.get("count"));
+            }
         }
 
         resultMap.put("now", nowMap);
