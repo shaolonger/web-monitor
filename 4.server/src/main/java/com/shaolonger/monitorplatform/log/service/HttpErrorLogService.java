@@ -181,4 +181,15 @@ public class HttpErrorLogService extends ServiceBase {
 
         return httpErrorLog;
     }
+
+    /**
+     * 查询某个时间段内的日志总数
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
+        return httpErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    }
 }

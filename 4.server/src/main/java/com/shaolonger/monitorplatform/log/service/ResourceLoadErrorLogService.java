@@ -163,4 +163,15 @@ public class ResourceLoadErrorLogService extends ServiceBase {
 
         return resourceLoadErrorLog;
     }
+
+    /**
+     * 查询某个时间段内的日志总数
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
+        return resourceLoadErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    }
 }

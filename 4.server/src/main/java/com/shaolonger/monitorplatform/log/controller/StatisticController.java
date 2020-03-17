@@ -22,10 +22,10 @@ public class StatisticController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getOverall", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOverallByTimeRange", method = RequestMethod.GET)
     public Object getOverall(HttpServletRequest request) {
         try {
-            return ResponseResultBase.getResponseResultBase(statisticService.getOverall(request));
+            return ResponseResultBase.getResponseResultBase(statisticService.getOverallByTimeRange(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }

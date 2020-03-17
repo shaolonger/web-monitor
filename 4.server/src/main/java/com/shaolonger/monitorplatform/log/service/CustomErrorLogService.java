@@ -155,4 +155,15 @@ public class CustomErrorLogService extends ServiceBase {
 
         return customErrorLog;
     }
+
+    /**
+     * 查询某个时间段内的日志总数
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
+        return customErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    }
 }

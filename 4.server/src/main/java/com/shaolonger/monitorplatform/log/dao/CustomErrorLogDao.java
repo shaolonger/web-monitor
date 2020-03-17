@@ -9,5 +9,5 @@ import java.util.Date;
 public interface CustomErrorLogDao extends JpaRepository<CustomErrorLog, Long> {
 
     @Query(value = "select count(id) from lms_custom_error_log where create_time between ?1 and ?2", nativeQuery = true)
-    int countByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime);
+    int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime);
 }

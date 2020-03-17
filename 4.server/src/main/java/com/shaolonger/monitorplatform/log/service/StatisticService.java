@@ -1,9 +1,5 @@
 package com.shaolonger.monitorplatform.log.service;
 
-import com.shaolonger.monitorplatform.log.dao.CustomErrorLogDao;
-import com.shaolonger.monitorplatform.log.dao.HttpErrorLogDao;
-import com.shaolonger.monitorplatform.log.dao.JsErrorLogDao;
-import com.shaolonger.monitorplatform.log.dao.ResourceLoadErrorLogDao;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +12,13 @@ import java.util.HashMap;
 public class StatisticService {
 
     @Autowired
-    CustomErrorLogDao customErrorLogDao;
-
+    CustomErrorLogService customErrorLogService;
     @Autowired
-    HttpErrorLogDao httpErrorLogDao;
-
+    HttpErrorLogService httpErrorLogService;
     @Autowired
-    JsErrorLogDao jsErrorLogDao;
-
+    JsErrorLogService jsErrorLogService;
     @Autowired
-    ResourceLoadErrorLogDao resourceLoadErrorLogDao;
+    ResourceLoadErrorLogService resourceLoadErrorLogService;
 
     /**
      * 获取总览统计信息
@@ -33,7 +26,7 @@ public class StatisticService {
      * @param request request
      * @return Object
      */
-    public Object getOverall(HttpServletRequest request) throws Exception {
+    public Object getOverallByTimeRange(HttpServletRequest request) throws Exception {
 
         // 获取查询参数
         Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
@@ -41,10 +34,10 @@ public class StatisticService {
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        int customErrorLogCount = customErrorLogDao.countByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int httpErrorLogCount = httpErrorLogDao.countByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int jsErrorLogCount = jsErrorLogDao.countByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int resourceLoadErrorLogCount = resourceLoadErrorLogDao.countByIdBetweenStartTimeAndEndTime(startTime, endTime);
+        int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+        int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+        int jsErrorLogCount = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+        int resourceLoadErrorLogCount = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
         resultMap.put("customErrorLogCount", customErrorLogCount);
