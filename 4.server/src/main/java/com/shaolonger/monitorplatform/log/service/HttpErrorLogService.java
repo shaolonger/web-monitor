@@ -2,6 +2,7 @@ package com.shaolonger.monitorplatform.log.service;
 
 import com.shaolonger.monitorplatform.log.dao.HttpErrorLogDao;
 import com.shaolonger.monitorplatform.log.entity.HttpErrorLog;
+import com.shaolonger.monitorplatform.utils.DateUtils;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
@@ -38,8 +39,8 @@ public class HttpErrorLogService extends ServiceBase {
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
-        Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
-        Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         String userName = request.getParameter("userName");
         String pageUrl = request.getParameter("pageUrl");
         String httpType = request.getParameter("httpType");

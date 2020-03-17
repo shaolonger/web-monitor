@@ -2,6 +2,7 @@ package com.shaolonger.monitorplatform.log.service;
 
 import com.shaolonger.monitorplatform.log.dao.JsErrorLogDao;
 import com.shaolonger.monitorplatform.log.entity.JsErrorLog;
+import com.shaolonger.monitorplatform.utils.DateUtils;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
@@ -39,8 +40,8 @@ public class JsErrorLogService extends ServiceBase {
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
-        Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
-        Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         String userName = request.getParameter("userName");
         String pageUrl = request.getParameter("pageUrl");
         String errorType = request.getParameter("errorType");
@@ -175,7 +176,7 @@ public class JsErrorLogService extends ServiceBase {
      *
      * @param startTime startTime
      * @param endTime endTime
-     * @return int
+     * @return List
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
         return jsErrorLogDao.getLogCountByHours(startTime, endTime);

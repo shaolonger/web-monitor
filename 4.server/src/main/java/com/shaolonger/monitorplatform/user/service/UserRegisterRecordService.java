@@ -3,6 +3,7 @@ package com.shaolonger.monitorplatform.user.service;
 import com.shaolonger.monitorplatform.user.dao.UserRegisterRecordDao;
 import com.shaolonger.monitorplatform.user.entity.UserEntity;
 import com.shaolonger.monitorplatform.user.entity.UserRegisterRecordEntity;
+import com.shaolonger.monitorplatform.utils.DateUtils;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
@@ -114,8 +115,8 @@ public class UserRegisterRecordService extends ServiceBase {
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
         int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
         Integer auditResult = DataConvertUtils.strToIntegerOrNull(request.getParameter("auditResult"));
-        Date startTime = DataConvertUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
-        Date endTime = DataConvertUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
 
         // 拼接sql，分页查询
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);

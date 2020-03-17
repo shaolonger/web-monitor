@@ -19,42 +19,6 @@ import java.util.Map;
 public class DataConvertUtils {
 
     /**
-     * String转Date
-     *
-     * @param str     时间字符串
-     * @param pattern 转换日期格式，如"yyyy-MM-dd HH:mm:ss"
-     * @return Date
-     */
-    public static Date strToDate(String str, String pattern) {
-        Date date = null;
-        if (str != null && pattern != null) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-                date = sdf.parse(str);
-            } catch (Exception e) {
-                // e.printStackTrace();
-            }
-        }
-        return date;
-    }
-
-    /**
-     * Date转String
-     *
-     * @param date    日期
-     * @param pattern 转换日期格式，如"yyyy-MM-dd HH:mm:ss"
-     * @return String
-     */
-    public static String dateToStr(Date date, String pattern) {
-        String dateStr = null;
-        if (date != null && pattern != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-            dateStr = sdf.format(date);
-        }
-        return dateStr;
-    }
-
-    /**
      * String转int
      *
      * @param str 字符串
