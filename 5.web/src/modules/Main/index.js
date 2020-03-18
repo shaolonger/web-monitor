@@ -6,6 +6,7 @@ import {LeftOutlined} from '@ant-design/icons';
 // children
 import UserRegisterAudit from "./children/UserRegisterAudit";
 import ProjectManage from "./children/ProjectManage";
+import Overview from "./children/overview";
 
 // css
 import './index.scss';
@@ -66,6 +67,7 @@ const Main = () => {
                     <Switch>
                         <Route path='/main/systemManage/userRegisterAudit' component={UserRegisterAudit} />
                         <Route path='/main/systemManage/projectManage' component={ProjectManage} />
+                        <Route path='/main/project/overview' component={Overview} />
                     </Switch>
                 </div>
             </div>
