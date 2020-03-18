@@ -59,10 +59,12 @@ public class StatisticService {
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         String logType = request.getParameter("logType");
+        String projectIdentifier = request.getParameter("projectIdentifier");
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
         if (logType == null || logType.isEmpty()) throw new Exception("logType错误");
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
 
         Map<String, Map<String, Object>> resultMap = new HashMap<>();
         long hoursGap = DateUtils.getHoursBetweenDateRange(startTime, endTime);
@@ -85,20 +87,20 @@ public class StatisticService {
 
         switch (logType) {
             case "jsErrorLog":
-                nowSearchList = jsErrorLogService.getLogCountByHours(startTime, endTime);
-                agoSearchList = jsErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                nowSearchList = jsErrorLogService.getLogCountByHours(startTime, endTime, projectIdentifier);
+                agoSearchList = jsErrorLogService.getLogCountByHours(agoStartTime, agoEndTime, projectIdentifier);
                 break;
             case "httpErrorLog":
-                nowSearchList = httpErrorLogService.getLogCountByHours(startTime, endTime);
-                agoSearchList = httpErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                nowSearchList = httpErrorLogService.getLogCountByHours(startTime, endTime, projectIdentifier);
+                agoSearchList = httpErrorLogService.getLogCountByHours(agoStartTime, agoEndTime, projectIdentifier);
                 break;
             case "resourceLoadErrorLog":
-                nowSearchList = resourceLoadErrorLogService.getLogCountByHours(startTime, endTime);
-                agoSearchList = resourceLoadErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                nowSearchList = resourceLoadErrorLogService.getLogCountByHours(startTime, endTime, projectIdentifier);
+                agoSearchList = resourceLoadErrorLogService.getLogCountByHours(agoStartTime, agoEndTime, projectIdentifier);
                 break;
             case "customErrorLog":
-                nowSearchList = customErrorLogService.getLogCountByHours(startTime, endTime);
-                agoSearchList = customErrorLogService.getLogCountByHours(agoStartTime, agoEndTime);
+                nowSearchList = customErrorLogService.getLogCountByHours(startTime, endTime, projectIdentifier);
+                agoSearchList = customErrorLogService.getLogCountByHours(agoStartTime, agoEndTime, projectIdentifier);
                 break;
             default:
                 break;

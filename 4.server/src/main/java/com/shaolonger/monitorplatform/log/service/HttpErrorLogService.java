@@ -202,7 +202,7 @@ public class HttpErrorLogService extends ServiceBase {
      * @param endTime endTime
      * @return List
      */
-    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
-        return httpErrorLogDao.getLogCountByHours(startTime, endTime);
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
+        return httpErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
     }
 }

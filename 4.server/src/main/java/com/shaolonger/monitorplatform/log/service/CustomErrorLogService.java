@@ -176,7 +176,7 @@ public class CustomErrorLogService extends ServiceBase {
      * @param endTime endTime
      * @return List
      */
-    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
-        return customErrorLogDao.getLogCountByHours(startTime, endTime);
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
+        return customErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
     }
 }

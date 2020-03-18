@@ -184,7 +184,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      * @param endTime 结束日期
      * @return List
      */
-    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
-        return resourceLoadErrorLogDao.getLogCountByHours(startTime, endTime);
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
+        return resourceLoadErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
     }
 }

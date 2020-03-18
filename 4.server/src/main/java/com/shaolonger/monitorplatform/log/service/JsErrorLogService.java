@@ -178,7 +178,7 @@ public class JsErrorLogService extends ServiceBase {
      * @param endTime endTime
      * @return List
      */
-    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime) {
-        return jsErrorLogDao.getLogCountByHours(startTime, endTime);
+    public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
+        return jsErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
     }
 }
