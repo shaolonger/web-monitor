@@ -187,9 +187,9 @@ public class HttpErrorLogService extends ServiceBase {
     /**
      * 查询某个时间段内的日志总数
      *
-     * @param startTime
-     * @param endTime
-     * @return
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return int
      */
     public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
         return httpErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
@@ -198,8 +198,8 @@ public class HttpErrorLogService extends ServiceBase {
     /**
      * 按小时间隔，获取各小时内的日志数量
      *
-     * @param startTime startTime
-     * @param endTime endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
@@ -209,11 +209,31 @@ public class HttpErrorLogService extends ServiceBase {
     /**
      * 按天时间隔，获取各天内的日志数量
      *
-     * @param startTime startTime
-     * @param endTime endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
         return httpErrorLogDao.getLogCountByDays(startTime, endTime, projectIdentifier);
+    }
+
+    /**
+     * 按status分类获取日志数量
+     *
+     * @param request request
+     * @return List
+     */
+    public List<Map<String, Object>> getLogCountByStatus(HttpServletRequest request) throws Exception {
+
+        // 获取请求参数
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String projectIdentifier = request.getParameter("projectIdentifier");
+
+        // 参数校验
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+
+        return httpErrorLogDao.getLogCountByStatus(startTime, endTime, projectIdentifier);
     }
 }

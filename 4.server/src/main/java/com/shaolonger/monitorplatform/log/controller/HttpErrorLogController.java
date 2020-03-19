@@ -50,4 +50,19 @@ public class HttpErrorLogController {
             return ResponseResultBase.getResponseResultBase(httpErrorLogService.add(httpErrorLog));
         }
     }
+
+    /**
+     * 按status分类获取日志数量
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getLogCountByStatus", method = RequestMethod.GET)
+    public Object getLogCountByStatus(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(httpErrorLogService.getLogCountByStatus(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
 }

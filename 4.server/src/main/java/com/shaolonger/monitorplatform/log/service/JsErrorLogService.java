@@ -163,8 +163,8 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * 查询某个时间段内的日志总数
      *
-     * @param startTime startTime
-     * @param endTime endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return int
      */
     public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
@@ -174,8 +174,8 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * 按小时间隔，获取各小时内的日志数量
      *
-     * @param startTime startTime
-     * @param endTime endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
@@ -185,8 +185,8 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * 按天间隔，获取各天内的日志数量
      *
-     * @param startTime startTime
-     * @param endTime endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
