@@ -18,6 +18,10 @@ const LogService = {
     getJsErrorLog(params) {
         return axios.get('/jsErrorLog/get?' + qs.stringify(params));
     },
+    // 自定义异常日志-条件查询
+    getCustomErrorLog(params) {
+        return axios.get('/customErrorLog/get?' + qs.stringify(params));
+    },
 };
 
 export default LogService;

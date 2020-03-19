@@ -1,21 +1,21 @@
-.jsErrorLog-container {
+.customErrorLog-container {
   padding: 1vw;
 
-  .jsErrorLog-topBanner {
+  .customErrorLog-topBanner {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 
-    .jsErrorLog-topBanner-radio {
+    .customErrorLog-topBanner-radio {
       margin-right: 1vw;
     }
 
-    .jsErrorLog-topBanner-datePicker {
+    .customErrorLog-topBanner-datePicker {
       width: 20vw;
     }
   }
 
-  .jsErrorLog-charts {
+  .customErrorLog-charts {
     padding: 1vw 0;
 
     .chartItem {
@@ -24,9 +24,9 @@
     }
   }
 
-  .jsErrorLog-table {
+  .customErrorLog-table {
     margin-top: 1vw;
-    .jsErrorLog-table-handleBtn {
+    .customErrorLog-table-handleBtn {
       button:nth-child(2) {
         margin-left: 1vw;
       }

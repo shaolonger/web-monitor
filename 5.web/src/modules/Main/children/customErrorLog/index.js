@@ -13,14 +13,14 @@ import logService from 'service/logService';
 // 总览表单查询参数
 const overallDays = 14;
 const overallFilterForm = {
-    logType: 'jsErrorLog',
+    logType: 'customErrorLog',
     projectIdentifier: 'testProject', // TODO 暂时固定，实际上需要根据项目属性获取
     startTime: moment().subtract('days', overallDays).format('YYYY-MM-DD'),
     endTime: moment().format('YYYY-MM-DD'),
 };
 // 图表实例
 const chartInstance = {
-    jsErrorLogChart: null,
+    customErrorLogChart: null,
 };
 const getInitTimeRangeList = () => {
     const todayStartTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
@@ -37,13 +37,13 @@ const getInitTimeRangeList = () => {
 const JsErrorLog = () => {
 
     // 统计图表
-    const [jsErrorLogChartData, setJsErrorLogChartData] = useState({});
+    const [customErrorLogChartData, setCustomErrorLogChartData] = useState({});
     useEffect(() => {
         getLogCountByDays();
     }, []);
     useEffect(() => {
-        initOrUpdateChart('jsErrorLogChart', jsErrorLogChartData);
-    }, [jsErrorLogChartData]);
+        initOrUpdateChart('customErrorLogChart', customErrorLogChartData);
+    }, [customErrorLogChartData]);
 
     // 筛选条件
     const [timeRangeList, setTimeRangeList] = useState(getInitTimeRangeList());
@@ -108,19 +108,19 @@ const JsErrorLog = () => {
      */
     const getLogCountByDays = async formData => {
         setSpinning(true);
-        // 获取jsErrorLog统计信息
-        let jsErrorLog;
+        // 获取customErrorLog统计信息
+        let customErrorLog;
         try {
             const res = await logService.getLogCountByDays(overallFilterForm);
             if (res && res.success) {
-                jsErrorLog = res.data;
-                console.log('[成功]获取jsErrorLog统计信息', jsErrorLog);
-                setJsErrorLogChartData(jsErrorLog);
+                customErrorLog = res.data;
+                console.log('[成功]获取customErrorLog统计信息', customErrorLog);
+                setCustomErrorLogChartData(customErrorLog);
             } else {
-                console.log('[错误]获取jsErrorLog统计信息', res);
+                console.log('[错误]获取customErrorLog统计信息', res);
             }
         } catch (e) {
-            console.log('[错误]获取jsErrorLog统计信息', e);
+            console.log('[错误]获取customErrorLog统计信息', e);
         }
         setSpinning(false);
     };
@@ -165,13 +165,13 @@ const JsErrorLog = () => {
      */
     const getTableList = form => {
         setSpinning(true);
-        logService.getJsErrorLog(form)
+        logService.getCustomErrorLog(form)
             .then(res => {
                 setSpinning(false);
-                console.log('[成功]查询jsErrorLog列表数据', res);
+                console.log('[成功]查询customErrorLog列表数据', res);
                 const {success, data, msg} = res;
                 if (!success) {
-                    message.error({content: msg || '查询jsErrorLog列表数据失败'});
+                    message.error({content: msg || '查询customErrorLog列表数据失败'});
                 } else {
                     const {records, totalNum} = data;
                     setTotal(totalNum);
@@ -190,8 +190,8 @@ const JsErrorLog = () => {
             })
             .catch(err => {
                 setSpinning(false);
-                console.log('[失败]查询jsErrorLog列表数据', err);
-                message.error({content: err.msg || '查询jsErrorLog列表数据失败'});
+                console.log('[失败]查询customErrorLog列表数据', err);
+                message.error({content: err.msg || '查询customErrorLog列表数据失败'});
             });
     };
 
@@ -212,9 +212,9 @@ const JsErrorLog = () => {
     };
 
     return (
-        <div className='jsErrorLog-container'>
-            <div className='jsErrorLog-topBanner'>
-                <div className='jsErrorLog-topBanner-radio'>
+        <div className='customErrorLog-container'>
+            <div className='customErrorLog-topBanner'>
+                <div className='customErrorLog-topBanner-radio'>
                     <Radio.Group defaultValue={timeRangeList[0].value} buttonStyle="solid"
                                  onChange={e => {
                                      const timeList = e.target.value;
@@ -225,7 +225,7 @@ const JsErrorLog = () => {
                         ))}
                     </Radio.Group>
                 </div>
-                <div className='jsErrorLog-topBanner-datePicker'>
+                <div className='customErrorLog-topBanner-datePicker'>
                     <DatePicker.RangePicker
                         showTime format='YYYY-MM-DD hh:mm:ss' allowClear={false}
                         value={[moment(filterForm.startTime), moment(filterForm.endTime)]}
@@ -237,10 +237,10 @@ const JsErrorLog = () => {
                     />
                 </div>
             </div>
-            <ul className='jsErrorLog-charts'>
-                <div id='jsErrorLogChart' className='chartItem'></div>
+            <ul className='customErrorLog-charts'>
+                <div id='customErrorLogChart' className='chartItem'></div>
             </ul>
-            <div className='jsErrorLog-table'>
+            <div className='customErrorLog-table'>
                 <Spin spinning={spinning}>
                     <Table dataSource={dataSource} columns={columns} pagination={pagination}/>
                 </Spin>
