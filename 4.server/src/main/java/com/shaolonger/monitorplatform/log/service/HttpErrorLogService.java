@@ -196,7 +196,7 @@ public class HttpErrorLogService extends ServiceBase {
     }
 
     /**
-     * 获取日志统计信息
+     * 按小时间隔，获取各小时内的日志数量
      *
      * @param startTime startTime
      * @param endTime endTime
@@ -204,5 +204,16 @@ public class HttpErrorLogService extends ServiceBase {
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
         return httpErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
+    }
+
+    /**
+     * 按天时间隔，获取各天内的日志数量
+     *
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return List
+     */
+    public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
+        return httpErrorLogDao.getLogCountByDays(startTime, endTime, projectIdentifier);
     }
 }

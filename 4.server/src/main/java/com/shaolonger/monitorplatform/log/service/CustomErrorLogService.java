@@ -170,7 +170,7 @@ public class CustomErrorLogService extends ServiceBase {
     }
 
     /**
-     * 获取日志统计信息
+     * 按小时间隔，获取各小时内的日志数量
      *
      * @param startTime startTime
      * @param endTime endTime
@@ -178,5 +178,16 @@ public class CustomErrorLogService extends ServiceBase {
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
         return customErrorLogDao.getLogCountByHours(startTime, endTime, projectIdentifier);
+    }
+
+    /**
+     * 按天间隔，获取各天内的日志数量
+     *
+     * @param startTime startTime
+     * @param endTime endTime
+     * @return List
+     */
+    public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
+        return customErrorLogDao.getLogCountByDays(startTime, endTime, projectIdentifier);
     }
 }

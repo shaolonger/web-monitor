@@ -16,4 +16,8 @@ public interface JsErrorLogDao extends JpaRepository<JsErrorLog, Long> {
     @Query(value = "select date_format(create_time, '%Y-%m-%d %H') as hour, count(id) as count from lms_js_error_log " +
             "where project_identifier=?3 and create_time between ?1 and ?2 group by hour", nativeQuery = true)
     List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier);
+
+    @Query(value = "select date_format(create_time, '%Y-%m-%d') as day, count(id) as count from lms_js_error_log " +
+            "where project_identifier=?3 and create_time between ?1 and ?2 group by day", nativeQuery = true)
+    List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier);
 }

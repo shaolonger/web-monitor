@@ -32,7 +32,7 @@ public class StatisticController {
     }
 
     /**
-     * 获取日志统计信息
+     * 按小时间隔，获取各小时内的日志数量
      *
      * @param request request
      * @return Object
@@ -41,6 +41,21 @@ public class StatisticController {
     public Object getLogCountByHours(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogCountByHours(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
+     * 按天间隔，获取各日期内的日志数量
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getLogCountByDays", method = RequestMethod.GET)
+    public Object getLogCountByDays(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(statisticService.getLogCountByDays(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }

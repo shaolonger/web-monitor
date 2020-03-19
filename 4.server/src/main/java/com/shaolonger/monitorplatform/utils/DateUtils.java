@@ -57,6 +57,17 @@ public class DateUtils {
     }
 
     /**
+     * 获取两个日期之间相差的天数
+     *
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @return long
+     */
+    public static long getDaysBetweenDateRange(Date startDate, Date endDate) {
+        return Math.abs((endDate.getTime() - startDate.getTime()) / (24 * 3600 * 1000));
+    }
+
+    /**
      * 获取在参考日期相隔days天的日期
      *
      * @param date 参考日期

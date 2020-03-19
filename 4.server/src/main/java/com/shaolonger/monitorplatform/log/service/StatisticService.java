@@ -49,7 +49,7 @@ public class StatisticService {
     }
 
     /**
-     * 获取JsErrorLog日志统计信息
+     * 按小时间隔，获取各小时内的日志数量
      *
      * @param request request
      * @return Object
@@ -116,6 +116,60 @@ public class StatisticService {
 
         resultMap.put("now", nowMap);
         resultMap.put("ago", agoMap);
+
+        return resultMap;
+    }
+
+    /**
+     * 按天间隔，获取各天内的日志数量
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getLogCountByDays(HttpServletRequest request) throws Exception {
+        // 获取查询参数
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd");
+        String logType = request.getParameter("logType");
+        String projectIdentifier = request.getParameter("projectIdentifier");
+
+        // 校验参数
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (logType == null || logType.isEmpty()) throw new Exception("logType错误");
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+
+        long daysGap = DateUtils.getDaysBetweenDateRange(startTime, endTime);
+        Map<String, Object> resultMap = new LinkedHashMap<>();
+
+        for (long i = 0; i < daysGap + 1; i++) {
+            Date nowtStartDate = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd");
+            nowtStartDate.setTime(nowtStartDate.getTime() + i * 24 * 3600 * 1000);
+            resultMap.put(DateUtils.dateToStr(nowtStartDate, "yyyy-MM-dd"), 0);
+        }
+
+        List<Map<String, Object>> searchList = null;
+
+        switch (logType) {
+            case "jsErrorLog":
+                searchList = jsErrorLogService.getLogCountByDays(startTime, endTime, projectIdentifier);
+                break;
+            case "httpErrorLog":
+                searchList = httpErrorLogService.getLogCountByDays(startTime, endTime, projectIdentifier);
+                break;
+            case "resourceLoadErrorLog":
+                searchList = resourceLoadErrorLogService.getLogCountByDays(startTime, endTime, projectIdentifier);
+                break;
+            case "customErrorLog":
+                searchList = customErrorLogService.getLogCountByDays(startTime, endTime, projectIdentifier);
+                break;
+            default:
+                break;
+        }
+        if (searchList != null) {
+            for (Map<String, Object> map : searchList) {
+                resultMap.put((String) map.get("day"), map.get("count"));
+            }
+        }
 
         return resultMap;
     }
