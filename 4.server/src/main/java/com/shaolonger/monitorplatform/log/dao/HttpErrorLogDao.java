@@ -18,7 +18,7 @@ public interface HttpErrorLogDao extends JpaRepository<HttpErrorLog, Long> {
     List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier);
 
     @Query(value = "select date_format(create_time, '%Y-%m-%d') as day, count(id) as count from lms_http_error_log " +
-            "where project_identifier=?3 and create_time between ?1 and ?2 group by day", nativeQuery = true)
+            "where project_identifier=?3 and create_time between ?1 and date_add(?2, interval 1 day) group by day", nativeQuery = true)
     List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier);
 }
 
