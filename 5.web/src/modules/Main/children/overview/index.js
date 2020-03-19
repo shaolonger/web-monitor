@@ -40,12 +40,12 @@ const Overview = () => {
     const [spinning, setSpinning] = useState(false);
 
     // 筛选条件
+    const [timeRangeList, setTimeRangeList] = useState(getInitTimeRangeList());
     const [filterForm, setFilterForm] = useState({
         projectIdentifier: 'testProject',
-        startTime: '',
-        endTime: '',
+        startTime: timeRangeList[0].value[0],
+        endTime: timeRangeList[0].value[1],
     });
-    const [timeRangeList, setTimeRangeList] = useState(getInitTimeRangeList());
     useEffect(() => {
         getOverallByTimeRange(filterForm.startTime, filterForm.endTime);
         getLogCountByHours(filterForm);
