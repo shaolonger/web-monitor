@@ -6,7 +6,8 @@ import {LeftOutlined} from '@ant-design/icons';
 // children
 import UserRegisterAudit from "./children/UserRegisterAudit";
 import ProjectManage from "./children/ProjectManage";
-import Overview from "./children/overview";
+import Overview from "./children/Overview";
+import JsErrorLog from "./children/JsErrorLog";
 
 // css
 import './index.scss';
@@ -68,6 +69,7 @@ const Main = () => {
                         <Route path='/main/systemManage/userRegisterAudit' component={UserRegisterAudit} />
                         <Route path='/main/systemManage/projectManage' component={ProjectManage} />
                         <Route path='/main/project/overview' component={Overview} />
+                        <Route path='/main/project/jsErrorLog' component={JsErrorLog} />
                     </Switch>
                 </div>
             </div>

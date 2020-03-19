@@ -25,7 +25,7 @@ const SystemManage = () => {
     const [spinning, setSpinning] = useState(false);
 
     useEffect(() => {
-        console.log('[useCallback]filterForm', filterForm);
+        // console.log('[useCallback]filterForm', filterForm);
         getTableList(filterForm);
     }, [filterForm]);
 

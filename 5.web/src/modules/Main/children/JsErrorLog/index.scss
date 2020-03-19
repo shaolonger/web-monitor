@@ -1,0 +1,35 @@
+.jsError-container {
+  padding: 1vw;
+
+  .jsError-topBanner {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .jsError-topBanner-radio {
+      margin-right: 1vw;
+    }
+
+    .jsError-topBanner-datePicker {
+      width: 20vw;
+    }
+  }
+
+  .jsError-charts {
+    padding: 1vw 0;
+
+    .chartItem {
+      width: 100%;
+      height: 10vw;
+    }
+  }
+
+  .jsError-table {
+    margin-top: 1vw;
+    .jsError-table-handleBtn {
+      button:nth-child(2) {
+        margin-left: 1vw;
+      }
+    }
+  }
+}
