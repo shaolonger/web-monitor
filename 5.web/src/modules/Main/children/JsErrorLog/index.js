@@ -146,7 +146,8 @@ const JsErrorLog = () => {
             },
             series: [{
                 data: Object.values(chartData),
-                type: 'bar'
+                type: 'bar',
+                barWidth: 30
             }],
             grid: {
                 left: '0%',
@@ -226,7 +227,8 @@ const JsErrorLog = () => {
                 </div>
                 <div className='jsError-topBanner-datePicker'>
                     <DatePicker.RangePicker
-                        showTime format='YYYY-MM-DD hh:mm:ss'
+                        showTime format='YYYY-MM-DD hh:mm:ss' allowClear={false}
+                        value={[moment(filterForm.startTime), moment(filterForm.endTime)]}
                         onChange={
                             (date, dateString) => {
                                 setFilterForm({...filterForm, startTime: dateString[0], endTime: dateString[1]})
