@@ -13,14 +13,14 @@ import logService from 'service/logService';
 // 总览表单查询参数
 const overallDays = 14;
 const overallFilterForm = {
-    logType: 'customErrorLog',
+    logType: 'httpErrorLog',
     projectIdentifier: 'testProject', // TODO 暂时固定，实际上需要根据项目属性获取
     startTime: moment().subtract('days', overallDays).format('YYYY-MM-DD'),
     endTime: moment().format('YYYY-MM-DD'),
 };
 // 图表实例
 const chartInstance = {
-    customErrorLogChart: null,
+    httpErrorLogChart: null,
 };
 const getInitTimeRangeList = () => {
     const todayStartTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
@@ -34,16 +34,19 @@ const getInitTimeRangeList = () => {
     ];
 };
 
-const CustomErrorLog = () => {
+const HttpErrorLog = () => {
+
+    // 总计
+    const [stateCountList, setStateCountList] = useState([]);
 
     // 统计图表
-    const [customErrorLogChartData, setCustomErrorLogChartData] = useState({});
+    const [httpErrorLogChartData, setHttpErrorLogChartData] = useState({});
     useEffect(() => {
         getLogCountByDays();
     }, []);
     useEffect(() => {
-        initOrUpdateChart('customErrorLogChart', customErrorLogChartData);
-    }, [customErrorLogChartData]);
+        initOrUpdateChart('httpErrorLogChart', httpErrorLogChartData);
+    }, [httpErrorLogChartData]);
 
     // 筛选条件
     const [timeRangeList, setTimeRangeList] = useState(getInitTimeRangeList());
@@ -58,6 +61,9 @@ const CustomErrorLog = () => {
 
     useEffect(() => {
         // console.log('[useCallback]filterForm', filterForm);
+        const {projectIdentifier} = overallFilterForm;
+        const {startTime, endTime} = filterForm;
+        getHttpErrorLogCountByStatus({projectIdentifier, startTime, endTime});
         getTableList(filterForm);
     }, [filterForm]);
 
@@ -75,9 +81,10 @@ const CustomErrorLog = () => {
             key: 'errorType',
         },
         {
-            title: '错误信息',
-            dataIndex: 'errorMessage',
-            key: 'errorMessage',
+            title: '地址',
+            dataIndex: 'httpUrlComplete',
+            key: 'httpUrlComplete',
+            width: 20,
         },
         {
             title: '页面地址',
@@ -108,19 +115,19 @@ const CustomErrorLog = () => {
      */
     const getLogCountByDays = async formData => {
         setSpinning(true);
-        // 获取customErrorLog统计信息
-        let customErrorLog;
+        // 获取httpErrorLog统计信息
+        let httpErrorLog;
         try {
             const res = await logService.getLogCountByDays(overallFilterForm);
             if (res && res.success) {
-                customErrorLog = res.data;
-                console.log('[成功]获取customErrorLog统计信息', customErrorLog);
-                setCustomErrorLogChartData(customErrorLog);
+                httpErrorLog = res.data;
+                console.log('[成功]获取httpErrorLog统计信息', httpErrorLog);
+                setHttpErrorLogChartData(httpErrorLog);
             } else {
-                console.log('[错误]获取customErrorLog统计信息', res);
+                console.log('[错误]获取httpErrorLog统计信息', res);
             }
         } catch (e) {
-            console.log('[错误]获取customErrorLog统计信息', e);
+            console.log('[错误]获取httpErrorLog统计信息', e);
         }
         setSpinning(false);
     };
@@ -165,13 +172,13 @@ const CustomErrorLog = () => {
      */
     const getTableList = form => {
         setSpinning(true);
-        logService.getCustomErrorLog(form)
+        logService.getHttpErrorLog(form)
             .then(res => {
                 setSpinning(false);
-                console.log('[成功]查询customErrorLog列表数据', res);
+                console.log('[成功]查询httpErrorLog列表数据', res);
                 const {success, data, msg} = res;
                 if (!success) {
-                    message.error({content: msg || '查询customErrorLog列表数据失败'});
+                    message.error({content: msg || '查询httpErrorLog列表数据失败'});
                 } else {
                     const {records, totalNum} = data;
                     setTotal(totalNum);
@@ -179,7 +186,7 @@ const CustomErrorLog = () => {
                         key: index + 1,
                         index: index + 1,
                         errorType: item.errorType,
-                        errorMessage: item.errorMessage,
+                        httpUrlComplete: item.httpUrlComplete,
                         pageUrl: item.pageUrl,
                         deviceName: item.deviceName,
                         userName: item.userName,
@@ -190,8 +197,32 @@ const CustomErrorLog = () => {
             })
             .catch(err => {
                 setSpinning(false);
-                console.log('[失败]查询customErrorLog列表数据', err);
-                message.error({content: err.msg || '查询customErrorLog列表数据失败'});
+                console.log('[失败]查询httpErrorLog列表数据', err);
+                message.error({content: err.msg || '查询httpErrorLog列表数据失败'});
+            });
+    };
+
+    /**
+     * 按status分类获取日志数量
+     * @param form
+     */
+    const getHttpErrorLogCountByStatus = (form) => {
+        setSpinning(true);
+        logService.getHttpErrorLogCountByStatus(form)
+            .then(res => {
+                setSpinning(false);
+                console.log('[成功]查询按status分类获取日志数量', res);
+                const {success, data, msg} = res;
+                if (!success) {
+                    message.error({content: msg || '查询按status分类获取日志数量失败'});
+                } else {
+                    setStateCountList(data);
+                }
+            })
+            .catch(err => {
+                setSpinning(false);
+                console.log('[失败]查询按status分类获取日志数量', err);
+                message.error({content: err.msg || '查询按status分类获取日志数量失败'});
             });
     };
 
@@ -212,9 +243,9 @@ const CustomErrorLog = () => {
     };
 
     return (
-        <div className='customErrorLog-container'>
-            <div className='customErrorLog-topBanner'>
-                <div className='customErrorLog-topBanner-radio'>
+        <div className='httpErrorLog-container'>
+            <div className='httpErrorLog-topBanner'>
+                <div className='httpErrorLog-topBanner-radio'>
                     <Radio.Group defaultValue={timeRangeList[0].value} buttonStyle="solid"
                                  onChange={e => {
                                      const timeList = e.target.value;
@@ -225,7 +256,7 @@ const CustomErrorLog = () => {
                         ))}
                     </Radio.Group>
                 </div>
-                <div className='customErrorLog-topBanner-datePicker'>
+                <div className='httpErrorLog-topBanner-datePicker'>
                     <DatePicker.RangePicker
                         showTime format='YYYY-MM-DD hh:mm:ss' allowClear={false}
                         value={[moment(filterForm.startTime), moment(filterForm.endTime)]}
@@ -237,10 +268,21 @@ const CustomErrorLog = () => {
                     />
                 </div>
             </div>
-            <ul className='customErrorLog-charts'>
-                <div id='customErrorLogChart' className='chartItem'></div>
-            </ul>
-            <div className='customErrorLog-table'>
+            <div className='httpErrorLog-overall'>
+                <ul className='httpErrorLog-stateList'>
+                    {stateCountList.map(item => (
+                        <li key={item.status} className='httpErrorLog-stateItem'>
+                            <p className='httpErrorLog-stateItem-em'>{item.status}</p>
+                            <p>发生次数</p>
+                            <p>{item.count}</p>
+                        </li>
+                    ))}
+                </ul>
+                <ul className='httpErrorLog-charts'>
+                    <div id='httpErrorLogChart' className='chartItem'></div>
+                </ul>
+            </div>
+            <div className='httpErrorLog-table'>
                 <Spin spinning={spinning}>
                     <Table dataSource={dataSource} columns={columns} pagination={pagination}/>
                 </Spin>
@@ -249,4 +291,4 @@ const CustomErrorLog = () => {
     );
 };
 
-export default CustomErrorLog;
+export default HttpErrorLog;

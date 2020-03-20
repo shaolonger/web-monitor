@@ -18,6 +18,14 @@ const LogService = {
     getJsErrorLog(params) {
         return axios.get('/jsErrorLog/get?' + qs.stringify(params));
     },
+    // http异常日志-条件查询
+    getHttpErrorLog(params) {
+        return axios.get('/httpErrorLog/get?' + qs.stringify(params));
+    },
+    // http异常日志-按status分类获取日志数量
+    getHttpErrorLogCountByStatus(params) {
+        return axios.get('/httpErrorLog/getLogCountByStatus?' + qs.stringify(params));
+    },
     // 自定义异常日志-条件查询
     getCustomErrorLog(params) {
         return axios.get('/customErrorLog/get?' + qs.stringify(params));
