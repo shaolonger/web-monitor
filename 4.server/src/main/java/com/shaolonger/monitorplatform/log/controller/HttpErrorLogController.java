@@ -57,10 +57,10 @@ public class HttpErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogCountByStatus", method = RequestMethod.GET)
-    public Object getLogCountByStatus(HttpServletRequest request) {
+    @RequestMapping(value = "/getLogCountByState", method = RequestMethod.GET)
+    public Object getLogCountByState(HttpServletRequest request) {
         try {
-            return ResponseResultBase.getResponseResultBase(httpErrorLogService.getLogCountByStatus(request));
+            return ResponseResultBase.getResponseResultBase(httpErrorLogService.getLogCountByState(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }

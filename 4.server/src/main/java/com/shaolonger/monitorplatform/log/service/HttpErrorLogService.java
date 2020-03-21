@@ -223,7 +223,7 @@ public class HttpErrorLogService extends ServiceBase {
      * @param request request
      * @return List
      */
-    public List<Map<String, Object>> getLogCountByStatus(HttpServletRequest request) throws Exception {
+    public List<Map<String, Object>> getLogCountByState(HttpServletRequest request) throws Exception {
 
         // 获取请求参数
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
@@ -234,6 +234,6 @@ public class HttpErrorLogService extends ServiceBase {
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
         if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
 
-        return httpErrorLogDao.getLogCountByStatus(startTime, endTime, projectIdentifier);
+        return httpErrorLogDao.getLogCountByState(startTime, endTime, projectIdentifier);
     }
 }

@@ -23,6 +23,6 @@ public interface HttpErrorLogDao extends JpaRepository<HttpErrorLog, Long> {
 
     @Query(value = "select status, count(id) as count from lms_http_error_log " +
             "where project_identifier=?3 and create_time between ?1 and ?2 group by status", nativeQuery = true)
-    List<Map<String, Object>> getLogCountByStatus(Date startTime, Date endTime, String projectIdentifier);
+    List<Map<String, Object>> getLogCountByState(Date startTime, Date endTime, String projectIdentifier);
 }
 
