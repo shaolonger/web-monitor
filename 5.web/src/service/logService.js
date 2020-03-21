@@ -22,6 +22,14 @@ const LogService = {
     getHttpErrorLog(params) {
         return axios.get('/httpErrorLog/get?' + qs.stringify(params));
     },
+    // resource加载异常日志-条件查询
+    getResourceLoadErrorLog(params) {
+        return axios.get('/resourceLoadErrorLog/get?' + qs.stringify(params));
+    },
+    // resource加载异常日志-获取总览统计信息
+    getResourceLoadErrorOverallByTimeRange(params) {
+        return axios.get('/resourceLoadErrorLog/getOverallByTimeRange?' + qs.stringify(params));
+    },
     // http异常日志-按status分类获取日志数量
     getHttpErrorLogCountByStatus(params) {
         return axios.get('/httpErrorLog/getLogCountByState?' + qs.stringify(params));

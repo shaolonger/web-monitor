@@ -13,14 +13,14 @@ import logService from 'service/logService';
 // 总览表单查询参数
 const overallDays = 14;
 const overallFilterForm = {
-    logType: 'httpErrorLog',
+    logType: 'resourceLoadErrorLog',
     projectIdentifier: 'testProject', // TODO 暂时固定，实际上需要根据项目属性获取
     startTime: moment().subtract(overallDays, 'days').format('YYYY-MM-DD'),
     endTime: moment().format('YYYY-MM-DD'),
 };
 // 图表实例
 const chartInstance = {
-    httpErrorLogChart: null,
+    resourceLoadErrorLogChart: null,
 };
 const resizeChartInstance = () => {
     Object.keys(chartInstance).forEach(key => {
@@ -40,19 +40,23 @@ const getInitTimeRangeList = () => {
     ];
 };
 
-const HttpErrorLog = () => {
+const ResourceLoadErrorLog = () => {
 
-    // 总计
-    const [stateCountList, setStateCountList] = useState([]);
+    // 总览数据
+    const [overallMap, seOverallMap] = useState({
+        affectCounts: 0, // 总发生次数
+        affectPages: 0, // 影响页面数
+        affectUsers: 0, // 影响用户数
+    });
 
     // 统计图表
-    const [httpErrorLogChartData, setHttpErrorLogChartData] = useState({});
+    const [resourceLoadErrorLogChartData, setResourceLoadErrorLogChartData] = useState({});
     useEffect(() => {
         getLogCountByDays();
     }, []);
     useEffect(() => {
-        initOrUpdateChart('httpErrorLogChart', httpErrorLogChartData);
-    }, [httpErrorLogChartData]);
+        initOrUpdateChart('resourceLoadErrorLogChart', resourceLoadErrorLogChartData);
+    }, [resourceLoadErrorLogChartData]);
 
     // 筛选条件
     const [timeRangeList, setTimeRangeList] = useState(getInitTimeRangeList());
@@ -69,7 +73,7 @@ const HttpErrorLog = () => {
         // console.log('[useCallback]filterForm', filterForm);
         const {projectIdentifier} = overallFilterForm;
         const {startTime, endTime} = filterForm;
-        getHttpErrorLogCountByStatus({projectIdentifier, startTime, endTime});
+        getResourceLoadErrorOverallByTimeRange({projectIdentifier, startTime, endTime});
         getTableList(filterForm);
     }, [filterForm]);
 
@@ -82,14 +86,14 @@ const HttpErrorLog = () => {
             key: 'index',
         },
         {
-            title: '错误类型',
-            dataIndex: 'errorType',
-            key: 'errorType',
+            title: '资源类型',
+            dataIndex: 'resourceType',
+            key: 'resourceType',
         },
         {
-            title: '地址',
-            dataIndex: 'httpUrlComplete',
-            key: 'httpUrlComplete',
+            title: '资源链接',
+            dataIndex: 'resourceUrl',
+            key: 'resourceUrl',
         },
         {
             title: '页面地址',
@@ -120,19 +124,19 @@ const HttpErrorLog = () => {
      */
     const getLogCountByDays = async formData => {
         setSpinning(true);
-        // 获取httpErrorLog统计信息
-        let httpErrorLog;
+        // 获取resourceLoadErrorLog统计信息
+        let resourceLoadErrorLog;
         try {
             const res = await logService.getLogCountByDays(overallFilterForm);
             if (res && res.success) {
-                httpErrorLog = res.data;
-                console.log('[成功]获取httpErrorLog统计信息', httpErrorLog);
-                setHttpErrorLogChartData(httpErrorLog);
+                resourceLoadErrorLog = res.data;
+                console.log('[成功]获取resourceLoadErrorLog统计信息', resourceLoadErrorLog);
+                setResourceLoadErrorLogChartData(resourceLoadErrorLog);
             } else {
-                console.log('[错误]获取httpErrorLog统计信息', res);
+                console.log('[错误]获取resourceLoadErrorLog统计信息', res);
             }
         } catch (e) {
-            console.log('[错误]获取httpErrorLog统计信息', e);
+            console.log('[错误]获取resourceLoadErrorLog统计信息', e);
         }
         setSpinning(false);
     };
@@ -177,21 +181,21 @@ const HttpErrorLog = () => {
      */
     const getTableList = form => {
         setSpinning(true);
-        logService.getHttpErrorLog(form)
+        logService.getResourceLoadErrorLog(form)
             .then(res => {
                 setSpinning(false);
-                console.log('[成功]查询httpErrorLog列表数据', res);
+                console.log('[成功]查询resourceLoadErrorLog列表数据', res);
                 const {success, data, msg} = res;
                 if (!success) {
-                    message.error({content: msg || '查询httpErrorLog列表数据失败'});
+                    message.error({content: msg || '查询resourceLoadErrorLog列表数据失败'});
                 } else {
                     const {records, totalNum} = data;
                     setTotal(totalNum);
                     const dataSource = records.map((item, index) => ({
                         key: index + 1,
                         index: index + 1,
-                        errorType: item.errorType,
-                        httpUrlComplete: item.httpUrlComplete,
+                        resourceType: item.resourceType,
+                        resourceUrl: item.resourceUrl,
                         pageUrl: item.pageUrl,
                         deviceName: item.deviceName,
                         userName: item.userName,
@@ -202,33 +206,32 @@ const HttpErrorLog = () => {
             })
             .catch(err => {
                 setSpinning(false);
-                console.log('[失败]查询httpErrorLog列表数据', err);
-                message.error({content: err.msg || '查询httpErrorLog列表数据失败'});
+                console.log('[失败]查询resourceLoadErrorLog列表数据', err);
+                message.error({content: err.msg || '查询resourceLoadErrorLog列表数据失败'});
             });
     };
 
     /**
-     * 按status分类获取日志数量
+     * resource加载异常日志-获取总览统计信息
      * @param form
      */
-    const getHttpErrorLogCountByStatus = (form) => {
+    const getResourceLoadErrorOverallByTimeRange = (form) => {
         setSpinning(true);
-        logService.getHttpErrorLogCountByStatus(form)
+        logService.getResourceLoadErrorOverallByTimeRange(form)
             .then(res => {
                 setSpinning(false);
-                console.log('[成功]查询按status分类获取日志数量', res);
+                console.log('[成功]resource加载异常日志-获取总览统计信息', res);
                 const {success, data, msg} = res;
                 if (!success) {
-                    message.error({content: msg || '查询按status分类获取日志数量失败'});
+                    message.error({content: msg || 'resource加载异常日志-获取总览统计信息失败'});
                 } else {
-                    setStateCountList(data);
-                    resizeChartInstance();
+                    seOverallMap(data);
                 }
             })
             .catch(err => {
                 setSpinning(false);
-                console.log('[失败]查询按status分类获取日志数量', err);
-                message.error({content: err.msg || '查询按status分类获取日志数量失败'});
+                console.log('[失败]resource加载异常日志-获取总览统计信息', err);
+                message.error({content: err.msg || 'resource加载异常日志-获取总览统计信息失败'});
             });
     };
 
@@ -249,9 +252,9 @@ const HttpErrorLog = () => {
     };
 
     return (
-        <div className='httpErrorLog-container'>
-            <div className='httpErrorLog-topBanner'>
-                <div className='httpErrorLog-topBanner-radio'>
+        <div className='resourceLoadErrorLog-container'>
+            <div className='resourceLoadErrorLog-topBanner'>
+                <div className='resourceLoadErrorLog-topBanner-radio'>
                     <Radio.Group defaultValue={timeRangeList[0].value} buttonStyle="solid"
                                  onChange={e => {
                                      const timeList = e.target.value;
@@ -262,7 +265,7 @@ const HttpErrorLog = () => {
                         ))}
                     </Radio.Group>
                 </div>
-                <div className='httpErrorLog-topBanner-datePicker'>
+                <div className='resourceLoadErrorLog-topBanner-datePicker'>
                     <DatePicker.RangePicker
                         showTime format='YYYY-MM-DD hh:mm:ss' allowClear={false}
                         value={[moment(filterForm.startTime), moment(filterForm.endTime)]}
@@ -274,24 +277,26 @@ const HttpErrorLog = () => {
                     />
                 </div>
             </div>
-            <div className='httpErrorLog-overall'>
-                {stateCountList.length
-                    ? (<ul className='httpErrorLog-stateList'>
-                        {stateCountList.map(item => (
-                            <li key={item.status} className='httpErrorLog-stateItem'>
-                                <p className='httpErrorLog-stateItem-em'>{item.status}</p>
-                                <p>发生次数</p>
-                                <p>{item.count}</p>
-                            </li>
-                        ))}
-                    </ul>)
-                    : null
-                }
-                <ul className='httpErrorLog-charts'>
-                    <div id='httpErrorLogChart' className='chartItem'></div>
+            <div className='resourceLoadErrorLog-overall'>
+                <ul className='resourceLoadErrorLog-stateList'>
+                    <li className='resourceLoadErrorLog-stateItem'>
+                        <p>总发生次数</p>
+                        <p>{overallMap.affectCounts}</p>
+                    </li>
+                    <li className='resourceLoadErrorLog-stateItem'>
+                        <p>影响页面数</p>
+                        <p>{overallMap.affectPages}</p>
+                    </li>
+                    <li className='resourceLoadErrorLog-stateItem'>
+                        <p>影响用户数</p>
+                        <p>{overallMap.affectUsers}</p>
+                    </li>
+                </ul>
+                <ul className='resourceLoadErrorLog-charts'>
+                    <div id='resourceLoadErrorLogChart' className='chartItem'></div>
                 </ul>
             </div>
-            <div className='httpErrorLog-table'>
+            <div className='resourceLoadErrorLog-table'>
                 <Spin spinning={spinning}>
                     <Table dataSource={dataSource} columns={columns} pagination={pagination}/>
                 </Spin>
@@ -300,4 +305,4 @@ const HttpErrorLog = () => {
     );
 };
 
-export default HttpErrorLog;
+export default ResourceLoadErrorLog;

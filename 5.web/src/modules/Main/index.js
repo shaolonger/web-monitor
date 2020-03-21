@@ -9,6 +9,7 @@ import ProjectManage from "./children/ProjectManage";
 import Overview from "./children/Overview";
 import JsErrorLog from "./children/JsErrorLog";
 import HttpErrorLog from "./children/HttpErrorLog";
+import ResourceLoadErrorLog from "./children/ResourceLoadErrorLog";
 import CustomErrorLog from "./children/CustomErrorLog";
 
 // css
@@ -73,6 +74,7 @@ const Main = () => {
                         <Route path='/main/project/overview' component={Overview} />
                         <Route path='/main/project/jsErrorLog' component={JsErrorLog} />
                         <Route path='/main/project/httpErrorLog' component={HttpErrorLog} />
+                        <Route path='/main/project/resourceLoadErrorLog' component={ResourceLoadErrorLog} />
                         <Route path='/main/project/customErrorLog' component={CustomErrorLog} />
                     </Switch>
                 </div>

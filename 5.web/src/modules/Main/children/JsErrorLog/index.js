@@ -15,7 +15,7 @@ const overallDays = 14;
 const overallFilterForm = {
     logType: 'jsErrorLog',
     projectIdentifier: 'testProject', // TODO 暂时固定，实际上需要根据项目属性获取
-    startTime: moment().subtract('days', overallDays).format('YYYY-MM-DD'),
+    startTime: moment().subtract(overallDays, 'days').format('YYYY-MM-DD'),
     endTime: moment().format('YYYY-MM-DD'),
 };
 // 图表实例
@@ -25,8 +25,8 @@ const chartInstance = {
 const getInitTimeRangeList = () => {
     const todayStartTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
     const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
-    const threeDaysAgoTime = moment().subtract('days', 2).format('YYYY-MM-DD HH:mm:ss');
-    const sevenDaysAgoTime = moment().subtract('days', 6).format('YYYY-MM-DD HH:mm:ss');
+    const threeDaysAgoTime = moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss');
+    const sevenDaysAgoTime = moment().subtract(6, 'days').format('YYYY-MM-DD HH:mm:ss');
     return [
         {label: '今天', value: [todayStartTime, nowTime]},
         {label: '三天', value: [threeDaysAgoTime, nowTime]},

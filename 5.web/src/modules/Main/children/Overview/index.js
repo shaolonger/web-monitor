@@ -13,8 +13,8 @@ import logService from 'service/logService';
 const getInitTimeRangeList = () => {
     const todayStartTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
     const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
-    const threeDaysAgoTime = moment().subtract('days', 2).format('YYYY-MM-DD HH:mm:ss');
-    const sevenDaysAgoTime = moment().subtract('days', 6).format('YYYY-MM-DD HH:mm:ss');
+    const threeDaysAgoTime = moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss');
+    const sevenDaysAgoTime = moment().subtract(6, 'days').format('YYYY-MM-DD HH:mm:ss');
     return [
         {label: '今天', value: [todayStartTime, nowTime]},
         {label: '三天', value: [threeDaysAgoTime, nowTime]},
