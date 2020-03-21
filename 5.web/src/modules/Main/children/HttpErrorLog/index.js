@@ -22,6 +22,12 @@ const overallFilterForm = {
 const chartInstance = {
     httpErrorLogChart: null,
 };
+const resizeChartInstance = () => {
+    Object.keys(chartInstance).forEach(key => {
+        if (!chartInstance[key]) return;
+        chartInstance[key].resize();
+    });
+};
 const getInitTimeRangeList = () => {
     const todayStartTime = moment().format('YYYY-MM-DD') + ' 00:00:00';
     const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -217,6 +223,7 @@ const HttpErrorLog = () => {
                     message.error({content: msg || '查询按status分类获取日志数量失败'});
                 } else {
                     setStateCountList(data);
+                    resizeChartInstance();
                 }
             })
             .catch(err => {
@@ -269,15 +276,18 @@ const HttpErrorLog = () => {
                 </div>
             </div>
             <div className='httpErrorLog-overall'>
-                <ul className='httpErrorLog-stateList'>
-                    {stateCountList.map(item => (
-                        <li key={item.status} className='httpErrorLog-stateItem'>
-                            <p className='httpErrorLog-stateItem-em'>{item.status}</p>
-                            <p>发生次数</p>
-                            <p>{item.count}</p>
-                        </li>
-                    ))}
-                </ul>
+                {stateCountList.length
+                    ? (<ul className='httpErrorLog-stateList'>
+                        {stateCountList.map(item => (
+                            <li key={item.status} className='httpErrorLog-stateItem'>
+                                <p className='httpErrorLog-stateItem-em'>{item.status}</p>
+                                <p>发生次数</p>
+                                <p>{item.count}</p>
+                            </li>
+                        ))}
+                    </ul>)
+                    : null
+                }
                 <ul className='httpErrorLog-charts'>
                     <div id='httpErrorLogChart' className='chartItem'></div>
                 </ul>
