@@ -225,7 +225,7 @@ public class HttpErrorLogService extends ServiceBase {
      */
     public List<Map<String, Object>> getLogCountByState(HttpServletRequest request) throws Exception {
 
-        // 获取请求参数
+        // 获取查询参数
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         String projectIdentifier = request.getParameter("projectIdentifier");

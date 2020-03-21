@@ -198,4 +198,24 @@ public class ResourceLoadErrorLogService extends ServiceBase {
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
         return resourceLoadErrorLogDao.getLogCountByDays(startTime, endTime, projectIdentifier);
     }
+
+    /**
+     * 获取总览统计信息
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getOverallByTimeRange(HttpServletRequest request) throws Exception {
+
+        // 获取查询参数
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String projectIdentifier = request.getParameter("projectIdentifier");
+
+        // 参数校验
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+
+        return resourceLoadErrorLogDao.getOverallByTimeRange(startTime, endTime, projectIdentifier);
+    }
 }

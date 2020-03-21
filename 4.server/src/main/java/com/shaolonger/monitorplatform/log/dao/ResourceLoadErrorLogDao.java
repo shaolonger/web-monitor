@@ -20,5 +20,9 @@ public interface ResourceLoadErrorLogDao extends JpaRepository<ResourceLoadError
     @Query(value = "select date_format(create_time, '%Y-%m-%d') as day, count(id) as count from lms_resource_load_error_log " +
             "where project_identifier=?3 and create_time between ?1 and date_add(?2, interval 1 day) group by day", nativeQuery = true)
     List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier);
+
+    @Query(value = "select count(id) as affectCounts, count(distinct page_url) as affectPages, count(distinct user_id) as affectUsers " +
+            "from lms_resource_load_error_log where project_identifier=?3 and create_time between ?1 and ?2", nativeQuery = true)
+    Map<String, Object> getOverallByTimeRange(Date startTime, Date endTime, String projectIdentifier);
 }
 

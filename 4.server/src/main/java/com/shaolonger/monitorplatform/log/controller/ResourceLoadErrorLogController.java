@@ -9,6 +9,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.transport.ObjectTable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -48,6 +49,21 @@ public class ResourceLoadErrorLogController {
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
             return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.add(resourceLoadErrorLog));
+        }
+    }
+
+    /**
+     * 获取总览统计信息
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getOverallByTimeRange", method = RequestMethod.GET)
+    public Object getOverallByTimeRange(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.getOverallByTimeRange(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
         }
     }
 }

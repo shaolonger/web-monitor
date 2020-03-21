@@ -127,6 +127,7 @@ public class StatisticService {
      * @return Object
      */
     public Object getLogCountByDays(HttpServletRequest request) throws Exception {
+
         // 获取查询参数
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd");
