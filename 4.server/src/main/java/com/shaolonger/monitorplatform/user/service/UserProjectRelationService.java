@@ -1,18 +1,12 @@
 package com.shaolonger.monitorplatform.user.service;
 
-import com.shaolonger.monitorplatform.user.dao.UserDao;
 import com.shaolonger.monitorplatform.user.dao.UserProjectRelationDao;
 import com.shaolonger.monitorplatform.user.entity.UserProjectRelationEntity;
-import com.shaolonger.monitorplatform.utils.ServiceBase;
-import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
+import com.shaolonger.monitorplatform.common.service.ServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class UserProjectRelationService extends ServiceBase {

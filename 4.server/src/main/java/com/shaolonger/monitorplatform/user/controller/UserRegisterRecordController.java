@@ -2,7 +2,7 @@ package com.shaolonger.monitorplatform.user.controller;
 
 import com.shaolonger.monitorplatform.user.entity.UserRegisterRecordEntity;
 import com.shaolonger.monitorplatform.user.service.UserRegisterRecordService;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
+import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;

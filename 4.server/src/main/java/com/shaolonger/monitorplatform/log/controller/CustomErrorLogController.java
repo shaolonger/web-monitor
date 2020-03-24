@@ -2,7 +2,7 @@ package com.shaolonger.monitorplatform.log.controller;
 
 import com.shaolonger.monitorplatform.log.entity.CustomErrorLog;
 import com.shaolonger.monitorplatform.log.service.CustomErrorLogService;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
+import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;

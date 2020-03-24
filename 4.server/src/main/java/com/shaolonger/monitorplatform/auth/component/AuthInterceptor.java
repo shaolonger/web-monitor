@@ -1,7 +1,6 @@
 package com.shaolonger.monitorplatform.auth.component;
 
 import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;

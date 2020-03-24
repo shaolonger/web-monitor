@@ -2,7 +2,7 @@ package com.shaolonger.monitorplatform.project.controller;
 
 import com.shaolonger.monitorplatform.project.entity.ProjectEntity;
 import com.shaolonger.monitorplatform.project.service.ProjectService;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
+import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;

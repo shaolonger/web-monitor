@@ -1,4 +1,4 @@
-package com.shaolonger.monitorplatform.utils.convert;
+package com.shaolonger.monitorplatform.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

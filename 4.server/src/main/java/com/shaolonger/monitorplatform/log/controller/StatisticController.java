@@ -1,7 +1,7 @@
 package com.shaolonger.monitorplatform.log.controller;
 
 import com.shaolonger.monitorplatform.log.service.StatisticService;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
+import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

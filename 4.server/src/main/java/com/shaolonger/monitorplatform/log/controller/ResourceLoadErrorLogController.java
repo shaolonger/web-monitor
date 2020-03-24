@@ -2,14 +2,13 @@ package com.shaolonger.monitorplatform.log.controller;
 
 import com.shaolonger.monitorplatform.log.entity.ResourceLoadErrorLog;
 import com.shaolonger.monitorplatform.log.service.ResourceLoadErrorLogService;
-import com.shaolonger.monitorplatform.utils.ResponseResultBase;
+import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import sun.rmi.transport.ObjectTable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

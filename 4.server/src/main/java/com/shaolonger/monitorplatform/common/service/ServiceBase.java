@@ -1,4 +1,4 @@
-package com.shaolonger.monitorplatform.utils;
+package com.shaolonger.monitorplatform.common.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

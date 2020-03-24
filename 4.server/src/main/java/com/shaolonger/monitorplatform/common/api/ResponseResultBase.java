@@ -1,4 +1,4 @@
-package com.shaolonger.monitorplatform.utils;
+package com.shaolonger.monitorplatform.common.api;
 
 import lombok.Getter;
 import lombok.Setter;
