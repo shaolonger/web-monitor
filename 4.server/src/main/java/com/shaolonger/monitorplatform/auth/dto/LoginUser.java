@@ -1,4 +1,4 @@
-package com.shaolonger.monitorplatform.base.dto;
+package com.shaolonger.monitorplatform.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.shaolonger.monitorplatform.base.service;
+package com.shaolonger.monitorplatform.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

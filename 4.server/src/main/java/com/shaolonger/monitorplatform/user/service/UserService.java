@@ -1,7 +1,6 @@
 package com.shaolonger.monitorplatform.user.service;
 
-import com.shaolonger.monitorplatform.base.dto.LoginUser;
-import com.shaolonger.monitorplatform.base.service.TokenService;
+import com.shaolonger.monitorplatform.auth.service.TokenService;
 import com.shaolonger.monitorplatform.user.dao.UserDao;
 import com.shaolonger.monitorplatform.user.entity.UserEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;

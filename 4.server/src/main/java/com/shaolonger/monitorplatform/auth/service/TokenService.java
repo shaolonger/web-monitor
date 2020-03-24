@@ -1,6 +1,6 @@
-package com.shaolonger.monitorplatform.base.service;
+package com.shaolonger.monitorplatform.auth.service;
 
-import com.shaolonger.monitorplatform.base.dto.LoginUser;
+import com.shaolonger.monitorplatform.auth.dto.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
