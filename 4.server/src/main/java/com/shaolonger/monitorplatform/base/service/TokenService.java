@@ -1,7 +1,6 @@
 package com.shaolonger.monitorplatform.base.service;
 
-import com.shaolonger.monitorplatform.user.entity.UserEntity;
-import org.apache.catalina.User;
+import com.shaolonger.monitorplatform.base.dto.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -38,14 +37,14 @@ public class TokenService {
      * 根据token获取用户信息
      *
      * @param token token
-     * @return UserEntity
+     * @return LoginUser
      */
-    public UserEntity getUserByToken(String token) {
+    public LoginUser getUserByToken(String token) {
         if (StringUtils.isEmpty(token)) return null;
         if (!hasToken(token)) {
             return null;
         } else {
-            return (UserEntity) redisService.hGet(REDIS_TOKEN_KEY, token);
+            return (LoginUser) redisService.hGet(REDIS_TOKEN_KEY, token);
         }
     }
 
@@ -55,25 +54,26 @@ public class TokenService {
      * @param token token
      * @param userId userId
      * @param username username
-     * @return UserEntity
+     * @return LoginUser
      */
-    public UserEntity addOrUpdateToken(String token, Long userId, String username) {
+    public LoginUser addOrUpdateToken(String token, Long userId, String username) {
         if (hasToken(token)) {
-            UserEntity userEntity = getUserByToken(token);
-            if (userEntity != null) {
+            LoginUser loginUser = getUserByToken(token);
+            if (loginUser != null) {
                 // 若token已存在，则刷新缓存时间
-                redisService.hSet(REDIS_TOKEN_KEY, token, userEntity, REDIS_TOKEN_EXPIRE);
-                return userEntity;
+                redisService.expire(REDIS_TOKEN_KEY, REDIS_TOKEN_EXPIRE);
+                return loginUser;
             } else {
                 return null;
             }
         } else {
             // 若token不存在，则新增
-            UserEntity userEntity = new UserEntity();
-            userEntity.setId(userId);
-            userEntity.setUsername(username);
-            redisService.hSet(REDIS_TOKEN_KEY, token, userEntity, REDIS_TOKEN_EXPIRE);
-            return userEntity;
+            LoginUser loginUser = new LoginUser();
+            loginUser.setId(userId);
+            loginUser.setUsername(username);
+            loginUser.setToken(token);
+            redisService.hSet(REDIS_TOKEN_KEY, token, loginUser, REDIS_TOKEN_EXPIRE);
+            return loginUser;
         }
     }
 

@@ -1,9 +1,12 @@
 package com.shaolonger.monitorplatform.user.service;
 
+import com.shaolonger.monitorplatform.base.dto.LoginUser;
+import com.shaolonger.monitorplatform.base.service.TokenService;
 import com.shaolonger.monitorplatform.user.dao.UserDao;
 import com.shaolonger.monitorplatform.user.entity.UserEntity;
 import com.shaolonger.monitorplatform.utils.PageResultBase;
 import com.shaolonger.monitorplatform.utils.ServiceBase;
+import com.shaolonger.monitorplatform.utils.TokenUtils;
 import com.shaolonger.monitorplatform.utils.convert.DataConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,8 @@ public class UserService extends ServiceBase {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private TokenService tokenService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -132,6 +137,9 @@ public class UserService extends ServiceBase {
             throw new Exception("用户名或密码不正确");
         }
 
-        return userEntityList.get(0);
+        // 获取token并存入redis
+        UserEntity userEntity = userEntityList.get(0);
+        String token = TokenUtils.getToken();
+        return tokenService.addOrUpdateToken(token, userEntity.getId(), userEntity.getUsername());
     }
 }
