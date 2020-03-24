@@ -1,6 +1,7 @@
 package com.shaolonger.monitorplatform.auth.component;
 
 import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
+import com.shaolonger.monitorplatform.common.execption.ApiException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -29,7 +30,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         // 获取token
         String token = request.getParameter("token");
         if (StringUtils.isEmpty(token)) {
-            throw new Exception("token不能为空");
+            throw new ApiException("token不能为空");
         }
         return true;
     }

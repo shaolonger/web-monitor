@@ -1,5 +1,6 @@
 package com.shaolonger.monitorplatform.user.controller;
 
+import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
 import com.shaolonger.monitorplatform.user.service.UserService;
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class UserController {
         }
     }
 
+    @AuthIgnore
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(HttpServletRequest request) {
         try {
