@@ -16,7 +16,7 @@ public class RedisService {
     private RedisTemplate<String, Object> redisTemplate;
 
     public void set(String key, Object value, long time) {
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value, time, TimeUnit.MINUTES);
     }
 
     public void set(String key, Object value) {
@@ -36,11 +36,11 @@ public class RedisService {
     }
 
     public Boolean expire(String key, long time) {
-        return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+        return redisTemplate.expire(key, time, TimeUnit.MINUTES);
     }
 
     public Long getExpire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        return redisTemplate.getExpire(key, TimeUnit.MINUTES);
     }
 
     public Boolean hasKey(String key) {
