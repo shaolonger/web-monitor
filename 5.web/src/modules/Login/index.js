@@ -3,6 +3,9 @@ import {useHistory} from 'react-router-dom';
 import {Spin, Form, Input, Button, Checkbox, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 
+// state
+import useUserInfo from "../../state/useUserInfo";
+
 // 图片资源
 import imgBgMonitor from 'static/images/Login/bg_monitor.png';
 
@@ -17,9 +20,10 @@ const Login = props => {
     const history = useHistory();
     const [spinning, setSpinning] = useState(false);
     const [form] = Form.useForm();
+    const [userInfo, setUserinfo] = useUserInfo();
 
     useEffect(() => {
-        console.log('[Login]useEffect', props);
+        // console.log('[Login]useEffect', props);
         // 判断本地是否有登录信息，有则还原
         const loginInfo = window.localStorage.getItem('ump-loginInfo');
         if (loginInfo) {
@@ -42,7 +46,8 @@ const Login = props => {
                 setSpinning(false);
                 const {success, data, msg} = res;
                 if (success) {
-                    // 将用户信息存入本地
+                    // 将用户信息存入state及本地
+                    setUserinfo({...data, hasLogin: true});
                     window.sessionStorage.setItem('ump-userInfo', JSON.stringify(data));
                     // 若选择了记住密码，则将用户名、密码存入本地
                     if (remember) {

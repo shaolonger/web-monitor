@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 
+// state
+import useUserInfo from "../../state/useUserInfo";
+
 // 图片资源
 import imgIconAvatar from 'static/images/Home/icon_avatar.png';
 import imgBgSystemManage from 'static/images/Main/systemManage/bg_systemManage.png';
@@ -11,15 +14,17 @@ import './index.scss';
 const Home = () => {
 
     const history = useHistory();
+    const [userInfo, setUserInfo] = useUserInfo();
     // TODO 这里的模块列表，后期需要改为从角色菜单中获取
     const [moduleList, setModuleList] = useState([]);
 
     useEffect(() => {
         // 判断用户是否登录，否则跳转至登录页
-        const userInfo = window.sessionStorage.getItem('ump-userInfo');
-        if (!userInfo) {
+        if (!userInfo.hasLogin) {
             history.replace('/login');
             return;
+        } else {
+            console.log('userInfo', userInfo);
         }
     }, []);
 
