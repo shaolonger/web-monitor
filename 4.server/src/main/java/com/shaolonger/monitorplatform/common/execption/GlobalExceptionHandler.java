@@ -1,6 +1,9 @@
 package com.shaolonger.monitorplatform.common.execption;
 
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,9 +14,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
-    public Object handle(ApiException e) {
+    public Object handleApiException(ApiException e) {
+        logger.error(e.getMessage(), e);
+        return ResponseResultBase.getErrorResponseResult(e);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = Exception.class)
+    public Object handleException(Exception e) {
+        logger.error(e.getMessage(), e);
         return ResponseResultBase.getErrorResponseResult(e);
     }
 }
