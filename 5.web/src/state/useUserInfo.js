@@ -1,7 +1,7 @@
 let userInfo = {};
 
 const setUserInfo = newUserInfo => {
-    userInfo = {...userInfo, ...newUserInfo};
+    userInfo = Object.assign(userInfo, newUserInfo);
 };
 
 const useUserInfo = () => {

@@ -28,7 +28,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 获取token
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)) {
             throw new ApiException("token不能为空");
         }
