@@ -45,6 +45,7 @@ public class UserService extends ServiceBase {
         Date createTime = new Date();
 
         // 保存实体
+        userEntity.setIsAdmin(0);
         userEntity.setCreateTime(createTime);
         userDao.save(userEntity);
 

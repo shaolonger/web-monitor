@@ -53,6 +53,12 @@ public class UserEntity {
     private String email;
 
     /**
+     * 是否超级管理员
+     * 0-否，1-是
+     */
+    private Integer isAdmin;
+
+    /**
      * 创建时间
      */
     private Date createTime;
