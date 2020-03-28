@@ -102,7 +102,7 @@ const SystemManage = () => {
                         phone: item.phone,
                         gender: genderMap[item.gender],
                         auditResult: auditResultMap[item.auditResult],
-                        auditTime: moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
+                        auditTime: item.updateTime ? moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss') : '',
                         handle: item,
                     }));
                     setDataSource(dataSource);
