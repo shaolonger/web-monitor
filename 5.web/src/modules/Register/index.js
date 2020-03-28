@@ -23,19 +23,24 @@ const Register = props => {
         message.loading({content: '注册中，请稍等', duration: 0, key: 'register'});
         registerService.register(values)
             .then(res => {
-                console.log('[成功]注册', res);
                 setSpinning(false);
-                message.success({
-                    content: '注册成功，即将跳转', key: 'register',
-                    onClose: () => {
-                        props.history.replace('/login');
-                    }
-                });
+                if (res.success) {
+                    console.log('[成功]注册', res);
+                    message.success({
+                        content: '注册成功，请等待管理员审核', key: 'register',
+                        onClose: () => {
+                            props.history.replace('/login');
+                        }
+                    });
+                } else {
+                    console.log('[失败]注册', res);
+                    message.error({content: '注册失败: ' + (res.msg || ''), key: 'register'});
+                }
             })
             .catch(err => {
                 console.log('[失败]注册', err);
                 setSpinning(false);
-                message.error({content: '注册失败' + (err.msg || ''), key: 'register'});
+                message.error({content: '注册失败: ' + (err.msg || ''), key: 'register'});
             });
     };
 

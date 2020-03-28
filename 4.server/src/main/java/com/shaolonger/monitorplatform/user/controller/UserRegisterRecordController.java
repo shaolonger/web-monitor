@@ -1,5 +1,6 @@
 package com.shaolonger.monitorplatform.user.controller;
 
+import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
 import com.shaolonger.monitorplatform.user.entity.UserRegisterRecordEntity;
 import com.shaolonger.monitorplatform.user.service.UserRegisterRecordService;
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
@@ -27,6 +28,7 @@ public class UserRegisterRecordController {
      * @param bindingResult bindingResult
      * @return Object Object
      */
+    @AuthIgnore
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(@Valid UserRegisterRecordEntity userRegisterRecordEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

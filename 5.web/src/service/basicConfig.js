@@ -1,6 +1,8 @@
 import axios from 'axios';
 import config from "../config";
+import {Modal} from "antd";
 import useUserInfo from "../state/useUserInfo";
+import {createHashHistory} from 'history';
 
 const [userInfo] = useUserInfo();
 
@@ -11,6 +13,11 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     baseURL = config.prodBasicUrl;
 }
+
+// 免token校验的接口
+const authIgnoreList = [
+    '/user/login', '/userRegisterRecord/add'
+];
 
 /**
  * 统一的错误回调
@@ -43,8 +50,21 @@ axios.interceptors.request.use(
     config => {
         if (userInfo.hasLogin && userInfo.token) {
             config.headers.token = userInfo.token;
+            return config;
+        } else if (authIgnoreList.indexOf(config.url) > -1) {
+            return config;
+        } else {
+            const history = createHashHistory();
+            Modal.warning({
+                title: '提示',
+                content: '登录已失效，请重新登录',
+                okText: '确定',
+                onOk: () => {
+                    history.push('/login');
+                }
+            });
+            return Promise.reject(config);
         }
-        return config;
     },
     error => Promise.reject(error)
 );
