@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/15 12:18:19                           */
+/* Created on:     2020/3/28 9:00:27                            */
 /*==============================================================*/
 
 
@@ -156,6 +156,7 @@ create table ums_user
    icon                 varchar(500) default "" comment '头像',
    gender               int(1) default 0 comment '性别，0-未知，1-男，2-女',
    email                varchar(100) not null comment '邮箱',
+   is_admin             int(1) not null default 0 comment '是否超级管理员，0-否，1-是',
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
    primary key (id),
