@@ -54,9 +54,10 @@ public class TokenService {
      * @param token token
      * @param userId userId
      * @param username username
+     * @param isAdmin isAdmin
      * @return LoginUser
      */
-    public LoginUser addOrUpdateToken(String token, Long userId, String username) {
+    public LoginUser addOrUpdateToken(String token, Long userId, String username, Integer isAdmin) {
         if (hasToken(token)) {
             LoginUser loginUser = getUserByToken(token);
             if (loginUser != null) {
@@ -71,6 +72,7 @@ public class TokenService {
             LoginUser loginUser = new LoginUser();
             loginUser.setId(userId);
             loginUser.setUsername(username);
+            loginUser.setIsAdmin(isAdmin);
             loginUser.setToken(token);
             redisService.hSet(REDIS_TOKEN_KEY, token, loginUser, REDIS_TOKEN_EXPIRE);
             return loginUser;

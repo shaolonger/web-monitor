@@ -140,6 +140,6 @@ public class UserService extends ServiceBase {
         // 获取token并存入redis
         UserEntity userEntity = userEntityList.get(0);
         String token = TokenUtils.getToken();
-        return tokenService.addOrUpdateToken(token, userEntity.getId(), userEntity.getUsername());
+        return tokenService.addOrUpdateToken(token, userEntity.getId(), userEntity.getUsername(), userEntity.getIsAdmin());
     }
 }

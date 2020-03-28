@@ -21,6 +21,11 @@ public class LoginUser {
     private String username;
 
     /**
+     * 是否超级管理员
+     */
+    private Integer isAdmin;
+
+    /**
      * token
      */
     private String token;
