@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from "../config";
 import {Modal} from "antd";
+import {TOKEN_EXPIRE_TEXT} from 'const/BasicConfigConst';
 import useUserInfo from "../state/useUserInfo";
 import {createHashHistory} from 'history';
 
@@ -71,7 +72,26 @@ axios.interceptors.request.use(
 
 // 响应拦截器
 axios.interceptors.response.use(
-    res => res.status === 200 ? Promise.resolve(res.data) : Promise.reject(res.data),
+    res => {
+        if (res.status === 200) {
+            if (res.data.msg === TOKEN_EXPIRE_TEXT) {
+                const history = createHashHistory();
+                Modal.warning({
+                    title: '提示',
+                    content: '登录已失效，请重新登录',
+                    okText: '确定',
+                    onOk: () => {
+                        history.push('/login');
+                    }
+                });
+                return Promise.reject(res.data);
+            } else {
+                return Promise.resolve(res.data);
+            }
+        } else {
+            return Promise.reject(res.data);
+        }
+    },
     error => {
         const {response} = error;
         if (response) {

@@ -9,7 +9,7 @@ import './index.scss';
 import registerService from 'service/registerService';
 
 // const
-import {auditResultMap, genderMap} from 'const/SystemManage.js';
+import {AUDIT_RESULT_MAP, GENDER_MAP} from 'const/SystemManageConst';
 
 const SystemManage = () => {
 
@@ -100,8 +100,8 @@ const SystemManage = () => {
                         username: item.username,
                         email: item.email,
                         phone: item.phone,
-                        gender: genderMap[item.gender],
-                        auditResult: auditResultMap[item.auditResult],
+                        gender: GENDER_MAP[item.gender],
+                        auditResult: AUDIT_RESULT_MAP[item.auditResult],
                         auditTime: item.updateTime ? moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss') : '',
                         handle: item,
                     }));
