@@ -1,10 +1,15 @@
 package com.shaolonger.monitorplatform.user.service;
 
+import com.shaolonger.monitorplatform.auth.dto.LoginUser;
 import com.shaolonger.monitorplatform.auth.service.TokenService;
+import com.shaolonger.monitorplatform.project.entity.ProjectEntity;
+import com.shaolonger.monitorplatform.project.service.ProjectService;
 import com.shaolonger.monitorplatform.user.dao.UserDao;
+import com.shaolonger.monitorplatform.user.dao.UserProjectRelationDao;
 import com.shaolonger.monitorplatform.user.entity.UserEntity;
 import com.shaolonger.monitorplatform.common.api.PageResultBase;
 import com.shaolonger.monitorplatform.common.service.ServiceBase;
+import com.shaolonger.monitorplatform.user.entity.UserProjectRelationEntity;
 import com.shaolonger.monitorplatform.utils.TokenUtils;
 import com.shaolonger.monitorplatform.utils.DataConvertUtils;
 import org.slf4j.Logger;
@@ -16,10 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends ServiceBase {
@@ -28,6 +31,10 @@ public class UserService extends ServiceBase {
     private UserDao userDao;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private UserProjectRelationDao userProjectRelationDao;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -55,7 +62,7 @@ public class UserService extends ServiceBase {
     }
 
     /**
-     * 查询
+     * 多条件分页查询
      *
      * @param request request
      * @return Object
@@ -141,5 +148,35 @@ public class UserService extends ServiceBase {
         UserEntity userEntity = userEntityList.get(0);
         String token = TokenUtils.getToken();
         return tokenService.addOrUpdateToken(token, userEntity.getId(), userEntity.getUsername(), userEntity.getIsAdmin());
+    }
+
+    /**
+     * 根据用户获取关联的项目
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getRelatedProjectList(HttpServletRequest request) {
+
+        // 通过获取userId
+        String token = request.getHeader("token");
+        LoginUser user = tokenService.getUserByToken(token);
+
+        // 获取关联的项目列表
+        List<UserProjectRelationEntity> relatedProjectList = userProjectRelationDao.findByUserId(user.getId());
+        List<Long> projectIdList = relatedProjectList.stream().map(UserProjectRelationEntity::getProjectId).collect(Collectors.toList());
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        for (Long projectId : projectIdList) {
+            Optional<ProjectEntity> optional = projectService.getProjectById(projectId);
+            ProjectEntity projectEntity = optional.orElse(null);
+            if (projectEntity != null) {
+                Map<String, Object> project = new HashMap<>();
+                project.put("projectId", projectEntity.getId());
+                project.put("projectName", projectEntity.getProjectName());
+                resultList.add(project);
+            }
+        }
+
+        return resultList;
     }
 }

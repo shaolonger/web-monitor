@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserProjectRelationDao extends JpaRepository<UserProjectRelationEntity, Long> {
 
+    List<UserProjectRelationEntity> findByUserId(Long userId);
+
     List<UserProjectRelationEntity> findByProjectId(Long projectId);
 
     void deleteByUserIdAndProjectId(Long userId, Long projectId);

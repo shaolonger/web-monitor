@@ -166,6 +166,16 @@ public class ProjectService extends ServiceBase {
     }
 
     /**
+     * 根据ID获取项目
+     *
+     * @param id 项目ID
+     * @return
+     */
+    public Optional<ProjectEntity> getProjectById(Long id) {
+        return projectDao.findById(id);
+    }
+
+    /**
      * 删除
      *
      * @param id id

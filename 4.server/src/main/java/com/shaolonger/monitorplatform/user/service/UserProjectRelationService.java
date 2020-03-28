@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserProjectRelationService extends ServiceBase {
 
     @Autowired
-    UserProjectRelationDao userProjectRelationDao;
+    private UserProjectRelationDao userProjectRelationDao;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     

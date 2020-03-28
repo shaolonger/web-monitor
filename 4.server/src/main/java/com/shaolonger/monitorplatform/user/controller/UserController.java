@@ -1,6 +1,7 @@
 package com.shaolonger.monitorplatform.user.controller;
 
 import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
+import com.shaolonger.monitorplatform.user.service.UserProjectRelationService;
 import com.shaolonger.monitorplatform.user.service.UserService;
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
+    /**
+     * 多条件分页查询
+     *
+     * @param request request
+     * @return Object
+     */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         try {
@@ -25,6 +33,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 登录
+     *
+     * @param request request
+     * @return Object
+     */
     @AuthIgnore
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(HttpServletRequest request) {
@@ -33,5 +47,16 @@ public class UserController {
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }
+    }
+
+    /**
+     * 根据用户获取关联的项目
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getRelatedProjectList")
+    public Object getRelatedProjectList(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(userService.getRelatedProjectList(request));
     }
 }
