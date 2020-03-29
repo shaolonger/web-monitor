@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/3/28 9:00:27                            */
+/* Created on:     2020/3/29 17:49:01                           */
 /*==============================================================*/
 
 
@@ -40,6 +40,7 @@ create table lms_custom_error_log
    ip_address           varchar(50) default "" comment 'IP地址',
    error_type           varchar(30) default "" comment '错误类型',
    error_message        text not null comment '错误信息',
+   error_stack          text comment '错误堆栈信息',
    primary key (id)
 );
 
