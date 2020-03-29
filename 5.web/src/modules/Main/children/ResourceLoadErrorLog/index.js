@@ -56,6 +56,12 @@ const ResourceLoadErrorLog = () => {
     }, []);
     useEffect(() => {
         initOrUpdateChart('resourceLoadErrorLogChart', resourceLoadErrorLogChartData);
+        return () => {
+            if (chartInstance.resourceLoadErrorLogChart) {
+                echarts.dispose(chartInstance.resourceLoadErrorLogChart);
+                chartInstance.resourceLoadErrorLogChart = null;
+            }
+        };
     }, [resourceLoadErrorLogChartData]);
 
     // 筛选条件

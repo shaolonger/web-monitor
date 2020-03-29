@@ -43,6 +43,10 @@ const CustomErrorLog = () => {
     }, []);
     useEffect(() => {
         initOrUpdateChart('customErrorLogChart', customErrorLogChartData);
+        return () => {
+            echarts.dispose(chartInstance.customErrorLogChart);
+            chartInstance.customErrorLogChart = null;
+        };
     }, [customErrorLogChartData]);
 
     // 筛选条件

@@ -52,6 +52,12 @@ const HttpErrorLog = () => {
     }, []);
     useEffect(() => {
         initOrUpdateChart('httpErrorLogChart', httpErrorLogChartData);
+        return () => {
+            if (chartInstance.httpErrorLogChart) {
+                echarts.dispose(chartInstance.httpErrorLogChart);
+                chartInstance.httpErrorLogChart = null;
+            }
+        };
     }, [httpErrorLogChartData]);
 
     // 筛选条件

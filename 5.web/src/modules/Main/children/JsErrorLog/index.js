@@ -43,6 +43,12 @@ const JsErrorLog = () => {
     }, []);
     useEffect(() => {
         initOrUpdateChart('jsErrorLogChart', jsErrorLogChartData);
+        return () => {
+            if (chartInstance.jsErrorLogChart) {
+                echarts.dispose(chartInstance.jsErrorLogChart);
+                chartInstance.jsErrorLogChart = null;
+            }
+        };
     }, [jsErrorLogChartData]);
 
     // 筛选条件

@@ -64,15 +64,39 @@ const Overview = () => {
     const [customErrorLogChartData, setCustomErrorLogChartData] = useState([]);
     useEffect(() => {
         initOrUpdateChart('jsErrorLogChart', jsErrorLogChartData);
+        return () => {
+            if (chartInstance.jsErrorLogChart) {
+                echarts.dispose(chartInstance.jsErrorLogChart);
+                chartInstance.jsErrorLogChart = null;
+            }
+        };
     }, [jsErrorLogChartData]);
     useEffect(() => {
         initOrUpdateChart('httpErrorLogChart', httpErrorLogChartData);
+        return () => {
+            if (chartInstance.httpErrorLogChart) {
+                echarts.dispose(chartInstance.httpErrorLogChart);
+                chartInstance.httpErrorLogChart = null;
+            }
+        };
     }, [httpErrorLogChartData]);
     useEffect(() => {
         initOrUpdateChart('resourceLoadErrorLogChart', resourceLoadErrorLogChartData);
+        return () => {
+            if (chartInstance.resourceLoadErrorLogChart) {
+                echarts.dispose(chartInstance.resourceLoadErrorLogChart);
+                chartInstance.resourceLoadErrorLogChart = null;
+            }
+        };
     }, [resourceLoadErrorLogChartData]);
     useEffect(() => {
         initOrUpdateChart('customErrorLogChart', customErrorLogChartData);
+        return () => {
+            if (chartInstance.customErrorLogChart) {
+                echarts.dispose(chartInstance.customErrorLogChart);
+                chartInstance.customErrorLogChart = null;
+            }
+        };
     }, [customErrorLogChartData]);
 
     /**
