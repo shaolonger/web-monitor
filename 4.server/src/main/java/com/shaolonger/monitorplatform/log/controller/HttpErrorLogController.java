@@ -1,5 +1,6 @@
 package com.shaolonger.monitorplatform.log.controller;
 
+import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
 import com.shaolonger.monitorplatform.log.entity.HttpErrorLog;
 import com.shaolonger.monitorplatform.log.service.HttpErrorLogService;
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
@@ -38,6 +39,7 @@ public class HttpErrorLogController {
      * @param bindingResult bindingResult
      * @return Object
      */
+    @AuthIgnore
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(@Valid HttpErrorLog httpErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

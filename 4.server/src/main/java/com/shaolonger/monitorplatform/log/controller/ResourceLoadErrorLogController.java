@@ -1,5 +1,6 @@
 package com.shaolonger.monitorplatform.log.controller;
 
+import com.shaolonger.monitorplatform.auth.annotation.AuthIgnore;
 import com.shaolonger.monitorplatform.log.entity.ResourceLoadErrorLog;
 import com.shaolonger.monitorplatform.log.service.ResourceLoadErrorLogService;
 import com.shaolonger.monitorplatform.common.api.ResponseResultBase;
@@ -38,6 +39,7 @@ public class ResourceLoadErrorLogController {
      * @param bindingResult bindingResult
      * @return Object
      */
+    @AuthIgnore
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public Object add(@Valid ResourceLoadErrorLog resourceLoadErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
