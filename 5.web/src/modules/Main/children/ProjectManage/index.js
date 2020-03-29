@@ -47,7 +47,7 @@ const ProjectManage = () => {
                 console.log('[成功]获取用户列表', res);
                 const {success, data} = res;
                 if (!success) {
-                    message.error({content: '获取用户列表失败' + (res.msg || '')});
+                    message.error({content: '获取用户列表失败: ' + (res.msg || '')});
                 } else {
                     setUserList(data.map(item => ({
                         label: item.username, value: item.id
@@ -57,7 +57,7 @@ const ProjectManage = () => {
             .catch(err => {
                 console.log('[失败]新增', err);
                 setSpinning(false);
-                message.error({content: '获取用户列表失败' + (err.msg || '')});
+                message.error({content: '获取用户列表失败: ' + (err.msg || '')});
             });
     }, []);
 
@@ -93,7 +93,7 @@ const ProjectManage = () => {
                 .catch(err => {
                     console.log('[失败]新增', err);
                     setSpinning(false);
-                    message.error({content: '新增失败' + (err.msg || ''), key: 'add'});
+                    message.error({content: '新增失败: ' + (err.msg || ''), key: 'add'});
                 });
         } else if (mode === 'edit') {
             // 编辑
@@ -113,7 +113,7 @@ const ProjectManage = () => {
                     setSpinning(false);
                     const {success, msg} = res;
                     if (!success) {
-                        message.error({content: '更新失败' + (msg || ''), key: 'update'});
+                        message.error({content: '更新失败: ' + (msg || ''), key: 'update'});
                     } else {
                         message.success({
                             content: '更新成功',
@@ -130,7 +130,7 @@ const ProjectManage = () => {
                 .catch(err => {
                     console.log('[失败]更新', err);
                     setSpinning(false);
-                    message.error({content: '更新失败' + (err.msg || ''), key: 'update'});
+                    message.error({content: '更新失败: ' + (err.msg || ''), key: 'update'});
                 });
         }
     };
@@ -171,13 +171,13 @@ const ProjectManage = () => {
                 } else {
                     console.log('[失败]删除', res);
                     setSpinning(false);
-                    message.error({content: '删除失败' + (msg || ''), key: 'delete'});
+                    message.error({content: '删除失败: ' + (msg || ''), key: 'delete'});
                 }
             })
             .catch(err => {
                 console.log('[失败]删除', err);
                 setSpinning(false);
-                message.error({content: '删除失败' + (err.msg || ''), key: 'delete'});
+                message.error({content: '删除失败: ' + (err.msg || ''), key: 'delete'});
             });
     };
 

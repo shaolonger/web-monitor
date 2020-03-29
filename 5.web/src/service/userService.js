@@ -10,6 +10,10 @@ const userService = {
     get(params) {
         return axios.get('/user/get', qs.stringify(params));
     },
+    // 根据用户获取关联的项目
+    getRelatedProjectList() {
+        return axios.get('/user/getRelatedProjectList');
+    },
 };
 
 export default userService;

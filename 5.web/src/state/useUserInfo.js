@@ -4,7 +4,8 @@ const setUserInfo = newUserInfo => {
     userInfo = Object.assign(userInfo, newUserInfo);
 };
 
-const useUserInfo = () => {
+const useUserInfo = initUserInfo => {
+    if (initUserInfo) userInfo = Object.assign(userInfo, initUserInfo);
     return [userInfo, setUserInfo];
 };
 
