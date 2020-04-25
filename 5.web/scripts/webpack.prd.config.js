@@ -1,9 +1,17 @@
+const pkg = require('../package.json');
 const path = require('path');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    entry: path.resolve(__dirname, '../src/index.js'),
+    mode: 'production',
+    entry: {
+        app: path.resolve(__dirname, '../src/index.js'),
+        vendor: Object.keys(pkg.dependencies) // 将第三方依赖单独打包
+    },
+    output: {
+        path: path.resolve(__dirname, '../dist/'),
+        filename: '[name].[chunkhash:8].js'
+    },
     resolve: {
         alias: {
             static: path.resolve(__dirname, '../src/static/'),
@@ -29,12 +37,6 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.html$/,
-                use: {
-                    loader: "html-loader"
-                }
-            },
-            {
                 test: /\.(png|jpg|gif)$/,
                 use: {
                     loader: 'url-loader',
@@ -46,22 +48,17 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebPackPlugin({
-            title: 'nuall-monitor-platform',
-            filename: 'index.html',
+        // html模板插件
+        new HtmlWebpackPlugin({
             template: path.resolve(__dirname, '../src/index.html')
-        })
+        }),
     ],
-    devServer: {
-        contentBase: path.resolve(__dirname, '../build'),
-        port: 5000,
-        hot: true,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:6001',
-                pathRewrite: {'^/api' : ''}
-            }
-        }
+    node: {
+        fs: 'empty' // 避免打包过程中出现Can't resolve 'fs' when bundle with webpack的报错
     },
-    devtool: "source-map"
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    }
 };
