@@ -165,8 +165,8 @@ public class CustomErrorLogService extends ServiceBase {
      * @param endTime
      * @return
      */
-    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
-        return customErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
+        return customErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
     }
 
     /**

@@ -28,15 +28,17 @@ public class StatisticService {
     public Object getOverallByTimeRange(HttpServletRequest request) throws Exception {
 
         // 获取查询参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int jsErrorLogCount = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
-        int resourceLoadErrorLogCount = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int jsErrorLogCount = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int resourceLoadErrorLogCount = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
         resultMap.put("customErrorLogCount", customErrorLogCount);

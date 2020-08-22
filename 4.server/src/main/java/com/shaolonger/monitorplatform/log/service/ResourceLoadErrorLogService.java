@@ -173,8 +173,8 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      * @param endTime 结束日期
      * @return int
      */
-    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
-        return resourceLoadErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
+        return resourceLoadErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
     }
 
     /**

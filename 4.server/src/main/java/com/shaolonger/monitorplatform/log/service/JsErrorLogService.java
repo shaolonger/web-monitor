@@ -167,8 +167,8 @@ public class JsErrorLogService extends ServiceBase {
      * @param endTime 结束时间
      * @return int
      */
-    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
-        return jsErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
+        return jsErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
     }
 
     /**

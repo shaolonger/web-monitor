@@ -191,8 +191,8 @@ public class HttpErrorLogService extends ServiceBase {
      * @param endTime 结束时间
      * @return int
      */
-    public int getCountByIdBetweenStartTimeAndEndTime(Date startTime, Date endTime) {
-        return httpErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(startTime, endTime);
+    public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
+        return httpErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
     }
 
     /**
