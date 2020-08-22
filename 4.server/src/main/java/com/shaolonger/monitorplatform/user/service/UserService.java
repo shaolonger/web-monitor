@@ -173,6 +173,7 @@ public class UserService extends ServiceBase {
                 Map<String, Object> project = new HashMap<>();
                 project.put("projectId", projectEntity.getId());
                 project.put("projectName", projectEntity.getProjectName());
+                project.put("projectIdentifier", projectEntity.getProjectIdentifier());
                 resultList.add(project);
             }
         }
