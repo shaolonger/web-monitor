@@ -41,7 +41,7 @@ public class ServiceBase {
         return new PageImpl<E>(content, pageable, total);
     }
 
-    public <C> Page<C> findPageByNativeSqlAndParam(String dataSql, String countSql, Pageable pageable, Map<String, Object> paramMap) {
+    public Page findPageByNativeSqlAndParam(String dataSql, String countSql, Pageable pageable, Map<String, Object> paramMap) {
         Query countQuery = entityManager.createNativeQuery(countSql);
         Query dataQuery = entityManager.createNativeQuery(dataSql);
 
@@ -57,8 +57,8 @@ public class ServiceBase {
         // 设置返回最大条数，也就是限定一页返回的数量
         dataQuery.setMaxResults(pageSize);
         long total = ((BigInteger)(countQuery.getSingleResult())).longValue();
-        List<C> content = total > pageable.getOffset() ? dataQuery.getResultList() : Collections.emptyList();
+        List content = total > pageable.getOffset() ? dataQuery.getResultList() : Collections.emptyList();
 
-        return new PageImpl<C>(content, pageable, total);
+        return new PageImpl(content, pageable, total);
     }
 }
