@@ -1,5 +1,6 @@
 package com.shaolonger.monitorplatform.log.service;
 
+import com.shaolonger.monitorplatform.log.vo.StatisticRecordVO;
 import com.shaolonger.monitorplatform.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -174,5 +175,29 @@ public class StatisticService {
         }
 
         return resultMap;
+    }
+
+    /**
+     * entity转vo
+     *
+     * @param list 列表
+     * @return List
+     */
+    public List<StatisticRecordVO> getStatisticListVO(List list) {
+        ArrayList<StatisticRecordVO> returnList = new ArrayList<>();
+        for (Object listItem : list) {
+            StatisticRecordVO recordVO = new StatisticRecordVO();
+            Object[] item = (Object[]) listItem;
+            // count
+            recordVO.setCount(Integer.parseInt(item[0].toString()));
+            // latestRecordTime
+            recordVO.setLatestRecordTime((Date) item[1]);
+            // affectUserCount
+            recordVO.setAffectUserCount(Integer.parseInt(item[2].toString()));
+            // errorMessage
+            recordVO.setErrorMessage((String) item[3]);
+            returnList.add(recordVO);
+        }
+        return returnList;
     }
 }

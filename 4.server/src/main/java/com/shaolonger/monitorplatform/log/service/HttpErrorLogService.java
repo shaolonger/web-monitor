@@ -24,6 +24,9 @@ public class HttpErrorLogService extends ServiceBase {
     @Autowired
     private HttpErrorLogDao httpErrorLogDao;
 
+    @Autowired
+    private StatisticService statisticService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -218,7 +221,7 @@ public class HttpErrorLogService extends ServiceBase {
         Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 转换vo
-        List<StatisticRecordVO> resultList = this.getStatisticListVO(page.getContent());
+        List<StatisticRecordVO> resultList = statisticService.getStatisticListVO(page.getContent());
 
         // 返回
         PageResultBase<StatisticRecordVO> pageResultBase = new PageResultBase<>();
@@ -337,29 +340,5 @@ public class HttpErrorLogService extends ServiceBase {
         if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
 
         return httpErrorLogDao.getLogCountByState(startTime, endTime, projectIdentifier);
-    }
-
-    /**
-     * entity转vo
-     *
-     * @param list 列表
-     * @return List
-     */
-    private List<StatisticRecordVO> getStatisticListVO(List list) {
-        ArrayList<StatisticRecordVO> returnList = new ArrayList<>();
-        for (Object listItem : list) {
-            StatisticRecordVO recordVO = new StatisticRecordVO();
-            Object[] item = (Object[]) listItem;
-            // count
-            recordVO.setCount(Integer.parseInt(item[0].toString()));
-            // latestRecordTime
-            recordVO.setLatestRecordTime((Date) item[1]);
-            // affectUserCount
-            recordVO.setAffectUserCount(Integer.parseInt(item[2].toString()));
-            // errorMessage
-            recordVO.setErrorMessage((String) item[3]);
-            returnList.add(recordVO);
-        }
-        return returnList;
     }
 }

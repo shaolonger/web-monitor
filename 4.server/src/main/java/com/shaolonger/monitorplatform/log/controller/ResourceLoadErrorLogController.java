@@ -33,6 +33,17 @@ public class ResourceLoadErrorLogController {
     }
 
     /**
+     * 多条件聚合查询
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    public Object getByGroup(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.getByGroup(request));
+    }
+
+    /**
      * 新增
      *
      * @param resourceLoadErrorLog  resourceLoadErrorLog
