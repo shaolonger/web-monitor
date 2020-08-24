@@ -179,7 +179,7 @@ public class JsErrorLogService extends ServiceBase {
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" group by t.error_message");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<List> page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 转换vo
         List<StatisticRecordVO> resultList = this.getStatisticListVO(page.getContent());
@@ -280,13 +280,23 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * entity转vo
      *
-     * @param list list
-     * @return List List
+     * @param list 列表
+     * @return List
      */
-    private List<StatisticRecordVO> getStatisticListVO(List list) throws Exception {
+    private List<StatisticRecordVO> getStatisticListVO(List list) {
         ArrayList<StatisticRecordVO> returnList = new ArrayList<>();
-        for (Object item : list) {
-            System.out.println();
+        for (Object listItem : list) {
+            StatisticRecordVO recordVO = new StatisticRecordVO();
+            Object[] item = (Object[]) listItem;
+            // count
+            recordVO.setCount(Integer.parseInt(item[0].toString()));
+            // latestRecordTime
+            recordVO.setLatestRecordTime((Date) item[1]);
+            // affectUserCount
+            recordVO.setAffectUserCount(Integer.parseInt(item[2].toString()));
+            // errorMessage
+            recordVO.setErrorMessage((String) item[3]);
+            returnList.add(recordVO);
         }
         return returnList;
     }
