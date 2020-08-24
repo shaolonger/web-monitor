@@ -177,7 +177,7 @@ public class JsErrorLogService extends ServiceBase {
             paramSqlBuilder.append(" and t.error_message like :errorMessage");
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
-        dataSqlBuilder.append(paramSqlBuilder).append(" group by t.error_message");
+        dataSqlBuilder.append(paramSqlBuilder).append(" group by t.error_message order by count desc");
         countSqlBuilder.append(paramSqlBuilder);
         Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
