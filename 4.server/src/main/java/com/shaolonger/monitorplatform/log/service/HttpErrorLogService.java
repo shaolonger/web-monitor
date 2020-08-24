@@ -2,6 +2,7 @@ package com.shaolonger.monitorplatform.log.service;
 
 import com.shaolonger.monitorplatform.log.dao.HttpErrorLogDao;
 import com.shaolonger.monitorplatform.log.entity.HttpErrorLog;
+import com.shaolonger.monitorplatform.log.vo.StatisticRecordVO;
 import com.shaolonger.monitorplatform.utils.DateUtils;
 import com.shaolonger.monitorplatform.common.api.PageResultBase;
 import com.shaolonger.monitorplatform.common.service.ServiceBase;
@@ -15,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class HttpErrorLogService extends ServiceBase {
@@ -129,6 +127,110 @@ public class HttpErrorLogService extends ServiceBase {
     }
 
     /**
+     * 聚合查询
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getByGroup(HttpServletRequest request) {
+        // 获取请求参数
+        int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
+        int pageSize = DataConvertUtils.strToInt(request.getParameter("pageSize"));
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String logType = request.getParameter("logType");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String httpType = request.getParameter("httpType");
+        String httpUrlComplete = request.getParameter("httpUrlComplete");
+        String httpUrlShort = request.getParameter("httpUrlShort");
+        String status = request.getParameter("status");
+        String statusText = request.getParameter("statusText");
+
+        // 拼接sql，分页查询
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Map<String, Object> paramMap = new HashMap<>();
+        StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
+                "count(t.user_id) as user_count, t.http_url_complete from lms_http_error_log t where 1=1");
+        StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from lms_http_error_log t where 1=1");
+        StringBuilder paramSqlBuilder = new StringBuilder();
+
+        // 项目标识
+        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+            paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
+            paramMap.put("projectIdentifier", projectIdentifier);
+        }
+        // 日志类型
+        if (logType != null && !logType.isEmpty()) {
+            paramSqlBuilder.append(" and t.log_type like :logType");
+            paramMap.put("logType", "%" + logType + "%");
+        }
+        // 开始时间、结束时间
+        if (startTime != null && endTime != null) {
+            paramSqlBuilder.append(" and t.create_time between :startTime and :endTime");
+            paramMap.put("startTime", startTime);
+            paramMap.put("endTime", endTime);
+        } else if (startTime != null) {
+            paramSqlBuilder.append(" and t.create_time >= :startTime");
+            paramMap.put("startTime", startTime);
+        } else if (endTime != null) {
+            paramSqlBuilder.append(" and t.create_time <= :endTime");
+            paramMap.put("endTime", endTime);
+        }
+        // 用户名
+        if (userName != null && !userName.isEmpty()) {
+            paramSqlBuilder.append(" and t.user_name like :userName");
+            paramMap.put("userName", "%" + userName + "%");
+        }
+        // 页面URL
+        if (pageUrl != null && !pageUrl.isEmpty()) {
+            paramSqlBuilder.append(" and t.page_url like :pageUrl");
+            paramMap.put("pageUrl", "%" + pageUrl + "%");
+        }
+        // Http类型，如request、response
+        if (httpType != null && !httpType.isEmpty()) {
+            paramSqlBuilder.append(" and t.http_type like :httpType");
+            paramMap.put("httpType", "%" + httpType + "%");
+        }
+        // 完整的Http请求地址
+        if (httpUrlComplete != null && !httpUrlComplete.isEmpty()) {
+            paramSqlBuilder.append(" and t.http_url_complete like :httpUrlComplete");
+            paramMap.put("httpUrlComplete", "%" + httpUrlComplete + "%");
+        }
+        // 缩写的Http请求地址
+        if (httpUrlShort != null && !httpUrlShort.isEmpty()) {
+            paramSqlBuilder.append(" and t.http_url_short like :httpUrlShort");
+            paramMap.put("httpUrlShort", "%" + httpUrlShort + "%");
+        }
+        // 状态
+        if (status != null && !status.isEmpty()) {
+            paramSqlBuilder.append(" and t.status like :status");
+            paramMap.put("status", "%" + status + "%");
+        }
+        // 状态的文字描述
+        if (statusText != null && !statusText.isEmpty()) {
+            paramSqlBuilder.append(" and t.status_text like :statusText");
+            paramMap.put("statusText", "%" + statusText + "%");
+        }
+        dataSqlBuilder.append(paramSqlBuilder).append(" group by t.http_url_complete order by count desc");
+        countSqlBuilder.append(paramSqlBuilder);
+        Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+
+        // 转换vo
+        List<StatisticRecordVO> resultList = this.getStatisticListVO(page.getContent());
+
+        // 返回
+        PageResultBase<StatisticRecordVO> pageResultBase = new PageResultBase<>();
+        pageResultBase.setTotalNum(page.getTotalElements());
+        pageResultBase.setTotalPage(page.getTotalPages());
+        pageResultBase.setPageNum(pageNum);
+        pageResultBase.setPageSize(pageSize);
+        pageResultBase.setRecords(resultList);
+        return pageResultBase;
+    }
+
+    /**
      * 新增
      *
      * @param httpErrorLog httpErrorLog
@@ -235,5 +337,29 @@ public class HttpErrorLogService extends ServiceBase {
         if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
 
         return httpErrorLogDao.getLogCountByState(startTime, endTime, projectIdentifier);
+    }
+
+    /**
+     * entity转vo
+     *
+     * @param list 列表
+     * @return List
+     */
+    private List<StatisticRecordVO> getStatisticListVO(List list) {
+        ArrayList<StatisticRecordVO> returnList = new ArrayList<>();
+        for (Object listItem : list) {
+            StatisticRecordVO recordVO = new StatisticRecordVO();
+            Object[] item = (Object[]) listItem;
+            // count
+            recordVO.setCount(Integer.parseInt(item[0].toString()));
+            // latestRecordTime
+            recordVO.setLatestRecordTime((Date) item[1]);
+            // affectUserCount
+            recordVO.setAffectUserCount(Integer.parseInt(item[2].toString()));
+            // errorMessage
+            recordVO.setErrorMessage((String) item[3]);
+            returnList.add(recordVO);
+        }
+        return returnList;
     }
 }
