@@ -33,6 +33,17 @@ public class CustomErrorLogController {
     }
 
     /**
+     * 多条件聚合查询
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    public Object getByGroup(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(customErrorLogService.getByGroup(request));
+    }
+
+    /**
      * 新增
      *
      * @param customErrorLog customErrorLog
