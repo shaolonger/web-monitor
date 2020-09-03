@@ -60,4 +60,19 @@ public class StatisticController {
             return ResponseResultBase.getErrorResponseResult(e);
         }
     }
+
+    /**
+     * 按天间隔，获取两个日期之间的对比数据
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getLogCountBetweenDiffDate", method = RequestMethod.GET)
+    public Object getLogCountBetweenDiffDate(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(statisticService.getLogCountBetweenDiffDate(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
 }

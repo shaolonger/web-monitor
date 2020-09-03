@@ -68,6 +68,18 @@ public class DateUtils {
     }
 
     /**
+     * 根据传入的单位(秒)，获取两个日期之间相差的单位数
+     *
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param timeInterval 间隔时间
+     * @return long
+     */
+    public static long getCountBetweenDateRange(Date startDate, Date endDate, int timeInterval) {
+        return Math.abs((endDate.getTime() - startDate.getTime()) / (timeInterval * 1000));
+    }
+
+    /**
      * 获取在参考日期相隔days天的日期
      *
      * @param date 参考日期

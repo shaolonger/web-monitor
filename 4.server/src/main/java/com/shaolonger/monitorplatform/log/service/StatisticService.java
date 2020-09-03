@@ -1,6 +1,7 @@
 package com.shaolonger.monitorplatform.log.service;
 
 import com.shaolonger.monitorplatform.log.vo.StatisticRecordVO;
+import com.shaolonger.monitorplatform.utils.DataConvertUtils;
 import com.shaolonger.monitorplatform.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -174,6 +175,81 @@ public class StatisticService {
             }
         }
 
+        return resultMap;
+    }
+
+    /**
+     * 获取两个日期之间的对比数据
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getLogCountBetweenDiffDate(HttpServletRequest request) throws Exception {
+
+        // 获取查询参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String logTypeList = request.getParameter("logTypeList");
+        int timeInterval = DataConvertUtils.strToInt(request.getParameter("timeInterval"));
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (logTypeList == null || logTypeList.isEmpty()) throw new Exception("logTypeList不能为空");
+        if (timeInterval < 60) throw new Exception("timeInterval不能为空或不能小于60");
+
+        String[] logTypeLists = logTypeList.split(",");
+        if (logTypeLists.length == 0) throw new Exception("logTypeList格式错误，要以,隔开");
+
+        Map<String, Object> resultMap = new HashMap<>();
+        for (String logType : logTypeLists) {
+            long countGap = DateUtils.getCountBetweenDateRange(startTime, endTime, timeInterval);
+            List<Map<String, Object>> logTypeResultList = new LinkedList<>();
+            int i = 0;
+            Date startDate = null;
+            Date endDate = null;
+            while (i < countGap + 1) {
+
+                if (startDate == null) {
+                    startDate = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+                } else {
+                    startDate.setTime(startDate.getTime() + timeInterval * 1000);
+                }
+                if (endDate == null) {
+                    endDate = new Date(startDate.getTime() + (i + 1) * timeInterval * 1000);
+                } else {
+                    endDate.setTime(endDate.getTime() + timeInterval * 1000);
+                }
+
+                int count = 0;
+                switch (logType) {
+                    case "jsErrorLog":
+                        count = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
+                        break;
+                    case "httpErrorLog":
+                        count = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
+                        break;
+                    case "resourceLoadErrorLog":
+                        count = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
+                        break;
+                    case "customErrorLog":
+                        count = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
+                        break;
+                    default:
+                        break;
+                }
+
+                HashMap<String, Object> logTypeResult = new HashMap<>();
+                String startDateStr = DateUtils.dateToStr(startDate, "yyyy-MM-dd HH:mm:ss");
+                logTypeResult.put("key", startDateStr);
+                logTypeResult.put("value", count);
+                logTypeResultList.add(logTypeResult);
+
+                i++;
+            }
+            resultMap.put(logType, logTypeResultList);
+        }
         return resultMap;
     }
 
