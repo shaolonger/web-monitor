@@ -280,4 +280,15 @@ public class CustomErrorLogService extends ServiceBase {
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
         return customErrorLogDao.getLogCountByDays(startTime, endTime, projectIdentifier);
     }
+
+    /**
+     * 获取时间间隔内的简易日志信息
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return List
+     */
+    public List<Map<String, Object>> getLogListByCreateTimeAndProjectIdentifier(String projectIdentifier, Date startTime, Date endTime) {
+        return customErrorLogDao.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 import java.util.*;
 
 @Service
@@ -191,26 +192,47 @@ public class StatisticService {
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         String logTypeList = request.getParameter("logTypeList");
+        String indicatorList = request.getParameter("indicatorList");
         int timeInterval = DataConvertUtils.strToInt(request.getParameter("timeInterval"));
 
         // 校验参数
         if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
         if (logTypeList == null || logTypeList.isEmpty()) throw new Exception("logTypeList不能为空");
+        if (indicatorList == null || indicatorList.isEmpty()) throw new Exception("indicatorList不能为空");
         if (timeInterval < 60) throw new Exception("timeInterval不能为空或不能小于60");
 
         String[] logTypeLists = logTypeList.split(",");
         if (logTypeLists.length == 0) throw new Exception("logTypeList格式错误，要以,隔开");
+        String[] indicatorLists = indicatorList.split(",");
+        if (indicatorLists.length == 0) throw new Exception("indicatorList格式错误，要以,隔开");
 
         Map<String, Object> resultMap = new HashMap<>();
         for (String logType : logTypeLists) {
+
+            List<Map<String, Object>> originResultList = new ArrayList<>();
+            switch (logType) {
+                case "jsErrorLog":
+                    originResultList = jsErrorLogService.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
+                    break;
+                case "httpErrorLog":
+                    originResultList = httpErrorLogService.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
+                    break;
+                case "resourceLoadErrorLog":
+                    originResultList = resourceLoadErrorLogService.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
+                    break;
+                case "customErrorLog":
+                    originResultList = customErrorLogService.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
+                    break;
+                default:
+                    break;
+            }
             long countGap = DateUtils.getCountBetweenDateRange(startTime, endTime, timeInterval);
-            List<Map<String, Object>> logTypeResultList = new LinkedList<>();
             int i = 0;
             Date startDate = null;
             Date endDate = null;
+            LinkedHashMap<String, List<Map<String, Object>>> tempMap = new LinkedHashMap<>();
             while (i < countGap + 1) {
-
                 if (startDate == null) {
                     startDate = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
                 } else {
@@ -221,33 +243,50 @@ public class StatisticService {
                 } else {
                     endDate.setTime(endDate.getTime() + timeInterval * 1000);
                 }
-
-                int count = 0;
-                switch (logType) {
-                    case "jsErrorLog":
-                        count = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
-                        break;
-                    case "httpErrorLog":
-                        count = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
-                        break;
-                    case "resourceLoadErrorLog":
-                        count = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
-                        break;
-                    case "customErrorLog":
-                        count = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startDate, endDate);
-                        break;
-                    default:
-                        break;
-                }
-
-                HashMap<String, Object> logTypeResult = new HashMap<>();
                 String startDateStr = DateUtils.dateToStr(startDate, "yyyy-MM-dd HH:mm:ss");
-                logTypeResult.put("key", startDateStr);
-                logTypeResult.put("value", count);
-                logTypeResultList.add(logTypeResult);
-
+                List<Map<String, Object>> tempList = tempMap.get(startDateStr);
+                if (tempList == null) {
+                    tempList = new LinkedList<>();
+                }
+                Iterator<Map<String, Object>> iterator = originResultList.iterator();
+                while (iterator.hasNext()) {
+                    Map<String, Object> item = iterator.next();
+                    Date createTime = (Date) item.get("create_time");
+                    if (createTime.after(startDate) && createTime.before(endDate)) {
+                        tempList.add(item);
+                        iterator.remove();
+                    }
+                }
+                tempMap.put(startDateStr, tempList);
                 i++;
             }
+
+            List<HashMap<String, Object>> logTypeResultList = new LinkedList<>();
+            List<String> indicatorListArr = Arrays.asList(indicatorLists);
+            tempMap.keySet().forEach(key -> {
+                List<Map<String, Object>> list = tempMap.get(key);
+                HashMap<String, Object> dataMap = new HashMap<>();
+                dataMap.put("key", key);
+
+                // 计算count，日志数量
+                if (indicatorListArr.contains("count")) {
+                    int count = list.size();
+                    dataMap.put("count", count);
+                }
+
+                // 计算uv，影响的用户数
+                if (indicatorListArr.contains("uv")) {
+                    HashSet<Long> tempSet = new HashSet<>();
+                    list.forEach(item -> {
+                        BigInteger userId = (BigInteger) item.get("user_id");
+                        tempSet.add(userId.longValue());
+                    });
+                    int uv = tempSet.size();
+                    dataMap.put("uv", uv);
+                }
+
+                logTypeResultList.add(dataMap);
+            });
             resultMap.put(logType, logTypeResultList);
         }
         return resultMap;
