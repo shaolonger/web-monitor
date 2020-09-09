@@ -232,7 +232,7 @@ public class StatisticService {
             Date startDate = null;
             Date endDate = null;
             LinkedHashMap<String, List<Map<String, Object>>> tempMap = new LinkedHashMap<>();
-            while (i < countGap + 1) {
+            while (i < countGap) {
                 if (startDate == null) {
                     startDate = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
                 } else {
