@@ -134,9 +134,8 @@ public class JsErrorLogService extends ServiceBase {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
-                "count(t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
-        StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) as count, max(t.create_time) " +
-                "as latest_create_time, count(t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
+                "count(distinct t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
+        StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) from lms_js_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
