@@ -156,7 +156,8 @@ public class HttpErrorLogService extends ServiceBase {
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
                 "count(t.user_id) as user_count, t.http_url_complete from lms_http_error_log t where 1=1");
-        StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from lms_http_error_log t where 1=1");
+        StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) as count, max(t.create_time) as " +
+                "latest_create_time, count(t.user_id) as user_count, t.http_url_complete from lms_http_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
@@ -217,7 +218,7 @@ public class HttpErrorLogService extends ServiceBase {
             paramMap.put("statusText", "%" + statusText + "%");
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" group by t.http_url_complete order by count desc");
-        countSqlBuilder.append(paramSqlBuilder);
+        countSqlBuilder.append(paramSqlBuilder.append(" group by t.http_url_complete) s"));
         Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 转换vo

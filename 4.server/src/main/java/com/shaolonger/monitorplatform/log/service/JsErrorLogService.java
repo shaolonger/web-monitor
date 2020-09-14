@@ -135,7 +135,8 @@ public class JsErrorLogService extends ServiceBase {
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
                 "count(t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
-        StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from lms_js_error_log t where 1=1");
+        StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) as count, max(t.create_time) " +
+                "as latest_create_time, count(t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
@@ -181,7 +182,7 @@ public class JsErrorLogService extends ServiceBase {
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" group by t.error_message order by count desc");
-        countSqlBuilder.append(paramSqlBuilder);
+        countSqlBuilder.append(paramSqlBuilder.append(" group by t.error_message) s"));
         Page page = this.findPageByNativeSqlAndParam(dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 转换vo

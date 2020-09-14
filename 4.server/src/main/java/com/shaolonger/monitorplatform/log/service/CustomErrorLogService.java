@@ -55,7 +55,8 @@ public class CustomErrorLogService extends ServiceBase {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select * from lms_custom_error_log t where 1=1");
-        StringBuilder countSqlBuilder = new StringBuilder("select count(t.id) from lms_custom_error_log t where 1=1");
+        StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) as count, max(t.create_time) " +
+                "as latest_create_time, count(t.user_id) as user_count, t.error_message from lms_custom_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
@@ -101,7 +102,7 @@ public class CustomErrorLogService extends ServiceBase {
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
-        countSqlBuilder.append(paramSqlBuilder);
+        countSqlBuilder.append(paramSqlBuilder.append(" group by t.error_message) s"));
         Page<CustomErrorLog> page = this.findPageBySqlAndParam(CustomErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
