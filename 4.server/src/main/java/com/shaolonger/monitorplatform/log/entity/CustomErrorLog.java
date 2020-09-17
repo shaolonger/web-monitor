@@ -51,6 +51,7 @@ public class CustomErrorLog {
     /**
      * 页面URL
      */
+    @Column(columnDefinition = "TEXT")
     private String pageUrl;
 
     /**
@@ -86,11 +87,13 @@ public class CustomErrorLog {
     /**
      * 异常类型
      */
+    @Column(columnDefinition = "TEXT")
     private String errorType;
 
     /**
      * 异常信息
      */
     @NotEmpty(message = "errorMessage不能为空")
+    @Column(columnDefinition = "TEXT")
     private String errorMessage;
 }

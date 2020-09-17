@@ -50,6 +50,7 @@ public class HttpErrorLog {
     /**
      * 页面URL
      */
+    @Column(columnDefinition = "TEXT")
     private String pageUrl;
 
     /**
@@ -92,11 +93,13 @@ public class HttpErrorLog {
      * 完整的Http地址
      */
     @NotEmpty(message = "httpUrlComplete不能为空")
+    @Column(columnDefinition = "TEXT")
     private String httpUrlComplete;
 
     /**
      * 缩写的Http地址
      */
+    @Column(columnDefinition = "TEXT")
     private String httpUrlShort;
 
     /**

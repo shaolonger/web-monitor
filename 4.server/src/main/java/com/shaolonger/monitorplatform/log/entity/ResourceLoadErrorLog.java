@@ -50,6 +50,7 @@ public class ResourceLoadErrorLog {
     /**
      * 页面URL
      */
+    @Column(columnDefinition = "TEXT")
     private String pageUrl;
 
     /**
@@ -86,6 +87,7 @@ public class ResourceLoadErrorLog {
      * 资源链接
      */
     @NotEmpty(message = "resourceUrl不能为空")
+    @Column(columnDefinition = "TEXT")
     private String resourceUrl;
 
     /**

@@ -53,6 +53,7 @@ public class JsErrorLog {
     /**
      * 页面URL
      */
+    @Column(columnDefinition = "TEXT")
     private String pageUrl;
 
     /**
@@ -94,10 +95,12 @@ public class JsErrorLog {
      * 异常信息
      */
     @NotEmpty(message = "errorMessage不能为空")
+    @Column(columnDefinition = "TEXT")
     private String errorMessage;
 
     /**
      * JS错误栈信息
      */
+    @Column(columnDefinition = "TEXT")
     private String errorStack;
 }
