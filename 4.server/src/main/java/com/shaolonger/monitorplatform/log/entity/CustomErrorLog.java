@@ -85,6 +85,11 @@ public class CustomErrorLog {
     private String ipAddress;
 
     /**
+     * 网络类型
+     */
+    private String netType;
+
+    /**
      * 异常类型
      */
     @Column(columnDefinition = "TEXT")

@@ -84,6 +84,11 @@ public class HttpErrorLog {
     private String ipAddress;
 
     /**
+     * 网络类型
+     */
+    private String netType;
+
+    /**
      * Http类型
      * 如"request"、"response"
      */

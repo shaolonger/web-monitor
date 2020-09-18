@@ -203,7 +203,7 @@ public class JsErrorLogService extends ServiceBase {
      * @param jsErrorLog jsErrorLog
      * @return Object
      */
-    public Object add(JsErrorLog jsErrorLog) {
+    public boolean add(JsErrorLog jsErrorLog) {
 
         logger.info("--------[JsErrorLogService]保存开始--------");
 
@@ -218,6 +218,7 @@ public class JsErrorLogService extends ServiceBase {
         String browserName = jsErrorLog.getBrowserName();
         String browserVersion = jsErrorLog.getBrowserVersion();
         String ipAddress = jsErrorLog.getIpAddress();
+        String netType = jsErrorLog.getNetType();
         String errorType = jsErrorLog.getErrorType();
         String errorMessage = jsErrorLog.getErrorMessage();
         String errorStack = jsErrorLog.getErrorStack();
@@ -236,6 +237,7 @@ public class JsErrorLogService extends ServiceBase {
         jsErrorLog.setBrowserName(browserName);
         jsErrorLog.setBrowserVersion(browserVersion);
         jsErrorLog.setIpAddress(ipAddress);
+        jsErrorLog.setNetType(netType);
         jsErrorLog.setErrorType(errorType);
         jsErrorLog.setErrorMessage(errorMessage);
         jsErrorLog.setErrorStack(errorStack);
@@ -244,7 +246,7 @@ public class JsErrorLogService extends ServiceBase {
 
         logger.info("--------[JsErrorLogService]保存结束--------");
 
-        return jsErrorLog;
+        return true;
     }
 
     /**

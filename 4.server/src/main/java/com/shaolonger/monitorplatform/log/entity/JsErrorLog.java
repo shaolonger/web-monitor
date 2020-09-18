@@ -87,6 +87,11 @@ public class JsErrorLog {
     private String ipAddress;
 
     /**
+     * 网络类型
+     */
+    private String netType;
+
+    /**
      * 异常类型
      */
     private String errorType;

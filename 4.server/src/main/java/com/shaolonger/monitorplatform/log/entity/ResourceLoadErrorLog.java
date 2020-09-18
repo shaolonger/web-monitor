@@ -84,6 +84,11 @@ public class ResourceLoadErrorLog {
     private String ipAddress;
 
     /**
+     * 网络类型
+     */
+    private String netType;
+
+    /**
      * 资源链接
      */
     @NotEmpty(message = "resourceUrl不能为空")

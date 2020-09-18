@@ -239,7 +239,7 @@ public class HttpErrorLogService extends ServiceBase {
      * @param httpErrorLog httpErrorLog
      * @return Object
      */
-    public Object add(HttpErrorLog httpErrorLog) {
+    public boolean add(HttpErrorLog httpErrorLog) {
 
         logger.info("--------[HttpErrorLogService]保存开始--------");
 
@@ -254,6 +254,7 @@ public class HttpErrorLogService extends ServiceBase {
         String browserName = httpErrorLog.getBrowserName();
         String browserVersion = httpErrorLog.getBrowserVersion();
         String ipAddress = httpErrorLog.getIpAddress();
+        String netType = httpErrorLog.getNetType();
         String httpType = httpErrorLog.getHttpType();
         String httpUrlComplete = httpErrorLog.getHttpUrlComplete();
         String httpUrlShort = httpErrorLog.getHttpUrlShort();
@@ -275,6 +276,7 @@ public class HttpErrorLogService extends ServiceBase {
         httpErrorLog.setBrowserName(browserName);
         httpErrorLog.setBrowserVersion(browserVersion);
         httpErrorLog.setIpAddress(ipAddress);
+        httpErrorLog.setNetType(netType);
         httpErrorLog.setHttpType(httpType);
         httpErrorLog.setHttpUrlComplete(httpUrlComplete);
         httpErrorLog.setHttpUrlShort(httpUrlShort);
@@ -286,7 +288,7 @@ public class HttpErrorLogService extends ServiceBase {
 
         logger.info("--------[HttpErrorLogService]保存结束--------");
 
-        return httpErrorLog;
+        return true;
     }
 
     /**

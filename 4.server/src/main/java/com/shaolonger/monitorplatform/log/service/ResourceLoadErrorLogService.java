@@ -219,7 +219,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      * @param resourceLoadErrorLog resourceLoadErrorLog
      * @return Object
      */
-    public Object add(ResourceLoadErrorLog resourceLoadErrorLog) {
+    public boolean add(ResourceLoadErrorLog resourceLoadErrorLog) {
 
         logger.info("--------[resourceLoadErrorLogService]保存开始--------");
 
@@ -234,6 +234,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         String browserName = resourceLoadErrorLog.getBrowserName();
         String browserVersion = resourceLoadErrorLog.getBrowserVersion();
         String ipAddress = resourceLoadErrorLog.getIpAddress();
+        String netType = resourceLoadErrorLog.getNetType();
         String resourceUrl = resourceLoadErrorLog.getResourceUrl();
         String resourceType = resourceLoadErrorLog.getResourceType();
         String status = resourceLoadErrorLog.getStatus();
@@ -252,6 +253,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         resourceLoadErrorLog.setBrowserName(browserName);
         resourceLoadErrorLog.setBrowserVersion(browserVersion);
         resourceLoadErrorLog.setIpAddress(ipAddress);
+        resourceLoadErrorLog.setNetType(netType);
         resourceLoadErrorLog.setResourceUrl(resourceUrl);
         resourceLoadErrorLog.setResourceType(resourceType);
         resourceLoadErrorLog.setStatus(status);
@@ -260,7 +262,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
 
         logger.info("--------[resourceLoadErrorLogService]保存结束--------");
 
-        return resourceLoadErrorLog;
+        return true;
     }
 
     /**

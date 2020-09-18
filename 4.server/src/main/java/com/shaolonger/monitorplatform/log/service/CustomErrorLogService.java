@@ -207,7 +207,7 @@ public class CustomErrorLogService extends ServiceBase {
      * @param customErrorLog customErrorLog
      * @return Object
      */
-    public Object add(CustomErrorLog customErrorLog) {
+    public boolean add(CustomErrorLog customErrorLog) {
 
         logger.info("--------[CustomErrorLogService]保存开始--------");
 
@@ -222,6 +222,7 @@ public class CustomErrorLogService extends ServiceBase {
         String browserName = customErrorLog.getBrowserName();
         String browserVersion = customErrorLog.getBrowserVersion();
         String ipAddress = customErrorLog.getIpAddress();
+        String netType = customErrorLog.getNetType();
         String errorType = customErrorLog.getErrorType();
         String errorMessage = customErrorLog.getErrorMessage();
 
@@ -239,6 +240,7 @@ public class CustomErrorLogService extends ServiceBase {
         customErrorLog.setBrowserName(browserName);
         customErrorLog.setBrowserVersion(browserVersion);
         customErrorLog.setIpAddress(ipAddress);
+        customErrorLog.setNetType(netType);
         customErrorLog.setErrorType(errorType);
         customErrorLog.setErrorMessage(errorMessage);
         customErrorLog.setCreateTime(createTime);
@@ -246,7 +248,7 @@ public class CustomErrorLogService extends ServiceBase {
 
         logger.info("--------[CustomErrorLogService]保存结束--------");
 
-        return customErrorLog;
+        return true;
     }
 
     /**
