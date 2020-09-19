@@ -75,4 +75,18 @@ public class StatisticController {
             return ResponseResultBase.getErrorResponseResult(e);
         }
     }
+    /**
+     * 获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/getLogDistributionBetweenDiffDate", method = RequestMethod.GET)
+    public Object getLogDistributionBetweenDiffDate(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(statisticService.getLogDistributionBetweenDiffDate(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
 }

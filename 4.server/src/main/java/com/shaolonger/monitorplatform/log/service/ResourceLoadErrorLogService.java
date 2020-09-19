@@ -328,4 +328,15 @@ public class ResourceLoadErrorLogService extends ServiceBase {
     public List<Map<String, Object>> getLogListByCreateTimeAndProjectIdentifier(String projectIdentifier, Date startTime, Date endTime) {
         return resourceLoadErrorLogDao.getLogListByCreateTimeAndProjectIdentifier(projectIdentifier, startTime, endTime);
     }
+
+    /**
+     * 获取时间间隔内的所有日志
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return List
+     */
+    public List<Map<String, Object>> getAllLogsBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
+        return resourceLoadErrorLogDao.findAllByProjectIdentifierAndCreateTimeBetween(projectIdentifier, startTime, endTime);
+    }
 }

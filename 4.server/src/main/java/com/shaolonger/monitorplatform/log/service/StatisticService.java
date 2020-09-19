@@ -293,6 +293,73 @@ public class StatisticService {
     }
 
     /**
+     * 获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getLogDistributionBetweenDiffDate(HttpServletRequest request) throws Exception {
+
+        // 获取查询参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+        String logType = request.getParameter("logType");
+        String indicator = request.getParameter("indicator");
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+        if (logType == null) throw new Exception("logType不能为空");
+        if (indicator == null) throw new Exception("indicator不能为空");
+        ArrayList<String> indicatorLegalList = new ArrayList<String>() {{
+            add("net_type"); // 网络类型
+            add("device_name"); // 设备类型
+            add("os"); // 操作系统
+            add("browser_name"); // 浏览器
+        }};
+        if (!indicatorLegalList.contains(indicator)) throw new Exception("indicator不合法");
+
+        List<Map<String, Object>> rawResultList = new ArrayList<>();
+        ArrayList<HashMap<String, Integer>> resultList = new ArrayList<>();
+
+        switch (logType) {
+            case "jsErrorLog":
+                rawResultList = jsErrorLogService.getAllLogsBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+                break;
+            case "httpErrorLog":
+                rawResultList = httpErrorLogService.getAllLogsBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+                break;
+            case "resourceLoadErrorLog":
+                rawResultList = resourceLoadErrorLogService.getAllLogsBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+                break;
+            case "customErrorLog":
+                rawResultList = customErrorLogService.getAllLogsBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+                break;
+            default:
+                break;
+        }
+
+        if (rawResultList.size() > 0) {
+            rawResultList.forEach(item -> {
+                String tempKey = (String) item.get(indicator);
+                String key = tempKey == null ? "null" : tempKey;
+                HashMap<String, Integer> map = resultList.stream().filter(resultItem -> resultItem.containsKey(key)).findFirst().orElse(null);
+                if (map != null) {
+                    Integer value = map.get(key);
+                    map.put(key, value + 1);
+                } else {
+                    map = new HashMap<>();
+                    map.put(key, 1);
+                    resultList.add(map);
+                }
+            });
+        }
+
+        return resultList;
+    }
+
+    /**
      * entity转vo
      *
      * @param list 列表

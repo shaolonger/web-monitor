@@ -28,5 +28,8 @@ public interface ResourceLoadErrorLogDao extends JpaRepository<ResourceLoadError
     @Query(value = "select id, user_id, create_time from lms_resource_load_error_log " +
             "where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
     List<Map<String, Object>> getLogListByCreateTimeAndProjectIdentifier(String projectIdentifier, Date startTime, Date endTime);
+
+    @Query(value = "select * from lms_resource_load_error_log where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
+    List<Map<String, Object>> findAllByProjectIdentifierAndCreateTimeBetween(String projectIdentifier, Date startTime, Date endTime);
 }
 
