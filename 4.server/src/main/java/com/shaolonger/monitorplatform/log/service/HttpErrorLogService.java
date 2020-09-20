@@ -251,6 +251,7 @@ public class HttpErrorLogService extends ServiceBase {
         String pageKey = httpErrorLog.getPageKey();
         String deviceName = httpErrorLog.getDeviceName();
         String os = httpErrorLog.getOs();
+        String osVersion = httpErrorLog.getOsVersion();
         String browserName = httpErrorLog.getBrowserName();
         String browserVersion = httpErrorLog.getBrowserVersion();
         String ipAddress = httpErrorLog.getIpAddress();
@@ -273,6 +274,7 @@ public class HttpErrorLogService extends ServiceBase {
         httpErrorLog.setPageKey(pageKey);
         httpErrorLog.setDeviceName(deviceName);
         httpErrorLog.setOs(os);
+        httpErrorLog.setOsVersion(osVersion);
         httpErrorLog.setBrowserName(browserName);
         httpErrorLog.setBrowserVersion(browserVersion);
         httpErrorLog.setIpAddress(ipAddress);

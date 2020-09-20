@@ -219,6 +219,7 @@ public class CustomErrorLogService extends ServiceBase {
         String pageKey = customErrorLog.getPageKey();
         String deviceName = customErrorLog.getDeviceName();
         String os = customErrorLog.getOs();
+        String osVersion = customErrorLog.getOsVersion();
         String browserName = customErrorLog.getBrowserName();
         String browserVersion = customErrorLog.getBrowserVersion();
         String ipAddress = customErrorLog.getIpAddress();
@@ -237,6 +238,7 @@ public class CustomErrorLogService extends ServiceBase {
         customErrorLog.setPageKey(pageKey);
         customErrorLog.setDeviceName(deviceName);
         customErrorLog.setOs(os);
+        customErrorLog.setOsVersion(osVersion);
         customErrorLog.setBrowserName(browserName);
         customErrorLog.setBrowserVersion(browserVersion);
         customErrorLog.setIpAddress(ipAddress);

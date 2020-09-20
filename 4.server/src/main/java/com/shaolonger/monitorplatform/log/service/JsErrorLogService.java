@@ -215,6 +215,7 @@ public class JsErrorLogService extends ServiceBase {
         String pageKey = jsErrorLog.getPageKey();
         String deviceName = jsErrorLog.getDeviceName();
         String os = jsErrorLog.getOs();
+        String osVersion = jsErrorLog.getOsVersion();
         String browserName = jsErrorLog.getBrowserName();
         String browserVersion = jsErrorLog.getBrowserVersion();
         String ipAddress = jsErrorLog.getIpAddress();
@@ -234,6 +235,7 @@ public class JsErrorLogService extends ServiceBase {
         jsErrorLog.setPageKey(pageKey);
         jsErrorLog.setDeviceName(deviceName);
         jsErrorLog.setOs(os);
+        jsErrorLog.setOsVersion(osVersion);
         jsErrorLog.setBrowserName(browserName);
         jsErrorLog.setBrowserVersion(browserVersion);
         jsErrorLog.setIpAddress(ipAddress);

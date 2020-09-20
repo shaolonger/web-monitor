@@ -231,6 +231,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         String pageKey = resourceLoadErrorLog.getPageKey();
         String deviceName = resourceLoadErrorLog.getDeviceName();
         String os = resourceLoadErrorLog.getOs();
+        String osVersion = resourceLoadErrorLog.getOsVersion();
         String browserName = resourceLoadErrorLog.getBrowserName();
         String browserVersion = resourceLoadErrorLog.getBrowserVersion();
         String ipAddress = resourceLoadErrorLog.getIpAddress();
@@ -250,6 +251,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         resourceLoadErrorLog.setPageKey(pageKey);
         resourceLoadErrorLog.setDeviceName(deviceName);
         resourceLoadErrorLog.setOs(os);
+        resourceLoadErrorLog.setOsVersion(osVersion);
         resourceLoadErrorLog.setBrowserName(browserName);
         resourceLoadErrorLog.setBrowserVersion(browserVersion);
         resourceLoadErrorLog.setIpAddress(ipAddress);

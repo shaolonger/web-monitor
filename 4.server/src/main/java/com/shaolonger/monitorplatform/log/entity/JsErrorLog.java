@@ -72,6 +72,11 @@ public class JsErrorLog {
     private String os;
 
     /**
+     * 操作系统版本
+     */
+    private String osVersion;
+
+    /**
      * 浏览器名称
      */
     private String browserName;
