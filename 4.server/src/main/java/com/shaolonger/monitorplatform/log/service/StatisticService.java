@@ -321,7 +321,7 @@ public class StatisticService {
         if (!indicatorLegalList.contains(indicator)) throw new Exception("indicator不合法");
 
         List<Map<String, Object>> rawResultList = new ArrayList<>();
-        ArrayList<HashMap<String, Integer>> resultList = new ArrayList<>();
+        ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
 
         switch (logType) {
             case "jsErrorLog":
@@ -344,13 +344,14 @@ public class StatisticService {
             rawResultList.forEach(item -> {
                 String tempKey = (String) item.get(indicator);
                 String key = tempKey == null ? "null" : tempKey;
-                HashMap<String, Integer> map = resultList.stream().filter(resultItem -> resultItem.containsKey(key)).findFirst().orElse(null);
+                HashMap<String, Object> map = resultList.stream().filter(resultItem -> key.equals(resultItem.get("key"))).findFirst().orElse(null);
                 if (map != null) {
-                    Integer value = map.get(key);
-                    map.put(key, value + 1);
+                    Integer value = (Integer) map.get("count");
+                    map.put("count", value + 1);
                 } else {
                     map = new HashMap<>();
-                    map.put(key, 1);
+                    map.put("key", key);
+                    map.put("count", 1);
                     resultList.add(map);
                 }
             });
