@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/9/20 9:50:52                            */
+/* Created on:     2020/9/20 17:19:00                           */
 /*==============================================================*/
 
 
@@ -39,6 +39,7 @@ create table lms_custom_error_log
    browser_name         varchar(20) default "" comment '浏览器名',
    browser_version      varchar(20) comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
+   address              varchar(100) comment '地址',
    net_type             varchar(10) comment '网络类型',
    error_type           varchar(30) default "" comment '错误类型',
    error_message        text not null comment '错误信息',
@@ -67,6 +68,7 @@ create table lms_http_error_log
    browser_name         varchar(20) default "" comment '浏览器名',
    browser_version      varchar(20) comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
+   address              varchar(100) comment '地址',
    net_type             varchar(10) comment '网络类型',
    http_type            varchar(20) default "" comment 'http请求类型，如"request"、"response"',
    http_url_complete    text not null comment '完整的http请求地址',
@@ -98,6 +100,7 @@ create table lms_js_error_log
    browser_name         varchar(20) default "" comment '浏览器名',
    browser_version      varchar(20) comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
+   address              varchar(100) comment '地址',
    net_type             varchar(10) comment '网络类型',
    error_type           varchar(30) default "" comment '错误类型',
    error_message        text not null comment '错误信息',
@@ -126,6 +129,7 @@ create table lms_resource_load_error_log
    browser_name         varchar(20) default "" comment '浏览器名',
    browser_version      varchar(20) comment '浏览器版本',
    ip_address           varchar(50) default "" comment 'IP地址',
+   address              varchar(100) comment '地址',
    net_type             varchar(10) comment '网络类型',
    resource_url         text not null comment '资源URL',
    resource_type        varchar(20) not null comment '资源类型',
