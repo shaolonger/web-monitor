@@ -92,6 +92,11 @@ public class JsErrorLog {
     private String ipAddress;
 
     /**
+     * 地址
+     */
+    private String address;
+
+    /**
      * 网络类型
      */
     private String netType;
