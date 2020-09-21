@@ -3,6 +3,9 @@ package com.shaolonger.monitorplatform.log.service;
 import com.shaolonger.monitorplatform.common.api.PageResultBase;
 import com.shaolonger.monitorplatform.common.service.ServiceBase;
 import com.shaolonger.monitorplatform.log.entity.CustomErrorLog;
+import com.shaolonger.monitorplatform.log.entity.HttpErrorLog;
+import com.shaolonger.monitorplatform.log.entity.JsErrorLog;
+import com.shaolonger.monitorplatform.log.entity.ResourceLoadErrorLog;
 import com.shaolonger.monitorplatform.utils.DataConvertUtils;
 import com.shaolonger.monitorplatform.utils.DateUtils;
 import org.springframework.data.domain.Page;
@@ -48,6 +51,14 @@ public class LogService extends ServiceBase {
         String tableName = tableNameMap.get(logType);
         if (tableName == null) throw new Exception("logType参数不合规");
 
+        HashMap<String, Class> classMap = new HashMap<String, Class>() {{
+            put("jsErrorLog", JsErrorLog.class);
+            put("httpErrorLog", HttpErrorLog.class);
+            put("resourceLoadErrorLog", ResourceLoadErrorLog.class);
+            put("customErrorLog", CustomErrorLog.class);
+        }};
+        Class aClass = classMap.get(logType);
+
         StringBuilder dataSqlBuilder = new StringBuilder("select * from ").append(tableName).append(" t where 1=1");
         StringBuilder countSqlBuilder = new StringBuilder("select count(id) from ").append(tableName).append(" t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
@@ -81,7 +92,7 @@ public class LogService extends ServiceBase {
 
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<CustomErrorLog> page = this.findPageBySqlAndParam(CustomErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page page = this.findPageBySqlAndParam(aClass, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
         PageResultBase<CustomErrorLog> pageResultBase = new PageResultBase<>();
