@@ -317,6 +317,8 @@ public class StatisticService {
             add("device_name"); // 设备类型
             add("os"); // 操作系统
             add("browser_name"); // 浏览器
+            add("status"); // 状态码
+            add("resource_type"); // 资源类型
         }};
         if (!indicatorLegalList.contains(indicator)) throw new Exception("indicator不合法");
 
