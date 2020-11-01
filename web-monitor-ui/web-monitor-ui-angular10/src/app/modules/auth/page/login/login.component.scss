@@ -1,0 +1,28 @@
+.loginCom {
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .loginCom-avatar {
+    display: block;
+    margin: 0 auto 30px;
+  }
+  
+  .loginCom-form {
+    width: 400px;
+  }
+
+  .loginCom-form-margin {
+    margin-bottom: 16px;
+  }
+
+  .loginCom-form-forgot {
+    float: right;
+  }
+
+  .loginCom-form-button {
+    width: 100%;
+  }
+}

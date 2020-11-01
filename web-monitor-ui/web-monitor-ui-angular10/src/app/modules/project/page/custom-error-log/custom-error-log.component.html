@@ -1,0 +1,138 @@
+<div class="customErrorLog">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="customErrorLog-content">
+        <ul class="customErrorLog-banner">
+            <li class="customErrorLog-banner-item">
+                <p class="title">异常次数</p>
+                <p class="em">{{totalData.count.today}}</p>
+                <p>
+                    <span>对比昨日：</span>
+                    <i *ngIf="totalData.count.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                        nzTwotoneColor="#FF4949"></i>
+                    <i *ngIf="totalData.count.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                        nzTwotoneColor="#13CE66"></i>
+                    <span
+                        [ngClass]="{'red': totalData.count.change === 1, 'green': totalData.count.change === -1}">{{totalData.count.rate}}</span>
+                </p>
+            </li>
+            <li class="customErrorLog-banner-item">
+                <p class="title">影响用户</p>
+                <p class="em">{{totalData.affectUV.today}}</p>
+                <p>
+                    <span>对比昨日：</span>
+                    <i *ngIf="totalData.affectUV.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                        nzTwotoneColor="#FF4949"></i>
+                    <i *ngIf="totalData.affectUV.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                        nzTwotoneColor="#13CE66"></i>
+                    <span
+                        [ngClass]="{'red': totalData.affectUV.change === 1, 'green': totalData.affectUV.change === -1}">{{totalData.affectUV.rate}}</span>
+                </p>
+            </li>
+            <li class="customErrorLog-banner-item">
+                <p class="title">影响用户占比</p>
+                <p class="em">{{totalData.affectUVPercent.today}}</p>
+                <p>
+                    <span>对比昨日：</span>
+                    <i *ngIf="totalData.affectUVPercent.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                        nzTwotoneColor="#FF4949"></i>
+                    <i *ngIf="totalData.affectUVPercent.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                        nzTwotoneColor="#13CE66"></i>
+                    <span
+                        [ngClass]="{'red': totalData.affectUVPercent.change === 1, 'green': totalData.affectUVPercent.change === -1}">{{totalData.affectUVPercent.rate}}</span>
+                </p>
+            </li>
+        </ul>
+        <div class="customErrorLog-logTimeChart">
+            <div class="customErrorLog-logTimeChart-filters">
+                <nz-space nzSize="small">
+                    <nz-space-item>
+                        <nz-range-picker nzFormat="yyyy-MM-dd" [ngModel]="chartTimeRangeModel"
+                            (ngModelChange)="onChartSelectTimeRange($event)" [nzAllowClear]="false">
+                        </nz-range-picker>
+                    </nz-space-item>
+                    <nz-space-item>
+                        <span>时间粒度：</span>
+                        <nz-radio-group [(ngModel)]="logTimeChartFilterForm.timeInterval"
+                            (ngModelChange)="onChartTimeIntervalChange()">
+                            <label *ngFor="let option of timeIntervalOptionList" nz-radio
+                                [nzValue]="option.value">{{option.label}}</label>
+                        </nz-radio-group>
+                    </nz-space-item>
+                </nz-space>
+                <div echarts [options]="logTimeChartOptionCustom" class="customErrorLog-logTimeChart-item"></div>
+            </div>
+        </div>
+        <div class="customErrorLog-table">
+            <div class="customErrorLog-table-filters">
+                <nz-space nzSize="small">
+                    <nz-space-item>
+                        <nz-range-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="timeRangePicker"
+                            (ngModelChange)="onTableSelectTimeRange($event)" [nzAllowClear]="false">
+                        </nz-range-picker>
+                    </nz-space-item>
+                    <nz-space-item>
+                        <nz-radio-group [(ngModel)]="timeRange" (ngModelChange)="onTableTimeRangeChange()">
+                            <label *ngFor="let timeInterval of timeIntervalList" nz-radio-button
+                                [nzValue]="timeInterval.value">{{timeInterval.label}}</label>
+                        </nz-radio-group>
+                    </nz-space-item>
+                </nz-space>
+            </div>
+            <nz-table [nzData]="logRecordList" [(nzPageIndex)]="tableFilterForm.pageNum"
+                [(nzPageSize)]="tableFilterForm.pageSize" nzShowSizeChanger [nzTotal]="paginationConfig.total"
+                (nzPageIndexChange)="getTableList()" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false"
+                [nzShowTotal]="totalTemplate">
+                <thead>
+                    <tr>
+                        <th nzAlign="center">异常内容</th>
+                        <th nzAlign="center">异常次数</th>
+                        <th nzAlign="center">最后出现时间</th>
+                        <th nzAlign="center">影响用户数</th>
+                        <th nzAlign="center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of logRecordList">
+                        <td nzAlign="center">{{ data.errorMessage }}</td>
+                        <td nzAlign="center">{{ data.count }}</td>
+                        <td nzAlign="center">{{ data.latestRecordTime }}</td>
+                        <td nzAlign="center">{{ data.affectUserCount }}</td>
+                        <td nzAlign="center">
+                            <a (click)="handleShowDetail(data.errorMessage)">查看日志</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+            <ng-template #totalTemplate let-total> 共 {{ paginationConfig.total }} 条 </ng-template>
+        </div>
+        <ul class="customErrorLog-overviewChart">
+            <li class="customErrorLog-overviewChartItem">
+                <div class="customErrorLog-overviewChartItem-header">设备类型</div>
+                <div [hidden]="!chartOptionDeviceName.series[0].data.length" echarts [options]="chartOptionDeviceName"
+                    class="customErrorLog-overviewChartItem-content"></div>
+                <nz-empty [hidden]="chartOptionDeviceName.series[0].data.length"></nz-empty>
+            </li>
+            <li class="customErrorLog-overviewChartItem">
+                <div class="customErrorLog-overviewChartItem-header">操作系统</div>
+                <div [hidden]="!chartOptionOs.series[0].data.length" echarts [options]="chartOptionOs"
+                    class="customErrorLog-overviewChartItem-content"></div>
+                <nz-empty [hidden]="chartOptionOs.series[0].data.length"></nz-empty>
+            </li>
+            <li class="customErrorLog-overviewChartItem">
+                <div class="customErrorLog-overviewChartItem-header">浏览器</div>
+                <div [hidden]="!chartOptionBrowserName.series[0].data.length" echarts [options]="chartOptionBrowserName"
+                    class="customErrorLog-overviewChartItem-content"></div>
+                <nz-empty [hidden]="chartOptionBrowserName.series[0].data.length"></nz-empty>
+            </li>
+            <li class="customErrorLog-overviewChartItem">
+                <div class="customErrorLog-overviewChartItem-header">网络类型</div>
+                <div [hidden]="!chartOptionNetType.series[0].data.length" echarts [options]="chartOptionNetType"
+                    class="customErrorLog-overviewChartItem-content"></div>
+                <nz-empty [hidden]="chartOptionNetType.series[0].data.length"></nz-empty>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 详情页 -->
+    <app-log-detail [(visible)]="isShowDetail" logType="customErrorLog" [errorMsg]="errorMsg"></app-log-detail>
+</div>

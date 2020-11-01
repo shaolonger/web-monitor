@@ -1,0 +1,60 @@
+<div class="contentLayout">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="contentLayout-menu">
+        <!-- <div class="contentLayout-menu-title">nuall</div> -->
+        <ul class="contentLayout-menu-list" nz-menu nzMode="inline" nzTheme="dark" [nzInlineCollapsed]="isCollapsed">
+            <li class="contentLayout-menu-text" nz-menu-item [nzDisabled]="true">
+                <span>nuall</span>
+            </li>
+            <ng-container *ngFor="let menu of menuList">
+                <li *ngIf="menu.children?.length; else elseMenu" nz-submenu [nzTitle]="menu.name" [nzIcon]="menu.icon">
+                    <ul>
+                        <li *ngFor="let subMenu of menu.children" nz-menu-item>
+                            <a [routerLink]="subMenu.pageUrl">{{subMenu.name}}</a>
+                        </li>
+                    </ul>
+                </li>
+                <ng-template #elseMenu>
+                    <li nz-menu-item>
+                        <i nz-icon [nzType]="menu.icon"></i>
+                        <a *ngIf="!isCollapsed" [routerLink]="menu.pageUrl">{{menu.name}}</a>
+                    </li>
+                </ng-template>
+            </ng-container>
+        </ul>
+    </div>
+    <div class="contentLayout-content">
+        <div class="contentLayout-banner">
+            <div class="contentLayout-banner-leftPart">
+                <div>
+                    <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" (click)="toggleCollapsed()"></i>
+                </div>
+                <div class="contentLayout-banner-project">
+                    <p nz-dropdown [nzDropdownMenu]="menu">
+                        当前项目：{{projectSelected.projectName}}
+                        <i nz-icon nzType="down-circle" nzTheme="outline"></i>
+                    </p>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu nzSelectable>
+                            <li *ngFor="let project of userRelatedProjectList" nz-menu-item
+                                (click)="handleSelectProject(project)">{{project.projectName}}</li>
+                        </ul>
+                    </nz-dropdown-menu>
+                </div>
+            </div>
+            <div class="contentLayout-banner-rightPart">
+                <div nz-popover [nzPopoverContent]="userInfoTemplate" nzPopoverPlacement="bottom"
+                    class="contentLayout-banner-userInfo">
+                    <nz-avatar [nzSize]="24" [nzIcon]="'user'"></nz-avatar>
+                    <span class="contentLayout-banner-username">{{userInfo.username}}</span>
+                </div>
+                <ng-template #userInfoTemplate>
+                    <div>
+                        <a [routerLink]="'/auth/login'">退出登录</a>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <router-outlet></router-outlet>
+    </div>
+</div>

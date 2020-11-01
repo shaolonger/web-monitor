@@ -1,0 +1,121 @@
+<div class="advancedSearch">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="advancedSearch-filters">
+        <ul>
+            <li>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">监控指标</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-select [(ngModel)]="filterForm.logType" (ngModelChange)="handleSwitchLogType()">
+                            <nz-option *ngFor="let logType of logTypeList" [nzValue]="logType.value"
+                                [nzLabel]="logType.label">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">参数名</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-select ngModel="上报时间" disabled>
+                            <nz-option nzValue="上报时间" nzLabel="上报时间"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">条件</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-select ngModel="等于" disabled>
+                            <nz-option nzValue="等于" nzLabel="等于"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">参数值</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-range-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="timeRangePicker"
+                            [nzRanges]="timeRangeOptions" (ngModelChange)="onSelectTimeRange($event)"
+                            [nzAllowClear]="false">
+                        </nz-range-picker>
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <div class="advancedSearch-filters-content">
+                        <i nz-icon nzType="plus-circle" nzTheme="outline" (click)="addCondition()"></i>
+                    </div>
+                </div>
+            </li>
+            <li *ngFor="let condition of conditionList;let i = index;">
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">参数名</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-select [(ngModel)]="condition.key" placeholder="请选择参数">
+                            <nz-option *ngFor="let conditionKey of conditionKeyList" [nzValue]="conditionKey.value"
+                                [nzLabel]="conditionKey.label">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">条件</span>
+                    <div class="advancedSearch-filters-content">
+                        <nz-select [(ngModel)]="condition.op" placeholder="请选择条件">
+                            <nz-option *ngFor="let conditionOp of conditionOpList" [nzValue]="conditionOp.value"
+                                [nzLabel]="conditionOp.label">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <span class="advancedSearch-filters-title">参数值</span>
+                    <div class="advancedSearch-filters-content">
+                        <input nz-input placeholder="请输入参数值" [(ngModel)]="condition.value" />
+                    </div>
+                </div>
+                <div class="advancedSearch-filters-item">
+                    <div class="advancedSearch-filters-content">
+                        <i nz-icon nzType="plus-circle" nzTheme="outline" (click)="addCondition()"></i>
+                        <i nz-icon nzType="minus-circle" nzTheme="outline" (click)="delCondition(i)"></i>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="advancedSearch-filters-btn">
+            <button nz-button nzType="primary" (click)="getTableList()">查询</button>
+        </div>
+    </div>
+    <div class="advancedSearch-result">
+        <nz-table [nzData]="logRecordList" [(nzPageIndex)]="filterForm.pageNum" [(nzPageSize)]="filterForm.pageSize"
+            nzShowSizeChanger [nzTotal]="paginationConfig.total" (nzPageIndexChange)="getTableList()"
+            [nzScroll]="{y: '520px'}" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false"
+            [nzShowTotal]="totalTemplate">
+            <thead>
+                <tr>
+                    <th nzAlign="center">异常内容</th>
+                    <th nzAlign="center">上报时间</th>
+                    <th nzAlign="center">用户ID</th>
+                    <th nzAlign="center">用户名称</th>
+                    <th nzAlign="center">页面URL</th>
+                    <th nzAlign="center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of logRecordList">
+                    <td nzAlign="center">{{ data.content }}</td>
+                    <td nzAlign="center">{{ data.createTimeStr }}</td>
+                    <td nzAlign="center">{{ data.userId }}</td>
+                    <td nzAlign="center">{{ data.userName }}</td>
+                    <td nzAlign="center">{{ data.pageUrl }}</td>
+                    <td nzAlign="center">
+                        <a (click)="handleShowDetail(data.content)">查看日志</a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <ng-template #totalTemplate let-total> 共 {{ paginationConfig.total }} 条 </ng-template>
+    </div>
+
+    <!-- 详情页 -->
+    <app-log-detail [(visible)]="isShowDetail" logType="jsErrorLog" [errorMsg]="errorMsg"></app-log-detail>
+</div>

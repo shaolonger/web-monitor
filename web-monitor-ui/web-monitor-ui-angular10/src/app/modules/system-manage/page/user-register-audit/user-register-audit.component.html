@@ -1,0 +1,57 @@
+<div class="userRegisterAudit">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="userRegisterAudit-filterForms">
+        <nz-space nzSize="small">
+            <nz-space-item>
+                <nz-range-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" ngModel
+                    (ngModelChange)="onSelectTimeRange($event)">
+                </nz-range-picker>
+            </nz-space-item>
+            <nz-space-item>
+                <nz-select id="gender" nzPlaceHolder="审核状态" [(ngModel)]="filterForm.auditResult" nzAllowClear
+                    (ngModelChange)="getTableList()">
+                    <nz-option nzValue="-1" nzLabel="未审核"></nz-option>
+                    <nz-option nzValue="0" nzLabel="审核通过"></nz-option>
+                    <nz-option nzValue="1" nzLabel="审核不通过"></nz-option>
+                </nz-select>
+            </nz-space-item>
+        </nz-space>
+    </div>
+    <div class="userRegisterAudit-table">
+        <nz-table [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum" [(nzPageSize)]="filterForm.pageSize"
+            nzShowSizeChanger [nzTotal]="paginationConfig.total" (nzPageIndexChange)="getTableList()"
+            (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th nzAlign="center">用户名</th>
+                    <th nzAlign="center">电子邮箱</th>
+                    <th nzAlign="center">电话号码</th>
+                    <th nzAlign="center">性别</th>
+                    <th nzAlign="center">审核结果</th>
+                    <th nzAlign="center">审核时间</th>
+                    <th nzAlign="center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of listData">
+                    <td nzAlign="center">{{ data.username }}</td>
+                    <td nzAlign="center">{{ data.email }}</td>
+                    <td nzAlign="center">{{ data.phone }}</td>
+                    <td nzAlign="center">{{ data.gender }}</td>
+                    <td nzAlign="center">{{ data.auditResultText }}</td>
+                    <td nzAlign="center">{{ data.auditTime }}</td>
+                    <td nzAlign="center">
+                        <nz-space *ngIf="data.auditResult === -1" nzSize="small">
+                            <nz-space-item>
+                                <button nz-button (click)="audit(data.id, 1)" nzType="primary">通过</button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button (click)="audit(data.id, 0)" nzType="primary" nzDanger>不通过</button>
+                            </nz-space-item>
+                        </nz-space>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>

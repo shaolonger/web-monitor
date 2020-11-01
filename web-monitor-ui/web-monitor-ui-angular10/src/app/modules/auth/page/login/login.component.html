@@ -1,0 +1,32 @@
+<div class="loginCom">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <nz-avatar [nzSize]="128" [nzIcon]="'user'" class="loginCom-avatar"></nz-avatar>
+    <form nz-form [formGroup]="validateForm" class="loginCom-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+            <nz-form-control nzErrorTip="请输入用户名">
+                <nz-input-group nzPrefixIcon="user">
+                    <input type="text" nz-input formControlName="username" placeholder="用户名" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control nzErrorTip="请输入密码">
+                <nz-input-group nzPrefixIcon="lock">
+                    <input type="password" nz-input formControlName="password" placeholder="密码" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <div nz-row class="loginCom-form-margin">
+            <div nz-col [nzSpan]="12">
+                <label nz-checkbox formControlName="remember">
+                    <span>记住账号密码</span>
+                </label>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <a class="loginCom-form-forgot">忘记密码</a>
+            </div>
+        </div>
+        <button nz-button class="loginCom-form-button loginCom-form-margin" [nzType]="'primary'">登录</button>
+        <a routerLink="/auth/register">现在注册</a>
+    </form>
+</div>

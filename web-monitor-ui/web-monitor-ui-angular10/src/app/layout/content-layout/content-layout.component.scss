@@ -1,0 +1,77 @@
+.contentLayout {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+
+    .contentLayout-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+
+        .contentLayout-menu-title {
+            height: 60px;
+            line-height: 60px;
+            font-size: 24px;
+            text-align: center;
+            color: #fff;
+            background-color: #191A23;
+            border-bottom: 1px solid #101117;
+        }
+
+        .contentLayout-menu-list {
+            flex: 1;
+
+            .contentLayout-menu-text {
+                display: flex;
+                justify-content: center;
+                cursor: default;
+
+                span {
+                    font-size: 24px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .contentLayout-content {
+        flex: 1;
+        height: 100%;
+        overflow-y: hidden;
+        background-color: #F0F0F0;
+
+        .contentLayout-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            height: 60px;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+
+            .contentLayout-banner-leftPart {
+                display: flex;
+                align-items: center;
+
+                .contentLayout-banner-project {
+                    margin-left: 8px;
+
+                    p {
+                        margin: 0;
+                    }
+                }
+            }
+
+            .contentLayout-banner-rightPart {
+                .contentLayout-banner-userInfo {
+                    cursor: pointer;
+
+                    .contentLayout-banner-username {
+                        margin-left: 6px;
+                    }
+                }
+            }
+        }
+    }
+}

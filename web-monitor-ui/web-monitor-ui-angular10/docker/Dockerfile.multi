@@ -1,0 +1,18 @@
+FROM node:12.18.4-alpine AS builder
+# ENV PROJECT_ENV production
+# ENV NODE_ENV production
+WORKDIR /app
+# COPY package*.json /app/
+COPY . /app
+# RUN npm install -g nrm
+# RUN nrm use taobao
+# RUN npm install -g npm@latest
+# RUN npm update
+# RUN npm install -g @angular/cli@latest
+RUN npm install  --registry=https://registry.npm.taobao.org
+# RUN npm install --save-dev @angular-devkit/build-angular
+RUN npm run build
+
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist/web-monitor-ui /app

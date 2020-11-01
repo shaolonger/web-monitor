@@ -1,0 +1,91 @@
+<div class="homeContainer">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="homeContainer-banner">
+        <nz-radio-group [(ngModel)]="timeRange" (ngModelChange)="getPageData()">
+            <label *ngFor="let timeInterval of timeIntervalList" nz-radio-button
+                [nzValue]="timeInterval.value">{{timeInterval.label}}</label>
+        </nz-radio-group>
+    </div>
+    <ul class="homeContainer-chartList">
+        <li class="homeContainer-chartItem">
+            <div class="homeContainer-chartItem-wrapper">
+                <div class="homeContainer-chartItem-header">
+                    <p class="homeContainer-chartItem-title">JS异常</p>
+                    <div class="homeContainer-chartItem-content">
+                        <span class="homeContainer-chartItem-em">{{chartTotalJS.today}}</span>
+                        <div>
+                            <span>对比昨日：</span>
+                            <i *ngIf="chartTotalJS.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                                nzTwotoneColor="#FF4949"></i>
+                            <i *ngIf="chartTotalJS.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                                nzTwotoneColor="#13CE66"></i>
+                            <span
+                                [ngClass]="{'red': chartTotalJS.change === 1, 'green': chartTotalJS.change === -1}">{{chartTotalJS.rate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div echarts [options]="chartOptionJS" class="homeContainer-chart"></div>
+            </div>
+        </li>
+        <li class="homeContainer-chartItem">
+            <div class="homeContainer-chartItem-wrapper">
+                <div class="homeContainer-chartItem-header">
+                    <p class="homeContainer-chartItem-title">HTTP异常</p>
+                    <div class="homeContainer-chartItem-content">
+                        <span class="homeContainer-chartItem-em">{{chartTotalHttp.today}}</span>
+                        <div>
+                            <span>对比昨日：</span>
+                            <i *ngIf="chartTotalHttp.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                                nzTwotoneColor="#FF4949"></i>
+                            <i *ngIf="chartTotalHttp.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                                nzTwotoneColor="#13CE66"></i>
+                            <span
+                                [ngClass]="{'red': chartTotalHttp.change === 1, 'green': chartTotalHttp.change === -1}">{{chartTotalHttp.rate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div echarts [options]="chartOptionHttp" class="homeContainer-chart"></div>
+            </div>
+        </li>
+        <li class="homeContainer-chartItem">
+            <div class="homeContainer-chartItem-wrapper">
+                <div class="homeContainer-chartItem-header">
+                    <p class="homeContainer-chartItem-title">资源加载异常</p>
+                    <div class="homeContainer-chartItem-content">
+                        <span class="homeContainer-chartItem-em">{{chartTotalRes.today}}</span>
+                        <div>
+                            <span>对比昨日：</span>
+                            <i *ngIf="chartTotalRes.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                                nzTwotoneColor="#FF4949"></i>
+                            <i *ngIf="chartTotalRes.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                                nzTwotoneColor="#13CE66"></i>
+                            <span
+                                [ngClass]="{'red': chartTotalRes.change === 1, 'green': chartTotalRes.change === -1}">{{chartTotalRes.rate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div echarts [options]="chartOptionRes" class="homeContainer-chart"></div>
+            </div>
+        </li>
+        <li class="homeContainer-chartItem">
+            <div class="homeContainer-chartItem-wrapper">
+                <div class="homeContainer-chartItem-header">
+                    <p class="homeContainer-chartItem-title">自定义异常</p>
+                    <div class="homeContainer-chartItem-content">
+                        <span class="homeContainer-chartItem-em">{{chartTotalCus.today}}</span>
+                        <div>
+                            <span>对比昨日：</span>
+                            <i *ngIf="chartTotalCus.change === 1" nz-icon nzType="caret-up" nzTheme="fill"
+                                nzTwotoneColor="#FF4949"></i>
+                            <i *ngIf="chartTotalCus.change === -1" nz-icon nzType="caret-down" nzTheme="fill"
+                                nzTwotoneColor="#13CE66"></i>
+                            <span
+                                [ngClass]="{'red': chartTotalCus.change === 1, 'green': chartTotalCus.change === -1}">{{chartTotalCus.rate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div echarts [options]="chartOptionCus" class="homeContainer-chart"></div>
+            </div>
+        </li>
+    </ul>
+</div>

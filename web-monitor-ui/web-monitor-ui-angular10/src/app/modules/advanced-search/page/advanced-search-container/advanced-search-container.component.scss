@@ -1,0 +1,41 @@
+.advancedSearch {
+    padding: 20px;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+
+    .advancedSearch-filters {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+        li {
+            display: flex;
+            margin-bottom: 20px;
+
+            .advancedSearch-filters-item {
+                display: flex;
+                align-items: center;
+
+                .advancedSearch-filters-title {
+                    margin-right: 10px;
+                    width: 4em;
+                    text-align: right;
+                }
+
+                .ant-select {
+                    width: 200px;
+                }
+
+                .anticon {
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .advancedSearch-filters-btn {
+            padding-left: calc(4em + 10px);
+        }
+    }
+}

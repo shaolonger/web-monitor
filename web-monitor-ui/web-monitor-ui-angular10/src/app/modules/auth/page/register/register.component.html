@@ -1,0 +1,54 @@
+<div class="registerCom">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <img class="registerCom-bg" src="/assets/images/register/bg_register.png" />
+    <form nz-form [formGroup]="validateForm" class="registerCom-form">
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-label [nzSpan]="6" nzRequired nzFor="username">用户名</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="请输入用户名">
+                <nz-input-group nzPrefixIcon="user">
+                    <input type="text" nz-input formControlName="username" placeholder="用户名" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-label [nzSpan]="6" nzRequired nzFor="password">密码</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="请输入密码">
+                <nz-input-group nzPrefixIcon="lock">
+                    <input type="password" nz-input formControlName="password" placeholder="密码" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-label [nzSpan]="6" nzRequired nzFor="email">电子邮箱</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="请输入电子邮箱">
+                <nz-input-group nzPrefixIcon="lock">
+                    <input type="text" nz-input formControlName="email" placeholder="电子邮箱" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-label [nzSpan]="6" nzFor="phone">电话号码</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="请输入电话号码">
+                <nz-input-group nzPrefixIcon="lock">
+                    <input type="number" nz-input formControlName="phone" placeholder="电话号码" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-label [nzSpan]="6" nzFor="gender">性别</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="请选择性别">
+                <nz-select id="gender" formControlName="gender" nzPlaceHolder="请选择性别">
+                    <nz-option nzValue="0" nzLabel="未知"></nz-option>
+                    <nz-option nzValue="1" nzLabel="男"></nz-option>
+                    <nz-option nzValue="2" nzLabel="女"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="center">
+            <nz-form-control [nzOffset]="6" [nzSpan]="6">
+                <button nz-button (click)="onBack()" class="registerCom-form-btnBack">返回</button>
+                <button nz-button (click)="onSubmit()" nzType="primary" [disabled]="!validateForm.valid">确认注册</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>

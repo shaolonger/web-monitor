@@ -1,0 +1,108 @@
+<div>
+    <nz-modal [(nzVisible)]="visible" nzClassName="logDetail" nzWidth="50vw" (nzOnCancel)="handleModalOnCancel()" [nzFooter]="null">
+        <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" [(nzSelectedIndex)]="selectedTabIndex">
+            <nz-tab *ngFor="let result of resultList; let i = index" [nzTitle]="'最近' + (i + 1) + '次'">
+                <div class="logDetail-content">
+                    <div class="logDetail-content-wrapper leftPart">
+                        <div class="logDetail-content-item">
+                            <p class="logDetail-content-header">日志信息</p>
+                            <ul class="logDetail-content-body list">
+                                <li>
+                                    <div>上报时间</div>
+                                    <div>{{result.createTime}}</div>
+                                </li>
+                                <li>
+                                    <div>异常内容</div>
+                                    <div>{{result.errorMessage}}</div>
+                                </li>
+                                <li>
+                                    <div>页面URL</div>
+                                    <div>{{result.pageUrl}}</div>
+                                </li>
+                                <ng-template [ngIf]="logType === 'httpErrorLog'">
+                                    <li>
+                                        <div>Http Url</div>
+                                        <div>{{result.httpUrlComplete}}</div>
+                                    </li>
+                                    <li>
+                                        <div>请求方法</div>
+                                        <div>{{result.httpMethod}}</div>
+                                    </li>
+                                    <li>
+                                        <div>响应时间</div>
+                                        <div>{{result.resTime}}</div>
+                                    </li>
+                                    <li>
+                                        <div>状态码</div>
+                                        <div>{{result.status}}</div>
+                                    </li>
+                                </ng-template>
+                                <ng-template [ngIf]="logType === 'resourceLoadErrorLog'">
+                                    <li>
+                                        <div>资源地址</div>
+                                        <div>{{result.resourceUrl}}</div>
+                                    </li>
+                                </ng-template>
+                            </ul>
+                        </div>
+                        <div *ngIf="logType === 'jsErrorLog' || logType === 'customErrorLog'" class="logDetail-content-item">
+                            <p class="logDetail-content-header">异常堆栈</p>
+                            <p class="logDetail-content-body stack">
+                                {{result.errorStack}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="logDetail-content-wrapper rightPart">
+                        <div class="logDetail-content-item">
+                            <p class="logDetail-content-header">用户信息</p>
+                            <ul class="logDetail-content-body list">
+                                <li>
+                                    <div>用户ID</div>
+                                    <div>{{result.userId}}</div>
+                                </li>
+                                <li>
+                                    <div>用户名称</div>
+                                    <div>{{result.userName}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logDetail-content-item">
+                            <p class="logDetail-content-header">设备信息</p>
+                            <ul class="logDetail-content-body list">
+                                <li>
+                                    <div>设备</div>
+                                    <div>{{result.deviceName}}</div>
+                                </li>
+                                <li>
+                                    <div>操作系统</div>
+                                    <div>{{result.os}} {{result.osVersion}}</div>
+                                </li>
+                                <li>
+                                    <div>客户端</div>
+                                    <div>{{result.browserName}} {{result.browserVersion}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logDetail-content-item">
+                            <p class="logDetail-content-header">网络位置</p>
+                            <ul class="logDetail-content-body list">
+                                <li>
+                                    <div>网络类型</div>
+                                    <div>{{result.netType}}</div>
+                                </li>
+                                <li>
+                                    <div>IP地址</div>
+                                    <div>{{result.ipAddress}}</div>
+                                </li>
+                                <li>
+                                    <div>地址</div>
+                                    <div>{{result.address}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </nz-modal>
+</div>

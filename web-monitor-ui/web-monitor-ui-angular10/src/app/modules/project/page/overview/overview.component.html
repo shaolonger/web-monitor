@@ -1,0 +1,54 @@
+<div class="overview">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="overview-content">
+        <div class="overview-filters">
+            <nz-space nzSize="small">
+                <nz-space-item>
+                    <nz-select nzPlaceHolder="选择项目" [(ngModel)]="filterForm.projectIdentifier"
+                        (ngModelChange)="getPageData()">
+                        <nz-option *ngFor="let project of projectList" [nzValue]="project.projectIdentifier"
+                            [nzLabel]="project.projectName"></nz-option>
+                    </nz-select>
+                </nz-space-item>
+                <nz-space-item>
+                    <nz-range-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" ngModel
+                        (ngModelChange)="onSelectTimeRange($event)">
+                    </nz-range-picker>
+                </nz-space-item>
+            </nz-space>
+        </div>
+        
+        <ul class="overview-statistic">
+            <li class="overview-statistic-item blue">
+                <div>
+                    <p>JS异常</p>
+                    <p class="overview-statistic-em">{{overviewStatistic.jsErrorLogCount}}</p>
+                </div>
+                <img class="overview-statistic-img" src="/assets/images/overview/icon_bug.png" />
+            </li>
+            <li class="overview-statistic-item red">
+                <div>
+                    <p>HTTP请求异常</p>
+                    <p class="overview-statistic-em">{{overviewStatistic.httpErrorLogCount}}</p>
+                </div>
+                <img class="overview-statistic-img" src="/assets/images/overview/icon_network.png" />
+            </li>
+            <li class="overview-statistic-item yellow">
+                <div>
+                    <p>资源加载异常</p>
+                    <p class="overview-statistic-em">{{overviewStatistic.resourceLoadErrorLogCount}}</p>
+                </div>
+                <img class="overview-statistic-img" src="/assets/images/overview/icon_images.png" />
+            </li>
+            <li class="overview-statistic-item green">
+                <div>
+                    <p>自定义异常</p>
+                    <p class="overview-statistic-em">{{overviewStatistic.customErrorLogCount}}</p>
+                </div>
+                <img class="overview-statistic-img" src="/assets/images/overview/icon_star.png" />
+            </li>
+        </ul>
+
+        <div echarts [options]="chartOption" class="overview-chart"></div>
+    </div>
+</div>
