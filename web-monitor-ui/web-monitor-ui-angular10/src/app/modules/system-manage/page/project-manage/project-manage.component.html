@@ -111,8 +111,9 @@
                     </nz-form-item>
                     <nz-form-item nz-row nzJustify="center">
                         <nz-form-label [nzSpan]="6" nzRequired nzFor="activeFuncs">开启功能</nz-form-label>
-                        <nz-form-control [nzSpan]="18" nzErrorTip="请选择开启功能">
-                            <nz-select formControlName="activeFuncs" nzMode="multiple" nzPlaceHolder="请选择开启功能">
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请至少选择一项开启功能">
+                            <nz-select formControlName="activeFuncs" nzMode="multiple" nzPlaceHolder="请选择开启功能"
+                                [nzDisabled]="mode !== 'edit'">
                                 <nz-option *ngFor="let option of activeFuncsOptions" [nzLabel]="option.label"
                                     [nzValue]="option.value">
                                 </nz-option>

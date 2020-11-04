@@ -128,7 +128,9 @@ export class ProjectManageComponent implements OnInit {
                         description: item.description,
                         createTime: item.createTime && moment(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
                         updateTime: item.updateTime && moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
-                        userList: item.userList
+                        userList: item.userList,
+                        accessType: item.accessType,
+                        activeFuncs: item.activeFuncs,
                     }));
                     this.paginationConfig.total = totalNum;
                 }
@@ -183,7 +185,8 @@ export class ProjectManageComponent implements OnInit {
             this.validateForm.patchValue({
                 ...this.validateForm.getRawValue(),
                 ...data,
-                userList: data.userList.length ? data.userList.split(',').map(user => Number(user)) : []
+                userList: data.userList.length ? data.userList.split(',').map(user => Number(user)) : [],
+                activeFuncs: data.activeFuncs.length ? data.activeFuncs.split(',') : []
             });
             if (mode === 'view') {
                 this.validateForm.disable();
@@ -223,7 +226,7 @@ export class ProjectManageComponent implements OnInit {
             {
                 ...formData,
                 userList: JSON.stringify(formData.userList),
-                activeFuncs: JSON.stringify(formData.activeFuncs)
+                activeFuncs: formData.activeFuncs.join(',')
             },
             res => {
                 console.log('[成功]新增项目', res);
@@ -254,7 +257,7 @@ export class ProjectManageComponent implements OnInit {
             {
                 ...formData,
                 userList: JSON.stringify(formData.userList),
-                activeFuncs: JSON.stringify(formData.activeFuncs)
+                activeFuncs: formData.activeFuncs.join(',')
             },
             res => {
                 console.log('[成功]编辑项目', res);
