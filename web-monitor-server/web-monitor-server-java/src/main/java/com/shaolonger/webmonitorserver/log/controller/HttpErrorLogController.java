@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/httpErrorLog")
 public class HttpErrorLogController {
     @Autowired
     private HttpErrorLogService httpErrorLogService;
@@ -27,7 +26,7 @@ public class HttpErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/httpErrorLog/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(httpErrorLogService.get(request));
     }
@@ -38,7 +37,7 @@ public class HttpErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    @RequestMapping(value = "/httpErrorLog/getByGroup", method = RequestMethod.GET)
     public Object getByGroup(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(httpErrorLogService.getByGroup(request));
     }
@@ -51,7 +50,7 @@ public class HttpErrorLogController {
      * @return Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/httpErrorLog/add", method = RequestMethod.PUT)
     public Object add(@Valid HttpErrorLog httpErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +69,7 @@ public class HttpErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogCountByState", method = RequestMethod.GET)
+    @RequestMapping(value = "/httpErrorLog/getLogCountByState", method = RequestMethod.GET)
     public Object getLogCountByState(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(httpErrorLogService.getLogCountByState(request));

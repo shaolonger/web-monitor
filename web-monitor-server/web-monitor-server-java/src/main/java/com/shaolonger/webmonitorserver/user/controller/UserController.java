@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -24,7 +23,7 @@ public class UserController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(userService.get(request));
@@ -40,7 +39,7 @@ public class UserController {
      * @return Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     public Object login(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(userService.login(request));
@@ -55,7 +54,7 @@ public class UserController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getRelatedProjectList")
+    @RequestMapping(value = "/user/getRelatedProjectList")
     public Object getRelatedProjectList(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(userService.getRelatedProjectList(request));
     }

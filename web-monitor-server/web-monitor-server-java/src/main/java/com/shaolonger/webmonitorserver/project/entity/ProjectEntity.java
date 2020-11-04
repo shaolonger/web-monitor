@@ -36,6 +36,17 @@ public class ProjectEntity {
     private String description;
 
     /**
+     * 接入方式
+     */
+    @NotEmpty(message = "accessType不能为空")
+    private String accessType;
+
+    /**
+     * 开启功能
+     */
+    private String activeFuncs;
+
+    /**
      * 创建时间
      */
     private Date createTime;

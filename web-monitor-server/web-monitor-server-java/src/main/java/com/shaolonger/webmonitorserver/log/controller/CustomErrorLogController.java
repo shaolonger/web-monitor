@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/customErrorLog")
 public class CustomErrorLogController {
     @Autowired
     private CustomErrorLogService customErrorLogService;
@@ -27,7 +26,7 @@ public class CustomErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/customErrorLog/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(customErrorLogService.get(request));
     }
@@ -38,7 +37,7 @@ public class CustomErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    @RequestMapping(value = "/customErrorLog/getByGroup", method = RequestMethod.GET)
     public Object getByGroup(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(customErrorLogService.getByGroup(request));
     }
@@ -51,7 +50,7 @@ public class CustomErrorLogController {
      * @return Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/customErrorLog/add", method = RequestMethod.PUT)
     public Object add(@Valid CustomErrorLog customErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();

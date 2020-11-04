@@ -14,7 +14,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/jsErrorLog")
 public class JsErrorLogController {
     @Autowired
     private JsErrorLogService jsErrorLogService;
@@ -25,7 +24,7 @@ public class JsErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/jsErrorLog/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(jsErrorLogService.get(request));
     }
@@ -36,7 +35,7 @@ public class JsErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    @RequestMapping(value = "/jsErrorLog/getByGroup", method = RequestMethod.GET)
     public Object getByGroup(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(jsErrorLogService.getByGroup(request));
     }
@@ -49,7 +48,7 @@ public class JsErrorLogController {
      * @return Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/jsErrorLog/add", method = RequestMethod.PUT)
     public Object add(@Valid JsErrorLog jsErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();

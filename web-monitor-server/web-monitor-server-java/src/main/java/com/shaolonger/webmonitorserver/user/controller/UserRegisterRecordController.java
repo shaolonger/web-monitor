@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/userRegisterRecord")
 public class UserRegisterRecordController {
     @Autowired
     private UserRegisterRecordService userRegisterRecordService;
@@ -25,11 +24,11 @@ public class UserRegisterRecordController {
      * 新增
      *
      * @param userRegisterRecordEntity userRegisterRecordEntity
-     * @param bindingResult bindingResult
+     * @param bindingResult            bindingResult
      * @return Object Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/userRegisterRecord/add", method = RequestMethod.PUT)
     public Object add(@Valid UserRegisterRecordEntity userRegisterRecordEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -48,7 +47,7 @@ public class UserRegisterRecordController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/audit", method = RequestMethod.POST)
+    @RequestMapping(value = "/userRegisterRecord/audit", method = RequestMethod.POST)
     public Object audit(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(userRegisterRecordService.audit(request));
@@ -63,7 +62,7 @@ public class UserRegisterRecordController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/userRegisterRecord/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(userRegisterRecordService.get(request));
     }

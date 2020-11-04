@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("/resourceLoadErrorLog")
 public class ResourceLoadErrorLogController {
     @Autowired
     private ResourceLoadErrorLogService resourceLoadErrorLogService;
@@ -27,7 +26,7 @@ public class ResourceLoadErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/resourceLoadErrorLog/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.get(request));
     }
@@ -38,7 +37,7 @@ public class ResourceLoadErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getByGroup", method = RequestMethod.GET)
+    @RequestMapping(value = "/resourceLoadErrorLog/getByGroup", method = RequestMethod.GET)
     public Object getByGroup(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.getByGroup(request));
     }
@@ -46,12 +45,12 @@ public class ResourceLoadErrorLogController {
     /**
      * 新增
      *
-     * @param resourceLoadErrorLog  resourceLoadErrorLog
-     * @param bindingResult bindingResult
+     * @param resourceLoadErrorLog resourceLoadErrorLog
+     * @param bindingResult        bindingResult
      * @return Object
      */
     @AuthIgnore
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/resourceLoadErrorLog/add", method = RequestMethod.PUT)
     public Object add(@Valid ResourceLoadErrorLog resourceLoadErrorLog, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +69,7 @@ public class ResourceLoadErrorLogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getOverallByTimeRange", method = RequestMethod.GET)
+    @RequestMapping(value = "/resourceLoadErrorLog/getOverallByTimeRange", method = RequestMethod.GET)
     public Object getOverallByTimeRange(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.getOverallByTimeRange(request));

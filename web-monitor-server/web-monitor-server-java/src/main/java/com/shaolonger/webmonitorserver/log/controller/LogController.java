@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/log")
 public class LogController {
 
     @Autowired
@@ -21,7 +20,7 @@ public class LogController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/log/list", method = RequestMethod.POST)
     public Object list(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(logService.getLogListByConditions(request));

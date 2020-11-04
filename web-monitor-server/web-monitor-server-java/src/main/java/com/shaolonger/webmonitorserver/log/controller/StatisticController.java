@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/statistic")
 public class StatisticController {
 
     @Autowired
@@ -22,7 +21,7 @@ public class StatisticController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getOverallByTimeRange", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic/getOverallByTimeRange", method = RequestMethod.GET)
     public Object getOverall(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getOverallByTimeRange(request));
@@ -37,7 +36,7 @@ public class StatisticController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogCountByHours", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic/getLogCountByHours", method = RequestMethod.GET)
     public Object getLogCountByHours(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogCountByHours(request));
@@ -52,7 +51,7 @@ public class StatisticController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogCountByDays", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic/getLogCountByDays", method = RequestMethod.GET)
     public Object getLogCountByDays(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogCountByDays(request));
@@ -67,7 +66,7 @@ public class StatisticController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogCountBetweenDiffDate", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic/getLogCountBetweenDiffDate", method = RequestMethod.GET)
     public Object getLogCountBetweenDiffDate(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogCountBetweenDiffDate(request));
@@ -75,13 +74,14 @@ public class StatisticController {
             return ResponseResultBase.getErrorResponseResult(e);
         }
     }
+
     /**
      * 获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据
      *
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/getLogDistributionBetweenDiffDate", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic/getLogDistributionBetweenDiffDate", method = RequestMethod.GET)
     public Object getLogDistributionBetweenDiffDate(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogDistributionBetweenDiffDate(request));

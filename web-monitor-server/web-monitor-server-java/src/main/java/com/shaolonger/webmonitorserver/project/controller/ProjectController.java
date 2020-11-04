@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 @RestController
-@RequestMapping("project")
 public class ProjectController {
 
     @Autowired
@@ -25,12 +24,12 @@ public class ProjectController {
     /**
      * 新增
      *
-     * @param request request
+     * @param request       request
      * @param projectEntity projectEntity
      * @param bindingResult bindingResult
      * @return Object
      */
-    @RequestMapping(value = "/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/project/add", method = RequestMethod.PUT)
     public Object add(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -50,12 +49,12 @@ public class ProjectController {
     /**
      * 更新
      *
-     * @param request request
+     * @param request       request
      * @param projectEntity projectEntity
      * @param bindingResult bindingResult
      * @return Object
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/project/update", method = RequestMethod.POST)
     public Object update(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -78,7 +77,7 @@ public class ProjectController {
      * @param request request
      * @return Object
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/project/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(projectService.get(request));
@@ -92,7 +91,7 @@ public class ProjectController {
      *
      * @return Object
      */
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/project/delete/{id}", method = RequestMethod.DELETE)
     public Object delete(@PathVariable("id") Long id) {
         try {
             return ResponseResultBase.getResponseResultBase(projectService.delete(id));
