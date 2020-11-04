@@ -59,43 +59,69 @@
     </div>
     <nz-modal [(nzVisible)]="showDetailDialog" [nzTitle]="detailDialogTitle" (nzOnCancel)="handleModalOnCancel()"
         [nzFooter]="['add', 'edit'].indexOf(mode) > -1 ? modalFooter : null">
-        <div>
-            <form nz-form [formGroup]="validateForm">
-                <nz-form-item nz-row nzJustify="center">
-                    <nz-form-label [nzSpan]="6" nzRequired nzFor="projectName">项目名</nz-form-label>
-                    <nz-form-control [nzSpan]="18" nzErrorTip="请输入项目名">
-                        <nz-input-group nzPrefixIcon="user">
-                            <input type="text" nz-input formControlName="projectName" placeholder="项目名" />
-                        </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-row nzJustify="center">
-                    <nz-form-label [nzSpan]="6" nzRequired nzFor="projectIdentifier">项目标识</nz-form-label>
-                    <nz-form-control [nzSpan]="18" nzErrorTip="请输入项目标识">
-                        <nz-input-group nzPrefixIcon="lock">
-                            <input type="text" nz-input formControlName="projectIdentifier" placeholder="项目标识" />
-                        </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-row nzJustify="center">
-                    <nz-form-label [nzSpan]="6" nzFor="description">项目描述</nz-form-label>
-                    <nz-form-control [nzSpan]="18">
-                        <nz-input-group nzPrefixIcon="lock">
-                            <input type="text" nz-input formControlName="description" placeholder="项目描述" />
-                        </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item nz-row nzJustify="center">
-                    <nz-form-label [nzSpan]="6" nzFor="userList">关联用户</nz-form-label>
-                    <nz-form-control [nzSpan]="18" nzErrorTip="请选择关联用户">
-                        <nz-select id="userList" formControlName="userList" nzPlaceHolder="请选择关联用户" nzMode="multiple">
-                            <nz-option *ngFor="let user of userOptionsList" [nzValue]="user.value"
-                                [nzLabel]="user.label"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </form>
-        </div>
+        <nz-tabset>
+            <nz-tab nzTitle="基本信息">
+                <form nz-form [formGroup]="validateForm">
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzRequired nzFor="projectName">项目名</nz-form-label>
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请输入项目名">
+                            <nz-input-group nzPrefixIcon="user">
+                                <input type="text" nz-input formControlName="projectName" placeholder="项目名" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzFor="description">项目描述</nz-form-label>
+                        <nz-form-control [nzSpan]="18">
+                            <nz-input-group nzPrefixIcon="lock">
+                                <input type="text" nz-input formControlName="description" placeholder="项目描述" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzFor="userList">关联用户</nz-form-label>
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请选择关联用户">
+                            <nz-select id="userList" formControlName="userList" nzPlaceHolder="请选择关联用户"
+                                nzMode="multiple">
+                                <nz-option *ngFor="let user of userOptionsList" [nzValue]="user.value"
+                                    [nzLabel]="user.label"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+            <nz-tab nzTitle="打点代码">
+                <form nz-form [formGroup]="validateForm">
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzRequired nzFor="projectIdentifier">项目标识</nz-form-label>
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请输入项目标识">
+                            <nz-input-group nzPrefixIcon="lock">
+                                <input type="text" nz-input formControlName="projectIdentifier" placeholder="项目标识" />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzRequired nzFor="accessType">接入方式</nz-form-label>
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请选择接入方式">
+                            <nz-radio-group formControlName="accessType">
+                                <label *ngFor="let option of accessTypeOpitons" nz-radio [nzValue]="option.value"
+                                    [nzDisabled]="option.disabled">{{option.label}}</label>
+                            </nz-radio-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzRequired nzFor="activeFuncs">开启功能</nz-form-label>
+                        <nz-form-control [nzSpan]="18" nzErrorTip="请选择开启功能">
+                            <nz-select formControlName="activeFuncs" nzMode="multiple" nzPlaceHolder="请选择开启功能">
+                                <nz-option *ngFor="let option of activeFuncsOptions" [nzLabel]="option.label"
+                                    [nzValue]="option.value">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-tab>
+        </nz-tabset>
         <ng-template #modalFooter>
             <button nz-button nzType="default" (click)="handleModalOnCancel()">取消</button>
             <button nz-button nzType="primary" (click)="handleModalOnOk()" [disabled]="!validateForm.valid">确定</button>

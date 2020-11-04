@@ -38,6 +38,18 @@ export class ProjectManageComponent implements OnInit {
     // 关联用户选项列表
     userOptionsList = [];
     validateForm!: FormGroup;
+    // 接入方式
+    accessTypeOpitons = [
+        { label: '<script>标签引入', value: 'script', disabled: false },
+        { label: 'npm', value: 'npm', disabled: true },
+    ];
+    // 开启功能
+    activeFuncsOptions = [
+        { label: 'JS异常', value: 'jsError' },
+        { label: 'HTTP异常', value: 'httpError' },
+        { label: '静态资源异常', value: 'ResourceLoadError' },
+        { label: '自定义异常', value: 'customError' },
+    ];
 
     constructor(
         private userService: UserService,
@@ -62,7 +74,9 @@ export class ProjectManageComponent implements OnInit {
             projectName: ['', [Validators.required]],
             projectIdentifier: ['', [Validators.required]],
             description: [''],
-            userList: [[]]
+            userList: [[]],
+            accessType: ['script', [Validators.required]],
+            activeFuncs: [[], [Validators.required]],
         });
     }
 
@@ -208,7 +222,8 @@ export class ProjectManageComponent implements OnInit {
         this.projectService.addProject(
             {
                 ...formData,
-                userList: JSON.stringify(formData.userList)
+                userList: JSON.stringify(formData.userList),
+                activeFuncs: JSON.stringify(formData.activeFuncs)
             },
             res => {
                 console.log('[成功]新增项目', res);
@@ -238,7 +253,8 @@ export class ProjectManageComponent implements OnInit {
         this.projectService.updateProject(
             {
                 ...formData,
-                userList: JSON.stringify(formData.userList)
+                userList: JSON.stringify(formData.userList),
+                activeFuncs: JSON.stringify(formData.activeFuncs)
             },
             res => {
                 console.log('[成功]编辑项目', res);
