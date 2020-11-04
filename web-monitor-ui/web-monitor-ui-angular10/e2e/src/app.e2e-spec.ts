@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('nuall-monitor-platform-web-angular is running!');
+    expect(page.getTitleText()).toEqual('web-monitor-ui is running!');
   });
 
   afterEach(async () => {

@@ -4,7 +4,7 @@
 # 应用组名
 group_name='web'
 # 应用名称
-app_name='nuall-monitor-platform-angular'
+app_name='web-monitor-ui'
 # 应用版本
 app_version='1.0.0'
 # 应用运行端口
