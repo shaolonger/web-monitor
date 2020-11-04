@@ -150,7 +150,7 @@ export class ProjectManageComponent implements OnInit {
 
     /**
      * 操作按钮点击事件
-     * @param mode 
+     * @param mode
      */
     handleShowDetailDialog(mode: string, data: Project): void {
         if (mode === 'delete') {
@@ -171,13 +171,18 @@ export class ProjectManageComponent implements OnInit {
                 ...data,
                 userList: data.userList.length ? data.userList.split(',').map(user => Number(user)) : []
             });
+            if (mode === 'view') {
+                this.validateForm.disable();
+            } else {
+                this.validateForm.enable();
+            }
             this.showDetailDialog = true;
         }
     }
 
     /**
      * 设置操作模式
-     * @param mode 
+     * @param mode
      */
     setMode(mode: string): void {
         this.mode = mode;
