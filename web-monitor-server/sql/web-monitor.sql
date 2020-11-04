@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/1 0:08:55                            */
+/* Created on:     2020/11/4 19:14:59                           */
 /*==============================================================*/
 
 
@@ -148,6 +148,8 @@ create table pms_project
    project_name         varchar(100) not null comment '项目名',
    project_identifier   varchar(200) not null comment '项目标识符',
    description          varchar(200) default "" comment '项目描述',
+   access_type          varchar(20) not null comment '接入类型，script、npm',
+   active_funcs         varchar(20) comment '开启功能，JS异常、HTTP异常、静态资源异常、自定义异常',
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
    primary key (id),
