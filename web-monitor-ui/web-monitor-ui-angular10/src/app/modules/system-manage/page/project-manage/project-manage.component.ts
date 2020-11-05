@@ -237,7 +237,7 @@ export class ProjectManageComponent implements OnInit {
      */
     setCodeContent(projectIdentifier: string): void {
         const jsSdkAPIBasicUrl = this.envService.getJsSdkAPIBasicUrl();
-        this.codeContent = `<script type="text/javascript" src="${jsSdkAPIBasicUrl}${projectIdentifier}"></script>`;
+        this.codeContent = `<script id="web-monitor-sdk" type="text/javascript" src="${jsSdkAPIBasicUrl}${projectIdentifier}"></script>`;
     }
 
     /**
