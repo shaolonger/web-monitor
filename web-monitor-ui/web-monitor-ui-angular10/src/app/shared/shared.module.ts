@@ -5,6 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // ng-zorro
 import { NgZorroAntdModule } from './ng-zorro-antd.module';
 
+// ngx-codemirror
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+
 // ngx-echarts
 import { NgxEchartsModule } from 'ngx-echarts';
 
@@ -35,6 +38,9 @@ import { LogDetailComponent } from './components/log-detail/log-detail.component
 
         // ng-zorro-antd
         NgZorroAntdModule,
+
+        // ngx-codemirror
+        CodemirrorModule,
 
         // ngx-echarts
         NgxEchartsModule,

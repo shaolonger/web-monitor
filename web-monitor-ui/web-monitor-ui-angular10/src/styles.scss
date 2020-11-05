@@ -1,2 +1,6 @@
 @import './style-reset.scss';
 // @import "~ng-zorro-antd/ng-zorro-antd.less";
+
+// ngx-codemirror
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';

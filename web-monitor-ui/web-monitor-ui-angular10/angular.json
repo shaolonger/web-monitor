@@ -42,7 +42,8 @@
                             "@ant-design/colors",
                             "echarts",
                             "zrender/lib/svg/svg",
-                            "zrender/lib/vml/vml"
+                            "zrender/lib/vml/vml",
+                            "@ctrl/ngx-codemirror"
                         ]
                     },
                     "configurations": {

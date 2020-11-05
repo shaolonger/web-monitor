@@ -120,6 +120,13 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                    <nz-form-item nz-row>
+                        <nz-form-label [nzSpan]="6">打点代码</nz-form-label>
+                        <nz-form-control [nzSpan]="18">
+                            <ngx-codemirror [(ngModel)]="codeContent" [options]="ngxCodeMirrorOptions"
+                                [ngModelOptions]="{standalone: true}"></ngx-codemirror>
+                        </nz-form-control>
+                    </nz-form-item>
                 </form>
             </nz-tab>
         </nz-tabset>

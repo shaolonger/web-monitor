@@ -50,6 +50,15 @@ export class ProjectManageComponent implements OnInit {
         { label: '静态资源异常', value: 'ResourceLoadError' },
         { label: '自定义异常', value: 'customError' },
     ];
+    // 打点代码-ngx-codemirror配置
+    ngxCodeMirrorOptions = {
+        lineNumbers: true,
+        theme: 'default',
+        mode: 'javascript',
+        readOnly: true
+    };
+    // 打点代码-内容
+    codeContent = `<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&amp;ak=rxUC1m3MazqG9Rar38aPtFGhY9UBj15r&amp;services=&amp;t=20200824135534"></script>`;
 
     constructor(
         private userService: UserService,
