@@ -39,6 +39,8 @@ export class ProjectManageComponent implements OnInit {
     // 关联用户选项列表
     userOptionsList = [];
     validateForm!: FormGroup;
+    // 标签序列
+    detailDialogTabIndex: number = 0;
     // 接入方式
     accessTypeOpitons = [
         { label: '<script>标签引入', value: 'script', disabled: false },
@@ -56,7 +58,9 @@ export class ProjectManageComponent implements OnInit {
         lineNumbers: true,
         theme: 'default',
         mode: 'javascript',
-        readOnly: true
+        readOnly: true,
+        viewportMargin: Infinity,
+        autoFocus: true
     };
     // 打点代码-内容
     codeContent: string = '';
@@ -74,21 +78,35 @@ export class ProjectManageComponent implements OnInit {
         this.initFormData();
         this.getUserOptionsList();
         this.getTableList();
+        this.onValidateFormChange();
     }
 
     /**
      * 表单数据初始化
      */
     initFormData(): void {
-        this.validateForm = this.fb.group({
-            id: [0],
-            projectName: ['', [Validators.required]],
-            projectIdentifier: ['', [Validators.required]],
-            description: [''],
-            userList: [[]],
-            accessType: ['script', [Validators.required]],
-            activeFuncs: [[], [Validators.required]],
-        });
+        if (!this.validateForm) {
+            this.validateForm = this.fb.group({
+                id: [0],
+                projectName: ['', [Validators.required]],
+                projectIdentifier: ['', [Validators.required]],
+                description: [''],
+                userList: [[]],
+                accessType: ['script', [Validators.required]],
+                activeFuncs: [[], [Validators.required]],
+            });
+        } else {
+            this.validateForm.patchValue({
+                ...this.validateForm.getRawValue(),
+                id: 0,
+                projectName: '',
+                projectIdentifier: '',
+                description: '',
+                userList: [],
+                accessType: 'script',
+                activeFuncs: [],
+            });
+        }
     }
 
     /**
@@ -177,9 +195,10 @@ export class ProjectManageComponent implements OnInit {
 
     /**
      * 操作按钮点击事件
-     * @param mode
+     * @param mode 
+     * @param data 
      */
-    handleShowDetailDialog(mode: string, data: Project): void {
+    handleShowDetailDialog(mode: string, data?: Project): void {
         if (mode === 'delete') {
             // 删除
             this.modal.confirm({
@@ -191,7 +210,7 @@ export class ProjectManageComponent implements OnInit {
                 nzCancelText: '取消'
             });
         } else if (mode === 'view' || mode === 'edit') {
-            // 查看
+            // 查看|编辑
             this.setMode(mode);
             this.validateForm.patchValue({
                 ...this.validateForm.getRawValue(),
@@ -204,7 +223,10 @@ export class ProjectManageComponent implements OnInit {
             } else {
                 this.validateForm.enable();
             }
-            this.setCodeContent(data.projectIdentifier); // 动态设置打点代码
+            this.showDetailDialog = true;
+        } else if (mode === 'add') {
+            this.setMode(mode);
+            this.validateForm.enable();
             this.showDetailDialog = true;
         }
     }
@@ -219,11 +241,22 @@ export class ProjectManageComponent implements OnInit {
     }
 
     /**
+     * 监听表单内容变化
+     */
+    onValidateFormChange(): void {
+        this.validateForm.valueChanges.subscribe(value => {
+            const { projectIdentifier } = value;
+            this.setCodeContent(projectIdentifier);
+        });
+    }
+
+    /**
      * 设置操作模式
      * @param mode
      */
     setMode(mode: string): void {
         this.mode = mode;
+        this.detailDialogTabIndex = 0;
         if (mode === 'add') {
             // 新增
             this.detailDialogTitle = '新增';

@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // ng-zorro
 import { NgZorroAntdModule } from './ng-zorro-antd.module';
 
-// ngx-codemirror
-import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+// ngx-highlightjs
+import { NpxHighlightModule } from './npx-highlight.module';
 
 // ngx-echarts
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -39,8 +39,8 @@ import { LogDetailComponent } from './components/log-detail/log-detail.component
         // ng-zorro-antd
         NgZorroAntdModule,
 
-        // ngx-codemirror
-        CodemirrorModule,
+        // ngx-highlightjs
+        NpxHighlightModule,
 
         // ngx-echarts
         NgxEchartsModule,
@@ -48,6 +48,10 @@ import { LogDetailComponent } from './components/log-detail/log-detail.component
         // components
         SpinnerComponent,
         LogDetailComponent
+    ],
+    providers: [
+        // ngx-highlightjs
+        NpxHighlightModule
     ]
 })
 export class SharedModule { }
