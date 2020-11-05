@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
-import { AuthService } from '@app/service/auth.service';
+import { AuthService } from '@core/service/auth.service';
 
 @Component({
     selector: 'app-register',

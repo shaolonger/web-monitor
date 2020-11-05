@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { HttpService } from '@app/service/http.service';
+import { HttpService } from '@core/service/http.service';
 
 import { BasicFilters } from '@data/interfaces/log.interface';
 

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { EnvService } from '@core/service/env.service';
 import { UserService } from '@data/service/user.service';
 import { ProjectService } from '@data/service/project.service';
 
@@ -58,9 +59,10 @@ export class ProjectManageComponent implements OnInit {
         readOnly: true
     };
     // 打点代码-内容
-    codeContent = `<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&amp;ak=rxUC1m3MazqG9Rar38aPtFGhY9UBj15r&amp;services=&amp;t=20200824135534"></script>`;
+    codeContent: string = '';
 
     constructor(
+        private envService: EnvService,
         private userService: UserService,
         private projectService: ProjectService,
         private message: NzMessageService,
@@ -202,8 +204,18 @@ export class ProjectManageComponent implements OnInit {
             } else {
                 this.validateForm.enable();
             }
+            this.setCodeContent(data.projectIdentifier); // 动态设置打点代码
             this.showDetailDialog = true;
         }
+    }
+
+    /**
+     * 动态设置打点代码
+     * @param projectIdentifier 
+     */
+    setCodeContent(projectIdentifier: string): void {
+        const jsSdkAPIBasicUrl = this.envService.getJsSdkAPIBasicUrl();
+        this.codeContent = `<script type="text/javascript" src="${jsSdkAPIBasicUrl}${projectIdentifier}"></script>`;
     }
 
     /**

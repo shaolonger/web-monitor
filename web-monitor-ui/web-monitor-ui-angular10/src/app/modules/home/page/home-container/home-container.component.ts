@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { EChartOption } from 'echarts';
 
 import { UserService } from '@data/service/user.service';
-import { EventService } from '@app/service/event.service';
+import { EventService } from '@core/service/event.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { LogService } from '@data/service/log.service';
 

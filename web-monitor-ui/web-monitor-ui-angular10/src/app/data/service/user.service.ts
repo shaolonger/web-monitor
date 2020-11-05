@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { EventService } from '@app/service/event.service';
-import { HttpService } from '@app/service/http.service';
+import { EventService } from '@core/service/event.service';
+import { HttpService } from '@core/service/http.service';
 
 import { UserInfo } from '@data/classes/userInfo.class';
 import { UserRelatedProject } from '@data/classes/project.class';

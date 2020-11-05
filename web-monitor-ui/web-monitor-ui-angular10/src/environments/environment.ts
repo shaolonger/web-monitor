@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    apiBasicUrl: '/api'
+    apiBasicUrl: '/api', // 后台地址
+    jsSdkAPIBasicUrl: 'http://api.com/jssdk?v=1.0.0&key=' // 通过script标签引用js sdk包的地址
 };
 
 /*

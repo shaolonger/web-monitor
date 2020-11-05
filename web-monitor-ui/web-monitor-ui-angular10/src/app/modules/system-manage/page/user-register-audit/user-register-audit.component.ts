@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserService } from '@data/service/user.service';
-import { AUDIT_RESULT_MAP, GENDER_MAP } from '@app/constants/system-manage.const';
+import { AUDIT_RESULT_MAP, GENDER_MAP } from '@core/constants/system-manage.const';
 
 @Component({
     selector: 'app-user-register-audit',
