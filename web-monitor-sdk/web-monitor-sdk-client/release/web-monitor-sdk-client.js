@@ -652,7 +652,8 @@
 	  getByProjectIdentifier(projectIdentifier, res => {
 	    const {
 	      projectIdentifier,
-	      activeFuncs
+	      activeFuncs,
+	      isAutoUpload
 	    } = res;
 	    const funcs = activeFuncs.length ? activeFuncs.split(',') : [];
 
@@ -665,7 +666,7 @@
 	      captureResourceError: checkEnabled('ResourceLoadError'),
 	      captureAjaxError: checkEnabled('httpError'),
 	      captureConsoleError: checkEnabled('customError'),
-	      isAutoUpload: true,
+	      isAutoUpload: isAutoUpload,
 	      // if true, monitor will call errorHandler automatically
 	      isEnableBuffer: false,
 	      // if true, monitor will create a buffer pool and save the concurrency info

@@ -13,7 +13,8 @@ getParamsFromScript(projectIdentifier => {
 
         const {
             projectIdentifier,
-            activeFuncs
+            activeFuncs,
+            isAutoUpload
         } = res;
         const funcs = activeFuncs.length ? activeFuncs.split(',') : [];
         const checkEnabled = funcName => funcs.indexOf(funcName) > -1;
@@ -25,7 +26,7 @@ getParamsFromScript(projectIdentifier => {
             captureResourceError: checkEnabled('ResourceLoadError'),
             captureAjaxError: checkEnabled('httpError'),
             captureConsoleError: checkEnabled('customError'),
-            isAutoUpload: true, // if true, monitor will call errorHandler automatically
+            isAutoUpload: isAutoUpload, // if true, monitor will call errorHandler automatically
             isEnableBuffer: false, // if true, monitor will create a buffer pool and save the concurrency info
             bufferCapacity: 10, // the capacity of buffer pool
             errorHandler: (data) => {
