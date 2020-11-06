@@ -43,15 +43,15 @@ public class ProjectEntity {
     private String accessType;
 
     /**
+     * 开启功能
+     */
+    private String activeFuncs;
+
+    /**
      * 是否自动上报
      */
     @NotNull(message = "isAutoUpload不能为空")
     private Integer isAutoUpload;
-
-    /**
-     * 开启功能
-     */
-    private String activeFuncs;
 
     /**
      * 创建时间

@@ -81,6 +81,7 @@ public class ProjectService extends ServiceBase {
         String description = request.getParameter("description");
         String accessType = request.getParameter("accessType");
         String activeFuncs = request.getParameter("activeFuncs");
+        Integer isAutoUpload = DataConvertUtils.strToIntegerOrNull(request.getParameter("isAutoUpload"));
         if (id == null || id < 1) throw new Exception("id格式不正确");
         Optional<ProjectEntity> optional = projectDao.findById(id);
         ProjectEntity entity = optional.orElseThrow(() -> new Exception("项目不存在"));
@@ -121,6 +122,7 @@ public class ProjectService extends ServiceBase {
         entity.setDescription(description);
         entity.setAccessType(accessType);
         entity.setActiveFuncs(activeFuncs);
+        entity.setIsAutoUpload(isAutoUpload);
         projectDao.save(entity);
 
         logger.info("--------[ProjectService]更新结束--------");

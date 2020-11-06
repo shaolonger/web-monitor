@@ -3,6 +3,7 @@ package com.shaolonger.webmonitorserver.project.vo;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -37,6 +38,12 @@ public class ProjectVO {
      * 开启功能
      */
     private String activeFuncs;
+
+    /**
+     * 是否自动上报
+     */
+    @NotNull(message = "isAutoUpload不能为空")
+    private Integer isAutoUpload;
 
     /**
      * 创建时间
