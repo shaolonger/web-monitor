@@ -20,9 +20,13 @@ export default {
     }],
     plugins: [
         commonjs(),
-        resolve(),
+        resolve({
+            browser: true
+        }),
         babel({
-            babelHelpers: 'bundled'
+            exclude: 'node_modules/**',
+            babelHelpers: 'runtime',
+            plugins: ['@babel/plugin-transform-runtime']
         })
     ]
 };

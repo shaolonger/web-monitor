@@ -8,6 +8,9 @@ import {
 import {
     uploadLog
 } from './service/monitorService';
+import {
+    getUuid
+} from './utils/uuidHelper';
 
 // 从script标签中获取项目信息
 getParamsFromScript(projectIdentifier => {
@@ -22,6 +25,8 @@ getParamsFromScript(projectIdentifier => {
         const funcs = activeFuncs.length ? activeFuncs.split(',') : [];
         const checkEnabled = funcName => funcs.indexOf(funcName) > -1;
 
+        const uuid = getUuid();
+
         const monitor = new WebMonitorSdkCore();
         const config = {
             projectIdentifier: projectIdentifier,
@@ -35,7 +40,10 @@ getParamsFromScript(projectIdentifier => {
             errorHandler: (data) => {
                 // something to do with data
                 // console.log('[log]web-monitor-sdk', data);
-                uploadLog(data);
+                uploadLog({
+                    ...data,
+                    cUuid: uuid
+                });
             }
         };
         monitor.init(config);
