@@ -121,6 +121,13 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                    <nz-form-item nz-row nzJustify="center">
+                        <nz-form-label [nzSpan]="6" nzRequired nzFor="isAutoUpload">自动上报</nz-form-label>
+                        <nz-form-control [nzSpan]="18">
+                            <nz-switch formControlName="isAutoUpload" nzCheckedChildren="是" nzUnCheckedChildren="否">
+                            </nz-switch>
+                        </nz-form-control>
+                    </nz-form-item>
                     <nz-form-item nz-row>
                         <nz-form-label [nzSpan]="6">打点代码</nz-form-label>
                         <nz-form-control [nzSpan]="18">

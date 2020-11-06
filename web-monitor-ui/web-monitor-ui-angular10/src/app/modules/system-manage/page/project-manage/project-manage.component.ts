@@ -94,6 +94,7 @@ export class ProjectManageComponent implements OnInit {
                 userList: [[]],
                 accessType: ['script', [Validators.required]],
                 activeFuncs: [[], [Validators.required]],
+                isAutoUpload: [false, [Validators.required]],
             });
         } else {
             this.validateForm.patchValue({
@@ -105,6 +106,7 @@ export class ProjectManageComponent implements OnInit {
                 userList: [],
                 accessType: 'script',
                 activeFuncs: [],
+                isAutoUpload: false
             });
         }
     }
@@ -151,15 +153,9 @@ export class ProjectManageComponent implements OnInit {
                 } else {
                     let { records, totalNum } = data;
                     this.listData = records.map(item => ({
-                        id: item.id,
-                        projectName: item.projectName,
-                        projectIdentifier: item.projectIdentifier,
-                        description: item.description,
+                        ...item,
                         createTime: item.createTime && moment(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
-                        updateTime: item.updateTime && moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
-                        userList: item.userList,
-                        accessType: item.accessType,
-                        activeFuncs: item.activeFuncs,
+                        updateTime: item.updateTime && moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss')
                     }));
                     this.paginationConfig.total = totalNum;
                 }
@@ -216,7 +212,8 @@ export class ProjectManageComponent implements OnInit {
                 ...this.validateForm.getRawValue(),
                 ...data,
                 userList: data.userList.length ? data.userList.split(',').map(user => Number(user)) : [],
-                activeFuncs: data.activeFuncs.length ? data.activeFuncs.split(',') : []
+                activeFuncs: data.activeFuncs.length ? data.activeFuncs.split(',') : [],
+                isAutoUpload: !!data.isAutoUpload
             });
             if (mode === 'view') {
                 this.validateForm.disable();
@@ -280,7 +277,8 @@ export class ProjectManageComponent implements OnInit {
             {
                 ...formData,
                 userList: JSON.stringify(formData.userList),
-                activeFuncs: formData.activeFuncs.join(',')
+                activeFuncs: formData.activeFuncs.join(','),
+                isAutoUpload: formData.isAutoUpload ? 1 : 0
             },
             res => {
                 console.log('[成功]新增项目', res);
@@ -311,7 +309,8 @@ export class ProjectManageComponent implements OnInit {
             {
                 ...formData,
                 userList: JSON.stringify(formData.userList),
-                activeFuncs: formData.activeFuncs.join(',')
+                activeFuncs: formData.activeFuncs.join(','),
+                isAutoUpload: formData.isAutoUpload ? 1 : 0
             },
             res => {
                 console.log('[成功]编辑项目', res);

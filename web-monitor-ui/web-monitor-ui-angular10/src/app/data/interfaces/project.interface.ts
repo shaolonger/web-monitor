@@ -5,6 +5,7 @@ export interface Project {
     description?: string;
     accessType: string;
     activeFuncs?: string;
+    isAutoUpload: number;
     createTime: string;
     updateTime: string;
     userList: string;

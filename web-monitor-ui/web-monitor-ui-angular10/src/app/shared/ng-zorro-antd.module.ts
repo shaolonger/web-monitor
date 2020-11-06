@@ -19,6 +19,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @NgModule({
     declarations: [],
@@ -42,7 +43,8 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
         NzDropDownModule,
         NzRadioModule,
         NzEmptyModule,
-        NzTabsModule
+        NzTabsModule,
+        NzSwitchModule
     ]
 })
 export class NgZorroAntdModule { }
