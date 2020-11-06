@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ProjectDao extends JpaRepository<ProjectEntity, Long> {
     Optional<ProjectEntity> findById(Long id);
+
+    Optional<ProjectEntity> findByProjectIdentifier(String projectIdentifier);
 }

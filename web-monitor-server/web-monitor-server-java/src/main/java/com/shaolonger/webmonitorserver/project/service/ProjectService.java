@@ -173,10 +173,25 @@ public class ProjectService extends ServiceBase {
      * 根据ID获取项目
      *
      * @param id 项目ID
-     * @return
+     * @return Optional
      */
     public Optional<ProjectEntity> getProjectById(Long id) {
         return projectDao.findById(id);
+    }
+
+    /**
+     * 根据projectIdentifier获取项目
+     *
+     * @param request request
+     * @return Optional
+     */
+    public Optional<ProjectEntity> getProjectByProjectIdentifier(HttpServletRequest request) throws Exception {
+        // 获取参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+
+        // 检验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier不存在");
+        return projectDao.findByProjectIdentifier(projectIdentifier);
     }
 
     /**

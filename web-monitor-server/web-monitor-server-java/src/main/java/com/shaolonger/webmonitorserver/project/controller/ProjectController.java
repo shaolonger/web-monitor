@@ -1,5 +1,6 @@
 package com.shaolonger.webmonitorserver.project.controller;
 
+import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
 import com.shaolonger.webmonitorserver.project.entity.ProjectEntity;
 import com.shaolonger.webmonitorserver.project.service.ProjectService;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
@@ -81,6 +82,22 @@ public class ProjectController {
     public Object get(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(projectService.get(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
+     * 查询-根据项目标识
+     *
+     * @param request request
+     * @return Object
+     */
+    @AuthIgnore
+    @RequestMapping(value = "/project/getByProjectIdentifier", method = RequestMethod.GET)
+    public Object getByProjectIdentifier(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(projectService.getProjectByProjectIdentifier(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }
