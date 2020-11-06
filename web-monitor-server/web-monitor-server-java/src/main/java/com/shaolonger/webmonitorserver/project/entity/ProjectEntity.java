@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -40,6 +41,12 @@ public class ProjectEntity {
      */
     @NotEmpty(message = "accessType不能为空")
     private String accessType;
+
+    /**
+     * 是否自动上报
+     */
+    @NotNull(message = "isAutoUpload不能为空")
+    private Integer isAutoUpload;
 
     /**
      * 开启功能
