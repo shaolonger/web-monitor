@@ -17,7 +17,7 @@ docker_image_name=${group_name}/${app_name}-${app_version}
 docker_container_name=${group_name}__${app_name}
 
 # 停止当前正在运行的docker容器
-docker stop ${app_name}
+docker stop ${docker_container_name}
 echo '----stop container success----'
 
 # 删除当前正在运行的docker容器
