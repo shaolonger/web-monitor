@@ -8,13 +8,13 @@ import {
 export default {
     input: 'src/index.js',
     output: [{
-        file: 'lib/log4browser.js',
+        file: 'lib/web-monitor-sdk-core.js',
         format: 'umd',
-        name: 'Log4Browser'
+        name: 'webMonitorSdkCore'
     }, {
-        file: 'lib/log4browser.min.js',
+        file: 'lib/web-monitor-sdk-core.min.js',
         format: 'umd',
-        name: 'Log4Browser',
+        name: 'webMonitorSdkCore',
         plugins: [terser()]
     }],
     plugins: [

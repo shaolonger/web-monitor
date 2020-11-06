@@ -1,31 +1,31 @@
-# log4browser
+# web-monitor-sdk-core
 
 This is a simple log tool for usage in browser.
 
 Dont like Java or the other language, we lack good log tool in browser environment, which can help us trace errors or problems more efficiently.
 
-So this is what log4browser try to do.
+So this is what web-monitor-sdk-core try to do.
 
 Welcome to develop together or put an issue.
 
 ## Installation
 
 ```shell script
-npm install log4browser
+npm install web-monitor-sdk-core
 ```
 
 ## Usage
 1.create instance
 ```javascript
 // Common JS
-var log4browser = require("log4browser");
-var logger = new log4browser();
+var WebMonitorSdkCore = require("web-monitor-sdk-core");
+var monitor = new WebMonitorSdkCore();
 ```
 
 ```javascript
 // Or in ES Modules
-import log4browser from 'log4browser';
-var logger = new log4browser();
+import WebMonitorSdkCore from 'web-monitor-sdk-core';
+var monitor = new WebMonitorSdkCore();
 ```
 
 2.init with your own config
@@ -36,21 +36,21 @@ var config = {
     captureResourceError: true,
     captureAjaxError: true,
     captureConsoleError: false,
-    isAutoHandle: true, // if true, logger will call errorHandler automatically
-    isEnableBuffer: false, // if true, logger will create a buffer pool and save the concurrency info
+    isAutoHandle: true, // if true, monitor will call errorHandler automatically
+    isEnableBuffer: false, // if true, monitor will create a buffer pool and save the concurrency info
     bufferCapacity: 10, // the capacity of buffer pool
-    errorHandler: function (logData) {
-        // something to do with logData
+    errorHandler: function (data) {
+        // something to do with data
     }
 };
-logger.init(config);
+monitor.init(config);
 ```
 
 3.(optional)switch errorHandler automation
 ```javascript
-logger.setIsAutoHandle(false); // stop
-logger.setIsAutoHandle(true); // restart
+monitor.setIsAutoHandle(false); // stop
+monitor.setIsAutoHandle(true); // restart
 ```
 
 ## License
-Log4browser is under the MIT License.
+web-monitor-sdk-core is under the MIT License.

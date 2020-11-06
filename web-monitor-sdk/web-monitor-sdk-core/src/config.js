@@ -7,7 +7,7 @@ const DEFAULT_CONFIG = {
     captureResourceError: true,
     captureAjaxError: true,
     captureConsoleError: false,
-    isAutoHandle: true, // If true, log4browser will automatically call callback function
+    isAutoHandle: true, // If true, WebMonitorSdkCore will automatically call callback function
 };
 
 export {

@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Log4Browser = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.webMonitorSdkCore = factory());
 }(this, (function () { 'use strict';
 
   function _typeof(obj) {
@@ -399,7 +399,7 @@
     captureResourceError: true,
     captureAjaxError: true,
     captureConsoleError: false,
-    isAutoHandle: true // If true, log4browser will automatically call callback function
+    isAutoHandle: true // If true, WebMonitorSdkCore will automatically call callback function
 
   };
 
@@ -408,11 +408,11 @@
       _classCallCheck(this, BufferPool);
 
       if (typeof capacity !== 'number') {
-        throw new Error('[error]Log4browser->BufferPool: capacity is not legal!');
+        throw new Error('[error]WebMonitorSdkCore->BufferPool: capacity is not legal!');
       }
 
       if (capacity < 1) {
-        throw new Error('[error]Log4browser->BufferPool: capacity should not less than 0!');
+        throw new Error('[error]WebMonitorSdkCore->BufferPool: capacity should not less than 0!');
       }
 
       this.pool = [];
@@ -575,9 +575,9 @@
     });
   };
 
-  var Log4Browser = /*#__PURE__*/function () {
-    function Log4Browser() {
-      _classCallCheck(this, Log4Browser);
+  var WebMonitorSdkCore = /*#__PURE__*/function () {
+    function WebMonitorSdkCore() {
+      _classCallCheck(this, WebMonitorSdkCore);
 
       setIpInfo();
     }
@@ -587,7 +587,7 @@
      */
 
 
-    _createClass(Log4Browser, [{
+    _createClass(WebMonitorSdkCore, [{
       key: "init",
       value: function init(config) {
         this.config = _objectSpread2(_objectSpread2({}, DEFAULT_CONFIG), config);
@@ -881,9 +881,9 @@
       }
     }]);
 
-    return Log4Browser;
+    return WebMonitorSdkCore;
   }();
 
-  return Log4Browser;
+  return WebMonitorSdkCore;
 
 })));

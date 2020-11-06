@@ -53,7 +53,7 @@ const getErrorMessageAndStack = (projectIdentifier, errorType, errorMessage, err
     };
 };
 
-class Log4Browser {
+class WebMonitorSdkCore {
     constructor() {
         UTILS.setIpInfo();
     }
@@ -314,4 +314,4 @@ class Log4Browser {
     }
 };
 
-export default Log4Browser;
+export default WebMonitorSdkCore;

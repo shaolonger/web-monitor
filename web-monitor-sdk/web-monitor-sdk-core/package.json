@@ -1,15 +1,11 @@
 {
-  "name": "log4browser",
+  "name": "web-monitor-sdk-core",
   "version": "2.0.0",
   "description": "A log helper for browser use.",
-  "main": "lib/log4browser.min.js",
+  "main": "lib/web-monitor-sdk-core.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:umd": "rollup --config rollup.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shaolonger/log4browser.git"
   },
   "keywords": [
     "log",
@@ -20,10 +16,6 @@
   ],
   "author": "shaolonger",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shaolonger/log4browser/issues"
-  },
-  "homepage": "https://github.com/shaolonger/log4browser#readme",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.11.6",

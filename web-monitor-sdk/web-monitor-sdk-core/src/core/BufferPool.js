@@ -1,10 +1,10 @@
 class BufferPool {
     constructor(capacity) {
         if (typeof capacity !== 'number') {
-            throw new Error('[error]Log4browser->BufferPool: capacity is not legal!');
+            throw new Error('[error]WebMonitorSdkCore->BufferPool: capacity is not legal!');
         }
         if (capacity < 1) {
-            throw new Error('[error]Log4browser->BufferPool: capacity should not less than 0!');
+            throw new Error('[error]WebMonitorSdkCore->BufferPool: capacity should not less than 0!');
         }
         this.pool = [];
         this.capacity = capacity;
