@@ -104,8 +104,8 @@
                 <tr *ngFor="let data of logRecordList">
                     <td nzAlign="center">{{ data.content }}</td>
                     <td nzAlign="center">{{ data.createTimeStr }}</td>
-                    <td nzAlign="center">{{ data.userId }}</td>
-                    <td nzAlign="center">{{ data.userName }}</td>
+                    <td nzAlign="center">{{ data.bUid }}</td>
+                    <td nzAlign="center">{{ data.bUname }}</td>
                     <td nzAlign="center">{{ data.pageUrl }}</td>
                     <td nzAlign="center">
                         <a (click)="handleShowDetail(data.content)">查看日志</a>
