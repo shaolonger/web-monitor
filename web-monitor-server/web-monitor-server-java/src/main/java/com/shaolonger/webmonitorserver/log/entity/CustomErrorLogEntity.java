@@ -1,5 +1,6 @@
 package com.shaolonger.webmonitorserver.log.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -40,17 +41,20 @@ public class CustomErrorLogEntity {
     /**
      * 客户端唯一标识码
      */
+    @JsonProperty(value = "cUuid")
     @NotEmpty(message = "cUuid不能为空")
     private String cUuid;
 
     /**
      * 业务用户ID
      */
+    @JsonProperty(value = "bUid")
     private Long bUid;
 
     /**
      * 业务用户名
      */
+    @JsonProperty(value = "bUname")
     private String bUname;
 
     /**
