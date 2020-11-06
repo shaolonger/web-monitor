@@ -43,7 +43,7 @@ public class JsErrorLogService extends ServiceBase {
         String logType = request.getParameter("logType");
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
-        String userName = request.getParameter("userName");
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String errorType = request.getParameter("errorType");
         String errorMessage = request.getParameter("errorMessage");
@@ -78,9 +78,9 @@ public class JsErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.user_name like :userName");
-            paramMap.put("userName", "%" + userName + "%");
+        if (bUname != null && !bUname.isEmpty()) {
+            paramSqlBuilder.append(" and t.b_uname like :bUname");
+            paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
@@ -125,7 +125,7 @@ public class JsErrorLogService extends ServiceBase {
         String logType = request.getParameter("logType");
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
-        String userName = request.getParameter("userName");
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String errorType = request.getParameter("errorType");
         String errorMessage = request.getParameter("errorMessage");
@@ -134,7 +134,7 @@ public class JsErrorLogService extends ServiceBase {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
-                "count(distinct t.user_id) as user_count, t.error_message from lms_js_error_log t where 1=1");
+                "count(distinct t.c_uuid) as user_count, t.error_message from lms_js_error_log t where 1=1");
         StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) from lms_js_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
@@ -161,9 +161,9 @@ public class JsErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.user_name like :userName");
-            paramMap.put("userName", "%" + userName + "%");
+        if (bUname != null && !bUname.isEmpty()) {
+            paramSqlBuilder.append(" and t.b_uname like :bUname");
+            paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
@@ -210,8 +210,8 @@ public class JsErrorLogService extends ServiceBase {
         // 获取请求参数
         String logType = jsErrorLogEntity.getLogType();
         String cUuid = jsErrorLogEntity.getCUuid();
-        Long userId = jsErrorLogEntity.getUserId();
-        String userName = jsErrorLogEntity.getUserName();
+        Long bUid = jsErrorLogEntity.getBUid();
+        String bUname = jsErrorLogEntity.getBUname();
         String pageUrl = jsErrorLogEntity.getPageUrl();
         String pageKey = jsErrorLogEntity.getPageKey();
         String deviceName = jsErrorLogEntity.getDeviceName();
@@ -231,8 +231,8 @@ public class JsErrorLogService extends ServiceBase {
         // 保存实体
         jsErrorLogEntity.setLogType(logType);
         jsErrorLogEntity.setCUuid(cUuid);
-        jsErrorLogEntity.setUserId(userId);
-        jsErrorLogEntity.setUserName(userName);
+        jsErrorLogEntity.setBUid(bUid);
+        jsErrorLogEntity.setBUname(bUname);
         jsErrorLogEntity.setPageUrl(pageUrl);
         jsErrorLogEntity.setPageKey(pageKey);
         jsErrorLogEntity.setDeviceName(deviceName);
@@ -267,8 +267,8 @@ public class JsErrorLogService extends ServiceBase {
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
         String cUuid = request.getParameter("cUuid");
-        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
-        String userName = request.getParameter("userName");
+        Long bUid = DataConvertUtils.strToLong(request.getParameter("bUid"));
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String pageKey = request.getParameter("pageKey");
         String deviceName = request.getParameter("deviceName");
@@ -310,8 +310,8 @@ public class JsErrorLogService extends ServiceBase {
         jsErrorLogEntity.setProjectIdentifier(projectIdentifier);
         jsErrorLogEntity.setLogType(logType);
         jsErrorLogEntity.setCUuid(cUuid);
-        jsErrorLogEntity.setUserId(userId);
-        jsErrorLogEntity.setUserName(userName);
+        jsErrorLogEntity.setBUid(bUid);
+        jsErrorLogEntity.setBUname(bUname);
         jsErrorLogEntity.setPageUrl(pageUrl);
         jsErrorLogEntity.setPageKey(pageKey);
         jsErrorLogEntity.setDeviceName(deviceName);

@@ -43,7 +43,7 @@ public class HttpErrorLogService extends ServiceBase {
         String logType = request.getParameter("logType");
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
-        String userName = request.getParameter("userName");
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String httpType = request.getParameter("httpType");
         String httpUrlComplete = request.getParameter("httpUrlComplete");
@@ -81,9 +81,9 @@ public class HttpErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.user_name like :userName");
-            paramMap.put("userName", "%" + userName + "%");
+        if (bUname != null && !bUname.isEmpty()) {
+            paramSqlBuilder.append(" and t.b_uname like :bUname");
+            paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
@@ -143,7 +143,7 @@ public class HttpErrorLogService extends ServiceBase {
         String logType = request.getParameter("logType");
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
-        String userName = request.getParameter("userName");
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String httpType = request.getParameter("httpType");
         String httpUrlComplete = request.getParameter("httpUrlComplete");
@@ -155,7 +155,7 @@ public class HttpErrorLogService extends ServiceBase {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Map<String, Object> paramMap = new HashMap<>();
         StringBuilder dataSqlBuilder = new StringBuilder("select count(t.id) as count, max(t.create_time) as latest_create_time, " +
-                "count(distinct t.user_id) as user_count, t.http_url_complete from lms_http_error_log t where 1=1");
+                "count(distinct t.c_uuid) as user_count, t.http_url_complete from lms_http_error_log t where 1=1");
         StringBuilder countSqlBuilder = new StringBuilder("select count(*) from (select count(t.id) from lms_http_error_log t where 1=1");
         StringBuilder paramSqlBuilder = new StringBuilder();
 
@@ -182,9 +182,9 @@ public class HttpErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (userName != null && !userName.isEmpty()) {
-            paramSqlBuilder.append(" and t.user_name like :userName");
-            paramMap.put("userName", "%" + userName + "%");
+        if (bUname != null && !bUname.isEmpty()) {
+            paramSqlBuilder.append(" and t.b_uname like :bUname");
+            paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
         if (pageUrl != null && !pageUrl.isEmpty()) {
@@ -246,8 +246,8 @@ public class HttpErrorLogService extends ServiceBase {
         // 获取请求参数
         String logType = httpErrorLogEntity.getLogType();
         String cUuid = httpErrorLogEntity.getCUuid();
-        Long userId = httpErrorLogEntity.getUserId();
-        String userName = httpErrorLogEntity.getUserName();
+        Long bUid = httpErrorLogEntity.getBUid();
+        String bUname = httpErrorLogEntity.getBUname();
         String pageUrl = httpErrorLogEntity.getPageUrl();
         String pageKey = httpErrorLogEntity.getPageKey();
         String deviceName = httpErrorLogEntity.getDeviceName();
@@ -270,8 +270,8 @@ public class HttpErrorLogService extends ServiceBase {
         // 保存实体
         httpErrorLogEntity.setLogType(logType);
         httpErrorLogEntity.setCUuid(cUuid);
-        httpErrorLogEntity.setUserId(userId);
-        httpErrorLogEntity.setUserName(userName);
+        httpErrorLogEntity.setBUid(bUid);
+        httpErrorLogEntity.setBUname(bUname);
         httpErrorLogEntity.setPageUrl(pageUrl);
         httpErrorLogEntity.setPageKey(pageKey);
         httpErrorLogEntity.setDeviceName(deviceName);
@@ -309,8 +309,8 @@ public class HttpErrorLogService extends ServiceBase {
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
         String cUuid = request.getParameter("cUuid");
-        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
-        String userName = request.getParameter("userName");
+        Long bUid = DataConvertUtils.strToLong(request.getParameter("bUid"));
+        String bUname = request.getParameter("bUname");
         String pageUrl = request.getParameter("pageUrl");
         String pageKey = request.getParameter("pageKey");
         String deviceName = request.getParameter("deviceName");
@@ -355,8 +355,8 @@ public class HttpErrorLogService extends ServiceBase {
         httpErrorLogEntity.setProjectIdentifier(projectIdentifier);
         httpErrorLogEntity.setLogType(logType);
         httpErrorLogEntity.setCUuid(cUuid);
-        httpErrorLogEntity.setUserId(userId);
-        httpErrorLogEntity.setUserName(userName);
+        httpErrorLogEntity.setBUid(bUid);
+        httpErrorLogEntity.setBUname(bUname);
         httpErrorLogEntity.setPageUrl(pageUrl);
         httpErrorLogEntity.setPageKey(pageKey);
         httpErrorLogEntity.setDeviceName(deviceName);

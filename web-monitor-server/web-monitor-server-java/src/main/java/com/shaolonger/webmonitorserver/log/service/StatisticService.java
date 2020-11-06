@@ -278,7 +278,7 @@ public class StatisticService {
                 if (indicatorListArr.contains("uv")) {
                     HashSet<Long> tempSet = new HashSet<>();
                     list.forEach(item -> {
-                        BigInteger userId = (BigInteger) item.get("user_id");
+                        BigInteger userId = (BigInteger) item.get("c_uuid");
                         tempSet.add(userId.longValue());
                     });
                     int uv = tempSet.size();

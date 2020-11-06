@@ -44,14 +44,14 @@ public class CustomErrorLogEntity {
     private String cUuid;
 
     /**
-     * 用户ID
+     * 业务用户ID
      */
-    private Long userId;
+    private Long bUid;
 
     /**
-     * 用户名
+     * 业务用户名
      */
-    private String userName;
+    private String bUname;
 
     /**
      * 页面URL

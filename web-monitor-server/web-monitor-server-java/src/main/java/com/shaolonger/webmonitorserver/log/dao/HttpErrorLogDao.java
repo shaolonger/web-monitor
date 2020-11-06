@@ -25,7 +25,7 @@ public interface HttpErrorLogDao extends JpaRepository<HttpErrorLogEntity, Long>
             "where project_identifier=?3 and create_time between ?1 and ?2 group by status", nativeQuery = true)
     List<Map<String, Object>> getLogCountByState(Date startTime, Date endTime, String projectIdentifier);
 
-    @Query(value = "select id, user_id, create_time from lms_http_error_log " +
+    @Query(value = "select id, c_uuid, create_time from lms_http_error_log " +
             "where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
     List<Map<String, Object>> getLogListByCreateTimeAndProjectIdentifier(String projectIdentifier, Date startTime, Date endTime);
 
