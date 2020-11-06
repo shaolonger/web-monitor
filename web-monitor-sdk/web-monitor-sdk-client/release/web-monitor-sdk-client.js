@@ -497,34 +497,107 @@
 	  });
 	});
 
+	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+	  try {
+	    var info = gen[key](arg);
+	    var value = info.value;
+	  } catch (error) {
+	    reject(error);
+	    return;
+	  }
+
+	  if (info.done) {
+	    resolve(value);
+	  } else {
+	    Promise.resolve(value).then(_next, _throw);
+	  }
+	}
+
+	function _asyncToGenerator(fn) {
+	  return function () {
+	    var self = this,
+	        args = arguments;
+	    return new Promise(function (resolve, reject) {
+	      var gen = fn.apply(self, args);
+
+	      function _next(value) {
+	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+	      }
+
+	      function _throw(err) {
+	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+	      }
+
+	      _next(undefined);
+	    });
+	  };
+	}
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+
+	function _defineProperties(target, props) {
+	  for (var i = 0; i < props.length; i++) {
+	    var descriptor = props[i];
+	    descriptor.enumerable = descriptor.enumerable || false;
+	    descriptor.configurable = true;
+	    if ("value" in descriptor) descriptor.writable = true;
+	    Object.defineProperty(target, descriptor.key, descriptor);
+	  }
+	}
+
+	function _createClass(Constructor, protoProps, staticProps) {
+	  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+	  if (staticProps) _defineProperties(Constructor, staticProps);
+	  return Constructor;
+	}
+
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+
+	  return obj;
+	}
+
 	/**
 	 * 从script标签中获取项目信息
 	 * @param {Function} success 
 	 */
-	const getParamsFromScript = success => {
-	  const scriptDom = document.getElementById('web-monitor-sdk');
+	var getParamsFromScript = function getParamsFromScript(success) {
+	  var scriptDom = document.getElementById('web-monitor-sdk');
 
 	  if (!scriptDom) {
 	    return console.error('[error]web-monitor-sdk: 无法找到script标签！');
 	  }
 
-	  const url = scriptDom.getAttribute('src');
-	  const paramsArr = url.split('?');
+	  var url = scriptDom.getAttribute('src');
+	  var paramsArr = url.split('?');
 
 	  if (paramsArr.length < 2) {
 	    return console.error('[error]web-monitor-sdk: script标签缺少参数！');
 	  } // 获取参数
 
 
-	  const pidItem = paramsArr[1].split('&').map(item => {
-	    const temp = item.split('=');
+	  var pidItem = paramsArr[1].split('&').map(function (item) {
+	    var temp = item.split('=');
 
 	    if (temp.length > 1) {
-	      return {
-	        [temp[0]]: temp[1]
-	      };
+	      return _defineProperty({}, temp[0], temp[1]);
 	    }
-	  }).find(item => item['key']);
+	  }).find(function (item) {
+	    return item['key'];
+	  });
 
 	  if (!pidItem) {
 	    return console.error('[error]web-monitor-sdk: script标签参数错误！');
@@ -533,89 +606,98 @@
 	  success && typeof success === 'function' && success(pidItem['key']);
 	};
 
-	class HttpClient {
-	  constructor(config) {
+	var HttpClient = /*#__PURE__*/function () {
+	  function HttpClient(config) {
+	    _classCallCheck(this, HttpClient);
+
 	    this.config = config;
 	    this.setXmlHttp();
 	  }
 
-	  setXmlHttp() {
-	    let xmlHttp = null;
+	  _createClass(HttpClient, [{
+	    key: "setXmlHttp",
+	    value: function setXmlHttp() {
+	      var xmlHttp = null;
 
-	    if (window.XMLHttpRequest) {
-	      xmlHttp = new XMLHttpRequest();
-	    } else if (window.ActiveXObject) {
-	      // IE5 and IE6
-	      xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+	      if (window.XMLHttpRequest) {
+	        xmlHttp = new XMLHttpRequest();
+	      } else if (window.ActiveXObject) {
+	        // IE5 and IE6
+	        xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+	      }
+
+	      if (xmlHttp === null) {
+	        console.error('[error]web-monitor-client: 客户端不支持xmlHttp');
+	        return;
+	      }
+
+	      this.xmlHttp = xmlHttp;
 	    }
+	  }, {
+	    key: "fetch",
+	    value: function fetch(option) {
+	      var _this = this;
 
-	    if (xmlHttp === null) {
-	      console.error('[error]web-monitor-client: 客户端不支持xmlHttp');
-	      return;
-	    }
+	      return new Promise(function (resolve, reject) {
+	        var xmlHttp = _this.xmlHttp;
+	        var _this$config$baseUrl = _this.config.baseUrl,
+	            baseUrl = _this$config$baseUrl === void 0 ? '' : _this$config$baseUrl;
+	        var _option$method = option.method,
+	            method = _option$method === void 0 ? 'GET' : _option$method,
+	            url = option.url,
+	            _option$params = option.params,
+	            params = _option$params === void 0 ? {} : _option$params,
+	            _option$async = option.async,
+	            async = _option$async === void 0 ? true : _option$async;
+	        method = method.toUpperCase();
 
-	    this.xmlHttp = xmlHttp;
-	  }
+	        if (method == 'GET') {
+	          // 处理GET请求URL
+	          var getUrl = url;
+	          getUrl += '?';
 
-	  fetch(option) {
-	    return new Promise((resolve, reject) => {
-	      const xmlHttp = this.xmlHttp;
-	      const {
-	        baseUrl = ''
-	      } = this.config;
-	      let {
-	        method = 'GET',
-	        url,
-	        params = {},
-	        async = true
-	      } = option;
-	      method = method.toUpperCase();
+	          for (var key in params) {
+	            getUrl += key + '=' + params[key] + '&';
+	          }
 
-	      if (method == 'GET') {
-	        // 处理GET请求URL
-	        let getUrl = url;
-	        getUrl += '?';
-
-	        for (let key in params) {
-	          getUrl += key + '=' + params[key] + '&';
+	          getUrl = getUrl.substring(0, getUrl.length - 1);
+	          xmlHttp.open('GET', baseUrl + getUrl, async);
+	          xmlHttp.send(null);
 	        }
 
-	        getUrl = getUrl.substring(0, getUrl.length - 1);
-	        xmlHttp.open('GET', baseUrl + getUrl, async);
-	        xmlHttp.send(null);
-	      }
+	        if (method == 'POST') {
+	          xmlHttp.open('POST', baseUrl + url, async);
+	          xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	          xmlHttp.send(params);
+	        }
 
-	      if (method == 'POST') {
-	        xmlHttp.open('POST', baseUrl + url, async);
-	        xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	        xmlHttp.send(params);
-	      }
+	        xmlHttp.onreadystatechange = function () {
+	          if (xmlHttp.readyState === 4) {
+	            var res = JSON.parse(xmlHttp.responseText);
 
-	      xmlHttp.onreadystatechange = () => {
-	        if (xmlHttp.readyState === 4) {
-	          const res = JSON.parse(xmlHttp.responseText);
-
-	          if (xmlHttp.status === 200) {
-	            if (res) {
-	              resolve(res);
+	            if (xmlHttp.status === 200) {
+	              if (res) {
+	                resolve(res);
+	              } else {
+	                reject(res);
+	              }
 	            } else {
 	              reject(res);
 	            }
-	          } else {
-	            reject(res);
 	          }
-	        }
-	      };
-	    });
-	  }
+	        };
+	      });
+	    }
+	  }]);
 
-	}
+	  return HttpClient;
+	}();
 
 	// 后台地址【上线前需修改此处】
-	const baseUrl = 'http://localhost:6001';
+	var baseUrl = 'http://localhost:6001';
 
-	const httpClient = new HttpClient({
-	  baseUrl
+	var httpClient = new HttpClient({
+	  baseUrl: baseUrl
 	});
 
 	/**
@@ -623,44 +705,68 @@
 	 * @param {Function} success 
 	 */
 
-	const getByProjectIdentifier = async (projectIdentifier, successCallback) => {
-	  try {
-	    const result = await httpClient.fetch({
-	      method: 'GET',
-	      url: '/project/getByProjectIdentifier',
-	      params: {
-	        projectIdentifier: projectIdentifier
+	var getByProjectIdentifier = /*#__PURE__*/function () {
+	  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(projectIdentifier, successCallback) {
+	    var result, success, data;
+	    return regeneratorRuntime.wrap(function _callee$(_context) {
+	      while (1) {
+	        switch (_context.prev = _context.next) {
+	          case 0:
+	            _context.prev = 0;
+	            _context.next = 3;
+	            return httpClient.fetch({
+	              method: 'GET',
+	              url: '/project/getByProjectIdentifier',
+	              params: {
+	                projectIdentifier: projectIdentifier
+	              }
+	            });
+
+	          case 3:
+	            result = _context.sent;
+	            // console.log('result', result);
+	            success = result.success, data = result.data;
+
+	            if (success) {
+	              typeof successCallback === 'function' && successCallback(data);
+	            } else {
+	              console.error('[error]web-monitor-sdk: getByProjectIdentifier', result);
+	            }
+
+	            _context.next = 11;
+	            break;
+
+	          case 8:
+	            _context.prev = 8;
+	            _context.t0 = _context["catch"](0);
+	            console.error('[error]web-monitor-sdk: getByProjectIdentifier', _context.t0);
+
+	          case 11:
+	          case "end":
+	            return _context.stop();
+	        }
 	      }
-	    }); // console.log('result', result);
+	    }, _callee, null, [[0, 8]]);
+	  }));
 
-	    const {
-	      success,
-	      data
-	    } = result;
+	  return function getByProjectIdentifier(_x, _x2) {
+	    return _ref.apply(this, arguments);
+	  };
+	}();
 
-	    if (success) {
-	      typeof successCallback === 'function' && successCallback(data);
-	    } else {
-	      console.error('[error]web-monitor-sdk: getByProjectIdentifier', result);
-	    }
-	  } catch (e) {
-	    console.error('[error]web-monitor-sdk: getByProjectIdentifier', e);
-	  }
-	};
+	getParamsFromScript(function (projectIdentifier) {
+	  getByProjectIdentifier(projectIdentifier, function (res) {
+	    var projectIdentifier = res.projectIdentifier,
+	        activeFuncs = res.activeFuncs,
+	        isAutoUpload = res.isAutoUpload;
+	    var funcs = activeFuncs.length ? activeFuncs.split(',') : [];
 
-	getParamsFromScript(projectIdentifier => {
-	  getByProjectIdentifier(projectIdentifier, res => {
-	    const {
-	      projectIdentifier,
-	      activeFuncs,
-	      isAutoUpload
-	    } = res;
-	    const funcs = activeFuncs.length ? activeFuncs.split(',') : [];
+	    var checkEnabled = function checkEnabled(funcName) {
+	      return funcs.indexOf(funcName) > -1;
+	    };
 
-	    const checkEnabled = funcName => funcs.indexOf(funcName) > -1;
-
-	    const monitor = new webMonitorSdkCore_min();
-	    const config = {
+	    var monitor = new webMonitorSdkCore_min();
+	    var config = {
 	      projectIdentifier: projectIdentifier,
 	      captureJsError: checkEnabled('jsError'),
 	      captureResourceError: checkEnabled('ResourceLoadError'),
@@ -672,7 +778,7 @@
 	      // if true, monitor will create a buffer pool and save the concurrency info
 	      bufferCapacity: 10,
 	      // the capacity of buffer pool
-	      errorHandler: data => {
+	      errorHandler: function errorHandler(data) {
 	        // something to do with data
 	        console.log('[log]web-monitor-sdk', data);
 	      }

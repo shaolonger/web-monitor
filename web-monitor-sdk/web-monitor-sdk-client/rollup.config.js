@@ -1,7 +1,6 @@
 // rollup.config.js
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
-// import nodePolyfills from 'rollup-plugin-node-polyfills';
 import babel from '@rollup/plugin-babel';
 import {
     terser
@@ -21,7 +20,6 @@ export default {
     }],
     plugins: [
         commonjs(),
-        // nodePolyfills(),
         resolve(),
         babel({
             babelHelpers: 'bundled'
