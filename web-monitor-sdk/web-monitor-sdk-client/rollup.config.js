@@ -14,7 +14,7 @@ export default {
         name: 'webMonitorSdkClient'
     }, {
         file: 'release/web-monitor-sdk-client.min.js',
-        format: 'umd',
+        format: 'iife',
         name: 'webMonitorSdkClient',
         plugins: [terser()]
     }],
