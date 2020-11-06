@@ -5,7 +5,7 @@
   "main": "lib/web-monitor-sdk-core.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:umd": "rollup --config rollup.config.js"
+    "build": "rollup --config rollup.config.js"
   },
   "keywords": [
     "log",

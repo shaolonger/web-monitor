@@ -1887,7 +1887,7 @@
 	        var e;
 	        r(this, t), (e = document.createElement("script")).type = "text/javascript", e.src = "http://pv.sohu.com/cityjson?ie=utf-8", e.onload = function () {
 	          e.parentNode.removeChild(e), e = null;
-	        }, document.body.append(e);
+	        }, document.body.appendChild(e);
 	      }
 
 	      return o(t, [{

@@ -383,7 +383,7 @@
       script = null;
     };
 
-    document.body.append(script);
+    document.body.appendChild(script);
   };
 
   var getIpInfo = function getIpInfo() {

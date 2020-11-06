@@ -163,7 +163,7 @@ const setIpInfo = () => {
         script.parentNode.removeChild(script);
         script = null;
     };
-    document.body.append(script);
+    document.body.appendChild(script);
 };
 
 const getIpInfo = () => {
