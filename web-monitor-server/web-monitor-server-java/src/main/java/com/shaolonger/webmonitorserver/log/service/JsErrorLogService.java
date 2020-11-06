@@ -209,6 +209,7 @@ public class JsErrorLogService extends ServiceBase {
 
         // 获取请求参数
         String logType = jsErrorLogEntity.getLogType();
+        String cUuid = jsErrorLogEntity.getCUuid();
         Long userId = jsErrorLogEntity.getUserId();
         String userName = jsErrorLogEntity.getUserName();
         String pageUrl = jsErrorLogEntity.getPageUrl();
@@ -229,6 +230,7 @@ public class JsErrorLogService extends ServiceBase {
 
         // 保存实体
         jsErrorLogEntity.setLogType(logType);
+        jsErrorLogEntity.setCUuid(cUuid);
         jsErrorLogEntity.setUserId(userId);
         jsErrorLogEntity.setUserName(userName);
         jsErrorLogEntity.setPageUrl(pageUrl);
@@ -264,6 +266,7 @@ public class JsErrorLogService extends ServiceBase {
         // 获取请求参数
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
+        String cUuid = request.getParameter("cUuid");
         Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
         String userName = request.getParameter("userName");
         String pageUrl = request.getParameter("pageUrl");
@@ -283,11 +286,11 @@ public class JsErrorLogService extends ServiceBase {
         if (projectIdentifier == null || projectIdentifier.isEmpty()) {
             throw new Exception("projectIdentifier不能为空");
         }
+        if (cUuid == null || cUuid.isEmpty()) {
+            throw new Exception("cUuid不能为空");
+        }
         if (logType == null || logType.isEmpty()) {
             throw new Exception("logType不能为空");
-        }
-        if (userId == null || userId == 0) {
-            throw new Exception("userId无效");
         }
         if (pageUrl == null || pageUrl.isEmpty()) {
             throw new Exception("pageUrl不能为空");
@@ -306,6 +309,7 @@ public class JsErrorLogService extends ServiceBase {
         JsErrorLogEntity jsErrorLogEntity = new JsErrorLogEntity();
         jsErrorLogEntity.setProjectIdentifier(projectIdentifier);
         jsErrorLogEntity.setLogType(logType);
+        jsErrorLogEntity.setCUuid(cUuid);
         jsErrorLogEntity.setUserId(userId);
         jsErrorLogEntity.setUserName(userName);
         jsErrorLogEntity.setPageUrl(pageUrl);

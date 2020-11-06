@@ -37,9 +37,14 @@ public class HttpErrorLogEntity {
     private Date createTime;
 
     /**
+     * 客户端唯一标识码
+     */
+    @NotEmpty(message = "cUuid不能为空")
+    private String cUuid;
+
+    /**
      * 用户ID
      */
-    @NotNull(message = "userId不能为空")
     private Long userId;
 
     /**

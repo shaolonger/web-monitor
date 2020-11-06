@@ -245,6 +245,7 @@ public class HttpErrorLogService extends ServiceBase {
 
         // 获取请求参数
         String logType = httpErrorLogEntity.getLogType();
+        String cUuid = httpErrorLogEntity.getCUuid();
         Long userId = httpErrorLogEntity.getUserId();
         String userName = httpErrorLogEntity.getUserName();
         String pageUrl = httpErrorLogEntity.getPageUrl();
@@ -268,6 +269,7 @@ public class HttpErrorLogService extends ServiceBase {
 
         // 保存实体
         httpErrorLogEntity.setLogType(logType);
+        httpErrorLogEntity.setCUuid(cUuid);
         httpErrorLogEntity.setUserId(userId);
         httpErrorLogEntity.setUserName(userName);
         httpErrorLogEntity.setPageUrl(pageUrl);
@@ -306,6 +308,7 @@ public class HttpErrorLogService extends ServiceBase {
         // 获取请求参数
         String projectIdentifier = request.getParameter("projectIdentifier");
         String logType = request.getParameter("logType");
+        String cUuid = request.getParameter("cUuid");
         Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
         String userName = request.getParameter("userName");
         String pageUrl = request.getParameter("pageUrl");
@@ -328,11 +331,11 @@ public class HttpErrorLogService extends ServiceBase {
         if (projectIdentifier == null || projectIdentifier.isEmpty()) {
             throw new Exception("projectIdentifier不能为空");
         }
+        if (cUuid == null || cUuid.isEmpty()) {
+            throw new Exception("cUuid不能为空");
+        }
         if (logType == null || logType.isEmpty()) {
             throw new Exception("logType不能为空");
-        }
-        if (userId == null || userId == 0) {
-            throw new Exception("userId无效");
         }
         if (pageUrl == null || pageUrl.isEmpty()) {
             throw new Exception("pageUrl不能为空");
@@ -351,6 +354,7 @@ public class HttpErrorLogService extends ServiceBase {
         HttpErrorLogEntity httpErrorLogEntity = new HttpErrorLogEntity();
         httpErrorLogEntity.setProjectIdentifier(projectIdentifier);
         httpErrorLogEntity.setLogType(logType);
+        httpErrorLogEntity.setCUuid(cUuid);
         httpErrorLogEntity.setUserId(userId);
         httpErrorLogEntity.setUserName(userName);
         httpErrorLogEntity.setPageUrl(pageUrl);
