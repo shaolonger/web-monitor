@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "lms_resource_load_error_log")
 @Data
-public class ResourceLoadErrorLog {
+public class ResourceLoadErrorLogEntity {
     /**
      * 主键
      */

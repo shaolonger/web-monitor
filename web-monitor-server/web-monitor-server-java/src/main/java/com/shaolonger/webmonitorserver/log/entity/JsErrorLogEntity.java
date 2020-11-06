@@ -1,6 +1,8 @@
 package com.shaolonger.webmonitorserver.log.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -8,14 +10,15 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "lms_http_error_log")
+@Table(name = "lms_js_error_log")
 @Data
-public class HttpErrorLog {
+public class JsErrorLogEntity {
     /**
      * 主键
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     /**
@@ -99,37 +102,20 @@ public class HttpErrorLog {
     private String netType;
 
     /**
-     * Http类型
-     * 如"request"、"response"
+     * 异常类型
      */
-    private String httpType;
+    private String errorType;
 
     /**
-     * 完整的Http地址
+     * 异常信息
      */
-    @NotEmpty(message = "httpUrlComplete不能为空")
+    @NotEmpty(message = "errorMessage不能为空")
     @Column(columnDefinition = "TEXT")
-    private String httpUrlComplete;
+    private String errorMessage;
 
     /**
-     * 缩写的Http地址
+     * JS错误栈信息
      */
     @Column(columnDefinition = "TEXT")
-    private String httpUrlShort;
-
-    /**
-     * Http请求状态
-     */
-    @NotEmpty(message = "status不能为空")
-    private String status;
-
-    /**
-     * Http请求状态文字描述
-     */
-    private String statusText;
-
-    /**
-     * 响应时长
-     */
-    private String resTime;
+    private String errorStack;
 }

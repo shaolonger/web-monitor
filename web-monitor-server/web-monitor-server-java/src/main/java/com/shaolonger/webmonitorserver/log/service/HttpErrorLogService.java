@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.log.dao.HttpErrorLogDao;
-import com.shaolonger.webmonitorserver.log.entity.HttpErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.HttpErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.vo.StatisticRecordVO;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
@@ -117,10 +117,10 @@ public class HttpErrorLogService extends ServiceBase {
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<HttpErrorLog> page = this.findPageBySqlAndParam(HttpErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page<HttpErrorLogEntity> page = this.findPageBySqlAndParam(HttpErrorLogEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<HttpErrorLog> pageResultBase = new PageResultBase<>();
+        PageResultBase<HttpErrorLogEntity> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
@@ -236,57 +236,57 @@ public class HttpErrorLogService extends ServiceBase {
     /**
      * 新增-LogService通用
      *
-     * @param httpErrorLog httpErrorLog
+     * @param httpErrorLogEntity httpErrorLog
      * @return Object
      */
-    public boolean add(HttpErrorLog httpErrorLog) {
+    public boolean add(HttpErrorLogEntity httpErrorLogEntity) {
 
         logger.info("--------[HttpErrorLogService]保存开始--------");
 
         // 获取请求参数
-        String logType = httpErrorLog.getLogType();
-        Long userId = httpErrorLog.getUserId();
-        String userName = httpErrorLog.getUserName();
-        String pageUrl = httpErrorLog.getPageUrl();
-        String pageKey = httpErrorLog.getPageKey();
-        String deviceName = httpErrorLog.getDeviceName();
-        String os = httpErrorLog.getOs();
-        String osVersion = httpErrorLog.getOsVersion();
-        String browserName = httpErrorLog.getBrowserName();
-        String browserVersion = httpErrorLog.getBrowserVersion();
-        String ipAddress = httpErrorLog.getIpAddress();
-        String netType = httpErrorLog.getNetType();
-        String httpType = httpErrorLog.getHttpType();
-        String httpUrlComplete = httpErrorLog.getHttpUrlComplete();
-        String httpUrlShort = httpErrorLog.getHttpUrlShort();
-        String status = httpErrorLog.getStatus();
-        String statusText = httpErrorLog.getStatusText();
-        String resTime = httpErrorLog.getResTime();
+        String logType = httpErrorLogEntity.getLogType();
+        Long userId = httpErrorLogEntity.getUserId();
+        String userName = httpErrorLogEntity.getUserName();
+        String pageUrl = httpErrorLogEntity.getPageUrl();
+        String pageKey = httpErrorLogEntity.getPageKey();
+        String deviceName = httpErrorLogEntity.getDeviceName();
+        String os = httpErrorLogEntity.getOs();
+        String osVersion = httpErrorLogEntity.getOsVersion();
+        String browserName = httpErrorLogEntity.getBrowserName();
+        String browserVersion = httpErrorLogEntity.getBrowserVersion();
+        String ipAddress = httpErrorLogEntity.getIpAddress();
+        String netType = httpErrorLogEntity.getNetType();
+        String httpType = httpErrorLogEntity.getHttpType();
+        String httpUrlComplete = httpErrorLogEntity.getHttpUrlComplete();
+        String httpUrlShort = httpErrorLogEntity.getHttpUrlShort();
+        String status = httpErrorLogEntity.getStatus();
+        String statusText = httpErrorLogEntity.getStatusText();
+        String resTime = httpErrorLogEntity.getResTime();
 
         // 创建时间
         Date createTime = new Date();
 
         // 保存实体
-        httpErrorLog.setLogType(logType);
-        httpErrorLog.setUserId(userId);
-        httpErrorLog.setUserName(userName);
-        httpErrorLog.setPageUrl(pageUrl);
-        httpErrorLog.setPageKey(pageKey);
-        httpErrorLog.setDeviceName(deviceName);
-        httpErrorLog.setOs(os);
-        httpErrorLog.setOsVersion(osVersion);
-        httpErrorLog.setBrowserName(browserName);
-        httpErrorLog.setBrowserVersion(browserVersion);
-        httpErrorLog.setIpAddress(ipAddress);
-        httpErrorLog.setNetType(netType);
-        httpErrorLog.setHttpType(httpType);
-        httpErrorLog.setHttpUrlComplete(httpUrlComplete);
-        httpErrorLog.setHttpUrlShort(httpUrlShort);
-        httpErrorLog.setStatus(status);
-        httpErrorLog.setStatusText(statusText);
-        httpErrorLog.setResTime(resTime);
-        httpErrorLog.setCreateTime(createTime);
-        httpErrorLogDao.save(httpErrorLog);
+        httpErrorLogEntity.setLogType(logType);
+        httpErrorLogEntity.setUserId(userId);
+        httpErrorLogEntity.setUserName(userName);
+        httpErrorLogEntity.setPageUrl(pageUrl);
+        httpErrorLogEntity.setPageKey(pageKey);
+        httpErrorLogEntity.setDeviceName(deviceName);
+        httpErrorLogEntity.setOs(os);
+        httpErrorLogEntity.setOsVersion(osVersion);
+        httpErrorLogEntity.setBrowserName(browserName);
+        httpErrorLogEntity.setBrowserVersion(browserVersion);
+        httpErrorLogEntity.setIpAddress(ipAddress);
+        httpErrorLogEntity.setNetType(netType);
+        httpErrorLogEntity.setHttpType(httpType);
+        httpErrorLogEntity.setHttpUrlComplete(httpUrlComplete);
+        httpErrorLogEntity.setHttpUrlShort(httpUrlShort);
+        httpErrorLogEntity.setStatus(status);
+        httpErrorLogEntity.setStatusText(statusText);
+        httpErrorLogEntity.setResTime(resTime);
+        httpErrorLogEntity.setCreateTime(createTime);
+        httpErrorLogDao.save(httpErrorLogEntity);
 
         logger.info("--------[HttpErrorLogService]保存结束--------");
 
@@ -348,28 +348,28 @@ public class HttpErrorLogService extends ServiceBase {
         Date createTime = new Date();
 
         // 保存实体
-        HttpErrorLog httpErrorLog = new HttpErrorLog();
-        httpErrorLog.setProjectIdentifier(projectIdentifier);
-        httpErrorLog.setLogType(logType);
-        httpErrorLog.setUserId(userId);
-        httpErrorLog.setUserName(userName);
-        httpErrorLog.setPageUrl(pageUrl);
-        httpErrorLog.setPageKey(pageKey);
-        httpErrorLog.setDeviceName(deviceName);
-        httpErrorLog.setOs(os);
-        httpErrorLog.setOsVersion(osVersion);
-        httpErrorLog.setBrowserName(browserName);
-        httpErrorLog.setBrowserVersion(browserVersion);
-        httpErrorLog.setIpAddress(ipAddress);
-        httpErrorLog.setNetType(netType);
-        httpErrorLog.setHttpType(httpType);
-        httpErrorLog.setHttpUrlComplete(httpUrlComplete);
-        httpErrorLog.setHttpUrlShort(httpUrlShort);
-        httpErrorLog.setStatus(status);
-        httpErrorLog.setStatusText(statusText);
-        httpErrorLog.setResTime(resTime);
-        httpErrorLog.setCreateTime(createTime);
-        httpErrorLogDao.save(httpErrorLog);
+        HttpErrorLogEntity httpErrorLogEntity = new HttpErrorLogEntity();
+        httpErrorLogEntity.setProjectIdentifier(projectIdentifier);
+        httpErrorLogEntity.setLogType(logType);
+        httpErrorLogEntity.setUserId(userId);
+        httpErrorLogEntity.setUserName(userName);
+        httpErrorLogEntity.setPageUrl(pageUrl);
+        httpErrorLogEntity.setPageKey(pageKey);
+        httpErrorLogEntity.setDeviceName(deviceName);
+        httpErrorLogEntity.setOs(os);
+        httpErrorLogEntity.setOsVersion(osVersion);
+        httpErrorLogEntity.setBrowserName(browserName);
+        httpErrorLogEntity.setBrowserVersion(browserVersion);
+        httpErrorLogEntity.setIpAddress(ipAddress);
+        httpErrorLogEntity.setNetType(netType);
+        httpErrorLogEntity.setHttpType(httpType);
+        httpErrorLogEntity.setHttpUrlComplete(httpUrlComplete);
+        httpErrorLogEntity.setHttpUrlShort(httpUrlShort);
+        httpErrorLogEntity.setStatus(status);
+        httpErrorLogEntity.setStatusText(statusText);
+        httpErrorLogEntity.setResTime(resTime);
+        httpErrorLogEntity.setCreateTime(createTime);
+        httpErrorLogDao.save(httpErrorLogEntity);
 
         logger.info("--------[HttpErrorLogService]保存结束--------");
 

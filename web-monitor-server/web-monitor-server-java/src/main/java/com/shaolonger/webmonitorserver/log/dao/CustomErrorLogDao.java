@@ -1,6 +1,6 @@
 package com.shaolonger.webmonitorserver.log.dao;
 
-import com.shaolonger.webmonitorserver.log.entity.CustomErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.CustomErrorLogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface CustomErrorLogDao extends JpaRepository<CustomErrorLog, Long> {
+public interface CustomErrorLogDao extends JpaRepository<CustomErrorLogEntity, Long> {
 
     @Query(value = "select count(id) from lms_custom_error_log where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
     int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime);

@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.controller;
 
 import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
-import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.service.ResourceLoadErrorLogService;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +45,13 @@ public class ResourceLoadErrorLogController {
     /**
      * 新增
      *
-     * @param resourceLoadErrorLog resourceLoadErrorLog
+     * @param resourceLoadErrorLogEntity resourceLoadErrorLog
      * @param bindingResult        bindingResult
      * @return Object
      */
     @AuthIgnore
     @RequestMapping(value = "/resourceLoadErrorLog/add", method = RequestMethod.PUT)
-    public Object add(@Valid ResourceLoadErrorLog resourceLoadErrorLog, BindingResult bindingResult) {
+    public Object add(@Valid ResourceLoadErrorLogEntity resourceLoadErrorLogEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -59,7 +59,7 @@ public class ResourceLoadErrorLogController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.add(resourceLoadErrorLog));
+            return ResponseResultBase.getResponseResultBase(resourceLoadErrorLogService.add(resourceLoadErrorLogEntity));
         }
     }
 

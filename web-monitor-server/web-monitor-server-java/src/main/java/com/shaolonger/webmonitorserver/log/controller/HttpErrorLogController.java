@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.controller;
 
 import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
-import com.shaolonger.webmonitorserver.log.entity.HttpErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.HttpErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.service.HttpErrorLogService;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +45,13 @@ public class HttpErrorLogController {
     /**
      * 新增
      *
-     * @param httpErrorLog  httpErrorLog
+     * @param httpErrorLogEntity  httpErrorLog
      * @param bindingResult bindingResult
      * @return Object
      */
     @AuthIgnore
     @RequestMapping(value = "/httpErrorLog/add", method = RequestMethod.PUT)
-    public Object add(@Valid HttpErrorLog httpErrorLog, BindingResult bindingResult) {
+    public Object add(@Valid HttpErrorLogEntity httpErrorLogEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -59,7 +59,7 @@ public class HttpErrorLogController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(httpErrorLogService.add(httpErrorLog));
+            return ResponseResultBase.getResponseResultBase(httpErrorLogService.add(httpErrorLogEntity));
         }
     }
 

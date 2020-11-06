@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.controller;
 
 import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
-import com.shaolonger.webmonitorserver.log.entity.CustomErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.CustomErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.service.CustomErrorLogService;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +45,13 @@ public class CustomErrorLogController {
     /**
      * 新增
      *
-     * @param customErrorLog customErrorLog
+     * @param customErrorLogEntity customErrorLog
      * @param bindingResult  bindingResult
      * @return Object
      */
     @AuthIgnore
     @RequestMapping(value = "/customErrorLog/add", method = RequestMethod.PUT)
-    public Object add(@Valid CustomErrorLog customErrorLog, BindingResult bindingResult) {
+    public Object add(@Valid CustomErrorLogEntity customErrorLogEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -59,7 +59,7 @@ public class CustomErrorLogController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(customErrorLogService.add(customErrorLog));
+            return ResponseResultBase.getResponseResultBase(customErrorLogService.add(customErrorLogEntity));
         }
     }
 }

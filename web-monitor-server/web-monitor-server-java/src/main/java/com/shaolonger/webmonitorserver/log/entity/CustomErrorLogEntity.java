@@ -1,8 +1,6 @@
 package com.shaolonger.webmonitorserver.log.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -10,9 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "lms_js_error_log")
+@Table(name = "lms_custom_error_log")
 @Data
-public class JsErrorLog {
+public class CustomErrorLogEntity {
     /**
      * 主键
      */
@@ -104,6 +102,7 @@ public class JsErrorLog {
     /**
      * 异常类型
      */
+    @Column(columnDefinition = "TEXT")
     private String errorType;
 
     /**
@@ -112,10 +111,4 @@ public class JsErrorLog {
     @NotEmpty(message = "errorMessage不能为空")
     @Column(columnDefinition = "TEXT")
     private String errorMessage;
-
-    /**
-     * JS错误栈信息
-     */
-    @Column(columnDefinition = "TEXT")
-    private String errorStack;
 }

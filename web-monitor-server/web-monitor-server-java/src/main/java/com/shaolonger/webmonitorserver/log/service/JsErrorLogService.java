@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.log.dao.JsErrorLogDao;
-import com.shaolonger.webmonitorserver.log.entity.JsErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.JsErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.vo.StatisticRecordVO;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
@@ -99,10 +99,10 @@ public class JsErrorLogService extends ServiceBase {
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<JsErrorLog> page = this.findPageBySqlAndParam(JsErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page<JsErrorLogEntity> page = this.findPageBySqlAndParam(JsErrorLogEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<JsErrorLog> pageResultBase = new PageResultBase<>();
+        PageResultBase<JsErrorLogEntity> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
@@ -200,51 +200,51 @@ public class JsErrorLogService extends ServiceBase {
     /**
      * 新增
      *
-     * @param jsErrorLog jsErrorLog
+     * @param jsErrorLogEntity jsErrorLog
      * @return Object
      */
-    public boolean add(JsErrorLog jsErrorLog) {
+    public boolean add(JsErrorLogEntity jsErrorLogEntity) {
 
         logger.info("--------[JsErrorLogService]保存开始--------");
 
         // 获取请求参数
-        String logType = jsErrorLog.getLogType();
-        Long userId = jsErrorLog.getUserId();
-        String userName = jsErrorLog.getUserName();
-        String pageUrl = jsErrorLog.getPageUrl();
-        String pageKey = jsErrorLog.getPageKey();
-        String deviceName = jsErrorLog.getDeviceName();
-        String os = jsErrorLog.getOs();
-        String osVersion = jsErrorLog.getOsVersion();
-        String browserName = jsErrorLog.getBrowserName();
-        String browserVersion = jsErrorLog.getBrowserVersion();
-        String ipAddress = jsErrorLog.getIpAddress();
-        String netType = jsErrorLog.getNetType();
-        String errorType = jsErrorLog.getErrorType();
-        String errorMessage = jsErrorLog.getErrorMessage();
-        String errorStack = jsErrorLog.getErrorStack();
+        String logType = jsErrorLogEntity.getLogType();
+        Long userId = jsErrorLogEntity.getUserId();
+        String userName = jsErrorLogEntity.getUserName();
+        String pageUrl = jsErrorLogEntity.getPageUrl();
+        String pageKey = jsErrorLogEntity.getPageKey();
+        String deviceName = jsErrorLogEntity.getDeviceName();
+        String os = jsErrorLogEntity.getOs();
+        String osVersion = jsErrorLogEntity.getOsVersion();
+        String browserName = jsErrorLogEntity.getBrowserName();
+        String browserVersion = jsErrorLogEntity.getBrowserVersion();
+        String ipAddress = jsErrorLogEntity.getIpAddress();
+        String netType = jsErrorLogEntity.getNetType();
+        String errorType = jsErrorLogEntity.getErrorType();
+        String errorMessage = jsErrorLogEntity.getErrorMessage();
+        String errorStack = jsErrorLogEntity.getErrorStack();
 
         // 创建时间
         Date createTime = new Date();
 
         // 保存实体
-        jsErrorLog.setLogType(logType);
-        jsErrorLog.setUserId(userId);
-        jsErrorLog.setUserName(userName);
-        jsErrorLog.setPageUrl(pageUrl);
-        jsErrorLog.setPageKey(pageKey);
-        jsErrorLog.setDeviceName(deviceName);
-        jsErrorLog.setOs(os);
-        jsErrorLog.setOsVersion(osVersion);
-        jsErrorLog.setBrowserName(browserName);
-        jsErrorLog.setBrowserVersion(browserVersion);
-        jsErrorLog.setIpAddress(ipAddress);
-        jsErrorLog.setNetType(netType);
-        jsErrorLog.setErrorType(errorType);
-        jsErrorLog.setErrorMessage(errorMessage);
-        jsErrorLog.setErrorStack(errorStack);
-        jsErrorLog.setCreateTime(createTime);
-        jsErrorLogDao.save(jsErrorLog);
+        jsErrorLogEntity.setLogType(logType);
+        jsErrorLogEntity.setUserId(userId);
+        jsErrorLogEntity.setUserName(userName);
+        jsErrorLogEntity.setPageUrl(pageUrl);
+        jsErrorLogEntity.setPageKey(pageKey);
+        jsErrorLogEntity.setDeviceName(deviceName);
+        jsErrorLogEntity.setOs(os);
+        jsErrorLogEntity.setOsVersion(osVersion);
+        jsErrorLogEntity.setBrowserName(browserName);
+        jsErrorLogEntity.setBrowserVersion(browserVersion);
+        jsErrorLogEntity.setIpAddress(ipAddress);
+        jsErrorLogEntity.setNetType(netType);
+        jsErrorLogEntity.setErrorType(errorType);
+        jsErrorLogEntity.setErrorMessage(errorMessage);
+        jsErrorLogEntity.setErrorStack(errorStack);
+        jsErrorLogEntity.setCreateTime(createTime);
+        jsErrorLogDao.save(jsErrorLogEntity);
 
         logger.info("--------[JsErrorLogService]保存结束--------");
 
@@ -303,25 +303,25 @@ public class JsErrorLogService extends ServiceBase {
         Date createTime = new Date();
 
         // 保存实体
-        JsErrorLog jsErrorLog = new JsErrorLog();
-        jsErrorLog.setProjectIdentifier(projectIdentifier);
-        jsErrorLog.setLogType(logType);
-        jsErrorLog.setUserId(userId);
-        jsErrorLog.setUserName(userName);
-        jsErrorLog.setPageUrl(pageUrl);
-        jsErrorLog.setPageKey(pageKey);
-        jsErrorLog.setDeviceName(deviceName);
-        jsErrorLog.setOs(os);
-        jsErrorLog.setOsVersion(osVersion);
-        jsErrorLog.setBrowserName(browserName);
-        jsErrorLog.setBrowserVersion(browserVersion);
-        jsErrorLog.setIpAddress(ipAddress);
-        jsErrorLog.setNetType(netType);
-        jsErrorLog.setErrorType(errorType);
-        jsErrorLog.setErrorMessage(errorMessage);
-        jsErrorLog.setErrorStack(errorStack);
-        jsErrorLog.setCreateTime(createTime);
-        jsErrorLogDao.save(jsErrorLog);
+        JsErrorLogEntity jsErrorLogEntity = new JsErrorLogEntity();
+        jsErrorLogEntity.setProjectIdentifier(projectIdentifier);
+        jsErrorLogEntity.setLogType(logType);
+        jsErrorLogEntity.setUserId(userId);
+        jsErrorLogEntity.setUserName(userName);
+        jsErrorLogEntity.setPageUrl(pageUrl);
+        jsErrorLogEntity.setPageKey(pageKey);
+        jsErrorLogEntity.setDeviceName(deviceName);
+        jsErrorLogEntity.setOs(os);
+        jsErrorLogEntity.setOsVersion(osVersion);
+        jsErrorLogEntity.setBrowserName(browserName);
+        jsErrorLogEntity.setBrowserVersion(browserVersion);
+        jsErrorLogEntity.setIpAddress(ipAddress);
+        jsErrorLogEntity.setNetType(netType);
+        jsErrorLogEntity.setErrorType(errorType);
+        jsErrorLogEntity.setErrorMessage(errorMessage);
+        jsErrorLogEntity.setErrorStack(errorStack);
+        jsErrorLogEntity.setCreateTime(createTime);
+        jsErrorLogDao.save(jsErrorLogEntity);
 
         logger.info("--------[JsErrorLogService]保存结束--------");
 

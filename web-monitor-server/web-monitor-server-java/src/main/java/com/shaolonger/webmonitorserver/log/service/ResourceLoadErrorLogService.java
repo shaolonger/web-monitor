@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.log.dao.ResourceLoadErrorLogDao;
-import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.vo.StatisticRecordVO;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
@@ -108,10 +108,10 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<ResourceLoadErrorLog> page = this.findPageBySqlAndParam(ResourceLoadErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page<ResourceLoadErrorLogEntity> page = this.findPageBySqlAndParam(ResourceLoadErrorLogEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<ResourceLoadErrorLog> pageResultBase = new PageResultBase<>();
+        PageResultBase<ResourceLoadErrorLogEntity> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
@@ -216,51 +216,51 @@ public class ResourceLoadErrorLogService extends ServiceBase {
     /**
      * 新增
      *
-     * @param resourceLoadErrorLog resourceLoadErrorLog
+     * @param resourceLoadErrorLogEntity resourceLoadErrorLog
      * @return Object
      */
-    public boolean add(ResourceLoadErrorLog resourceLoadErrorLog) {
+    public boolean add(ResourceLoadErrorLogEntity resourceLoadErrorLogEntity) {
 
         logger.info("--------[resourceLoadErrorLogService]保存开始--------");
 
         // 获取请求参数
-        String logType = resourceLoadErrorLog.getLogType();
-        Long userId = resourceLoadErrorLog.getUserId();
-        String userName = resourceLoadErrorLog.getUserName();
-        String pageUrl = resourceLoadErrorLog.getPageUrl();
-        String pageKey = resourceLoadErrorLog.getPageKey();
-        String deviceName = resourceLoadErrorLog.getDeviceName();
-        String os = resourceLoadErrorLog.getOs();
-        String osVersion = resourceLoadErrorLog.getOsVersion();
-        String browserName = resourceLoadErrorLog.getBrowserName();
-        String browserVersion = resourceLoadErrorLog.getBrowserVersion();
-        String ipAddress = resourceLoadErrorLog.getIpAddress();
-        String netType = resourceLoadErrorLog.getNetType();
-        String resourceUrl = resourceLoadErrorLog.getResourceUrl();
-        String resourceType = resourceLoadErrorLog.getResourceType();
-        String status = resourceLoadErrorLog.getStatus();
+        String logType = resourceLoadErrorLogEntity.getLogType();
+        Long userId = resourceLoadErrorLogEntity.getUserId();
+        String userName = resourceLoadErrorLogEntity.getUserName();
+        String pageUrl = resourceLoadErrorLogEntity.getPageUrl();
+        String pageKey = resourceLoadErrorLogEntity.getPageKey();
+        String deviceName = resourceLoadErrorLogEntity.getDeviceName();
+        String os = resourceLoadErrorLogEntity.getOs();
+        String osVersion = resourceLoadErrorLogEntity.getOsVersion();
+        String browserName = resourceLoadErrorLogEntity.getBrowserName();
+        String browserVersion = resourceLoadErrorLogEntity.getBrowserVersion();
+        String ipAddress = resourceLoadErrorLogEntity.getIpAddress();
+        String netType = resourceLoadErrorLogEntity.getNetType();
+        String resourceUrl = resourceLoadErrorLogEntity.getResourceUrl();
+        String resourceType = resourceLoadErrorLogEntity.getResourceType();
+        String status = resourceLoadErrorLogEntity.getStatus();
 
         // 创建时间
         Date createTime = new Date();
 
         // 保存实体
-        resourceLoadErrorLog.setLogType(logType);
-        resourceLoadErrorLog.setUserId(userId);
-        resourceLoadErrorLog.setUserName(userName);
-        resourceLoadErrorLog.setPageUrl(pageUrl);
-        resourceLoadErrorLog.setPageKey(pageKey);
-        resourceLoadErrorLog.setDeviceName(deviceName);
-        resourceLoadErrorLog.setOs(os);
-        resourceLoadErrorLog.setOsVersion(osVersion);
-        resourceLoadErrorLog.setBrowserName(browserName);
-        resourceLoadErrorLog.setBrowserVersion(browserVersion);
-        resourceLoadErrorLog.setIpAddress(ipAddress);
-        resourceLoadErrorLog.setNetType(netType);
-        resourceLoadErrorLog.setResourceUrl(resourceUrl);
-        resourceLoadErrorLog.setResourceType(resourceType);
-        resourceLoadErrorLog.setStatus(status);
-        resourceLoadErrorLog.setCreateTime(createTime);
-        resourceLoadErrorLogDao.save(resourceLoadErrorLog);
+        resourceLoadErrorLogEntity.setLogType(logType);
+        resourceLoadErrorLogEntity.setUserId(userId);
+        resourceLoadErrorLogEntity.setUserName(userName);
+        resourceLoadErrorLogEntity.setPageUrl(pageUrl);
+        resourceLoadErrorLogEntity.setPageKey(pageKey);
+        resourceLoadErrorLogEntity.setDeviceName(deviceName);
+        resourceLoadErrorLogEntity.setOs(os);
+        resourceLoadErrorLogEntity.setOsVersion(osVersion);
+        resourceLoadErrorLogEntity.setBrowserName(browserName);
+        resourceLoadErrorLogEntity.setBrowserVersion(browserVersion);
+        resourceLoadErrorLogEntity.setIpAddress(ipAddress);
+        resourceLoadErrorLogEntity.setNetType(netType);
+        resourceLoadErrorLogEntity.setResourceUrl(resourceUrl);
+        resourceLoadErrorLogEntity.setResourceType(resourceType);
+        resourceLoadErrorLogEntity.setStatus(status);
+        resourceLoadErrorLogEntity.setCreateTime(createTime);
+        resourceLoadErrorLogDao.save(resourceLoadErrorLogEntity);
 
         logger.info("--------[resourceLoadErrorLogService]保存结束--------");
 
@@ -322,25 +322,25 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         }
 
         // 保存实体
-        ResourceLoadErrorLog resourceLoadErrorLog = new ResourceLoadErrorLog();
-        resourceLoadErrorLog.setProjectIdentifier(projectIdentifier);
-        resourceLoadErrorLog.setLogType(logType);
-        resourceLoadErrorLog.setUserId(userId);
-        resourceLoadErrorLog.setUserName(userName);
-        resourceLoadErrorLog.setPageUrl(pageUrl);
-        resourceLoadErrorLog.setPageKey(pageKey);
-        resourceLoadErrorLog.setDeviceName(deviceName);
-        resourceLoadErrorLog.setOs(os);
-        resourceLoadErrorLog.setOsVersion(osVersion);
-        resourceLoadErrorLog.setBrowserName(browserName);
-        resourceLoadErrorLog.setBrowserVersion(browserVersion);
-        resourceLoadErrorLog.setIpAddress(ipAddress);
-        resourceLoadErrorLog.setNetType(netType);
-        resourceLoadErrorLog.setResourceUrl(resourceUrl);
-        resourceLoadErrorLog.setResourceType(resourceType);
-        resourceLoadErrorLog.setStatus(status);
-        resourceLoadErrorLog.setCreateTime(createTime);
-        resourceLoadErrorLogDao.save(resourceLoadErrorLog);
+        ResourceLoadErrorLogEntity resourceLoadErrorLogEntity = new ResourceLoadErrorLogEntity();
+        resourceLoadErrorLogEntity.setProjectIdentifier(projectIdentifier);
+        resourceLoadErrorLogEntity.setLogType(logType);
+        resourceLoadErrorLogEntity.setUserId(userId);
+        resourceLoadErrorLogEntity.setUserName(userName);
+        resourceLoadErrorLogEntity.setPageUrl(pageUrl);
+        resourceLoadErrorLogEntity.setPageKey(pageKey);
+        resourceLoadErrorLogEntity.setDeviceName(deviceName);
+        resourceLoadErrorLogEntity.setOs(os);
+        resourceLoadErrorLogEntity.setOsVersion(osVersion);
+        resourceLoadErrorLogEntity.setBrowserName(browserName);
+        resourceLoadErrorLogEntity.setBrowserVersion(browserVersion);
+        resourceLoadErrorLogEntity.setIpAddress(ipAddress);
+        resourceLoadErrorLogEntity.setNetType(netType);
+        resourceLoadErrorLogEntity.setResourceUrl(resourceUrl);
+        resourceLoadErrorLogEntity.setResourceType(resourceType);
+        resourceLoadErrorLogEntity.setStatus(status);
+        resourceLoadErrorLogEntity.setCreateTime(createTime);
+        resourceLoadErrorLogDao.save(resourceLoadErrorLogEntity);
 
         logger.info("--------[resourceLoadErrorLogService]保存结束--------");
 

@@ -8,15 +8,14 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "lms_custom_error_log")
+@Table(name = "lms_http_error_log")
 @Data
-public class CustomErrorLog {
+public class HttpErrorLogEntity {
     /**
      * 主键
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     /**
@@ -100,15 +99,37 @@ public class CustomErrorLog {
     private String netType;
 
     /**
-     * 异常类型
+     * Http类型
+     * 如"request"、"response"
      */
-    @Column(columnDefinition = "TEXT")
-    private String errorType;
+    private String httpType;
 
     /**
-     * 异常信息
+     * 完整的Http地址
      */
-    @NotEmpty(message = "errorMessage不能为空")
+    @NotEmpty(message = "httpUrlComplete不能为空")
     @Column(columnDefinition = "TEXT")
-    private String errorMessage;
+    private String httpUrlComplete;
+
+    /**
+     * 缩写的Http地址
+     */
+    @Column(columnDefinition = "TEXT")
+    private String httpUrlShort;
+
+    /**
+     * Http请求状态
+     */
+    @NotEmpty(message = "status不能为空")
+    private String status;
+
+    /**
+     * Http请求状态文字描述
+     */
+    private String statusText;
+
+    /**
+     * 响应时长
+     */
+    private String resTime;
 }

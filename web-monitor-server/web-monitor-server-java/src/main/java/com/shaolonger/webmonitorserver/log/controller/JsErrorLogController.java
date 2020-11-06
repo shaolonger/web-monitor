@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.controller;
 
 import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
-import com.shaolonger.webmonitorserver.log.entity.JsErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.JsErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.service.JsErrorLogService;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +43,13 @@ public class JsErrorLogController {
     /**
      * 新增
      *
-     * @param jsErrorLog    jsErrorLog
+     * @param jsErrorLogEntity    jsErrorLog
      * @param bindingResult bindingResult
      * @return Object
      */
     @AuthIgnore
     @RequestMapping(value = "/jsErrorLog/add", method = RequestMethod.PUT)
-    public Object add(@Valid JsErrorLog jsErrorLog, BindingResult bindingResult) {
+    public Object add(@Valid JsErrorLogEntity jsErrorLogEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -57,7 +57,7 @@ public class JsErrorLogController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(jsErrorLogService.add(jsErrorLog));
+            return ResponseResultBase.getResponseResultBase(jsErrorLogService.add(jsErrorLogEntity));
         }
     }
 }

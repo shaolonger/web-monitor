@@ -1,12 +1,11 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
-import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import com.shaolonger.webmonitorserver.common.service.ServiceBase;
-import com.shaolonger.webmonitorserver.log.entity.CustomErrorLog;
-import com.shaolonger.webmonitorserver.log.entity.HttpErrorLog;
-import com.shaolonger.webmonitorserver.log.entity.JsErrorLog;
-import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.CustomErrorLogEntity;
+import com.shaolonger.webmonitorserver.log.entity.HttpErrorLogEntity;
+import com.shaolonger.webmonitorserver.log.entity.JsErrorLogEntity;
+import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLogEntity;
 import com.shaolonger.webmonitorserver.utils.DataConvertUtils;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +85,10 @@ public class LogService extends ServiceBase {
         if (tableName == null) throw new Exception("logType参数不合规");
 
         HashMap<String, Class> classMap = new HashMap<String, Class>() {{
-            put("jsErrorLog", JsErrorLog.class);
-            put("httpErrorLog", HttpErrorLog.class);
-            put("resourceLoadErrorLog", ResourceLoadErrorLog.class);
-            put("customErrorLog", CustomErrorLog.class);
+            put("jsErrorLog", JsErrorLogEntity.class);
+            put("httpErrorLog", HttpErrorLogEntity.class);
+            put("resourceLoadErrorLog", ResourceLoadErrorLogEntity.class);
+            put("customErrorLog", CustomErrorLogEntity.class);
         }};
         Class aClass = classMap.get(logType);
 
@@ -129,7 +128,7 @@ public class LogService extends ServiceBase {
         Page page = this.findPageBySqlAndParam(aClass, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<CustomErrorLog> pageResultBase = new PageResultBase<>();
+        PageResultBase<CustomErrorLogEntity> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);

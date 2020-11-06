@@ -1,7 +1,7 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.log.dao.CustomErrorLogDao;
-import com.shaolonger.webmonitorserver.log.entity.CustomErrorLog;
+import com.shaolonger.webmonitorserver.log.entity.CustomErrorLogEntity;
 import com.shaolonger.webmonitorserver.log.vo.StatisticRecordVO;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
@@ -102,10 +102,10 @@ public class CustomErrorLogService extends ServiceBase {
         }
         dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
-        Page<CustomErrorLog> page = this.findPageBySqlAndParam(CustomErrorLog.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
+        Page<CustomErrorLogEntity> page = this.findPageBySqlAndParam(CustomErrorLogEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<CustomErrorLog> pageResultBase = new PageResultBase<>();
+        PageResultBase<CustomErrorLogEntity> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
@@ -204,49 +204,49 @@ public class CustomErrorLogService extends ServiceBase {
     /**
      * 新增
      *
-     * @param customErrorLog customErrorLog
+     * @param customErrorLogEntity customErrorLog
      * @return Object
      */
-    public boolean add(CustomErrorLog customErrorLog) {
+    public boolean add(CustomErrorLogEntity customErrorLogEntity) {
 
         logger.info("--------[CustomErrorLogService]保存开始--------");
 
         // 获取请求参数
-        String logType = customErrorLog.getLogType();
-        Long userId = customErrorLog.getUserId();
-        String userName = customErrorLog.getUserName();
-        String pageUrl = customErrorLog.getPageUrl();
-        String pageKey = customErrorLog.getPageKey();
-        String deviceName = customErrorLog.getDeviceName();
-        String os = customErrorLog.getOs();
-        String osVersion = customErrorLog.getOsVersion();
-        String browserName = customErrorLog.getBrowserName();
-        String browserVersion = customErrorLog.getBrowserVersion();
-        String ipAddress = customErrorLog.getIpAddress();
-        String netType = customErrorLog.getNetType();
-        String errorType = customErrorLog.getErrorType();
-        String errorMessage = customErrorLog.getErrorMessage();
+        String logType = customErrorLogEntity.getLogType();
+        Long userId = customErrorLogEntity.getUserId();
+        String userName = customErrorLogEntity.getUserName();
+        String pageUrl = customErrorLogEntity.getPageUrl();
+        String pageKey = customErrorLogEntity.getPageKey();
+        String deviceName = customErrorLogEntity.getDeviceName();
+        String os = customErrorLogEntity.getOs();
+        String osVersion = customErrorLogEntity.getOsVersion();
+        String browserName = customErrorLogEntity.getBrowserName();
+        String browserVersion = customErrorLogEntity.getBrowserVersion();
+        String ipAddress = customErrorLogEntity.getIpAddress();
+        String netType = customErrorLogEntity.getNetType();
+        String errorType = customErrorLogEntity.getErrorType();
+        String errorMessage = customErrorLogEntity.getErrorMessage();
 
         // 创建时间
         Date createTime = new Date();
 
         // 保存实体
-        customErrorLog.setLogType(logType);
-        customErrorLog.setUserId(userId);
-        customErrorLog.setUserName(userName);
-        customErrorLog.setPageUrl(pageUrl);
-        customErrorLog.setPageKey(pageKey);
-        customErrorLog.setDeviceName(deviceName);
-        customErrorLog.setOs(os);
-        customErrorLog.setOsVersion(osVersion);
-        customErrorLog.setBrowserName(browserName);
-        customErrorLog.setBrowserVersion(browserVersion);
-        customErrorLog.setIpAddress(ipAddress);
-        customErrorLog.setNetType(netType);
-        customErrorLog.setErrorType(errorType);
-        customErrorLog.setErrorMessage(errorMessage);
-        customErrorLog.setCreateTime(createTime);
-        customErrorLogDao.save(customErrorLog);
+        customErrorLogEntity.setLogType(logType);
+        customErrorLogEntity.setUserId(userId);
+        customErrorLogEntity.setUserName(userName);
+        customErrorLogEntity.setPageUrl(pageUrl);
+        customErrorLogEntity.setPageKey(pageKey);
+        customErrorLogEntity.setDeviceName(deviceName);
+        customErrorLogEntity.setOs(os);
+        customErrorLogEntity.setOsVersion(osVersion);
+        customErrorLogEntity.setBrowserName(browserName);
+        customErrorLogEntity.setBrowserVersion(browserVersion);
+        customErrorLogEntity.setIpAddress(ipAddress);
+        customErrorLogEntity.setNetType(netType);
+        customErrorLogEntity.setErrorType(errorType);
+        customErrorLogEntity.setErrorMessage(errorMessage);
+        customErrorLogEntity.setCreateTime(createTime);
+        customErrorLogDao.save(customErrorLogEntity);
 
         logger.info("--------[CustomErrorLogService]保存结束--------");
 
@@ -301,24 +301,24 @@ public class CustomErrorLogService extends ServiceBase {
         }
 
         // 保存实体
-        CustomErrorLog customErrorLog = new CustomErrorLog();
-        customErrorLog.setProjectIdentifier(projectIdentifier);
-        customErrorLog.setLogType(logType);
-        customErrorLog.setUserId(userId);
-        customErrorLog.setUserName(userName);
-        customErrorLog.setPageUrl(pageUrl);
-        customErrorLog.setPageKey(pageKey);
-        customErrorLog.setDeviceName(deviceName);
-        customErrorLog.setOs(os);
-        customErrorLog.setOsVersion(osVersion);
-        customErrorLog.setBrowserName(browserName);
-        customErrorLog.setBrowserVersion(browserVersion);
-        customErrorLog.setIpAddress(ipAddress);
-        customErrorLog.setNetType(netType);
-        customErrorLog.setErrorType(errorType);
-        customErrorLog.setErrorMessage(errorMessage);
-        customErrorLog.setCreateTime(createTime);
-        customErrorLogDao.save(customErrorLog);
+        CustomErrorLogEntity customErrorLogEntity = new CustomErrorLogEntity();
+        customErrorLogEntity.setProjectIdentifier(projectIdentifier);
+        customErrorLogEntity.setLogType(logType);
+        customErrorLogEntity.setUserId(userId);
+        customErrorLogEntity.setUserName(userName);
+        customErrorLogEntity.setPageUrl(pageUrl);
+        customErrorLogEntity.setPageKey(pageKey);
+        customErrorLogEntity.setDeviceName(deviceName);
+        customErrorLogEntity.setOs(os);
+        customErrorLogEntity.setOsVersion(osVersion);
+        customErrorLogEntity.setBrowserName(browserName);
+        customErrorLogEntity.setBrowserVersion(browserVersion);
+        customErrorLogEntity.setIpAddress(ipAddress);
+        customErrorLogEntity.setNetType(netType);
+        customErrorLogEntity.setErrorType(errorType);
+        customErrorLogEntity.setErrorMessage(errorMessage);
+        customErrorLogEntity.setCreateTime(createTime);
+        customErrorLogDao.save(customErrorLogEntity);
 
         logger.info("--------[CustomErrorLogService]保存结束--------");
 
