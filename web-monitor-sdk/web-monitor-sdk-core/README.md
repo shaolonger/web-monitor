@@ -36,7 +36,7 @@ var config = {
     captureResourceError: true,
     captureAjaxError: true,
     captureConsoleError: false,
-    isAutoHandle: true, // if true, monitor will call errorHandler automatically
+    isAutoUpload: true, // if true, monitor will call errorHandler automatically
     isEnableBuffer: false, // if true, monitor will create a buffer pool and save the concurrency info
     bufferCapacity: 10, // the capacity of buffer pool
     errorHandler: function (data) {
@@ -48,8 +48,8 @@ monitor.init(config);
 
 3.(optional)switch errorHandler automation
 ```javascript
-monitor.setIsAutoHandle(false); // stop
-monitor.setIsAutoHandle(true); // restart
+monitor.setIsAutoUpload(false); // stop
+monitor.setIsAutoUpload(true); // restart
 ```
 
 ## License

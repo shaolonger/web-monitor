@@ -111,7 +111,7 @@ class WebMonitorSdkCore {
             if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
             } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
             }
         };
     }
@@ -139,7 +139,7 @@ class WebMonitorSdkCore {
             if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
             } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
             }
         }
     }
@@ -175,7 +175,7 @@ class WebMonitorSdkCore {
             if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
             } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
             }
         }, true);
     }
@@ -206,7 +206,7 @@ class WebMonitorSdkCore {
                             if (config.isEnableBuffer) {
                                 __this.bufferPool.push(errorInfo);
                             } else {
-                                config.isAutoHandle && config.errorHandler(errorInfo);
+                                config.isAutoUpload && config.errorHandler(errorInfo);
                             }
                         }
                         return res;
@@ -225,7 +225,7 @@ class WebMonitorSdkCore {
                         if (config.isEnableBuffer) {
                             __this.bufferPool.push(errorInfo);
                         } else {
-                            config.isAutoHandle && config.errorHandler(errorInfo);
+                            config.isAutoUpload && config.errorHandler(errorInfo);
                         }
                     })
             }
@@ -250,7 +250,7 @@ class WebMonitorSdkCore {
                     if (config.isEnableBuffer) {
                         __this.bufferPool.push(errorInfo);
                     } else {
-                        config.isAutoHandle && config.errorHandler(errorInfo);
+                        config.isAutoUpload && config.errorHandler(errorInfo);
                     }
                 }
             }
@@ -299,18 +299,18 @@ class WebMonitorSdkCore {
             if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
             } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
             }
             return oldConsoleError.apply(window.console, arguments);
         };
     }
 
     /**
-     * Switch isAutoHandle
-     * @param {Boolean} isAutoHandle 
+     * Switch isAutoUpload
+     * @param {Boolean} isAutoUpload 
      */
-    setIsAutoHandle(isAutoHandle) {
-        this.config.isAutoHandle = !!isAutoHandle;
+    setIsAutoUpload(isAutoUpload) {
+        this.config.isAutoUpload = !!isAutoUpload;
     }
 };
 

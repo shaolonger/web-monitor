@@ -152,7 +152,7 @@
 	      captureResourceError: !0,
 	      captureAjaxError: !0,
 	      captureConsoleError: !1,
-	      isAutoHandle: !0
+	      isAutoUpload: !0
 	    },
 	        E = function (e) {
 	      !function (e, r) {
@@ -350,7 +350,7 @@
 	                u = "";
 	            s && s instanceof Error ? (a = s.name || "", c = s.message || t || "", u = s.stack || "") : (a = "Others", c = t || "", u = "");
 	            var f = R(e.projectIdentifier, a, c, u);
-	            e.isEnableBuffer ? r.bufferPool.push(f) : e.isAutoHandle && e.errorHandler(f);
+	            e.isEnableBuffer ? r.bufferPool.push(f) : e.isAutoUpload && e.errorHandler(f);
 	          };
 	        }
 	      }, {
@@ -363,7 +363,7 @@
 	                i = "";
 	            "object" === e(o.reason) ? (n = o.reason.message, i = o.reason.stack) : (n = o.reason, i = "");
 	            var s = R(r.projectIdentifier, "UncaughtInPromiseError", n, i);
-	            r.isEnableBuffer ? t.bufferPool.push(s) : r.isAutoHandle && r.errorHandler(s);
+	            r.isEnableBuffer ? t.bufferPool.push(s) : r.isAutoUpload && r.errorHandler(s);
 	          };
 	        }
 	      }, {
@@ -385,7 +385,7 @@
 	                status: "0",
 	                level: l
 	              });
-	              e.isEnableBuffer ? r.bufferPool.push(a) : e.isAutoHandle && e.errorHandler(a);
+	              e.isEnableBuffer ? r.bufferPool.push(a) : e.isAutoUpload && e.errorHandler(a);
 	            }
 	          }, !0);
 	        }
@@ -410,7 +410,7 @@
 	                    statusText: t,
 	                    level: l
 	                  });
-	                  e.isEnableBuffer ? r.bufferPool.push(n) : e.isAutoHandle && e.errorHandler(n);
+	                  e.isEnableBuffer ? r.bufferPool.push(n) : e.isAutoUpload && e.errorHandler(n);
 	                }
 
 	                return t;
@@ -424,7 +424,7 @@
 	                  statusText: t.stack,
 	                  level: l
 	                });
-	                e.isEnableBuffer ? r.bufferPool.push(n) : e.isAutoHandle && e.errorHandler(n);
+	                e.isEnableBuffer ? r.bufferPool.push(n) : e.isAutoUpload && e.errorHandler(n);
 	              });
 	            };
 	          }
@@ -444,7 +444,7 @@
 	                  statusText: t.target.statusText,
 	                  level: l
 	                });
-	                e.isEnableBuffer ? r.bufferPool.push(o) : e.isAutoHandle && e.errorHandler(o);
+	                e.isEnableBuffer ? r.bufferPool.push(o) : e.isAutoUpload && e.errorHandler(o);
 	              }
 	            };
 
@@ -483,14 +483,14 @@
 	                errorMessage: n,
 	                errorStack: i
 	              });
-	              return e.isEnableBuffer ? t.bufferPool.push(a) : e.isAutoHandle && e.errorHandler(a), r.apply(window.console, arguments);
+	              return e.isEnableBuffer ? t.bufferPool.push(a) : e.isAutoUpload && e.errorHandler(a), r.apply(window.console, arguments);
 	            };
 	          }
 	        }
 	      }, {
-	        key: "setIsAutoHandle",
+	        key: "setIsAutoUpload",
 	        value: function (e) {
-	          this.config.isAutoHandle = !!e;
+	          this.config.isAutoUpload = !!e;
 	        }
 	      }]), t;
 	    }();
@@ -665,7 +665,7 @@
 	      captureResourceError: checkEnabled('ResourceLoadError'),
 	      captureAjaxError: checkEnabled('httpError'),
 	      captureConsoleError: checkEnabled('customError'),
-	      isAutoHandle: true,
+	      isAutoUpload: true,
 	      // if true, monitor will call errorHandler automatically
 	      isEnableBuffer: false,
 	      // if true, monitor will create a buffer pool and save the concurrency info

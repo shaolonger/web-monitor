@@ -399,7 +399,7 @@
     captureResourceError: true,
     captureAjaxError: true,
     captureConsoleError: false,
-    isAutoHandle: true // If true, WebMonitorSdkCore will automatically call callback function
+    isAutoUpload: true // If true, WebMonitorSdkCore will automatically call callback function
 
   };
 
@@ -644,7 +644,7 @@
           if (config.isEnableBuffer) {
             __this.bufferPool.push(errorInfo);
           } else {
-            config.isAutoHandle && config.errorHandler(errorInfo);
+            config.isAutoUpload && config.errorHandler(errorInfo);
           }
         };
       }
@@ -676,7 +676,7 @@
           if (config.isEnableBuffer) {
             __this.bufferPool.push(errorInfo);
           } else {
-            config.isAutoHandle && config.errorHandler(errorInfo);
+            config.isAutoUpload && config.errorHandler(errorInfo);
           }
         };
       }
@@ -718,7 +718,7 @@
           if (config.isEnableBuffer) {
             __this.bufferPool.push(errorInfo);
           } else {
-            config.isAutoHandle && config.errorHandler(errorInfo);
+            config.isAutoUpload && config.errorHandler(errorInfo);
           }
         }, true);
       }
@@ -753,7 +753,7 @@
                 if (config.isEnableBuffer) {
                   __this.bufferPool.push(errorInfo);
                 } else {
-                  config.isAutoHandle && config.errorHandler(errorInfo);
+                  config.isAutoUpload && config.errorHandler(errorInfo);
                 }
               }
 
@@ -772,7 +772,7 @@
               if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
               } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
               }
             });
           };
@@ -799,7 +799,7 @@
               if (config.isEnableBuffer) {
                 __this.bufferPool.push(errorInfo);
               } else {
-                config.isAutoHandle && config.errorHandler(errorInfo);
+                config.isAutoUpload && config.errorHandler(errorInfo);
               }
             }
           };
@@ -863,21 +863,21 @@
           if (config.isEnableBuffer) {
             __this.bufferPool.push(errorInfo);
           } else {
-            config.isAutoHandle && config.errorHandler(errorInfo);
+            config.isAutoUpload && config.errorHandler(errorInfo);
           }
 
           return oldConsoleError.apply(window.console, arguments);
         };
       }
       /**
-       * Switch isAutoHandle
-       * @param {Boolean} isAutoHandle 
+       * Switch isAutoUpload
+       * @param {Boolean} isAutoUpload 
        */
 
     }, {
-      key: "setIsAutoHandle",
-      value: function setIsAutoHandle(isAutoHandle) {
-        this.config.isAutoHandle = !!isAutoHandle;
+      key: "setIsAutoUpload",
+      value: function setIsAutoUpload(isAutoUpload) {
+        this.config.isAutoUpload = !!isAutoUpload;
       }
     }]);
 

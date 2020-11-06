@@ -25,7 +25,7 @@ getParamsFromScript(projectIdentifier => {
             captureResourceError: checkEnabled('ResourceLoadError'),
             captureAjaxError: checkEnabled('httpError'),
             captureConsoleError: checkEnabled('customError'),
-            isAutoHandle: true, // if true, monitor will call errorHandler automatically
+            isAutoUpload: true, // if true, monitor will call errorHandler automatically
             isEnableBuffer: false, // if true, monitor will create a buffer pool and save the concurrency info
             bufferCapacity: 10, // the capacity of buffer pool
             errorHandler: (data) => {
