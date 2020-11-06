@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/6 22:02:03                           */
+/* Created on:     2020/11/6 19:19:19                           */
 /*==============================================================*/
 
 
@@ -29,8 +29,9 @@ create table lms_custom_error_log
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
-   user_id              bigint not null comment '用户ID',
-   user_name            varchar(64) default "" comment '用户名',
+   c_uuid               char(36) not null default "" comment '客户端唯一识别码，全称client uuid',
+   user_id              bigint comment '业务用户ID',
+   user_name            varchar(64) default "" comment '业务用户名',
    page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
@@ -58,8 +59,9 @@ create table lms_http_error_log
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
-   user_id              bigint not null comment '用户ID',
-   user_name            varchar(64) default "" comment '用户名',
+   c_uuid               char(36) not null default "" comment '客户端唯一识别码，全称client uuid',
+   user_id              bigint comment '业务用户ID',
+   user_name            varchar(64) default "" comment '业务用户名',
    page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
@@ -90,8 +92,9 @@ create table lms_js_error_log
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
-   user_id              bigint not null comment '关联的用户ID',
-   user_name            varchar(64) default "" comment '用户名',
+   c_uuid               char(36) not null default "" comment '客户端唯一识别码，全称client uuid',
+   user_id              bigint comment '业务用户ID',
+   user_name            varchar(64) default "" comment '业务用户名',
    page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
@@ -119,8 +122,9 @@ create table lms_resource_load_error_log
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
-   user_id              bigint not null comment '用户ID',
-   user_name            varchar(64) default "" comment '用户名',
+   c_uuid               char(36) not null default "" comment '客户端唯一识别码，全称client uuid',
+   user_id              bigint comment '业务用户ID',
+   user_name            varchar(64) default "" comment '业务用户名',
    page_url             text comment '页面URL',
    page_key             varchar(50) default "" comment '页面关键字',
    device_name          varchar(100) default "" comment '设备名',
