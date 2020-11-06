@@ -276,10 +276,10 @@ public class StatisticService {
 
                 // 计算uv，影响的用户数
                 if (indicatorListArr.contains("uv")) {
-                    HashSet<Long> tempSet = new HashSet<>();
+                    HashSet<String> tempSet = new HashSet<>();
                     list.forEach(item -> {
-                        BigInteger userId = (BigInteger) item.get("c_uuid");
-                        tempSet.add(userId.longValue());
+                        String cUuid = (String) item.get("c_uuid");
+                        tempSet.add(cUuid);
                     });
                     int uv = tempSet.size();
                     dataMap.put("uv", uv);
