@@ -5,6 +5,9 @@ import {
 import {
     getByProjectIdentifier
 } from './service/projectService';
+import {
+    uploadLog
+} from './service/monitorService';
 
 // 从script标签中获取项目信息
 getParamsFromScript(projectIdentifier => {
@@ -31,7 +34,8 @@ getParamsFromScript(projectIdentifier => {
             bufferCapacity: 10, // the capacity of buffer pool
             errorHandler: (data) => {
                 // something to do with data
-                console.log('[log]web-monitor-sdk', data);
+                // console.log('[log]web-monitor-sdk', data);
+                uploadLog(data);
             }
         };
         monitor.init(config);

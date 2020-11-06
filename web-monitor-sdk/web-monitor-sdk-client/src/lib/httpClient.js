@@ -63,6 +63,10 @@ class HttpClient {
             };
         })
     }
+
+    uploadLog(url) {
+        (new Image()).src = url;
+    }
 }
 
 export default HttpClient;
