@@ -268,6 +268,86 @@ public class ResourceLoadErrorLogService extends ServiceBase {
     }
 
     /**
+     * 新增-LogService通用
+     *
+     * @param request request
+     * @return Object
+     */
+    public boolean add(HttpServletRequest request) throws Exception {
+
+        logger.info("--------[resourceLoadErrorLogService]保存开始--------");
+
+        // 获取请求参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String logType = request.getParameter("logType");
+        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String pageKey = request.getParameter("pageKey");
+        String deviceName = request.getParameter("deviceName");
+        String os = request.getParameter("os");
+        String osVersion = request.getParameter("osVersion");
+        String browserName = request.getParameter("browserName");
+        String browserVersion = request.getParameter("browserVersion");
+        String ipAddress = request.getParameter("ipAddress");
+        String netType = request.getParameter("netType");
+        String resourceUrl = request.getParameter("resourceUrl");
+        String resourceType = request.getParameter("resourceType");
+        String status = request.getParameter("status");
+
+        // 创建时间
+        Date createTime = new Date();
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+            throw new Exception("projectIdentifier不能为空");
+        }
+        if (logType == null || logType.isEmpty()) {
+            throw new Exception("logType不能为空");
+        }
+        if (userId == null || userId == 0) {
+            throw new Exception("userId无效");
+        }
+        if (pageUrl == null || pageUrl.isEmpty()) {
+            throw new Exception("pageUrl不能为空");
+        }
+        if (resourceUrl == null || resourceUrl.isEmpty()) {
+            throw new Exception("resourceUrl不能为空");
+        }
+        if (resourceType == null || resourceType.isEmpty()) {
+            throw new Exception("resourceType不能为空");
+        }
+        if (status == null || status.isEmpty()) {
+            throw new Exception("status不能为空");
+        }
+
+        // 保存实体
+        ResourceLoadErrorLog resourceLoadErrorLog = new ResourceLoadErrorLog();
+        resourceLoadErrorLog.setProjectIdentifier(projectIdentifier);
+        resourceLoadErrorLog.setLogType(logType);
+        resourceLoadErrorLog.setUserId(userId);
+        resourceLoadErrorLog.setUserName(userName);
+        resourceLoadErrorLog.setPageUrl(pageUrl);
+        resourceLoadErrorLog.setPageKey(pageKey);
+        resourceLoadErrorLog.setDeviceName(deviceName);
+        resourceLoadErrorLog.setOs(os);
+        resourceLoadErrorLog.setOsVersion(osVersion);
+        resourceLoadErrorLog.setBrowserName(browserName);
+        resourceLoadErrorLog.setBrowserVersion(browserVersion);
+        resourceLoadErrorLog.setIpAddress(ipAddress);
+        resourceLoadErrorLog.setNetType(netType);
+        resourceLoadErrorLog.setResourceUrl(resourceUrl);
+        resourceLoadErrorLog.setResourceType(resourceType);
+        resourceLoadErrorLog.setStatus(status);
+        resourceLoadErrorLog.setCreateTime(createTime);
+        resourceLoadErrorLogDao.save(resourceLoadErrorLog);
+
+        logger.info("--------[resourceLoadErrorLogService]保存结束--------");
+
+        return true;
+    }
+
+    /**
      * 查询某个时间段内的日志总数
      *
      * @param startTime 开始日期

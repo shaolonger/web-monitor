@@ -1,6 +1,7 @@
 package com.shaolonger.webmonitorserver.log.service;
 
 import com.shaolonger.webmonitorserver.common.api.PageResultBase;
+import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import com.shaolonger.webmonitorserver.common.service.ServiceBase;
 import com.shaolonger.webmonitorserver.log.entity.CustomErrorLog;
 import com.shaolonger.webmonitorserver.log.entity.HttpErrorLog;
@@ -8,6 +9,7 @@ import com.shaolonger.webmonitorserver.log.entity.JsErrorLog;
 import com.shaolonger.webmonitorserver.log.entity.ResourceLoadErrorLog;
 import com.shaolonger.webmonitorserver.utils.DataConvertUtils;
 import com.shaolonger.webmonitorserver.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,38 @@ import java.util.*;
 
 @Service
 public class LogService extends ServiceBase {
+
+    @Autowired
+    JsErrorLogService jsErrorLogService;
+    @Autowired
+    HttpErrorLogService httpErrorLogService;
+    @Autowired
+    ResourceLoadErrorLogService resourceLoadErrorLogService;
+    @Autowired
+    CustomErrorLogService customErrorLogService;
+
+    /**
+     * 打点日志上传
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object add(HttpServletRequest request) throws Exception {
+        String logType = request.getParameter("logType");
+        if (logType == null || logType.isEmpty()) throw new Exception("logType不能为空");
+        switch (logType) {
+            case "JS_ERROR":
+                return jsErrorLogService.add(request);
+            case "HTTP_ERROR":
+                return httpErrorLogService.add(request);
+            case "RESOURCE_LOAD_ERROR":
+                return resourceLoadErrorLogService.add(request);
+            case "CUSTOM_ERROR":
+                return customErrorLogService.add(request);
+            default:
+                throw new Exception("logType无效");
+        }
+    }
 
     /**
      * 高级查询-多条件

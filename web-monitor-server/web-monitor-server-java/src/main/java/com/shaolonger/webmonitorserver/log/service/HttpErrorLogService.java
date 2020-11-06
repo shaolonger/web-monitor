@@ -234,7 +234,7 @@ public class HttpErrorLogService extends ServiceBase {
     }
 
     /**
-     * 新增
+     * 新增-LogService通用
      *
      * @param httpErrorLog httpErrorLog
      * @return Object
@@ -267,6 +267,89 @@ public class HttpErrorLogService extends ServiceBase {
         Date createTime = new Date();
 
         // 保存实体
+        httpErrorLog.setLogType(logType);
+        httpErrorLog.setUserId(userId);
+        httpErrorLog.setUserName(userName);
+        httpErrorLog.setPageUrl(pageUrl);
+        httpErrorLog.setPageKey(pageKey);
+        httpErrorLog.setDeviceName(deviceName);
+        httpErrorLog.setOs(os);
+        httpErrorLog.setOsVersion(osVersion);
+        httpErrorLog.setBrowserName(browserName);
+        httpErrorLog.setBrowserVersion(browserVersion);
+        httpErrorLog.setIpAddress(ipAddress);
+        httpErrorLog.setNetType(netType);
+        httpErrorLog.setHttpType(httpType);
+        httpErrorLog.setHttpUrlComplete(httpUrlComplete);
+        httpErrorLog.setHttpUrlShort(httpUrlShort);
+        httpErrorLog.setStatus(status);
+        httpErrorLog.setStatusText(statusText);
+        httpErrorLog.setResTime(resTime);
+        httpErrorLog.setCreateTime(createTime);
+        httpErrorLogDao.save(httpErrorLog);
+
+        logger.info("--------[HttpErrorLogService]保存结束--------");
+
+        return true;
+    }
+
+    /**
+     * 新增
+     *
+     * @param request request
+     * @return Object
+     */
+    public boolean add(HttpServletRequest request) throws Exception {
+
+        logger.info("--------[HttpErrorLogService]保存开始--------");
+
+        // 获取请求参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String logType = request.getParameter("logType");
+        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String pageKey = request.getParameter("pageKey");
+        String deviceName = request.getParameter("deviceName");
+        String os = request.getParameter("os");
+        String osVersion = request.getParameter("osVersion");
+        String browserName = request.getParameter("browserName");
+        String browserVersion = request.getParameter("browserVersion");
+        String ipAddress = request.getParameter("ipAddress");
+        String netType = request.getParameter("netType");
+        String httpType = request.getParameter("httpType");
+        String httpUrlComplete = request.getParameter("httpUrlComplete");
+        String httpUrlShort = request.getParameter("httpUrlShort");
+        String status = request.getParameter("status");
+        String statusText = request.getParameter("statusText");
+        String resTime = request.getParameter("resTime");
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+            throw new Exception("projectIdentifier不能为空");
+        }
+        if (logType == null || logType.isEmpty()) {
+            throw new Exception("logType不能为空");
+        }
+        if (userId == null || userId == 0) {
+            throw new Exception("userId无效");
+        }
+        if (pageUrl == null || pageUrl.isEmpty()) {
+            throw new Exception("pageUrl不能为空");
+        }
+        if (httpUrlComplete == null || httpUrlComplete.isEmpty()) {
+            throw new Exception("httpUrlComplete不能为空");
+        }
+        if (status == null || status.isEmpty()) {
+            throw new Exception("status不能为空");
+        }
+
+        // 创建时间
+        Date createTime = new Date();
+
+        // 保存实体
+        HttpErrorLog httpErrorLog = new HttpErrorLog();
+        httpErrorLog.setProjectIdentifier(projectIdentifier);
         httpErrorLog.setLogType(logType);
         httpErrorLog.setUserId(userId);
         httpErrorLog.setUserName(userName);

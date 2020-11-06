@@ -252,6 +252,83 @@ public class JsErrorLogService extends ServiceBase {
     }
 
     /**
+     * 新增-LogService通用
+     *
+     * @param request request
+     * @return boolean
+     */
+    public boolean add(HttpServletRequest request) throws Exception {
+
+        logger.info("--------[JsErrorLogService]保存开始--------");
+
+        // 获取请求参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String logType = request.getParameter("logType");
+        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String pageKey = request.getParameter("pageKey");
+        String deviceName = request.getParameter("deviceName");
+        String os = request.getParameter("os");
+        String osVersion = request.getParameter("osVersion");
+        String browserName = request.getParameter("browserName");
+        String browserVersion = request.getParameter("browserVersion");
+        String ipAddress = request.getParameter("ipAddress");
+        String netType = request.getParameter("netType");
+        String errorType = request.getParameter("errorType");
+        String errorMessage = request.getParameter("errorMessage");
+        String errorStack = request.getParameter("errorStack");
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+            throw new Exception("projectIdentifier不能为空");
+        }
+        if (logType == null || logType.isEmpty()) {
+            throw new Exception("logType不能为空");
+        }
+        if (userId == null || userId == 0) {
+            throw new Exception("userId无效");
+        }
+        if (pageUrl == null || pageUrl.isEmpty()) {
+            throw new Exception("pageUrl不能为空");
+        }
+        if (errorMessage == null || errorMessage.isEmpty()) {
+            throw new Exception("errorMessage不能为空");
+        }
+        if (errorStack == null || errorStack.isEmpty()) {
+            throw new Exception("errorStack不能为空");
+        }
+
+        // 创建时间
+        Date createTime = new Date();
+
+        // 保存实体
+        JsErrorLog jsErrorLog = new JsErrorLog();
+        jsErrorLog.setProjectIdentifier(projectIdentifier);
+        jsErrorLog.setLogType(logType);
+        jsErrorLog.setUserId(userId);
+        jsErrorLog.setUserName(userName);
+        jsErrorLog.setPageUrl(pageUrl);
+        jsErrorLog.setPageKey(pageKey);
+        jsErrorLog.setDeviceName(deviceName);
+        jsErrorLog.setOs(os);
+        jsErrorLog.setOsVersion(osVersion);
+        jsErrorLog.setBrowserName(browserName);
+        jsErrorLog.setBrowserVersion(browserVersion);
+        jsErrorLog.setIpAddress(ipAddress);
+        jsErrorLog.setNetType(netType);
+        jsErrorLog.setErrorType(errorType);
+        jsErrorLog.setErrorMessage(errorMessage);
+        jsErrorLog.setErrorStack(errorStack);
+        jsErrorLog.setCreateTime(createTime);
+        jsErrorLogDao.save(jsErrorLog);
+
+        logger.info("--------[JsErrorLogService]保存结束--------");
+
+        return true;
+    }
+
+    /**
      * 查询某个时间段内的日志总数
      *
      * @param startTime 开始时间

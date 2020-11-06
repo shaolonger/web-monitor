@@ -1,5 +1,6 @@
 package com.shaolonger.webmonitorserver.log.controller;
 
+import com.shaolonger.webmonitorserver.auth.annotation.AuthIgnore;
 import com.shaolonger.webmonitorserver.common.api.ResponseResultBase;
 import com.shaolonger.webmonitorserver.log.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,24 @@ public class LogController {
     LogService logService;
 
     /**
+     * 打点日志上传
+     *
+     * @param request request
+     * @return Object
+     */
+    @AuthIgnore
+    @RequestMapping(value = "/log/add", method = RequestMethod.GET)
+    public Object add(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(logService.add(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
      * 高级查询-多条件
+     *
      * @param request request
      * @return Object
      */

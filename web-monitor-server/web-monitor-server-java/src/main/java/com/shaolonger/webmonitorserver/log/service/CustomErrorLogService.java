@@ -254,11 +254,83 @@ public class CustomErrorLogService extends ServiceBase {
     }
 
     /**
+     * 新增-LogService通用
+     *
+     * @param request request
+     * @return Object
+     */
+    public boolean add(HttpServletRequest request) throws Exception {
+
+        logger.info("--------[CustomErrorLogService]保存开始--------");
+
+        // 获取请求参数
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        String logType = request.getParameter("logType");
+        Long userId = DataConvertUtils.strToLong(request.getParameter("userId"));
+        String userName = request.getParameter("userName");
+        String pageUrl = request.getParameter("pageUrl");
+        String pageKey = request.getParameter("pageKey");
+        String deviceName = request.getParameter("deviceName");
+        String os = request.getParameter("os");
+        String osVersion = request.getParameter("osVersion");
+        String browserName = request.getParameter("browserName");
+        String browserVersion = request.getParameter("browserVersion");
+        String ipAddress = request.getParameter("ipAddress");
+        String netType = request.getParameter("netType");
+        String errorType = request.getParameter("errorType");
+        String errorMessage = request.getParameter("errorMessage");
+
+        // 创建时间
+        Date createTime = new Date();
+
+        // 校验参数
+        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+            throw new Exception("projectIdentifier不能为空");
+        }
+        if (logType == null || logType.isEmpty()) {
+            throw new Exception("logType不能为空");
+        }
+        if (userId == null || userId == 0) {
+            throw new Exception("userId无效");
+        }
+        if (pageUrl == null || pageUrl.isEmpty()) {
+            throw new Exception("pageUrl不能为空");
+        }
+        if (errorMessage == null || errorMessage.isEmpty()) {
+            throw new Exception("errorMessage不能为空");
+        }
+
+        // 保存实体
+        CustomErrorLog customErrorLog = new CustomErrorLog();
+        customErrorLog.setProjectIdentifier(projectIdentifier);
+        customErrorLog.setLogType(logType);
+        customErrorLog.setUserId(userId);
+        customErrorLog.setUserName(userName);
+        customErrorLog.setPageUrl(pageUrl);
+        customErrorLog.setPageKey(pageKey);
+        customErrorLog.setDeviceName(deviceName);
+        customErrorLog.setOs(os);
+        customErrorLog.setOsVersion(osVersion);
+        customErrorLog.setBrowserName(browserName);
+        customErrorLog.setBrowserVersion(browserVersion);
+        customErrorLog.setIpAddress(ipAddress);
+        customErrorLog.setNetType(netType);
+        customErrorLog.setErrorType(errorType);
+        customErrorLog.setErrorMessage(errorMessage);
+        customErrorLog.setCreateTime(createTime);
+        customErrorLogDao.save(customErrorLog);
+
+        logger.info("--------[CustomErrorLogService]保存结束--------");
+
+        return true;
+    }
+
+    /**
      * 查询某个时间段内的日志总数
      *
-     * @param startTime
-     * @param endTime
-     * @return
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return int
      */
     public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
         return customErrorLogDao.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
@@ -268,7 +340,7 @@ public class CustomErrorLogService extends ServiceBase {
      * 按小时间隔，获取各小时内的日志数量
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
@@ -279,7 +351,7 @@ public class CustomErrorLogService extends ServiceBase {
      * 按天间隔，获取各天内的日志数量
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
