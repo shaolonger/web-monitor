@@ -49,12 +49,13 @@ public class ProjectService extends ServiceBase {
         projectDao.save(projectEntity);
 
         // 保存关联用户
+        ProjectEntity savedEntity = projectDao.findByProjectIdentifier(projectEntity.getProjectIdentifier()).orElseThrow(() -> new Exception("项目保存失败"));
         String userListStr = request.getParameter("userList");
         List<Integer> userList = DataConvertUtils.jsonStrToObject(userListStr, List.class);
         for (Integer userId : userList) {
             UserProjectRelationEntity userProjectRelationEntity = new UserProjectRelationEntity();
             userProjectRelationEntity.setUserId(userId.longValue());
-            userProjectRelationEntity.setProjectId(projectEntity.getId());
+            userProjectRelationEntity.setProjectId(savedEntity.getId());
             userProjectRelationDao.save(userProjectRelationEntity);
         }
 
