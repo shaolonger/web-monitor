@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/6 14:38:46                           */
+/* Created on:     2020/11/7 14:30:55                           */
 /*==============================================================*/
 
 
@@ -219,22 +219,4 @@ create table ums_user_register_record
 );
 
 alter table ums_user_register_record comment '用户表注册记录表';
-
-alter table lms_custom_error_log add constraint FK_Reference_4 foreign key (project_identifier)
-      references pms_project (project_identifier) on delete restrict on update restrict;
-
-alter table lms_http_error_log add constraint FK_Reference_2 foreign key (project_identifier)
-      references pms_project (project_identifier) on delete restrict on update restrict;
-
-alter table lms_js_error_log add constraint FK_Reference_1 foreign key (project_identifier)
-      references pms_project (project_identifier) on delete restrict on update restrict;
-
-alter table lms_resource_load_error_log add constraint FK_Reference_3 foreign key (project_identifier)
-      references pms_project (project_identifier) on delete restrict on update restrict;
-
-alter table ums_user_project_relation add constraint FK_Reference_5 foreign key (user_id)
-      references ums_user (id) on delete restrict on update restrict;
-
-alter table ums_user_project_relation add constraint FK_Reference_6 foreign key (project_id)
-      references pms_project (id) on delete restrict on update restrict;
 
