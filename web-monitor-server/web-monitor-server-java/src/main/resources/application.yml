@@ -1,6 +1,8 @@
 server:
   port: 6001
 spring:
+  jackson:
+    time-zone: GMT+8
   datasource:
     url: jdbc:mysql://localhost:3306/web_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
