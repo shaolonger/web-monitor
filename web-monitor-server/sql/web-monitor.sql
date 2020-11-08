@@ -1,8 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/7 14:30:55                           */
+/* Created on:     2020/11/8 17:09:57                           */
 /*==============================================================*/
 
+
+drop table if exists ams_alarm;
+
+drop table if exists ams_alarm_record;
+
+drop table if exists ams_subscriber;
 
 drop table if exists lms_custom_error_log;
 
@@ -19,6 +25,61 @@ drop table if exists ums_user;
 drop table if exists ums_user_project_relation;
 
 drop table if exists ums_user_register_record;
+
+/*==============================================================*/
+/* Table: ams_alarm                                             */
+/*==============================================================*/
+create table ams_alarm
+(
+   id                   bigint not null auto_increment comment 'ID',
+   name                 varchar(100) not null default "" comment '预警名称',
+   level                tinyint(1) not null default 0 comment '报警等级，-1-P4低，0-P3中，1-P2高，2-P1紧急',
+   category             tinyint(1) not null default 0 comment '过滤条件，可多选。0-全部，1-JS_ERROR，2-HTTP_ERROR，3-RESOURCE_LOAD，4-CUSTOM_ERROR',
+   rule                 varchar(255) not null default "" comment '预警规则，存放JSON格式',
+   start_time           char(8) not null default "" comment '报警时段-开始时间，例如00:00:00',
+   end_time             char(8) not null default "" comment '报警时段-结束时间，例如23:59:59',
+   silent_period        tinyint(1) not null default 0 comment '静默期，0-不静默，1-5分钟，2-10分钟，3-15分钟，4-30分钟，5-1小时，6-3小时，7-12小时，8-24小时，9-当天',
+   is_active            tinyint(1) not null default 0 comment '是否启用，0-否，1-是',
+   create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式yyyy-MM-dd HH:mm:ss',
+   update_time          datetime not null default CURRENT_TIMESTAMP comment '更新时间，格式yyyy-MM-dd HH:mm:ss',
+   create_by            bigint not null comment '创建人ID',
+   project_identifier   varchar(200) not null default "" comment '项目标识',
+   is_deleted           tinyint(1) not null default 0 comment '是否已被删除，0-否，1-是',
+   primary key (id)
+);
+
+alter table ams_alarm comment '预警规则表';
+
+/*==============================================================*/
+/* Table: ams_alarm_record                                      */
+/*==============================================================*/
+create table ams_alarm_record
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   alarm_id             bigint not null comment '预警规则id',
+   alarm_data           text not null default NULL comment '报警内容，格式为JSON字符串',
+   create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式为yyyy-MM-dd HH:mm:ss',
+   notice_time          datetime not null default NULL comment '通知时间，格式为yyyy-MM-dd HH:mm:ss',
+   state                tinyint(1) not null default 0 comment '预警状态，0-已创建未通知，1-已通知',
+   primary key (id)
+);
+
+alter table ams_alarm_record comment '报警记录表';
+
+/*==============================================================*/
+/* Table: ams_subscriber                                        */
+/*==============================================================*/
+create table ams_subscriber
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   alarm_id             bigint not null comment '预警规则id',
+   subscriber           text default NULL comment '报警订阅者，为JSON格式，例如"[]"',
+   is_active            tinyint(1) not null default 0 comment '是否启用，0-否，1-是',
+   category             tinyint(1) not null default 1 comment '订阅类型，1-钉钉机器人，2-邮箱',
+   primary key (id)
+);
+
+alter table ams_subscriber comment '预警订阅通知表';
 
 /*==============================================================*/
 /* Table: lms_custom_error_log                                  */
@@ -158,8 +219,7 @@ create table pms_project
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
    primary key (id),
-   unique key AK_Key_2 (project_identifier),
-   unique key AK_Key_3 (project_name)
+   unique key AK_Key_2 (project_identifier)
 );
 
 alter table pms_project comment '项目表';
@@ -174,13 +234,12 @@ create table ums_user
    password             varchar(64) not null comment '密码',
    phone                varchar(64) default "" comment '电话',
    icon                 varchar(500) default "" comment '头像',
-   gender               int(1) default 0 comment '性别，0-未知，1-男，2-女',
+   gender               tinyint(1) default 0 comment '性别，0-未知，1-男，2-女',
    email                varchar(100) not null comment '邮箱',
-   is_admin             int(1) not null default 0 comment '是否超级管理员，0-否，1-是',
+   is_admin             tinyint(1) not null default 0 comment '是否超级管理员，0-否，1-是',
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
-   primary key (id),
-   unique key AK_Key_2 (username)
+   primary key (id)
 );
 
 alter table ums_user comment '用户表';
@@ -209,13 +268,12 @@ create table ums_user_register_record
    email                varchar(100) not null comment '邮箱',
    phone                varchar(64) default "" comment '电话',
    icon                 varchar(500) default "" comment '头像',
-   gender               int(1) default 0 comment '性别，0-未知，1-男，2-女',
+   gender               tinyint(1) default 0 comment '性别，0-未知，1-男，2-女',
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
    audit_user           bigint default 0 comment '审批人',
-   audit_result         int(1) default -1 comment '审批结果，-1-未审核，0-不通过，1-通过',
-   primary key (id),
-   key AK_Key_2 (username)
+   audit_result         tinyint(1) default -1 comment '审批结果，-1-未审核，0-不通过，1-通过',
+   primary key (id)
 );
 
 alter table ums_user_register_record comment '用户表注册记录表';
