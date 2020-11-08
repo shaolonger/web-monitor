@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/8 17:09:57                           */
+/* Created on:     2020/11/8 17:14:55                           */
 /*==============================================================*/
 
 
@@ -86,7 +86,7 @@ alter table ams_subscriber comment '预警订阅通知表';
 /*==============================================================*/
 create table lms_custom_error_log
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -116,7 +116,7 @@ alter table lms_custom_error_log comment '自定义异常日志表';
 /*==============================================================*/
 create table lms_http_error_log
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -149,7 +149,7 @@ alter table lms_http_error_log comment 'HTTP异常日志表';
 /*==============================================================*/
 create table lms_js_error_log
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -179,7 +179,7 @@ alter table lms_js_error_log comment 'JS异常日志表';
 /*==============================================================*/
 create table lms_resource_load_error_log
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -209,7 +209,7 @@ alter table lms_resource_load_error_log comment '资源加载异常日志表';
 /*==============================================================*/
 create table pms_project
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    project_name         varchar(100) not null comment '项目名',
    project_identifier   varchar(200) not null comment '项目标识符',
    description          varchar(200) default "" comment '项目描述',
@@ -229,7 +229,7 @@ alter table pms_project comment '项目表';
 /*==============================================================*/
 create table ums_user
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    username             varchar(64) not null comment '用户名',
    password             varchar(64) not null comment '密码',
    phone                varchar(64) default "" comment '电话',
@@ -249,7 +249,7 @@ alter table ums_user comment '用户表';
 /*==============================================================*/
 create table ums_user_project_relation
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    user_id              bigint not null comment '关联的用户ID',
    project_id           bigint not null comment '关联的项目ID',
    primary key (id)
@@ -262,7 +262,7 @@ alter table ums_user_project_relation comment '用户与项目的关系表';
 /*==============================================================*/
 create table ums_user_register_record
 (
-   id                   bigint not null comment 'ID',
+   id                   bigint not null auto_increment comment 'ID',
    username             varchar(64) not null comment '用户名',
    password             varchar(64) not null comment '密码',
    email                varchar(100) not null comment '邮箱',
