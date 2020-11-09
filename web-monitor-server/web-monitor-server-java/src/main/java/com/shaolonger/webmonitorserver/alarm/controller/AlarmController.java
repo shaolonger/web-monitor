@@ -20,8 +20,15 @@ public class AlarmController {
     @Autowired
     AlarmService alarmService;
 
+    /**
+     * 新增
+     *
+     * @param alarmEntity   alarmEntity
+     * @param bindingResult bindingResult
+     * @return Object
+     */
     @RequestMapping(value = "/alarm/add", method = RequestMethod.PUT)
-    public Object add(HttpServletRequest request, @Valid AlarmEntity alarmEntity, BindingResult bindingResult) {
+    public Object add(@Valid AlarmEntity alarmEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -29,7 +36,22 @@ public class AlarmController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(alarmService.add(request, alarmEntity));
+            return ResponseResultBase.getResponseResultBase(alarmService.add(alarmEntity));
+        }
+    }
+
+    /**
+     * 编辑
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/alarm/update", method = RequestMethod.POST)
+    public Object update(HttpServletRequest request) {
+        try {
+            return alarmService.update(request);
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
         }
     }
 }
