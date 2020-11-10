@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/8 17:14:55                           */
+/* Created on:     2020/11/10 9:06:46                           */
 /*==============================================================*/
 
 
@@ -34,7 +34,7 @@ create table ams_alarm
    id                   bigint not null auto_increment comment 'ID',
    name                 varchar(100) not null default "" comment '预警名称',
    level                tinyint(1) not null default 0 comment '报警等级，-1-P4低，0-P3中，1-P2高，2-P1紧急',
-   category             tinyint(1) not null default 0 comment '过滤条件，可多选。0-全部，1-JS_ERROR，2-HTTP_ERROR，3-RESOURCE_LOAD，4-CUSTOM_ERROR',
+   category             tinyint(1) not null default 0 comment '过滤条件。0-全部，1-JS_ERROR，2-HTTP_ERROR，3-RESOURCE_LOAD，4-CUSTOM_ERROR',
    rule                 varchar(255) not null default "" comment '预警规则，存放JSON格式',
    start_time           char(8) not null default "" comment '报警时段-开始时间，例如00:00:00',
    end_time             char(8) not null default "" comment '报警时段-结束时间，例如23:59:59',
