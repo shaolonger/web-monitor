@@ -1,6 +1,6 @@
 {
   "name": "web-monitor-sdk-core",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "A log helper for browser use.",
   "main": "lib/web-monitor-sdk-core.min.js",
   "scripts": {
