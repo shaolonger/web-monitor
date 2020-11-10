@@ -1,6 +1,6 @@
 package com.monitor.web.auth.service;
 
-import com.monitor.web.auth.dto.LoginUser;
+import com.monitor.web.auth.dto.LoginUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -39,12 +39,12 @@ public class TokenService {
      * @param token token
      * @return LoginUser
      */
-    public LoginUser getUserByToken(String token) {
+    public LoginUserDTO getUserByToken(String token) {
         if (StringUtils.isEmpty(token)) return null;
         if (!hasToken(token)) {
             return null;
         } else {
-            return (LoginUser) redisService.hGet(REDIS_TOKEN_KEY, token);
+            return (LoginUserDTO) redisService.hGet(REDIS_TOKEN_KEY, token);
         }
     }
 
@@ -57,25 +57,25 @@ public class TokenService {
      * @param isAdmin isAdmin
      * @return LoginUser
      */
-    public LoginUser addOrUpdateToken(String token, Long userId, String username, Integer isAdmin) {
+    public LoginUserDTO addOrUpdateToken(String token, Long userId, String username, Integer isAdmin) {
         if (hasToken(token)) {
-            LoginUser loginUser = getUserByToken(token);
-            if (loginUser != null) {
+            LoginUserDTO loginUserDTO = getUserByToken(token);
+            if (loginUserDTO != null) {
                 // 若token已存在，则刷新缓存时间
                 redisService.expire(REDIS_TOKEN_KEY, REDIS_TOKEN_EXPIRE);
-                return loginUser;
+                return loginUserDTO;
             } else {
                 return null;
             }
         } else {
             // 若token不存在，则新增
-            LoginUser loginUser = new LoginUser();
-            loginUser.setId(userId);
-            loginUser.setUsername(username);
-            loginUser.setIsAdmin(isAdmin);
-            loginUser.setToken(token);
-            redisService.hSet(REDIS_TOKEN_KEY, token, loginUser, REDIS_TOKEN_EXPIRE);
-            return loginUser;
+            LoginUserDTO loginUserDTO = new LoginUserDTO();
+            loginUserDTO.setId(userId);
+            loginUserDTO.setUsername(username);
+            loginUserDTO.setIsAdmin(isAdmin);
+            loginUserDTO.setToken(token);
+            redisService.hSet(REDIS_TOKEN_KEY, token, loginUserDTO, REDIS_TOKEN_EXPIRE);
+            return loginUserDTO;
         }
     }
 

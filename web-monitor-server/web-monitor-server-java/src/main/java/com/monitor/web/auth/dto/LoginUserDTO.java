@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class LoginUser {
+public class LoginUserDTO {
 
     /**
      * 用户id

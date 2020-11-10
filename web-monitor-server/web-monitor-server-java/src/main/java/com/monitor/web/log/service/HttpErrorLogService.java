@@ -1,7 +1,7 @@
 package com.monitor.web.log.service;
 
 import com.monitor.web.common.api.PageResultBase;
-import com.monitor.web.log.dao.HttpErrorLogDao;
+import com.monitor.web.log.dao.HttpErrorLogDAO;
 import com.monitor.web.log.entity.HttpErrorLogEntity;
 import com.monitor.web.log.vo.StatisticRecordVO;
 import com.monitor.web.utils.DataConvertUtils;
@@ -22,7 +22,7 @@ import java.util.*;
 public class HttpErrorLogService extends ServiceBase {
 
     @Autowired
-    private HttpErrorLogDao httpErrorLogDao;
+    private HttpErrorLogDAO httpErrorLogDao;
 
     @Autowired
     private StatisticService statisticService;

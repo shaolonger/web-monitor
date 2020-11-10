@@ -1,6 +1,6 @@
 package com.monitor.web.user.service;
 
-import com.monitor.web.user.dao.UserRegisterRecordDao;
+import com.monitor.web.user.dao.UserRegisterRecordDAO;
 import com.monitor.web.user.entity.UserEntity;
 import com.monitor.web.user.entity.UserRegisterRecordEntity;
 import com.monitor.web.utils.DateUtils;
@@ -27,7 +27,7 @@ public class UserRegisterRecordService extends ServiceBase {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserRegisterRecordDao userRegisterRecordDao;
+    private UserRegisterRecordDAO userRegisterRecordDao;
 
     @Autowired
     private UserService userService;

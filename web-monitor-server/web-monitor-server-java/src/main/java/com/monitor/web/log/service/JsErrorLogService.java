@@ -1,10 +1,10 @@
 package com.monitor.web.log.service;
 
 import com.monitor.web.common.api.PageResultBase;
+import com.monitor.web.log.dao.JsErrorLogDAO;
 import com.monitor.web.log.entity.JsErrorLogEntity;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.utils.DateUtils;
-import com.monitor.web.log.dao.JsErrorLogDao;
 import com.monitor.web.log.vo.StatisticRecordVO;
 import com.monitor.web.common.service.ServiceBase;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import java.util.*;
 public class JsErrorLogService extends ServiceBase {
 
     @Autowired
-    private JsErrorLogDao jsErrorLogDao;
+    private JsErrorLogDAO jsErrorLogDao;
 
     @Autowired
     private StatisticService statisticService;

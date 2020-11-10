@@ -1,10 +1,10 @@
 package com.monitor.web.project.service;
 
 import com.monitor.web.common.api.PageResultBase;
-import com.monitor.web.user.dao.UserProjectRelationDao;
+import com.monitor.web.project.dao.ProjectDAO;
+import com.monitor.web.user.dao.UserProjectRelationDAO;
 import com.monitor.web.user.entity.UserProjectRelationEntity;
 import com.monitor.web.utils.DataConvertUtils;
-import com.monitor.web.project.dao.ProjectDao;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.vo.ProjectVO;
 import com.monitor.web.common.service.ServiceBase;
@@ -27,10 +27,10 @@ public class ProjectService extends ServiceBase {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private ProjectDao projectDao;
+    private ProjectDAO projectDao;
 
     @Autowired
-    private UserProjectRelationDao userProjectRelationDao;
+    private UserProjectRelationDAO userProjectRelationDao;
 
     /**
      * 新增

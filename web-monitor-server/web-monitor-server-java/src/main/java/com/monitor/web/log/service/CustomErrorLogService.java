@@ -1,7 +1,7 @@
 package com.monitor.web.log.service;
 
 import com.monitor.web.common.api.PageResultBase;
-import com.monitor.web.log.dao.CustomErrorLogDao;
+import com.monitor.web.log.dao.CustomErrorLogDAO;
 import com.monitor.web.log.entity.CustomErrorLogEntity;
 import com.monitor.web.log.vo.StatisticRecordVO;
 import com.monitor.web.utils.DataConvertUtils;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class CustomErrorLogService extends ServiceBase {
 
     @Autowired
-    private CustomErrorLogDao customErrorLogDao;
+    private CustomErrorLogDAO customErrorLogDao;
 
     @Autowired
     private StatisticService statisticService;

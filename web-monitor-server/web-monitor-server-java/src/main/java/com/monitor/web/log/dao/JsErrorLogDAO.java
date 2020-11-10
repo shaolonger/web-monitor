@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface JsErrorLogDao extends JpaRepository<JsErrorLogEntity, Long> {
+public interface JsErrorLogDAO extends JpaRepository<JsErrorLogEntity, Long> {
 
     @Query(value = "select count(id) from lms_js_error_log where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
     int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime);

@@ -1,13 +1,13 @@
 package com.monitor.web.user.service;
 
+import com.monitor.web.user.dao.UserProjectRelationDAO;
 import com.monitor.web.user.entity.UserEntity;
 import com.monitor.web.user.entity.UserProjectRelationEntity;
-import com.monitor.web.auth.dto.LoginUser;
+import com.monitor.web.auth.dto.LoginUserDTO;
 import com.monitor.web.auth.service.TokenService;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
-import com.monitor.web.user.dao.UserDao;
-import com.monitor.web.user.dao.UserProjectRelationDao;
+import com.monitor.web.user.dao.UserDAO;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.common.service.ServiceBase;
 import com.monitor.web.utils.TokenUtils;
@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 public class UserService extends ServiceBase {
 
     @Autowired
-    private UserDao userDao;
+    private UserDAO userDao;
     @Autowired
     private TokenService tokenService;
     @Autowired
     private ProjectService projectService;
     @Autowired
-    private UserProjectRelationDao userProjectRelationDao;
+    private UserProjectRelationDAO userProjectRelationDao;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -160,7 +160,7 @@ public class UserService extends ServiceBase {
 
         // 通过获取userId
         String token = request.getHeader("token");
-        LoginUser user = tokenService.getUserByToken(token);
+        LoginUserDTO user = tokenService.getUserByToken(token);
 
         // 获取关联的项目列表
         List<UserProjectRelationEntity> relatedProjectList = userProjectRelationDao.findByUserId(user.getId());

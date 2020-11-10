@@ -1,7 +1,7 @@
 package com.monitor.web.user.service;
 
 import com.monitor.web.user.entity.UserProjectRelationEntity;
-import com.monitor.web.user.dao.UserProjectRelationDao;
+import com.monitor.web.user.dao.UserProjectRelationDAO;
 import com.monitor.web.common.service.ServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserProjectRelationService extends ServiceBase {
 
     @Autowired
-    private UserProjectRelationDao userProjectRelationDao;
+    private UserProjectRelationDAO userProjectRelationDao;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     
