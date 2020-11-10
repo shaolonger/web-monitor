@@ -54,4 +54,15 @@ public class AlarmController {
             return ResponseResultBase.getErrorResponseResult(e);
         }
     }
+
+    /**
+     * 查询
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/alarm/get", method = RequestMethod.GET)
+    public Object get(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(alarmService.get(request));
+    }
 }
