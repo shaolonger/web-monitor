@@ -1,5 +1,6 @@
 package com.monitor.web.alarm.service;
 
+import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDao;
@@ -7,6 +8,7 @@ import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.common.service.ServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,11 +36,17 @@ public class AlarmService extends ServiceBase {
      * @return Object
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object add(AlarmEntity alarmEntity) {
+    public Object add(AlarmDTO alarmDTO) {
+
+        // 从DTO中复制属性
+        AlarmEntity alarmEntity = new AlarmEntity();
+        BeanUtils.copyProperties(alarmDTO, alarmEntity);
+
         // 创建时间、更新时间
         Date nowTime = new Date();
         alarmEntity.setCreateTime(nowTime);
         alarmEntity.setUpdateTime(nowTime);
+
         return alarmDao.save(alarmEntity);
     }
 

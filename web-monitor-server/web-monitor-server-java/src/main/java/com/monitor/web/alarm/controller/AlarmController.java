@@ -1,5 +1,6 @@
 package com.monitor.web.alarm.controller;
 
+import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.alarm.service.AlarmService;
 import com.monitor.web.common.api.ResponseResultBase;
@@ -24,12 +25,12 @@ public class AlarmController {
     /**
      * 新增
      *
-     * @param alarmEntity   alarmEntity
+     * @param alarmDTO   alarmDTO
      * @param bindingResult bindingResult
      * @return Object
      */
     @RequestMapping(value = "/alarm/add", method = RequestMethod.PUT)
-    public Object add(@Valid AlarmEntity alarmEntity, BindingResult bindingResult) {
+    public Object add(@Valid AlarmDTO alarmDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -37,7 +38,7 @@ public class AlarmController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(alarmService.add(alarmEntity));
+            return ResponseResultBase.getResponseResultBase(alarmService.add(alarmDTO));
         }
     }
 
