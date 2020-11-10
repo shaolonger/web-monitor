@@ -1,13 +1,13 @@
 package com.monitor.web.alarm.service;
 
 import com.monitor.web.alarm.dto.AlarmDTO;
+import com.monitor.web.alarm.dto.SubscriberDTO;
+import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.utils.DataConvertUtils;
-import com.monitor.web.alarm.dao.AlarmDao;
+import com.monitor.web.alarm.dao.AlarmDAO;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.common.service.ServiceBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,16 +19,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class AlarmService extends ServiceBase {
 
     @Autowired
-    private AlarmDao alarmDao;
+    private AlarmDAO alarmDao;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private SubscriberService subscriberService;
 
     /**
      * 新增
@@ -36,7 +37,7 @@ public class AlarmService extends ServiceBase {
      * @return Object
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object add(AlarmDTO alarmDTO) {
+    public Object add(AlarmDTO alarmDTO) throws Exception {
 
         // 从DTO中复制属性
         AlarmEntity alarmEntity = new AlarmEntity();
@@ -46,8 +47,16 @@ public class AlarmService extends ServiceBase {
         Date nowTime = new Date();
         alarmEntity.setCreateTime(nowTime);
         alarmEntity.setUpdateTime(nowTime);
+        Long id = alarmDao.save(alarmEntity).getId();
 
-        return alarmDao.save(alarmEntity);
+        String subscriberList = alarmDTO.getSubscriberList();
+        List<HashMap<String, Object>> list = DataConvertUtils.jsonStrToObject(subscriberList, List.class);
+        for (HashMap<String, Object> map : list) {
+            SubscriberEntity subscriberEntity = DataConvertUtils.mapToBean(map, SubscriberEntity.class);
+            subscriberEntity.setAlarmId(id);
+            subscriberService.add(subscriberEntity);
+        }
+        return list;
     }
 
     /**

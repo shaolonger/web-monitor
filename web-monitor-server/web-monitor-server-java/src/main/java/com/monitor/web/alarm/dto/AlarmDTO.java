@@ -1,21 +1,12 @@
 package com.monitor.web.alarm.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
-@Getter
+@Data
 public class AlarmDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;
 
     /**
      * 预警名称
@@ -70,16 +61,6 @@ public class AlarmDTO {
      */
     @NotNull(message = "isActive不能为空")
     private int isActive;
-
-    /**
-     * 创建时间，格式yyyy-MM-dd HH:mm:ss
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间，格式yyyy-MM-dd HH:mm:ss
-     */
-    private Date updateTime;
 
     /**
      * 创建人ID

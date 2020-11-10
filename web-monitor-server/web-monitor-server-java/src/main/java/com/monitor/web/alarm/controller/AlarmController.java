@@ -38,7 +38,11 @@ public class AlarmController {
             }
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
-            return ResponseResultBase.getResponseResultBase(alarmService.add(alarmDTO));
+            try {
+                return ResponseResultBase.getResponseResultBase(alarmService.add(alarmDTO));
+            } catch (Exception e) {
+                return ResponseResultBase.getErrorResponseResult(e);
+            }
         }
     }
 
