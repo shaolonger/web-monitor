@@ -8,6 +8,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -130,5 +131,29 @@ public class DataConvertUtils {
             }
         }
         return returnMap;
+    }
+
+    public static <T> T mapToBean(Map<String, Object> map, Class<T> tClass) {
+        try {
+            T bean = tClass.getConstructor().newInstance();
+            for (Object k : map.keySet()) {
+                String key = (String) k;
+                Object value = map.get(key);
+                if (value != null) {
+                    try {
+                        Field field = tClass.getDeclaredField(key);
+                        field.setAccessible(true);
+                        field.set(bean, value);
+                        field.setAccessible(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return bean;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
