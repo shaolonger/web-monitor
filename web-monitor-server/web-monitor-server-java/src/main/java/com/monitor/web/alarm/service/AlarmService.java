@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AlarmService extends ServiceBase {
@@ -204,5 +205,19 @@ public class AlarmService extends ServiceBase {
         pageResultBase.setPageSize(pageSize);
         pageResultBase.setRecords(page.getContent());
         return pageResultBase;
+    }
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return Object
+     */
+    @Transactional(rollbackOn = {Exception.class})
+    public Object delete(Long id) throws Exception {
+        boolean isExisted = alarmDao.existsById(id);
+        if (!isExisted) throw new Exception("项目不存在");
+        alarmDao.deleteById(id);
+        return true;
     }
 }
