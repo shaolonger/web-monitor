@@ -20,7 +20,7 @@ public class TokenService {
      * token在redis中的有效时间
      * 单位：分钟
      */
-    public static final int REDIS_TOKEN_EXPIRE = 10;
+    public static final int REDIS_TOKEN_EXPIRE = 60;
 
     /**
      * 判断token是否存在
