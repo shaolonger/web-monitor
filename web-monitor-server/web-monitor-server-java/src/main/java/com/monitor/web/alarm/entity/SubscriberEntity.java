@@ -13,18 +13,18 @@ public class SubscriberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Long id;
 
-    @NotNull(message = "alarmId不能为空")
+    @Column(nullable = false)
     private Long alarmId;
 
-    @NotEmpty(message = "subscriber不能为空")
+    @Column(nullable = false)
     private String subscriber;
 
-    @NotNull(message = "isActive不能为空")
+    @Column(nullable = false)
     private int isActive;
 
-    @NotNull(message = "category不能为空")
+    @Column(nullable = false)
     private int category;
 }

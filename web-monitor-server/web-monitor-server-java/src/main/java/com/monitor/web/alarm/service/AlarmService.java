@@ -1,7 +1,6 @@
 package com.monitor.web.alarm.service;
 
 import com.monitor.web.alarm.dto.AlarmDTO;
-import com.monitor.web.alarm.dto.SubscriberDTO;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.utils.DataConvertUtils;
@@ -47,16 +46,17 @@ public class AlarmService extends ServiceBase {
         Date nowTime = new Date();
         alarmEntity.setCreateTime(nowTime);
         alarmEntity.setUpdateTime(nowTime);
-        Long id = alarmDao.save(alarmEntity).getId();
+        alarmDao.save(alarmEntity);
 
         String subscriberList = alarmDTO.getSubscriberList();
         List<HashMap<String, Object>> list = DataConvertUtils.jsonStrToObject(subscriberList, List.class);
         for (HashMap<String, Object> map : list) {
             SubscriberEntity subscriberEntity = DataConvertUtils.mapToBean(map, SubscriberEntity.class);
-            subscriberEntity.setAlarmId(id);
+            if (subscriberEntity == null) throw new Exception("subscriberList格式不正确");
+            subscriberEntity.setAlarmId(alarmEntity.getId());
             subscriberService.add(subscriberEntity);
         }
-        return list;
+        return alarmEntity;
     }
 
     /**
