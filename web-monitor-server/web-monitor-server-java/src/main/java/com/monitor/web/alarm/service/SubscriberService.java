@@ -32,4 +32,15 @@ public class SubscriberService {
 
         return subscriberDAO.save(subscriberEntity);
     }
+
+    /**
+     * 删除
+     *
+     * @param alarmId alarmId
+     * @return Object
+     */
+    public Object deleteAllByAlarmId(Long alarmId) {
+        subscriberDAO.deleteAllByAlarmId(alarmId);
+        return true;
+    }
 }

@@ -234,6 +234,10 @@ public class AlarmService extends ServiceBase {
     public Object delete(Long id) throws Exception {
         boolean isExisted = alarmDao.existsById(id);
         if (!isExisted) throw new Exception("项目不存在");
+
+        // 先删除关联的订阅者
+        subscriberService.deleteAllByAlarmId(id);
+
         alarmDao.deleteById(id);
         return true;
     }
