@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubscriberService {
 
@@ -34,7 +36,7 @@ public class SubscriberService {
     }
 
     /**
-     * 删除
+     * 根据alarmId删除所有关联的subscriber
      *
      * @param alarmId alarmId
      * @return Object
@@ -42,5 +44,15 @@ public class SubscriberService {
     public Object deleteAllByAlarmId(Long alarmId) {
         subscriberDAO.deleteAllByAlarmId(alarmId);
         return true;
+    }
+
+    /**
+     * 根据alarmId获取所有关联的subscriber
+     *
+     * @param alarmId alarmId
+     * @return List
+     */
+    public List<SubscriberEntity> getAllByAlarmId(Long alarmId) {
+        return subscriberDAO.getAllByAlarmId(alarmId);
     }
 }

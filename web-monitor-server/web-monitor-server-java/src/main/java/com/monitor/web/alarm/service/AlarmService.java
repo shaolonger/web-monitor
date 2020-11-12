@@ -1,7 +1,9 @@
 package com.monitor.web.alarm.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.alarm.entity.SubscriberEntity;
+import com.monitor.web.alarm.vo.AlarmVO;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDAO;
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AlarmService extends ServiceBase {
@@ -229,12 +232,13 @@ public class AlarmService extends ServiceBase {
         Page<AlarmEntity> page = this.findPageBySqlAndParam(AlarmEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
         // 返回
-        PageResultBase<AlarmEntity> pageResultBase = new PageResultBase<>();
+        List<AlarmVO> voList = page.getContent().stream().map(this::transAlarmEntityToAlarmVO).collect(Collectors.toList());
+        PageResultBase<AlarmVO> pageResultBase = new PageResultBase<>();
         pageResultBase.setTotalNum(page.getTotalElements());
         pageResultBase.setTotalPage(page.getTotalPages());
         pageResultBase.setPageNum(pageNum);
         pageResultBase.setPageSize(pageSize);
-        pageResultBase.setRecords(page.getContent());
+        pageResultBase.setRecords(voList);
         return pageResultBase;
     }
 
@@ -254,5 +258,37 @@ public class AlarmService extends ServiceBase {
 
         alarmDao.deleteById(id);
         return true;
+    }
+
+    /**
+     * AlarmEntity转AlarmVO
+     *
+     * @param alarmEntity alarmEntity
+     * @return AlarmVO
+     */
+    private AlarmVO transAlarmEntityToAlarmVO(AlarmEntity alarmEntity) {
+        AlarmVO alarmVO = new AlarmVO();
+        BeanUtils.copyProperties(alarmEntity, alarmVO);
+        try {
+            this.setSubscriberListToAlarmVO(alarmVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return alarmVO;
+    }
+
+    /**
+     * 设置subscriberList
+     *
+     * @param alarmVO alarmVO
+     */
+    private void setSubscriberListToAlarmVO(AlarmVO alarmVO) throws JsonProcessingException {
+        Long alarmId = alarmVO.getId();
+        List<SubscriberEntity> subscriberEntityList = subscriberService.getAllByAlarmId(alarmId);
+        String subscriberList = "";
+        if (subscriberEntityList.size() > 0) {
+            subscriberList = DataConvertUtils.objectToJsonStr(subscriberEntityList);
+        }
+        alarmVO.setSubscriberList(subscriberList);
     }
 }
