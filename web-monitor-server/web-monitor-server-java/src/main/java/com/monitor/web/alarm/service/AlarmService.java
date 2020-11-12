@@ -3,8 +3,11 @@ package com.monitor.web.alarm.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.alarm.entity.SubscriberEntity;
+import com.monitor.web.alarm.scheduler.AlarmScheduler;
 import com.monitor.web.alarm.vo.AlarmVO;
 import com.monitor.web.common.api.PageResultBase;
+import com.monitor.web.schedule.component.CronTaskRegistrar;
+import com.monitor.web.schedule.component.SchedulingRunnable;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDAO;
 import com.monitor.web.alarm.entity.AlarmEntity;
@@ -34,6 +37,12 @@ public class AlarmService extends ServiceBase {
     @Autowired
     private SubscriberService subscriberService;
 
+    @Autowired
+    private AlarmScheduler alarmScheduler;
+
+    @Autowired
+    private CronTaskRegistrar cronTaskRegistrar;
+
     /**
      * 新增
      *
@@ -60,6 +69,10 @@ public class AlarmService extends ServiceBase {
             subscriberEntity.setAlarmId(alarmEntity.getId());
             subscriberService.add(subscriberEntity);
         }
+
+        // 启动预警定时任务
+        this.enableAlarmScheduler(alarmEntity);
+
         return alarmEntity;
     }
 
@@ -290,5 +303,15 @@ public class AlarmService extends ServiceBase {
             subscriberList = DataConvertUtils.objectToJsonStr(subscriberEntityList);
         }
         alarmVO.setSubscriberList(subscriberList);
+    }
+
+    /**
+     * 启动预警定时任务
+     *
+     * @param alarmEntity alarmEntity
+     */
+    private void enableAlarmScheduler(AlarmEntity alarmEntity) {
+        SchedulingRunnable task = new SchedulingRunnable(alarmScheduler.getBeanName(), alarmScheduler.getMethodName(), alarmEntity);
+        cronTaskRegistrar.addCronTask(task, alarmScheduler.getCronExpression());
     }
 }

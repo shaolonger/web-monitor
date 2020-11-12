@@ -92,4 +92,18 @@ public class DateUtils {
         calendar.add(Calendar.DATE, days);
         return calendar.getTime();
     }
+
+    /**
+     * 获取在参考日期相隔days天的日期
+     *
+     * @param date 参考日期
+     * @param minutes 相隔分钟数
+     * @return Date
+     */
+    public static Date getDateBeforeOrAfterByMinutes(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
+    }
 }

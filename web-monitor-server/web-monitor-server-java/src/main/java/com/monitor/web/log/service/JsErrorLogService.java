@@ -386,4 +386,26 @@ public class JsErrorLogService extends ServiceBase {
     public List<Map<String, Object>> getAllLogsBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
         return jsErrorLogDao.findAllByProjectIdentifierAndCreateTimeBetween(projectIdentifier, startTime, endTime);
     }
+
+    /**
+     * 获取时间范围内的影响用户数
+     *
+     * @param startTime startTime
+     * @param endTime   endTime
+     * @return int
+     */
+    public int countDistinctCUuidByCreateTimeBetween(Date startTime, Date endTime) {
+        return jsErrorLogDao.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+    }
+
+    /**
+     * 获取时间范围内的日志数
+     *
+     * @param startTime startTime
+     * @param endTime   endTime
+     * @return int
+     */
+    public int countByCreateTimeBetween(Date startTime, Date endTime) {
+        return jsErrorLogDao.countByCreateTimeBetween(startTime, endTime);
+    }
 }

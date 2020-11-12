@@ -1,5 +1,6 @@
 package com.monitor.web.log.service;
 
+import com.monitor.web.alarm.bean.AlarmRuleItemBean;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.log.entity.CustomErrorLogEntity;
 import com.monitor.web.log.entity.HttpErrorLogEntity;
@@ -135,6 +136,530 @@ public class LogService extends ServiceBase {
         pageResultBase.setPageSize(pageSize);
         pageResultBase.setRecords(page.getContent());
         return pageResultBase;
+    }
+
+    /**
+     * 根据预警规则，判断是否已超过预警阈值
+     *
+     * @param tableName         tableName
+     * @param alarmRuleItemBean alarmRuleItem
+     * @return HashMap
+     */
+    public HashMap<String, Object> checkIsExceedAlarmThreshold(String tableName, AlarmRuleItemBean alarmRuleItemBean) {
+
+        int timeSpan = alarmRuleItemBean.getTimeSpan();
+        int interval = alarmRuleItemBean.getInterval();
+        String ind = alarmRuleItemBean.getInd();
+        String op = alarmRuleItemBean.getOp();
+        String agg = alarmRuleItemBean.getAgg();
+        float val = alarmRuleItemBean.getVal();
+
+        // 当聚合维度为平均时，gap用于计算平均值
+        int gap = timeSpan / interval;
+
+        Date endTime = new Date();
+        Date startTime = DateUtils.getDateBeforeOrAfterByMinutes(endTime, -timeSpan);
+
+        // 返回结果
+        HashMap<String, Object> resultMap = new HashMap<String, Object>() {
+        };
+        boolean isExceedAlarmThreshold = false;
+        String targetInd = null;
+        float actualValue = 0F;
+
+        // ------------------------ 影响用户数 ------------------------
+        if ("uvCount".equals(ind)) {
+            targetInd = "影响用户数";
+            int uvCount = 0;
+            switch (tableName) {
+                case "lms_js_error_log":
+                    uvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_http_error_log":
+                    uvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_resource_load_error_log":
+                    uvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_custom_error_log":
+                    uvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+            }
+            if (">".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = uvCount > val;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = (float) (uvCount / gap) > val;
+                }
+                actualValue = uvCount;
+            }
+            if ("<".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = uvCount < val;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = (float) (uvCount / gap) < val;
+                }
+                actualValue = uvCount;
+            }
+            // 环比昨天上涨、下跌
+            if ("d_up".equals(op) || "d_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -1);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -1);
+                int preUvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        preUvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        preUvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        preUvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        preUvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                if ("d_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount > preUvCount;
+                        actualValue = uvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount / gap > preUvCount;
+                        actualValue = (float) uvCount / gap;
+                    }
+                }
+                if ("d_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount < preUvCount;
+                        actualValue = uvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount / gap < preUvCount;
+                        actualValue = (float) uvCount / gap;
+                    }
+                }
+            }
+            // 环比上周上涨、下跌
+            if ("w_up".equals(op) || "w_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -7);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -7);
+                int preUvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        preUvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        preUvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        preUvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        preUvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                if ("w_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount > preUvCount;
+                        actualValue = uvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount / gap > preUvCount;
+                        actualValue = (float) uvCount / gap;
+                    }
+                }
+                if ("w_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount < preUvCount;
+                        actualValue = uvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = uvCount / gap < preUvCount;
+                        actualValue = (float) uvCount / gap;
+                    }
+                }
+            }
+        }
+
+        // ------------------------ 影响用户率 ------------------------
+        if ("uvRate".equals(ind)) {
+            targetInd = "影响用户率";
+            int uvCount = 0;
+            int uvTotal = 1000; // TODO 先写死，后面需要改成从日志用户表中获取
+            switch (tableName) {
+                case "lms_js_error_log":
+                    uvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_http_error_log":
+                    uvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_resource_load_error_log":
+                    uvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_custom_error_log":
+                    uvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+            }
+            float uvRate = (float) uvCount / uvTotal;
+            if (">".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = uvRate > val;
+                    actualValue = uvRate;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = uvRate / gap > val;
+                    actualValue = (float) uvRate / gap;
+                }
+            }
+            if ("<".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = uvRate < val;
+                    actualValue = uvRate;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = uvRate / gap < val;
+                    actualValue = (float) uvRate / gap;
+                }
+            }
+            // 环比昨天上涨、下跌
+            if ("d_up".equals(op) || "d_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -1);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -1);
+                int preUvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        preUvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        preUvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        preUvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        preUvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                float preUvRate = (float) preUvCount / uvTotal;
+                if ("d_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate > uvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap > uvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+                if ("d_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate < uvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap < uvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+            }
+            // 环比上周上涨、下跌
+            if ("w_up".equals(op) || "w_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -7);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -7);
+                int preUvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        preUvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        preUvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        preUvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        preUvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                float preUvRate = (float) preUvCount / uvTotal;
+                if ("w_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate > uvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap > uvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+                if ("w_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate < uvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap < uvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+            }
+        }
+
+        // ------------------------ 人均异常次数 ------------------------
+        if ("perPV".equals(ind)) {
+            targetInd = "人均异常次数";
+            int pvCount = 0;
+            int uvTotal = 1000; // TODO 先写死，后面需要改成从日志用户表中获取
+            switch (tableName) {
+                case "lms_js_error_log":
+                    pvCount = jsErrorLogService.countByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_http_error_log":
+                    pvCount = httpErrorLogService.countByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_resource_load_error_log":
+                    pvCount = resourceLoadErrorLogService.countByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_custom_error_log":
+                    pvCount = customErrorLogService.countByCreateTimeBetween(startTime, endTime);
+                    break;
+            }
+            float pvRate = (float) pvCount / uvTotal;
+            if (">".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = pvRate > val;
+                    actualValue = pvRate;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = pvRate / gap > val;
+                    actualValue = pvRate / gap;
+                }
+            }
+            if ("<".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = pvRate < val;
+                    actualValue = pvRate;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = pvRate / gap < val;
+                    actualValue = pvRate / gap;
+                }
+            }
+            // 环比昨天上涨、下跌
+            if ("d_up".equals(op) || "d_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -1);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -1);
+                int prePvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        prePvCount = jsErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        prePvCount = httpErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        prePvCount = resourceLoadErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        prePvCount = customErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                float preUvRate = (float) prePvCount / uvTotal;
+                if ("d_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate > pvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap > pvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+                if ("d_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate < pvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap < pvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+            }
+            // 环比上周上涨、下跌
+            if ("w_up".equals(op) || "w_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -7);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -7);
+                int prePvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        prePvCount = jsErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        prePvCount = httpErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        prePvCount = resourceLoadErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        prePvCount = customErrorLogService.countByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                float preUvRate = (float) prePvCount / uvTotal;
+                if ("w_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate > pvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap > pvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+                if ("w_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate < pvRate;
+                        actualValue = preUvRate;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = preUvRate / gap < pvRate;
+                        actualValue = preUvRate / gap;
+                    }
+                }
+            }
+        }
+
+        // ------------------------ 新增异常数 ------------------------
+        if ("newPV".equals(ind)) {
+            targetInd = "新增异常数";
+            int pvCount = 0;
+            switch (tableName) {
+                case "lms_js_error_log":
+                    pvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_http_error_log":
+                    pvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_resource_load_error_log":
+                    pvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+                case "lms_custom_error_log":
+                    pvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+                    break;
+            }
+            if (">".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = pvCount > val;
+                    actualValue = pvCount;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = (float) (pvCount / gap) > val;
+                    actualValue = (float) pvCount / gap;
+                }
+            }
+            if ("<".equals(op)) {
+                if ("count".equals(agg)) {
+                    isExceedAlarmThreshold = pvCount < val;
+                    actualValue = pvCount;
+                }
+                if ("avg".equals(agg)) {
+                    isExceedAlarmThreshold = (float) (pvCount / gap) < val;
+                    actualValue = (float) pvCount / gap;
+                }
+            }
+            // 环比昨天上涨、下跌
+            if ("d_up".equals(op) || "d_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -1);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -1);
+                int prePvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        prePvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        prePvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        prePvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        prePvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                if ("d_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount > prePvCount;
+                        actualValue = pvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount / gap > prePvCount;
+                        actualValue = (float) pvCount / gap;
+                    }
+                }
+                if ("d_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount < prePvCount;
+                        actualValue = pvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount / gap < prePvCount;
+                        actualValue = (float) pvCount / gap;
+                    }
+                }
+            }
+            // 环比上周上涨、下跌
+            if ("w_up".equals(op) || "w_down".equals(op)) {
+                Date preStartTime = DateUtils.getDateBeforeOrAfterByDays(startTime, -7);
+                Date preEndTime = DateUtils.getDateBeforeOrAfterByDays(endTime, -7);
+                int prePvCount = 0;
+                switch (tableName) {
+                    case "lms_js_error_log":
+                        prePvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_http_error_log":
+                        prePvCount = httpErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_resource_load_error_log":
+                        prePvCount = resourceLoadErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                    case "lms_custom_error_log":
+                        prePvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(preStartTime, preEndTime);
+                        break;
+                }
+                if ("w_up".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount > prePvCount;
+                        actualValue = pvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount / gap > prePvCount;
+                        actualValue = (float) pvCount / gap;
+                    }
+                }
+                if ("w_down".equals(op)) {
+                    if ("count".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount < prePvCount;
+                        actualValue = pvCount;
+                    }
+                    if ("avg".equals(agg)) {
+                        isExceedAlarmThreshold = pvCount / gap < prePvCount;
+                        actualValue = (float) pvCount / gap;
+                    }
+                }
+            }
+        }
+
+        // 设置预警检查结果
+        resultMap.put("isExceedAlarmThreshold", isExceedAlarmThreshold);
+        resultMap.put("targetInd", targetInd);
+        resultMap.put("actualValue", actualValue);
+        resultMap.put("thresholdValue", val);
+
+        return resultMap;
     }
 
     /**

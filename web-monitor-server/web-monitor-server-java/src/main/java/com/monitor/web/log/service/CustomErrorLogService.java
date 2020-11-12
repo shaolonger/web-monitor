@@ -383,4 +383,26 @@ public class CustomErrorLogService extends ServiceBase {
     public List<Map<String, Object>> getAllLogsBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
         return customErrorLogDao.findAllByProjectIdentifierAndCreateTimeBetween(projectIdentifier, startTime, endTime);
     }
+
+    /**
+     * 获取时间范围内的影响用户数
+     *
+     * @param startTime startTime
+     * @param endTime   endTime
+     * @return int
+     */
+    public int countDistinctCUuidByCreateTimeBetween(Date startTime, Date endTime) {
+        return customErrorLogDao.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
+    }
+
+    /**
+     * 获取时间范围内的日志数
+     *
+     * @param startTime startTime
+     * @param endTime   endTime
+     * @return int
+     */
+    public int countByCreateTimeBetween(Date startTime, Date endTime) {
+        return customErrorLogDao.countByCreateTimeBetween(startTime, endTime);
+    }
 }

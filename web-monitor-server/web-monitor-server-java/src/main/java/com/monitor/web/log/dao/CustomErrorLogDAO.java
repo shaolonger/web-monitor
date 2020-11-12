@@ -27,4 +27,8 @@ public interface CustomErrorLogDAO extends JpaRepository<CustomErrorLogEntity, L
 
     @Query(value = "select * from lms_custom_error_log where project_identifier=?1 and create_time between ?2 and ?3", nativeQuery = true)
     List<Map<String, Object>> findAllByProjectIdentifierAndCreateTimeBetween(String projectIdentifier, Date startTime, Date endTime);
+
+    int countDistinctCUuidByCreateTimeBetween(Date startTime, Date endTime);
+
+    int countByCreateTimeBetween(Date startTime, Date endTime);
 }
