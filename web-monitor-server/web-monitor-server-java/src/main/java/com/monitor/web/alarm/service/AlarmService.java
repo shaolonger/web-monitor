@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -86,6 +87,7 @@ public class AlarmService extends ServiceBase {
         Integer isActive = DataConvertUtils.strToIntegerOrNull(request.getParameter("isActive"));
         Long createBy = DataConvertUtils.strToLong(request.getParameter("createBy"));
         Integer isDeleted = DataConvertUtils.strToIntegerOrNull(request.getParameter("isDeleted"));
+        String subscriberList = request.getParameter("subscriberList");
 
         // 修改
         AlarmEntity alarmEntity = alarmDao.getById(id).orElseThrow(() -> new Exception("该预警不存在"));
@@ -121,6 +123,18 @@ public class AlarmService extends ServiceBase {
         }
         if (isDeleted != null) {
             alarmEntity.setIsDeleted(isDeleted);
+        }
+        if (!StringUtils.isEmpty(subscriberList)) {
+            // 先删除已有的关联关系
+            subscriberService.deleteAllByAlarmId(alarmEntity.getId());
+            // 再创建新的关联关系
+            List<HashMap<String, Object>> list = DataConvertUtils.jsonStrToObject(subscriberList, List.class);
+            for (HashMap<String, Object> map : list) {
+                SubscriberEntity subscriberEntity = DataConvertUtils.mapToBean(map, SubscriberEntity.class);
+                if (subscriberEntity == null) throw new Exception("subscriberList格式不正确");
+                subscriberEntity.setAlarmId(alarmEntity.getId());
+                subscriberService.add(subscriberEntity);
+            }
         }
         return alarmDao.save(alarmEntity);
     }
