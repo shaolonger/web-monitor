@@ -6839,12 +6839,11 @@ LABL 0 新宋体,8,N</a:FontList>
 <a:Code>notice_time</a:Code>
 <a:CreationDate>1604825476</a:CreationDate>
 <a:Creator>nuall</a:Creator>
-<a:ModificationDate>1604825640</a:ModificationDate>
+<a:ModificationDate>1605258981</a:ModificationDate>
 <a:Modifier>nuall</a:Modifier>
 <a:Comment>通知时间，格式为yyyy-MM-dd HH:mm:ss</a:Comment>
 <a:DefaultValue>NULL</a:DefaultValue>
 <a:DataType>datetime</a:DataType>
-<a:Column.Mandatory>1</a:Column.Mandatory>
 </o:Column>
 <o:Column Id="o206">
 <a:ObjectID>D48365ED-2729-44B2-9256-B088C3F9AC59</a:ObjectID>

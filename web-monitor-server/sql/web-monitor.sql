@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/13 20:59:52                          */
+/* Created on:     2020/11/13 17:16:36                          */
 /*==============================================================*/
 
 
@@ -61,7 +61,7 @@ create table ams_alarm_record
    alarm_id             bigint not null default 0 comment '预警规则id',
    alarm_data           text not null default NULL comment '报警内容，格式为JSON字符串',
    create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式为yyyy-MM-dd HH:mm:ss',
-   notice_time          datetime not null default NULL comment '通知时间，格式为yyyy-MM-dd HH:mm:ss',
+   notice_time          datetime default NULL comment '通知时间，格式为yyyy-MM-dd HH:mm:ss',
    state                tinyint(1) not null default 0 comment '预警状态，1-已创建未通知，2-已通知',
    primary key (id)
 );
