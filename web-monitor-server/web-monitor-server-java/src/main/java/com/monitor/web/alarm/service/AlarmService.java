@@ -6,6 +6,8 @@ import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.scheduler.AlarmScheduler;
 import com.monitor.web.alarm.vo.AlarmVO;
 import com.monitor.web.common.api.PageResultBase;
+import com.monitor.web.project.entity.ProjectEntity;
+import com.monitor.web.project.service.ProjectService;
 import com.monitor.web.schedule.component.CronTaskRegistrar;
 import com.monitor.web.schedule.component.SchedulingRunnable;
 import com.monitor.web.utils.DataConvertUtils;
@@ -33,15 +35,14 @@ public class AlarmService extends ServiceBase {
 
     @Autowired
     private AlarmDAO alarmDao;
-
     @Autowired
     private SubscriberService subscriberService;
-
     @Autowired
     private AlarmScheduler alarmScheduler;
-
     @Autowired
     private CronTaskRegistrar cronTaskRegistrar;
+    @Autowired
+    private ProjectService projectService;
 
     /**
      * 新增
@@ -271,6 +272,25 @@ public class AlarmService extends ServiceBase {
 
         alarmDao.deleteById(id);
         return true;
+    }
+
+    /**
+     * 根据alarmId获取关联的项目名称
+     *
+     * @param alarmId alarmId
+     * @return String
+     */
+    public String getProjectNameByAlarmId(long alarmId) {
+        String projectName = "";
+        AlarmEntity alarmEntity = alarmDao.getById(alarmId).orElse(null);
+        if (alarmEntity != null) {
+            String projectIdentifier = alarmEntity.getProjectIdentifier();
+            ProjectEntity projectEntity = projectService.findByProjectIdentifier(projectIdentifier).orElse(null);
+            if (projectEntity != null) {
+                projectName = projectEntity.getProjectName();
+            }
+        }
+        return projectName;
     }
 
     /**

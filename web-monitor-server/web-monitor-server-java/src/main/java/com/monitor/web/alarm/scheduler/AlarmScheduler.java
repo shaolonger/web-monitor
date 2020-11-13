@@ -7,6 +7,7 @@ import com.monitor.web.alarm.dto.SubscriberNotifyRecordDTO;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.service.AlarmRecordService;
+import com.monitor.web.alarm.service.AlarmService;
 import com.monitor.web.alarm.service.SubscriberNotifyRecordService;
 import com.monitor.web.alarm.service.SubscriberService;
 import com.monitor.web.log.service.LogService;
@@ -29,6 +30,8 @@ public class AlarmScheduler {
     LogService logService;
     @Autowired
     SubscriberService subscriberService;
+    @Autowired
+    AlarmService alarmService;
     @Autowired
     AlarmRecordService alarmRecordService;
     @Autowired
@@ -155,6 +158,7 @@ public class AlarmScheduler {
      */
     @Transactional(rollbackOn = {Exception.class})
     protected void saveAlarmRecordAndNotifyAllSubscribers(AlarmEntity alarmEntity, ArrayList<HashMap<String, Object>> resultList) {
+
         List<SubscriberEntity> subscriberEntityList = subscriberService.getAllByAlarmId(alarmEntity.getId());
 
         // 保存报警记录
@@ -163,10 +167,13 @@ public class AlarmScheduler {
             AlarmRecordDTO alarmRecordDTO = new AlarmRecordDTO();
             alarmRecordDTO.setAlarmId(alarmEntity.getId());
             alarmRecordDTO.setAlarmData(alarmData);
+            long alarmId = alarmEntity.getId();
             long alarmRecordId = alarmRecordService.add(alarmRecordDTO);
 
             // 通知所有报警订阅方
-            this.notifyAllSubscribers(alarmRecordId, subscriberEntityList);
+            if (resultList.size() > 0 && subscriberEntityList.size() > 0) {
+                this.notifyAllSubscribers(alarmId, alarmRecordId, resultList, subscriberEntityList);
+            }
 
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -176,10 +183,17 @@ public class AlarmScheduler {
     /**
      * 通知所有报警订阅方
      *
+     * @param alarmId              alarmId
      * @param alarmRecordId        alarmRecordId
+     * @param resultList           resultList
      * @param subscriberEntityList subscriberEntityList
      */
-    private void notifyAllSubscribers(long alarmRecordId, List<SubscriberEntity> subscriberEntityList) {
+    private void notifyAllSubscribers(
+            long alarmId,
+            long alarmRecordId,
+            ArrayList<HashMap<String, Object>> resultList,
+            List<SubscriberEntity> subscriberEntityList
+    ) {
         for (SubscriberEntity subscriberEntity : subscriberEntityList) {
             int isActive = subscriberEntity.getIsActive();
             if (isActive == 1) {
@@ -190,6 +204,26 @@ public class AlarmScheduler {
                 Long subscriberId = subscriberEntity.getId();
                 subscriberNotifyRecordDTO.setAlarmRecordId(alarmRecordId);
                 subscriberNotifyRecordDTO.setSubscriberId(subscriberId);
+
+                // 设置通知内容
+                StringBuilder content = new StringBuilder();
+                String projectName = alarmService.getProjectNameByAlarmId(alarmId);
+                content.append("项目名：").append(projectName).append("\n");
+                content.append("报警内容：").append("\n");
+                int index = 1;
+                for (HashMap<String, Object> map : resultList) {
+                    String targetInd = (String) map.get("targetInd");
+                    float actualValue = (float) map.get("actualValue");
+                    float thresholdValue = (float) map.get("thresholdValue");
+                    content.append(index).append(".").append("[").append(targetInd).append("]")
+                            .append("阈值：").append(thresholdValue).append("，").append("实际值：")
+                            .append(actualValue);
+                    if (index < resultList.size()) {
+                        content.append("\n");
+                        index++;
+                    }
+                }
+                subscriberNotifyRecordDTO.setContent(content.toString());
 
                 int category = subscriberEntity.getCategory();
                 if (category == 1) {

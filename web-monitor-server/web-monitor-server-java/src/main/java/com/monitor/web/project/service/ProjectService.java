@@ -220,6 +220,16 @@ public class ProjectService extends ServiceBase {
     }
 
     /**
+     * 根据projectIdentifier查找实体类
+     *
+     * @param projectIdentifier projectIdentifier
+     * @return Optional
+     */
+    public Optional<ProjectEntity> findByProjectIdentifier(String projectIdentifier) {
+        return projectDao.findByProjectIdentifier(projectIdentifier);
+    }
+
+    /**
      * entity转vo
      *
      * @param list list
