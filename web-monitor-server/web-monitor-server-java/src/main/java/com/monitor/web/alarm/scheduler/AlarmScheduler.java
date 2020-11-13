@@ -5,8 +5,7 @@ import com.monitor.web.alarm.bean.AlarmRuleItemBean;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component("AlarmScheduler")
+@Slf4j
 public class AlarmScheduler {
 
     @Autowired
     LogService logService;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String beanName = "AlarmScheduler";
 
@@ -97,16 +95,16 @@ public class AlarmScheduler {
             }
             if ("&&".equals(op) && isAnd) {
                 // 触发预警条件，添加报警记录
-                logger.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
+                log.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
                 // TODO 记录报警记录，同时触发报警通知
             }
             if ("||".equals(op) && isOr) {
                 // 触发预警条件，添加报警记录
-                logger.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
+                log.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
                 // TODO 记录报警记录，同时触发报警通知
             }
         } catch (Exception e) {
-            logger.error("[预警定时任务]预警名称：{}，异常：{}", alarmEntity.getName(), e.getStackTrace());
+            log.error("[预警定时任务]预警名称：{}，异常：{}", alarmEntity.getName(), e.getStackTrace());
         }
     }
 

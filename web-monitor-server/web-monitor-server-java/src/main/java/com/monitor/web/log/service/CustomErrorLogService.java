@@ -7,8 +7,7 @@ import com.monitor.web.log.vo.StatisticRecordVO;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.utils.DateUtils;
 import com.monitor.web.common.service.ServiceBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class CustomErrorLogService extends ServiceBase {
 
     @Autowired
@@ -29,8 +29,6 @@ public class CustomErrorLogService extends ServiceBase {
 
     @Autowired
     private StatisticService statisticService;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 条件查询
@@ -209,7 +207,7 @@ public class CustomErrorLogService extends ServiceBase {
      */
     public boolean add(CustomErrorLogEntity customErrorLogEntity) {
 
-        logger.info("--------[CustomErrorLogService]保存开始--------");
+        log.info("--------[CustomErrorLogService]保存开始--------");
 
         // 获取请求参数
         String logType = customErrorLogEntity.getLogType();
@@ -250,7 +248,7 @@ public class CustomErrorLogService extends ServiceBase {
         customErrorLogEntity.setCreateTime(createTime);
         customErrorLogDao.save(customErrorLogEntity);
 
-        logger.info("--------[CustomErrorLogService]保存结束--------");
+        log.info("--------[CustomErrorLogService]保存结束--------");
 
         return true;
     }
@@ -263,7 +261,7 @@ public class CustomErrorLogService extends ServiceBase {
      */
     public boolean add(HttpServletRequest request) throws Exception {
 
-        logger.info("--------[CustomErrorLogService]保存开始--------");
+        log.info("--------[CustomErrorLogService]保存开始--------");
 
         // 获取请求参数
         String projectIdentifier = request.getParameter("projectIdentifier");
@@ -324,7 +322,7 @@ public class CustomErrorLogService extends ServiceBase {
         customErrorLogEntity.setCreateTime(createTime);
         customErrorLogDao.save(customErrorLogEntity);
 
-        logger.info("--------[CustomErrorLogService]保存结束--------");
+        log.info("--------[CustomErrorLogService]保存结束--------");
 
         return true;
     }

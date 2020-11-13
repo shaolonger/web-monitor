@@ -7,8 +7,7 @@ import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.utils.DateUtils;
 import com.monitor.web.log.vo.StatisticRecordVO;
 import com.monitor.web.common.service.ServiceBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class ResourceLoadErrorLogService extends ServiceBase {
 
     @Autowired
@@ -29,8 +29,6 @@ public class ResourceLoadErrorLogService extends ServiceBase {
 
     @Autowired
     private StatisticService statisticService;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 条件查询
@@ -221,7 +219,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      */
     public boolean add(ResourceLoadErrorLogEntity resourceLoadErrorLogEntity) {
 
-        logger.info("--------[resourceLoadErrorLogService]保存开始--------");
+        log.info("--------[resourceLoadErrorLogService]保存开始--------");
 
         // 获取请求参数
         String logType = resourceLoadErrorLogEntity.getLogType();
@@ -264,7 +262,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         resourceLoadErrorLogEntity.setCreateTime(createTime);
         resourceLoadErrorLogDao.save(resourceLoadErrorLogEntity);
 
-        logger.info("--------[resourceLoadErrorLogService]保存结束--------");
+        log.info("--------[resourceLoadErrorLogService]保存结束--------");
 
         return true;
     }
@@ -277,7 +275,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
      */
     public boolean add(HttpServletRequest request) throws Exception {
 
-        logger.info("--------[resourceLoadErrorLogService]保存开始--------");
+        log.info("--------[resourceLoadErrorLogService]保存开始--------");
 
         // 获取请求参数
         String projectIdentifier = request.getParameter("projectIdentifier");
@@ -346,7 +344,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         resourceLoadErrorLogEntity.setCreateTime(createTime);
         resourceLoadErrorLogDao.save(resourceLoadErrorLogEntity);
 
-        logger.info("--------[resourceLoadErrorLogService]保存结束--------");
+        log.info("--------[resourceLoadErrorLogService]保存结束--------");
 
         return true;
     }

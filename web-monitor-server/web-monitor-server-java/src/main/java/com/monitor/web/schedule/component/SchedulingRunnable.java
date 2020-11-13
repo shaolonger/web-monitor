@@ -1,17 +1,15 @@
 package com.monitor.web.schedule.component;
 
 import com.monitor.web.utils.SpringContextUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+@Slf4j
 public class SchedulingRunnable implements Runnable {
-
-    private static final Logger logger = LoggerFactory.getLogger(SchedulingRunnable.class);
 
     private String beanName;
 
@@ -31,7 +29,7 @@ public class SchedulingRunnable implements Runnable {
 
     @Override
     public void run() {
-        logger.info("定时任务开始执行 - bean：{}，方法：{}，参数：{}", beanName, methodName, params);
+        log.info("定时任务开始执行 - bean：{}，方法：{}，参数：{}", beanName, methodName, params);
         long startTime = System.currentTimeMillis();
         try {
             Object target = SpringContextUtils.getBean(beanName);
@@ -48,10 +46,10 @@ public class SchedulingRunnable implements Runnable {
                 method.invoke(target);
             }
         } catch (Exception e) {
-            logger.error(String.format("定时任务执行异常 - bean：%s，方法：%s，参数：%s ", beanName, methodName, params), e);
+            log.error(String.format("定时任务执行异常 - bean：%s，方法：%s，参数：%s ", beanName, methodName, params), e);
         }
         long times = System.currentTimeMillis() - startTime;
-        logger.info("定时任务执行结束 - bean：{}，方法：{}，参数：{}，耗时：{} 毫秒", beanName, methodName, params, times);
+        log.info("定时任务执行结束 - bean：{}，方法：{}，参数：{}，耗时：{} 毫秒", beanName, methodName, params, times);
     }
 
     @Override

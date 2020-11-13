@@ -8,8 +8,7 @@ import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.vo.ProjectVO;
 import com.monitor.web.common.service.ServiceBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +21,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProjectService extends ServiceBase {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ProjectDAO projectDao;
@@ -41,7 +39,7 @@ public class ProjectService extends ServiceBase {
     @Transactional(rollbackOn = {Exception.class})
     public Object add(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
 
-        logger.info("--------[ProjectService]保存开始--------");
+        log.info("--------[ProjectService]保存开始--------");
 
         // 创建时间
         Date createTime = new Date();
@@ -59,7 +57,7 @@ public class ProjectService extends ServiceBase {
             userProjectRelationDao.save(userProjectRelationEntity);
         }
 
-        logger.info("--------[ProjectService]保存结束--------");
+        log.info("--------[ProjectService]保存结束--------");
 
         return projectEntity;
     }
@@ -73,7 +71,7 @@ public class ProjectService extends ServiceBase {
     @Transactional(rollbackOn = {Exception.class})
     public Object update(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
 
-        logger.info("--------[ProjectService]更新开始--------");
+        log.info("--------[ProjectService]更新开始--------");
 
         // 获取要更新的实体
         Long id = DataConvertUtils.strToLong(request.getParameter("id"));
@@ -126,7 +124,7 @@ public class ProjectService extends ServiceBase {
         entity.setIsAutoUpload(isAutoUpload);
         projectDao.save(entity);
 
-        logger.info("--------[ProjectService]更新结束--------");
+        log.info("--------[ProjectService]更新结束--------");
 
         return entity;
     }
@@ -206,7 +204,7 @@ public class ProjectService extends ServiceBase {
     @Transactional(rollbackOn = {Exception.class})
     public Object delete(Long id) throws Exception {
 
-        logger.info("--------[ProjectService]删除开始--------");
+        log.info("--------[ProjectService]删除开始--------");
 
         Optional<ProjectEntity> optional = projectDao.findById(id);
         ProjectEntity entity = optional.orElseThrow(() -> new Exception("找不到要删除的项目"));
@@ -216,7 +214,7 @@ public class ProjectService extends ServiceBase {
 
         projectDao.delete(entity);
 
-        logger.info("--------[ProjectService]删除结束--------");
+        log.info("--------[ProjectService]删除结束--------");
 
         return true;
     }

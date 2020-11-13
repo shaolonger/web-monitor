@@ -7,8 +7,7 @@ import com.monitor.web.utils.DateUtils;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.common.service.ServiceBase;
 import com.monitor.web.utils.DataConvertUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +21,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserRegisterRecordService extends ServiceBase {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserRegisterRecordDAO userRegisterRecordDao;
@@ -40,7 +38,7 @@ public class UserRegisterRecordService extends ServiceBase {
      */
     public Object add(UserRegisterRecordEntity userRegisterRecordEntity) {
 
-        logger.info("--------[UserRegisterRecordService]保存开始--------");
+        log.info("--------[UserRegisterRecordService]保存开始--------");
 
         // 创建时间
         Date nowTime = new Date();
@@ -50,7 +48,7 @@ public class UserRegisterRecordService extends ServiceBase {
         userRegisterRecordEntity.setCreateTime(nowTime);
         userRegisterRecordDao.save(userRegisterRecordEntity);
 
-        logger.info("--------[UserRegisterRecordService]保存结束--------");
+        log.info("--------[UserRegisterRecordService]保存结束--------");
 
         return userRegisterRecordEntity;
     }

@@ -1,8 +1,7 @@
 package com.monitor.web.common.execption;
 
 import com.monitor.web.common.api.ResponseResultBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,21 +10,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 全局异常处理器
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
     public Object handleApiException(ApiException e) {
-        logger.error(e.getMessage(), e);
+        log.error(e.getMessage(), e);
         return ResponseResultBase.getErrorResponseResult(e);
     }
 
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public Object handleException(Exception e) {
-        logger.error(e.getMessage(), e);
+        log.error(e.getMessage(), e);
         return ResponseResultBase.getErrorResponseResult(e);
     }
 }

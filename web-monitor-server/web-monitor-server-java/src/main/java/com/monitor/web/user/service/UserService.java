@@ -12,8 +12,7 @@ import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.common.service.ServiceBase;
 import com.monitor.web.utils.TokenUtils;
 import com.monitor.web.utils.DataConvertUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService extends ServiceBase {
 
     @Autowired
@@ -36,8 +36,6 @@ public class UserService extends ServiceBase {
     @Autowired
     private UserProjectRelationDAO userProjectRelationDao;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     /**
      * 新增
      *
@@ -46,7 +44,7 @@ public class UserService extends ServiceBase {
      */
     public Object add(UserEntity userEntity) {
 
-        logger.info("--------[UserService]保存开始--------");
+        log.info("--------[UserService]保存开始--------");
 
         // 创建时间
         Date createTime = new Date();
@@ -56,7 +54,7 @@ public class UserService extends ServiceBase {
         userEntity.setCreateTime(createTime);
         userDao.save(userEntity);
 
-        logger.info("--------[UserService]保存结束--------");
+        log.info("--------[UserService]保存结束--------");
 
         return userEntity;
     }
