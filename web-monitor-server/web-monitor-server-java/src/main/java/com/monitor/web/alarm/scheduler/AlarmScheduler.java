@@ -154,7 +154,7 @@ public class AlarmScheduler {
         List<SubscriberEntity> subscriberEntityList = subscriberService.getAllByAlarmId(alarmEntity.getId());
 
         // 通知所有报警订阅方
-        boolean isAllNotifySuccess = this.notifyAllSubscribers(subscriberEntityList);
+        this.notifyAllSubscribers(subscriberEntityList);
 
         // 保存报警记录
         try {
@@ -162,13 +162,6 @@ public class AlarmScheduler {
             AlarmRecordDTO alarmRecordDTO = new AlarmRecordDTO();
             alarmRecordDTO.setAlarmId(alarmEntity.getId());
             alarmRecordDTO.setAlarmData(alarmData);
-            if (isAllNotifySuccess) {
-                Date noticeTime = new Date();
-                alarmRecordDTO.setState(2);
-                alarmRecordDTO.setNoticeTime(noticeTime);
-            } else {
-                alarmRecordDTO.setState(1);
-            }
             alarmRecordService.add(alarmRecordDTO);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -179,10 +172,8 @@ public class AlarmScheduler {
      * 通知所有报警订阅方
      *
      * @param subscriberEntityList subscriberEntityList
-     * @return boolean
      */
-    private boolean notifyAllSubscribers(List<SubscriberEntity> subscriberEntityList) {
-        boolean isAllNotifySuccess = true;
+    private void notifyAllSubscribers(List<SubscriberEntity> subscriberEntityList) {
         for (SubscriberEntity subscriberEntity : subscriberEntityList) {
             int isActive = subscriberEntity.getIsActive();
             if (isActive == 1) {
@@ -199,10 +190,8 @@ public class AlarmScheduler {
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());
-                    isAllNotifySuccess = false;
                 }
             }
         }
-        return isAllNotifySuccess;
     }
 }

@@ -33,12 +33,6 @@ public class AlarmRecordService {
         Date createTime = new Date();
         alarmRecordEntity.setCreateTime(createTime);
 
-        // state
-        alarmRecordEntity.setState(alarmRecordDTO.getState());
-
-        // noticeTime
-        alarmRecordEntity.setNoticeTime(alarmRecordDTO.getNoticeTime());
-
         alarmRecordDAO.save(alarmRecordEntity);
 
         return true;

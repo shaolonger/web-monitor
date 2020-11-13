@@ -32,15 +32,4 @@ public class AlarmRecordEntity {
      */
     @Column(nullable = false)
     private Date createTime;
-
-    /**
-     * 通知时间，格式为yyyy-MM-dd HH:mm:ss
-     */
-    private Date noticeTime;
-
-    /**
-     * 预警状态，1-已创建未通知，2-已通知
-     */
-    @Column(nullable = false)
-    private int state;
 }
