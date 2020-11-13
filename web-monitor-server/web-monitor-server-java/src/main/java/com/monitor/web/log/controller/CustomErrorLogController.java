@@ -17,6 +17,7 @@ import javax.validation.ValidationException;
 
 @RestController
 public class CustomErrorLogController {
+
     @Autowired
     private CustomErrorLogService customErrorLogService;
 
