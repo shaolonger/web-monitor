@@ -20,7 +20,7 @@ public class AlarmRecordService {
      * @param alarmRecordDTO alarmRecordDTO
      * @return boolean
      */
-    public boolean add(AlarmRecordDTO alarmRecordDTO) {
+    public long add(AlarmRecordDTO alarmRecordDTO) {
         AlarmRecordEntity alarmRecordEntity = new AlarmRecordEntity();
 
         // alarmId
@@ -33,8 +33,6 @@ public class AlarmRecordService {
         Date createTime = new Date();
         alarmRecordEntity.setCreateTime(createTime);
 
-        alarmRecordDAO.save(alarmRecordEntity);
-
-        return true;
+        return alarmRecordDAO.save(alarmRecordEntity).getId();
     }
 }

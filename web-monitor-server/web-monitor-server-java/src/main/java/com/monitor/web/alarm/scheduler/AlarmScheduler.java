@@ -3,9 +3,11 @@ package com.monitor.web.alarm.scheduler;
 import com.monitor.web.alarm.bean.AlarmRuleBean;
 import com.monitor.web.alarm.bean.AlarmRuleItemBean;
 import com.monitor.web.alarm.dto.AlarmRecordDTO;
+import com.monitor.web.alarm.dto.SubscriberNotifyRecordDTO;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.service.AlarmRecordService;
+import com.monitor.web.alarm.service.SubscriberNotifyRecordService;
 import com.monitor.web.alarm.service.SubscriberService;
 import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
@@ -29,6 +31,8 @@ public class AlarmScheduler {
     SubscriberService subscriberService;
     @Autowired
     AlarmRecordService alarmRecordService;
+    @Autowired
+    SubscriberNotifyRecordService subscriberNotifyRecordService;
 
     private static final String beanName = "AlarmScheduler";
 
@@ -153,16 +157,17 @@ public class AlarmScheduler {
     protected void saveAlarmRecordAndNotifyAllSubscribers(AlarmEntity alarmEntity, ArrayList<HashMap<String, Object>> resultList) {
         List<SubscriberEntity> subscriberEntityList = subscriberService.getAllByAlarmId(alarmEntity.getId());
 
-        // 通知所有报警订阅方
-        this.notifyAllSubscribers(subscriberEntityList);
-
         // 保存报警记录
         try {
             String alarmData = DataConvertUtils.objectToJsonStr(resultList);
             AlarmRecordDTO alarmRecordDTO = new AlarmRecordDTO();
             alarmRecordDTO.setAlarmId(alarmEntity.getId());
             alarmRecordDTO.setAlarmData(alarmData);
-            alarmRecordService.add(alarmRecordDTO);
+            long alarmRecordId = alarmRecordService.add(alarmRecordDTO);
+
+            // 通知所有报警订阅方
+            this.notifyAllSubscribers(alarmRecordId, subscriberEntityList);
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -171,25 +176,30 @@ public class AlarmScheduler {
     /**
      * 通知所有报警订阅方
      *
+     * @param alarmRecordId        alarmRecordId
      * @param subscriberEntityList subscriberEntityList
      */
-    private void notifyAllSubscribers(List<SubscriberEntity> subscriberEntityList) {
+    private void notifyAllSubscribers(long alarmRecordId, List<SubscriberEntity> subscriberEntityList) {
         for (SubscriberEntity subscriberEntity : subscriberEntityList) {
             int isActive = subscriberEntity.getIsActive();
             if (isActive == 1) {
                 String subscriber = subscriberEntity.getSubscriber();
-                try {
-                    List<String> subscriberList = DataConvertUtils.jsonStrToObject(subscriber, List.class);
-                    int category = subscriberEntity.getCategory();
-                    if (category == 1) {
-                        // 钉钉机器人
-                        // TODO 待创建通知领域模型，发送通知
-                    } else if (category == 2) {
-                        // 邮箱
-                        // TODO 待创建通知领域模型，发送通知
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
+                String[] subscriberList = subscriber.split(",");
+
+                SubscriberNotifyRecordDTO subscriberNotifyRecordDTO = new SubscriberNotifyRecordDTO();
+                Long subscriberId = subscriberEntity.getId();
+                subscriberNotifyRecordDTO.setAlarmRecordId(alarmRecordId);
+                subscriberNotifyRecordDTO.setSubscriberId(subscriberId);
+
+                int category = subscriberEntity.getCategory();
+                if (category == 1) {
+                    // 钉钉机器人
+                    subscriberNotifyRecordDTO.setState(2); // TODO 发送通知，并标记发送状态
+                    subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
+                } else if (category == 2) {
+                    // 邮箱
+                    subscriberNotifyRecordDTO.setState(2); // TODO 发送通知，并标记发送状态
+                    subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
                 }
             }
         }
