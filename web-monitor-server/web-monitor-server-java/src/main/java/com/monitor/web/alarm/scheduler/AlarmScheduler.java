@@ -2,14 +2,20 @@ package com.monitor.web.alarm.scheduler;
 
 import com.monitor.web.alarm.bean.AlarmRuleBean;
 import com.monitor.web.alarm.bean.AlarmRuleItemBean;
+import com.monitor.web.alarm.dto.AlarmRecordDTO;
 import com.monitor.web.alarm.entity.AlarmEntity;
+import com.monitor.web.alarm.entity.SubscriberEntity;
+import com.monitor.web.alarm.service.AlarmRecordService;
+import com.monitor.web.alarm.service.SubscriberService;
 import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +25,10 @@ public class AlarmScheduler {
 
     @Autowired
     LogService logService;
+    @Autowired
+    SubscriberService subscriberService;
+    @Autowired
+    AlarmRecordService alarmRecordService;
 
     private static final String beanName = "AlarmScheduler";
 
@@ -93,15 +103,10 @@ public class AlarmScheduler {
                     map.put("alarmContent", alarmContent);
                 }
             }
-            if ("&&".equals(op) && isAnd) {
+            if (("&&".equals(op) && isAnd) || ("||".equals(op) && isOr)) {
                 // 触发预警条件，添加报警记录
-                log.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
-                // TODO 记录报警记录，同时触发报警通知
-            }
-            if ("||".equals(op) && isOr) {
-                // 触发预警条件，添加报警记录
-                log.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
-                // TODO 记录报警记录，同时触发报警通知
+//                log.info("[预警定时任务]预警名称：{}，报警内容：{}", alarmEntity.getName(), resultList);
+                this.saveAlarmRecordAndNotifyAllSubscribers(alarmEntity, resultList);
             }
         } catch (Exception e) {
             log.error("[预警定时任务]预警名称：{}，异常：{}", alarmEntity.getName(), e.getStackTrace());
@@ -136,5 +141,68 @@ public class AlarmScheduler {
                 resultMap.put("isExceedAlarmThreshold", newActualValue > thresholdValue);
             }
         });
+    }
+
+    /**
+     * 保存报警记录，同时通知所有报警订阅方
+     *
+     * @param alarmEntity alarmEntity
+     * @param resultList  resultList
+     */
+    @Transactional(rollbackOn = {Exception.class})
+    protected void saveAlarmRecordAndNotifyAllSubscribers(AlarmEntity alarmEntity, ArrayList<HashMap<String, Object>> resultList) {
+        List<SubscriberEntity> subscriberEntityList = subscriberService.getAllByAlarmId(alarmEntity.getId());
+
+        // 通知所有报警订阅方
+        boolean isAllNotifySuccess = this.notifyAllSubscribers(subscriberEntityList);
+
+        // 保存报警记录
+        try {
+            String alarmData = DataConvertUtils.objectToJsonStr(resultList);
+            AlarmRecordDTO alarmRecordDTO = new AlarmRecordDTO();
+            alarmRecordDTO.setAlarmId(alarmEntity.getId());
+            alarmRecordDTO.setAlarmData(alarmData);
+            if (isAllNotifySuccess) {
+                Date noticeTime = new Date();
+                alarmRecordDTO.setState(2);
+                alarmRecordDTO.setNoticeTime(noticeTime);
+            } else {
+                alarmRecordDTO.setState(1);
+            }
+            alarmRecordService.add(alarmRecordDTO);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 通知所有报警订阅方
+     *
+     * @param subscriberEntityList subscriberEntityList
+     * @return boolean
+     */
+    private boolean notifyAllSubscribers(List<SubscriberEntity> subscriberEntityList) {
+        boolean isAllNotifySuccess = true;
+        for (SubscriberEntity subscriberEntity : subscriberEntityList) {
+            int isActive = subscriberEntity.getIsActive();
+            if (isActive == 1) {
+                String subscriber = subscriberEntity.getSubscriber();
+                try {
+                    List<String> subscriberList = DataConvertUtils.jsonStrToObject(subscriber, List.class);
+                    int category = subscriberEntity.getCategory();
+                    if (category == 1) {
+                        // 钉钉机器人
+                        // TODO 待创建通知领域模型，发送通知
+                    } else if (category == 2) {
+                        // 邮箱
+                        // TODO 待创建通知领域模型，发送通知
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    isAllNotifySuccess = false;
+                }
+            }
+        }
+        return isAllNotifySuccess;
     }
 }

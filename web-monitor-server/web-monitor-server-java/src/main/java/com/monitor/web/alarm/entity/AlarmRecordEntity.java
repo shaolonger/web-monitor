@@ -36,7 +36,6 @@ public class AlarmRecordEntity {
     /**
      * 通知时间，格式为yyyy-MM-dd HH:mm:ss
      */
-    @Column(nullable = false)
     private Date noticeTime;
 
     /**
