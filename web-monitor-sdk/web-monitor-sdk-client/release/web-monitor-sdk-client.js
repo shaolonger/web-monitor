@@ -3677,6 +3677,14 @@
 	  };
 	}();
 
+	var addLogClient = function addLogClient(formData) {
+	  httpClient.fetch({
+	    method: 'GET',
+	    url: '/log/client/add',
+	    params: formData
+	  });
+	};
+
 	var uploadLog = function uploadLog(logData) {
 	  var url = getUrlByQueryParams('/log/add', logData);
 	  httpClient.uploadLog(url);
@@ -3804,7 +3812,11 @@
 	        }));
 	      }
 	    };
-	    monitor.init(config);
+	    monitor.init(config); // 记录日志客户端cUuid
+
+	    addLogClient({
+	      cUuid: uuid
+	    });
 	    console.log('[log]web-monitor-sdk', '开启成功');
 	  });
 	});
