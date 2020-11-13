@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/13 20:33:13                          */
+/* Created on:     2020/11/13 20:59:52                          */
 /*==============================================================*/
 
 
@@ -75,7 +75,9 @@ create table ams_subscriber
 (
    id                   bigint not null auto_increment comment '唯一自增主键',
    alarm_id             bigint not null comment '预警规则id',
-   subscriber           text default NULL comment '报警订阅者，为JSON格式，例如"[]"',
+   subscriber           text default NULL comment '报警订阅方，内容为JSON格式，例如"[]"。
+            1、若订阅方式为钉钉，则内容为钉钉的机器人Webhook的access_token
+            2、若为邮件定于，则内容为邮件地址',
    is_active            tinyint(1) not null default 0 comment '是否启用，0-否，1-是',
    category             tinyint(1) not null default 1 comment '订阅类型，1-钉钉机器人，2-邮箱',
    primary key (id)
