@@ -46,4 +46,13 @@ public class ClientUserService {
 
         return true;
     }
+
+    /**
+     * 计算总cUuid数
+     *
+     * @return long
+     */
+    public int countDistinctCUuid() {
+        return clientUserDAO.countDistinctCUuid();
+    }
 }

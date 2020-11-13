@@ -29,6 +29,8 @@ public class LogService extends ServiceBase {
     ResourceLoadErrorLogService resourceLoadErrorLogService;
     @Autowired
     CustomErrorLogService customErrorLogService;
+    @Autowired
+    ClientUserService clientUserService;
 
     /**
      * 打点日志上传
@@ -289,7 +291,7 @@ public class LogService extends ServiceBase {
         if ("uvRate".equals(ind)) {
             targetInd = "影响用户率";
             int uvCount = 0;
-            int uvTotal = 1000; // TODO 先写死，后面需要改成从日志用户表中获取
+            int uvTotal = clientUserService.countDistinctCUuid();
             switch (tableName) {
                 case "lms_js_error_log":
                     uvCount = jsErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
@@ -304,7 +306,7 @@ public class LogService extends ServiceBase {
                     uvCount = customErrorLogService.countDistinctCUuidByCreateTimeBetween(startTime, endTime);
                     break;
             }
-            float uvRate = (float) uvCount / uvTotal;
+            float uvRate = (float) uvCount / uvTotal * 100;
             if (">".equals(op)) {
                 if ("count".equals(agg)) {
                     isExceedAlarmThreshold = uvRate > val;
@@ -413,7 +415,7 @@ public class LogService extends ServiceBase {
         if ("perPV".equals(ind)) {
             targetInd = "人均异常次数";
             int pvCount = 0;
-            int uvTotal = 1000; // TODO 先写死，后面需要改成从日志用户表中获取
+            int uvTotal = clientUserService.countDistinctCUuid();
             switch (tableName) {
                 case "lms_js_error_log":
                     pvCount = jsErrorLogService.countByCreateTimeBetween(startTime, endTime);
