@@ -6,6 +6,7 @@ import {
     getByProjectIdentifier
 } from './service/projectService';
 import {
+    addLogClient,
     uploadLog
 } from './service/monitorService';
 import {
@@ -47,6 +48,10 @@ getParamsFromScript(projectIdentifier => {
             }
         };
         monitor.init(config);
+
+        // 记录日志客户端cUuid
+        addLogClient({cUuid: uuid});
+
         console.log('[log]web-monitor-sdk', '开启成功');
     });
 });
