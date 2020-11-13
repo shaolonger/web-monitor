@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ams_alarm")
 public class AlarmEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @Column(unique = true, nullable = false)
