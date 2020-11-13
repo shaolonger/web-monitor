@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/10 9:06:46                           */
+/* Created on:     2020/11/13 11:03:56                          */
 /*==============================================================*/
 
 
@@ -9,6 +9,8 @@ drop table if exists ams_alarm;
 drop table if exists ams_alarm_record;
 
 drop table if exists ams_subscriber;
+
+drop table if exists lms_client_user;
 
 drop table if exists lms_custom_error_log;
 
@@ -82,11 +84,27 @@ create table ams_subscriber
 alter table ams_subscriber comment '预警订阅通知表';
 
 /*==============================================================*/
+/* Table: lms_client_user                                       */
+/*==============================================================*/
+create table lms_client_user
+(
+   id                   bigint not null auto_increment comment 'ID',
+   c_uuid               char(36) not null default "" comment '客户端唯一识别码，全称client uuid',
+   b_uid                bigint not null default 0 comment '业务用户ID',
+   b_uname              varchar(64) not null default "" comment '业务用户名',
+   create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间',
+   update_time          datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
+   primary key (id)
+);
+
+alter table lms_client_user comment '日志客户端用户表';
+
+/*==============================================================*/
 /* Table: lms_custom_error_log                                  */
 /*==============================================================*/
 create table lms_custom_error_log
 (
-   id                   bigint not null auto_increment comment 'ID',
+   id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -116,7 +134,7 @@ alter table lms_custom_error_log comment '自定义异常日志表';
 /*==============================================================*/
 create table lms_http_error_log
 (
-   id                   bigint not null auto_increment comment 'ID',
+   id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -149,7 +167,7 @@ alter table lms_http_error_log comment 'HTTP异常日志表';
 /*==============================================================*/
 create table lms_js_error_log
 (
-   id                   bigint not null auto_increment comment 'ID',
+   id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
@@ -179,7 +197,7 @@ alter table lms_js_error_log comment 'JS异常日志表';
 /*==============================================================*/
 create table lms_resource_load_error_log
 (
-   id                   bigint not null auto_increment comment 'ID',
+   id                   bigint not null comment 'ID',
    log_type             varchar(50) not null comment '日志类型',
    project_identifier   varchar(200) not null comment '关联的项目标识',
    create_time          datetime not null comment '创建时间',
