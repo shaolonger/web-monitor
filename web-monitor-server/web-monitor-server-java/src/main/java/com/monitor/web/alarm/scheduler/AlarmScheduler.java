@@ -65,11 +65,14 @@ public class AlarmScheduler {
 
             // 根据category过滤条件，查询对应的日志表
             if (category == 0) {
+                ArrayList<HashMap<String, Object>> tempList = new ArrayList<>();
                 tableNameMap.values().forEach(tableName -> {
                     alarmRuleItemBeanList.forEach(alarmRuleItemBean -> {
-                        resultList.add(logService.checkIsExceedAlarmThreshold(tableName, alarmRuleItemBean));
+                        tempList.add(logService.checkIsExceedAlarmThreshold(tableName, alarmRuleItemBean));
                     });
                 });
+                // 聚合分析
+                this.setResultListByTempList(tempList, resultList);
             } else {
                 String tableName = tableNameMap.get(category);
                 alarmRuleItemBeanList.forEach(alarmRuleItemBean -> {
@@ -105,5 +108,35 @@ public class AlarmScheduler {
         } catch (Exception e) {
             logger.error("[预警定时任务]预警名称：{}，异常：{}", alarmEntity.getName(), e.getStackTrace());
         }
+    }
+
+    /**
+     * 当category为0时，即选择的过滤条件为全部，此时需要对各个表的计算结果进行聚合分析
+     *
+     * @param tempList   tempList
+     * @param resultList resultList
+     */
+    private void setResultListByTempList(ArrayList<HashMap<String, Object>> tempList, ArrayList<HashMap<String, Object>> resultList) {
+        tempList.forEach(map -> {
+            HashMap<String, Object> resultMap = resultList
+                    .stream()
+                    .filter(item -> map.get("targetInd").equals(item.get("targetInd")))
+                    .findAny()
+                    .orElse(null);
+            if (resultMap == null) {
+                resultMap = new HashMap<>();
+                resultMap.put("isExceedAlarmThreshold", map.get("isExceedAlarmThreshold"));
+                resultMap.put("targetInd", map.get("targetInd"));
+                resultMap.put("actualValue", map.get("actualValue"));
+                resultMap.put("thresholdValue", map.get("thresholdValue"));
+                resultList.add(resultMap);
+            } else {
+                float thresholdValue = (float) resultMap.get("thresholdValue");
+                float oldActualValue = (float) resultMap.get("actualValue");
+                float newActualValue = oldActualValue + (float) map.get("actualValue");
+                resultMap.put("actualValue", newActualValue);
+                resultMap.put("isExceedAlarmThreshold", newActualValue > thresholdValue);
+            }
+        });
     }
 }

@@ -312,7 +312,7 @@ public class LogService extends ServiceBase {
                 }
                 if ("avg".equals(agg)) {
                     isExceedAlarmThreshold = uvRate / gap > val;
-                    actualValue = (float) uvRate / gap;
+                    actualValue = uvRate / gap;
                 }
             }
             if ("<".equals(op)) {
@@ -322,7 +322,7 @@ public class LogService extends ServiceBase {
                 }
                 if ("avg".equals(agg)) {
                     isExceedAlarmThreshold = uvRate / gap < val;
-                    actualValue = (float) uvRate / gap;
+                    actualValue = uvRate / gap;
                 }
             }
             // 环比昨天上涨、下跌
