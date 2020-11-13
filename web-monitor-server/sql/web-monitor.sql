@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/13 17:16:36                          */
+/* Created on:     2020/11/13 21:05:59                          */
 /*==============================================================*/
 
 
@@ -9,6 +9,8 @@ drop table if exists ams_alarm;
 drop table if exists ams_alarm_record;
 
 drop table if exists ams_subscriber;
+
+drop table if exists ams_subscriber_notify_record;
 
 drop table if exists lms_client_user;
 
@@ -61,8 +63,6 @@ create table ams_alarm_record
    alarm_id             bigint not null default 0 comment '预警规则id',
    alarm_data           text not null default NULL comment '报警内容，格式为JSON字符串',
    create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式为yyyy-MM-dd HH:mm:ss',
-   notice_time          datetime default NULL comment '通知时间，格式为yyyy-MM-dd HH:mm:ss',
-   state                tinyint(1) not null default 0 comment '预警状态，1-已创建未通知，2-已通知',
    primary key (id)
 );
 
@@ -84,6 +84,22 @@ create table ams_subscriber
 );
 
 alter table ams_subscriber comment '预警订阅通知表';
+
+/*==============================================================*/
+/* Table: ams_subscriber_notify_record                          */
+/*==============================================================*/
+create table ams_subscriber_notify_record
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   alarm_record_id      bigint not null default 0 comment '报警记录id',
+   subscriber_id        bigint not null default 0 comment '报警订阅方id',
+   state                tinyint(1) not null default 0 comment '通知状态，1-失败，2-成功',
+   content              text not null default '1' comment '通知内容',
+   create_time          date not null default CURRENT_TIMESTAMP comment '创建时间，即通知时间',
+   primary key (id)
+);
+
+alter table ams_subscriber_notify_record comment '预警订阅通知记录表';
 
 /*==============================================================*/
 /* Table: lms_client_user                                       */
