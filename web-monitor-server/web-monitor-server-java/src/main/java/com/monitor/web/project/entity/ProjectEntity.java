@@ -54,6 +54,16 @@ public class ProjectEntity {
     private Integer isAutoUpload;
 
     /**
+     * 预警模块中的钉钉机器人access_token，用于预警模块中发送报警推送，多个用英文逗号隔开
+     */
+    private String notifyDtToken;
+
+    /**
+     * 预警模块中的邮件推送地址，多个用英文逗号隔开
+     */
+    private String notifyEmail;
+
+    /**
      * 创建时间
      */
     private Date createTime;
