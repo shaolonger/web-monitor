@@ -10,17 +10,16 @@ import com.monitor.web.alarm.service.AlarmRecordService;
 import com.monitor.web.alarm.service.AlarmService;
 import com.monitor.web.alarm.service.SubscriberNotifyRecordService;
 import com.monitor.web.alarm.service.SubscriberService;
+import com.monitor.web.common.component.DingTalkComponent;
 import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Component("AlarmScheduler")
 @Slf4j
@@ -198,7 +197,6 @@ public class AlarmScheduler {
             int isActive = subscriberEntity.getIsActive();
             if (isActive == 1) {
                 String subscriber = subscriberEntity.getSubscriber();
-                String[] subscriberList = subscriber.split(",");
 
                 SubscriberNotifyRecordDTO subscriberNotifyRecordDTO = new SubscriberNotifyRecordDTO();
                 Long subscriberId = subscriberEntity.getId();
@@ -228,11 +226,25 @@ public class AlarmScheduler {
                 int category = subscriberEntity.getCategory();
                 if (category == 1) {
                     // 钉钉机器人
-                    subscriberNotifyRecordDTO.setState(2); // TODO 发送通知，并标记发送状态
-                    subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
+
+                    // 若为钉钉机器人，则subscriberList为access_token列表，多个以逗号隔开
+                    String[] subscriberList = subscriber.split(",");
+                    for (String accessToken : subscriberList) {
+                        if (!StringUtils.isEmpty(accessToken)) {
+                            DingTalkComponent dingTalkComponent = new DingTalkComponent(accessToken);
+
+                            // TODO 这里的钉钉消息推送keyword应该改为从项目的钉钉机器人配置里读取，此处先写死
+                            String keyword = "前端监控报警";
+
+                            boolean isSendSuccess = dingTalkComponent.sendText(keyword + content.toString(), null);
+                            int state = isSendSuccess ? 1 : 0;
+                            subscriberNotifyRecordDTO.setState(state);
+                            subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
+                        }
+                    }
                 } else if (category == 2) {
                     // 邮箱
-                    subscriberNotifyRecordDTO.setState(2); // TODO 发送通知，并标记发送状态
+                    subscriberNotifyRecordDTO.setState(1); // TODO 发送通知，并标记发送状态
                     subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
                 }
             }
