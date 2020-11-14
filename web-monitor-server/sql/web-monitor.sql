@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/13 23:32:51                          */
+/* Created on:     2020/11/14 21:19:37                          */
 /*==============================================================*/
 
 
@@ -77,7 +77,7 @@ create table ams_subscriber
    alarm_id             bigint not null comment '预警规则id',
    subscriber           text default NULL comment '报警订阅方，内容为JSON格式，例如"[]"。
             1、若订阅方式为钉钉，则内容为钉钉的机器人Webhook的access_token
-            2、若为邮件定于，则内容为邮件地址',
+            2、若为邮件订阅，则内容为邮件地址',
    is_active            tinyint(1) not null default 0 comment '是否启用，0-否，1-是',
    category             tinyint(1) not null default 1 comment '订阅类型，1-钉钉机器人，2-邮箱',
    primary key (id)
@@ -254,6 +254,8 @@ create table pms_project
    is_auto_upload       tinyint(1) not null default 1 comment '是否自动上报，0-否，1-是',
    create_time          datetime not null comment '创建时间',
    update_time          datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
+   notify_dt_token      text default null comment '预警模块中的钉钉机器人access_token，用于预警模块中发送报警推送，多个用英文逗号隔开',
+   notify_email         text default null comment '预警模块中的邮件推送地址，多个用英文逗号隔开',
    primary key (id),
    unique key AK_Key_2 (project_identifier)
 );
