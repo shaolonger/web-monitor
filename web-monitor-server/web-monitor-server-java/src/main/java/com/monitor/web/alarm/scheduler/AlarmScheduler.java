@@ -236,11 +236,11 @@ public class AlarmScheduler {
                         if (!StringUtils.isEmpty(accessToken)) {
                             DingTalkComponent dingTalkComponent = new DingTalkComponent(accessToken);
 
-                            // TODO 这里的钉钉消息推送keyword应该改为从项目的钉钉机器人配置里读取，此处先写死
-                            String keyword = "前端监控报警";
+                            // 从application配置文件中,获取钉钉推送关键词
+                            String keyword = environment.getProperty("ding-talk.keyword");
 
-                            // 根据application里的配置信息，获取是否开启钉钉推送的配置
-                            String isEnableDingTalk = environment.getProperty("dingtalk.enable");
+                            // 从application配置文件中，获取是否开启钉钉推送
+                            String isEnableDingTalk = environment.getProperty("ding-talk.enable");
                             if ("true".equals(isEnableDingTalk)) {
                                 boolean isSendSuccess = dingTalkComponent.sendText(keyword + content.toString(), null);
                                 int state = isSendSuccess ? 1 : 0;

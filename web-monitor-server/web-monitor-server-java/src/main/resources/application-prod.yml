@@ -40,5 +40,6 @@ logging:
             sql:
               BasicBinder: trace
 # 钉钉机器人推送
-dingtalk:
-  enable: true
+ding-talk:
+  enable: true # 是否开启钉钉推送
+  keyword: 前端监控报警平台 # 钉钉推送的关键词
