@@ -15,6 +15,7 @@ import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +26,8 @@ import java.util.*;
 @Slf4j
 public class AlarmScheduler {
 
+    @Autowired
+    Environment environment;
     @Autowired
     LogService logService;
     @Autowired
@@ -236,9 +239,15 @@ public class AlarmScheduler {
                             // TODO 这里的钉钉消息推送keyword应该改为从项目的钉钉机器人配置里读取，此处先写死
                             String keyword = "前端监控报警";
 
-                            boolean isSendSuccess = dingTalkComponent.sendText(keyword + content.toString(), null);
-                            int state = isSendSuccess ? 1 : 0;
-                            subscriberNotifyRecordDTO.setState(state);
+                            // 根据application里的配置信息，获取是否开启钉钉推送的配置
+                            String isEnableDingTalk = environment.getProperty("dingtalk.enable");
+                            if ("true".equals(isEnableDingTalk)) {
+                                boolean isSendSuccess = dingTalkComponent.sendText(keyword + content.toString(), null);
+                                int state = isSendSuccess ? 1 : 0;
+                                subscriberNotifyRecordDTO.setState(state);
+                            } else if ("false".equals(isEnableDingTalk)) {
+                                subscriberNotifyRecordDTO.setState(0);
+                            }
                             subscriberNotifyRecordService.add(subscriberNotifyRecordDTO);
                         }
                     }

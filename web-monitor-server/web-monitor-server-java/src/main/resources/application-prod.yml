@@ -39,3 +39,6 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+# 钉钉机器人推送
+dingtalk:
+  enable: true
