@@ -660,6 +660,8 @@ public class LogService extends ServiceBase {
         resultMap.put("targetInd", targetInd);
         resultMap.put("actualValue", actualValue);
         resultMap.put("thresholdValue", val);
+        resultMap.put("startTime", startTime);
+        resultMap.put("endTime", endTime);
 
         return resultMap;
     }

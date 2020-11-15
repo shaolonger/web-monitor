@@ -13,6 +13,7 @@ import com.monitor.web.alarm.service.SubscriberService;
 import com.monitor.web.common.component.DingTalkComponent;
 import com.monitor.web.log.service.LogService;
 import com.monitor.web.utils.DataConvertUtils;
+import com.monitor.web.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -141,6 +142,8 @@ public class AlarmScheduler {
                 resultMap.put("targetInd", map.get("targetInd"));
                 resultMap.put("actualValue", map.get("actualValue"));
                 resultMap.put("thresholdValue", map.get("thresholdValue"));
+                resultMap.put("startTime", map.get("startTime"));
+                resultMap.put("endTime", map.get("endTime"));
                 resultList.add(resultMap);
             } else {
                 float thresholdValue = (float) resultMap.get("thresholdValue");
@@ -209,16 +212,34 @@ public class AlarmScheduler {
                 // 设置通知内容
                 StringBuilder content = new StringBuilder();
                 String projectName = alarmService.getProjectNameByAlarmId(alarmId);
+                String alarmTime = DateUtils.dateToStr(new Date(), "yyyy-MM-dd HH:mm:ss");
                 content.append("项目名：").append(projectName).append("\n");
+                content.append("报警时间：").append(alarmTime).append("\n");
                 content.append("报警内容：").append("\n");
                 int index = 1;
                 for (HashMap<String, Object> map : resultList) {
                     String targetInd = (String) map.get("targetInd");
                     float actualValue = (float) map.get("actualValue");
                     float thresholdValue = (float) map.get("thresholdValue");
+                    Date startTime = (Date) map.get("startTime");
+                    Date endTime = (Date) map.get("endTime");
+                    String startTimeStr = DateUtils.dateToStr(startTime, "yyyy-MM-dd HH:mm:ss");
+
+                    // 简化endTimeStr，如果与startTime年月日相同，则省略
+                    String preStart = DateUtils.dateToStr(startTime, "yyyy-MM-dd");
+                    String preEnd = DateUtils.dateToStr(endTime, "yyyy-MM-dd");
+                    String endTimePattern = null;
+                    if (preStart.equals(preEnd)) {
+                        endTimePattern = "HH:mm:ss";
+                    } else {
+                        endTimePattern = "yyyy-MM-dd HH:mm:ss";
+                    }
+                    String endTimeStr = DateUtils.dateToStr(endTime, endTimePattern);
+
                     content.append(index).append(".").append("[").append(targetInd).append("]")
-                            .append("阈值：").append(thresholdValue).append("，").append("实际值：")
-                            .append(actualValue);
+                            .append("区间：").append(startTimeStr).append("至").append(endTimeStr).append("，")
+                            .append("阈值：").append(thresholdValue).append("，")
+                            .append("实际值：").append(actualValue);
                     if (index < resultList.size()) {
                         content.append("\n");
                         index++;
@@ -242,7 +263,7 @@ public class AlarmScheduler {
                             // 从application配置文件中，获取是否开启钉钉推送
                             String isEnableDingTalk = environment.getProperty("ding-talk.enable");
                             if ("true".equals(isEnableDingTalk)) {
-                                boolean isSendSuccess = dingTalkComponent.sendText(keyword + content.toString(), null);
+                                boolean isSendSuccess = dingTalkComponent.sendText(keyword + "\n" + content.toString(), null);
                                 int state = isSendSuccess ? 1 : 0;
                                 subscriberNotifyRecordDTO.setState(state);
                             } else if ("false".equals(isEnableDingTalk)) {
