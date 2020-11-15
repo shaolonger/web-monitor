@@ -163,16 +163,12 @@ public class UserService extends ServiceBase {
         // 获取关联的项目列表
         List<UserProjectRelationEntity> relatedProjectList = userProjectRelationDao.findByUserId(user.getId());
         List<Long> projectIdList = relatedProjectList.stream().map(UserProjectRelationEntity::getProjectId).collect(Collectors.toList());
-        List<Map<String, Object>> resultList = new ArrayList<>();
+        List<ProjectEntity> resultList = new ArrayList<>();
         for (Long projectId : projectIdList) {
             Optional<ProjectEntity> optional = projectService.getProjectById(projectId);
             ProjectEntity projectEntity = optional.orElse(null);
             if (projectEntity != null) {
-                Map<String, Object> project = new HashMap<>();
-                project.put("projectId", projectEntity.getId());
-                project.put("projectName", projectEntity.getProjectName());
-                project.put("projectIdentifier", projectEntity.getProjectIdentifier());
-                resultList.add(project);
+                resultList.add(projectEntity);
             }
         }
 
