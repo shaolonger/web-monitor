@@ -2,6 +2,7 @@ package com.monitor.web.project.service;
 
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.project.dao.ProjectDAO;
+import com.monitor.web.project.dto.ProjectDTO;
 import com.monitor.web.user.dao.UserProjectRelationDAO;
 import com.monitor.web.user.entity.UserProjectRelationEntity;
 import com.monitor.web.utils.DataConvertUtils;
@@ -9,11 +10,13 @@ import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.vo.ProjectVO;
 import com.monitor.web.common.service.ServiceBase;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -33,13 +36,17 @@ public class ProjectService extends ServiceBase {
     /**
      * 新增
      *
-     * @param projectEntity projectEntity
+     * @param request    request
+     * @param projectDTO projectDTO
      * @return Object
+     * @throws Exception Exception
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object add(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
+    public Object add(HttpServletRequest request, ProjectDTO projectDTO) throws Exception {
 
         log.info("--------[ProjectService]保存开始--------");
+        ProjectEntity projectEntity = new ProjectEntity();
+        BeanUtils.copyProperties(projectDTO, projectEntity);
 
         // 创建时间
         Date createTime = new Date();
@@ -47,13 +54,12 @@ public class ProjectService extends ServiceBase {
         projectDao.save(projectEntity);
 
         // 保存关联用户
-        ProjectEntity savedEntity = projectDao.findByProjectIdentifier(projectEntity.getProjectIdentifier()).orElseThrow(() -> new Exception("项目保存失败"));
         String userListStr = request.getParameter("userList");
         List<Integer> userList = DataConvertUtils.jsonStrToObject(userListStr, List.class);
         for (Integer userId : userList) {
             UserProjectRelationEntity userProjectRelationEntity = new UserProjectRelationEntity();
             userProjectRelationEntity.setUserId(userId.longValue());
-            userProjectRelationEntity.setProjectId(savedEntity.getId());
+            userProjectRelationEntity.setProjectId(projectEntity.getId());
             userProjectRelationDao.save(userProjectRelationEntity);
         }
 
@@ -65,31 +71,62 @@ public class ProjectService extends ServiceBase {
     /**
      * 更新
      *
-     * @param projectEntity projectEntity
+     * @param request request
      * @return Object
+     * @throws Exception Exception
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object update(HttpServletRequest request, ProjectEntity projectEntity) throws Exception {
+    public Object update(HttpServletRequest request) throws Exception {
 
         log.info("--------[ProjectService]更新开始--------");
 
         // 获取要更新的实体
         Long id = DataConvertUtils.strToLong(request.getParameter("id"));
-        String projectName = request.getParameter("projectName");
-        String projectIdentifier = request.getParameter("projectIdentifier");
-        String description = request.getParameter("description");
-        String accessType = request.getParameter("accessType");
-        String activeFuncs = request.getParameter("activeFuncs");
-        Integer isAutoUpload = DataConvertUtils.strToIntegerOrNull(request.getParameter("isAutoUpload"));
         if (id == null || id < 1) throw new Exception("id格式不正确");
-        Optional<ProjectEntity> optional = projectDao.findById(id);
-        ProjectEntity entity = optional.orElseThrow(() -> new Exception("项目不存在"));
+        ProjectEntity entity = projectDao.findById(id).orElseThrow(() -> new Exception("项目不存在"));
+
+        // projectName
+        String projectName = request.getParameter("projectName");
+        if (!StringUtils.isEmpty(projectName)) {
+            entity.setProjectName(projectName);
+        }
+
+        // projectIdentifier
+        String projectIdentifier = request.getParameter("projectIdentifier");
+        if (!StringUtils.isEmpty(projectIdentifier)) {
+            entity.setProjectIdentifier(projectIdentifier);
+        }
+
+        // description
+        String description = request.getParameter("description");
+        if (!StringUtils.isEmpty(description)) {
+            entity.setDescription(description);
+        }
+
+        // accessType
+        String accessType = request.getParameter("accessType");
+        if (!StringUtils.isEmpty(accessType)) {
+            entity.setAccessType(accessType);
+        }
+
+        // activeFuncs
+        String activeFuncs = request.getParameter("activeFuncs");
+        if (!StringUtils.isEmpty(activeFuncs)) {
+            entity.setActiveFuncs(activeFuncs);
+        }
+
+        // isAutoUpload
+        Integer isAutoUpload = DataConvertUtils.strToIntegerOrNull(request.getParameter("isAutoUpload"));
+        if (isAutoUpload != null) {
+            entity.setIsAutoUpload(isAutoUpload);
+        }
 
         // 处理关联用户
         String requestUserListStr = request.getParameter("userList");
         List<Integer> requestUserList = DataConvertUtils.jsonStrToObject(requestUserListStr, List.class);
         List<UserProjectRelationEntity> relatedUserList = userProjectRelationDao.findByProjectId(entity.getId());
         List<Long> dbUserList = relatedUserList.stream().map(UserProjectRelationEntity::getUserId).collect(Collectors.toList());
+
         // 找出差异的关联用户
         List<Long> shouldAddUserList = new ArrayList<>();
         List<Long> shouldDelUserList = new ArrayList<>();

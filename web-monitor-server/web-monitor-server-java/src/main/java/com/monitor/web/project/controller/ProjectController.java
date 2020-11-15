@@ -2,6 +2,7 @@ package com.monitor.web.project.controller;
 
 import com.monitor.web.auth.annotation.AuthIgnore;
 import com.monitor.web.common.api.ResponseResultBase;
+import com.monitor.web.project.dto.ProjectDTO;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,12 @@ public class ProjectController {
      * 新增
      *
      * @param request       request
-     * @param projectEntity projectEntity
+     * @param projectDTO    projectDTO
      * @param bindingResult bindingResult
      * @return Object
      */
     @RequestMapping(value = "/project/add", method = RequestMethod.PUT)
-    public Object add(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
+    public Object add(HttpServletRequest request, @Valid ProjectDTO projectDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -40,7 +41,7 @@ public class ProjectController {
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
             try {
-                return ResponseResultBase.getResponseResultBase(projectService.add(request, projectEntity));
+                return ResponseResultBase.getResponseResultBase(projectService.add(request, projectDTO));
             } catch (Exception e) {
                 return ResponseResultBase.getErrorResponseResult(e);
             }
@@ -50,25 +51,15 @@ public class ProjectController {
     /**
      * 更新
      *
-     * @param request       request
-     * @param projectEntity projectEntity
-     * @param bindingResult bindingResult
+     * @param request request
      * @return Object
      */
     @RequestMapping(value = "/project/update", method = RequestMethod.POST)
-    public Object update(HttpServletRequest request, @Valid ProjectEntity projectEntity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ObjectError objectError : bindingResult.getAllErrors()) {
-                stringBuilder.append(objectError.getDefaultMessage()).append(",");
-            }
-            throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
-        } else {
-            try {
-                return ResponseResultBase.getResponseResultBase(projectService.update(request, projectEntity));
-            } catch (Exception e) {
-                return ResponseResultBase.getErrorResponseResult(e);
-            }
+    public Object update(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(projectService.update(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
         }
     }
 
