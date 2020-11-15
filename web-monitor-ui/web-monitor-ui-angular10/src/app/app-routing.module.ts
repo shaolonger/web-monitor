@@ -28,6 +28,10 @@ const routes: Routes = [
                 path: 'advancedSearch',
                 loadChildren: () => import('@modules/advanced-search/advanced-search.module').then(m => m.AdvancedSearchModule)
             },
+            {
+                path: 'alarmManage',
+                loadChildren: () => import('@modules/alarm-manage/alarm-manage.module').then(m => m.AlarmManageModule)
+            },
         ]
     },
     {

@@ -1,0 +1,100 @@
+<div class="alarmManage">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="alarmManage-filterForms">
+        <nz-space nzSize="small">
+            <nz-space-item>
+                <button nz-button (click)="handleShowDetailDialog('add')" nzType="primary">新增</button>
+            </nz-space-item>
+            <nz-space-item>
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input [(ngModel)]="filterForm.name" (ngModelChange)="getTableList()"
+                        placeholder="输入预警名称进行查询" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </nz-space-item>
+        </nz-space>
+    </div>
+    <div class="alarmManage-table">
+        <nz-table [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum" [(nzPageSize)]="filterForm.pageSize"
+            nzShowSizeChanger [nzTotal]="paginationConfig.total" (nzPageIndexChange)="getTableList()"
+            (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th nzAlign="center">预警名称</th>
+                    <th nzAlign="center">预警条件</th>
+                    <th nzAlign="center">报警规则</th>
+                    <th nzAlign="center">报警时段</th>
+                    <th nzAlign="center">静默期</th>
+                    <th nzAlign="center">通知方式</th>
+                    <th nzAlign="center">等级</th>
+                    <th nzAlign="center">是否启用</th>
+                    <th nzAlign="center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of listData">
+                    <td nzAlign="center">{{ data.name }}</td>
+                    <td nzAlign="center">{{ data.categoryText }}</td>
+                    <td nzAlign="center">{{ data.ruleText }}</td>
+                    <td nzAlign="center">{{ data.silentPeriodText }}</td>
+                    <td nzAlign="center">{{ data.subscribeText }}</td>
+                    <td nzAlign="center">{{ data.levelText }}</td>
+                    <td nzAlign="center">{{ data.isActiveText }}</td>
+                    <td nzAlign="center">
+                        <nz-space nzSize="small">
+                            <nz-space-item>
+                                <button nz-button (click)="handleShowDetailDialog('edit', data)"
+                                    nzType="primary">编辑</button>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button (click)="handleShowDetailDialog('delete', data)" nzDanger
+                                    nzType="primary">删除</button>
+                            </nz-space-item>
+                        </nz-space>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+    <nz-modal [(nzVisible)]="showDetailDialog" [nzTitle]="detailDialogTitle" (nzOnCancel)="handleModalOnCancel()"
+        [nzFooter]="['add', 'edit'].indexOf(mode) > -1 ? modalFooter : null" [nzStyle]="{width: '800px'}">
+        <form nz-form [formGroup]="validateForm">
+            <nz-form-item nz-row nzJustify="center">
+                <nz-form-label [nzSpan]="4" nzRequired nzFor="name">预警名称</nz-form-label>
+                <nz-form-control [nzSpan]="20" nzErrorTip="请输入预警名称">
+                    <nz-input-group nzPrefixIcon="user">
+                        <input type="text" nz-input formControlName="name" placeholder="预警名称" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-row nzJustify="center">
+                <nz-form-label [nzSpan]="4" nzFor="category">过滤条件</nz-form-label>
+                <nz-form-control [nzSpan]="20" nzErrorTip="请选择过滤条件">
+                    <nz-select id="category" nzPlaceHolder="请选择过滤条件" formControlName="category"
+                        [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                        <nz-option *ngFor="let option of categoryOptionsList" [nzValue]="option.value"
+                            [nzLabel]="option.label">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-row nzJustify="center">
+                <nz-form-label [nzSpan]="4" nzFor="category">报警条件</nz-form-label>
+                <nz-form-control [nzSpan]="20" nzErrorTip="请选择过滤条件">
+                    <nz-select id="category" nzPlaceHolder="请选择过滤条件" formControlName="category"
+                        [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                        <nz-option *ngFor="let option of categoryOptionsList" [nzValue]="option.value"
+                            [nzLabel]="option.label">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+        <ng-template #modalFooter>
+            <button nz-button nzType="default" (click)="handleModalOnCancel()">取消</button>
+            <button nz-button nzType="primary" (click)="handleModalOnOk()" [disabled]="!validateForm.valid">确定</button>
+        </ng-template>
+    </nz-modal>
+</div>
