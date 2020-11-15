@@ -94,6 +94,8 @@ export class ProjectManageComponent implements OnInit {
                 userList: [[]],
                 accessType: ['script', [Validators.required]],
                 activeFuncs: [[], [Validators.required]],
+                notifyDtToken: [''],
+                notifyEmail: [''],
                 isAutoUpload: [false, [Validators.required]],
             });
         } else {
@@ -106,6 +108,8 @@ export class ProjectManageComponent implements OnInit {
                 userList: [],
                 accessType: 'script',
                 activeFuncs: [],
+                notifyDtToken: [''],
+                notifyEmail: [''],
                 isAutoUpload: false
             });
         }
