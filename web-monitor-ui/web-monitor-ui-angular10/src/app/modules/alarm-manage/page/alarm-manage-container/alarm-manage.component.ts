@@ -45,6 +45,34 @@ export class AlarmManageComponent implements OnInit {
         { label: '静态资源异常', value: 3 },
         { label: '自定义异常', value: 4 },
     ];
+    // 报警规则选项列表
+    ruleOperatorOptionsList = [
+        { label: '满足下列所有规则', value: '&&' },
+        { label: '满足下列任一规则', value: '||' },
+    ];
+    // 监控指标选项列表
+    ruleIndOptionsList = [
+        { label: '影响用户数', value: 'uvCount' },
+        { label: '影响用户率', value: 'uvRate' },
+        { label: '人均异常次数', value: 'perPV' },
+        { label: '新增异常数', value: 'newPV' },
+    ];
+    // 监控指标选项列表
+    ruleOpOptionsList = [
+        { label: '最近N分钟总和大于', value: 'uvCount', agg: 'count', op: '>', timeSpanSize: 1, interval: 1 },
+        { label: '最近N天总和大于', value: 'uvRate', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1 },
+        { label: '最近N分钟平均值大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1 },
+        { label: '最近N天平均值大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1440, interval: 1440 },
+        { label: '最近N分钟平均值环比上涨大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1 },
+        { label: '最近N分钟总和环比上涨大于', value: 'perPV', agg: 'count', op: '>', timeSpanSize: 1, interval: 1 },
+        { label: '最近N小时平均值与昨天同比上涨大于', value: 'perPV', agg: 'avg', op: 'd_up', timeSpanSize: 60, interval: 60 },
+        { label: '最近N小时平均值与上周同比上涨大于', value: 'perPV', agg: 'avg', op: 'w_up', timeSpanSize: 60, interval: 60 },
+    ];
+    // 监控条件选择结果
+    ruleOp = '&&';
+    ruleRules = [
+        { timeSpan: null, ind: "", agg: "", op: "", val: null, interval: null, timeSpanText: '', valText: '' }
+    ];
     validateForm!: FormGroup;
 
     constructor(
@@ -85,8 +113,6 @@ export class AlarmManageComponent implements OnInit {
                 projectIdentifier: [this.projectIdentifier],
                 level: [null, [Validators.required]],
                 category: [0, [Validators.required]],
-                ruleOp: ['&&', [Validators.required]],
-                ruleRules: [[], [Validators.required]],
                 startTime: [''],
                 endTime: [''],
                 silentPeriod: [0, [Validators.required]],
@@ -101,8 +127,6 @@ export class AlarmManageComponent implements OnInit {
                 projectIdentifier: this.projectIdentifier,
                 level: null,
                 category: 0,
-                ruleOp: '&&',
-                ruleRules: [],
                 startTime: '',
                 endTime: '',
                 silentPeriod: 0,

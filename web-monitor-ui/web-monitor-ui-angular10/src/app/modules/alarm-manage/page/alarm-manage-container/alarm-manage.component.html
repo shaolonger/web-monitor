@@ -81,15 +81,31 @@
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item nz-row nzJustify="center">
-                <nz-form-label [nzSpan]="4" nzFor="category">报警条件</nz-form-label>
-                <nz-form-control [nzSpan]="20" nzErrorTip="请选择过滤条件">
-                    <nz-select id="category" nzPlaceHolder="请选择过滤条件" formControlName="category"
-                        [nzDisabled]="['add','edit'].indexOf(mode)===-1">
-                        <nz-option *ngFor="let option of categoryOptionsList" [nzValue]="option.value"
-                            [nzLabel]="option.label">
-                        </nz-option>
-                    </nz-select>
-                </nz-form-control>
+                <nz-form-label [nzSpan]="4">报警条件</nz-form-label>
+                <div [nzSpan]="20">
+                    <nz-radio-group [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                        <label *ngFor="let option of ruleOperatorOptionsList" nz-radio [nzValue]="option.value"
+                            [nzDisabled]="option.disabled">{{option.label}}</label>
+                    </nz-radio-group>
+                    <div *ngFor="let rule of ruleRules">
+                        <nz-select id="category" nzPlaceHolder="监控指标" [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                            <nz-option *ngFor="let option of ruleIndOptionsList" [nzValue]="option.value"
+                                [nzLabel]="option.label">
+                            </nz-option>
+                        </nz-select>
+                        <nz-select id="category" nzPlaceHolder="取值方式" [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                            <nz-option *ngFor="let option of ruleIndOptionsList" [nzValue]="option.value"
+                                [nzLabel]="option.label">
+                            </nz-option>
+                        </nz-select>
+                        <nz-input-group [nzAddOnAfter]="rule.timeSpanText">
+                            <input type="text" nz-input [(ngModel)]="rule.timeSpan" />
+                        </nz-input-group>
+                        <nz-input-group [nzAddOnAfter]="rule.valText">
+                            <input type="text" nz-input [(ngModel)]="rule.val" />
+                        </nz-input-group>
+                    </div>
+                </div>
             </nz-form-item>
         </form>
         <ng-template #modalFooter>
