@@ -20,6 +20,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 @NgModule({
     declarations: [],
@@ -44,7 +46,9 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
         NzRadioModule,
         NzEmptyModule,
         NzTabsModule,
-        NzSwitchModule
+        NzSwitchModule,
+        NzGridModule,
+        NzTimePickerModule
     ]
 })
 export class NgZorroAntdModule { }

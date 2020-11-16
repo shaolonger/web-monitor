@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -45,33 +45,58 @@ export class AlarmManageComponent implements OnInit {
         { label: '静态资源异常', value: 3 },
         { label: '自定义异常', value: 4 },
     ];
+    // 静默期选项列表
+    silentPeriodOptionsList = [
+        { label: '不静默', value: 0 },
+        { label: '5分钟', value: 1 },
+        { label: '10分钟', value: 2 },
+        { label: '15分钟', value: 3 },
+        { label: '30分钟', value: 4 },
+        { label: '1小时', value: 5 },
+        { label: '3小时', value: 6 },
+        { label: '12小时', value: 7 },
+        { label: '24小时', value: 8 },
+        { label: '当天', value: 9 },
+    ];
+    // 通知方式选项列表
+    subscriberListOptionsList = [
+        { label: '钉钉机器人', value: 1 },
+        { label: '邮箱', value: 2 },
+    ];
     // 报警规则选项列表
     ruleOperatorOptionsList = [
         { label: '满足下列所有规则', value: '&&' },
         { label: '满足下列任一规则', value: '||' },
     ];
+    // 报警等级选项列表
+    ruleLevelOptionsList = [
+        { label: 'P1-紧急', value: 2 },
+        { label: 'P2-高', value: 1 },
+        { label: 'P3-中', value: 0 },
+        { label: 'P4-低', value: -1 },
+    ];
     // 监控指标选项列表
     ruleIndOptionsList = [
-        { label: '影响用户数', value: 'uvCount' },
-        { label: '影响用户率', value: 'uvRate' },
-        { label: '人均异常次数', value: 'perPV' },
-        { label: '新增异常数', value: 'newPV' },
+        { label: '影响用户数', value: 'uvCount', valText: '个' },
+        { label: '影响用户率', value: 'uvRate', valText: '%' },
+        { label: '人均异常次数', value: 'perPV', valText: '个' },
+        { label: '新增异常数', value: 'newPV', valText: '个' },
     ];
     // 监控指标选项列表
     ruleOpOptionsList = [
-        { label: '最近N分钟总和大于', value: 'uvCount', agg: 'count', op: '>', timeSpanSize: 1, interval: 1 },
-        { label: '最近N天总和大于', value: 'uvRate', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1 },
-        { label: '最近N分钟平均值大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1 },
-        { label: '最近N天平均值大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1440, interval: 1440 },
-        { label: '最近N分钟平均值环比上涨大于', value: 'perPV', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1 },
-        { label: '最近N分钟总和环比上涨大于', value: 'perPV', agg: 'count', op: '>', timeSpanSize: 1, interval: 1 },
-        { label: '最近N小时平均值与昨天同比上涨大于', value: 'perPV', agg: 'avg', op: 'd_up', timeSpanSize: 60, interval: 60 },
-        { label: '最近N小时平均值与上周同比上涨大于', value: 'perPV', agg: 'avg', op: 'w_up', timeSpanSize: 60, interval: 60 },
+        { label: '最近N分钟总和大于', agg: 'count', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
+        { label: '最近N天总和大于', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1, timeSpanText: '天' },
+        { label: '最近N分钟平均值大于', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
+        { label: '最近N天平均值大于', agg: 'avg', op: '>', timeSpanSize: 1440, interval: 1440, timeSpanText: '天' },
+        { label: '最近N分钟平均值环比上涨大于', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
+        { label: '最近N分钟总和环比上涨大于', agg: 'count', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
+        { label: '最近N小时平均值与昨天同比上涨大于', agg: 'avg', op: 'd_up', timeSpanSize: 60, interval: 60, timeSpanText: '小时' },
+        { label: '最近N小时平均值与上周同比上涨大于', agg: 'avg', op: 'w_up', timeSpanSize: 60, interval: 60, timeSpanText: '小时' },
     ];
     // 监控条件选择结果
     ruleOp = '&&';
     ruleRules = [
-        { timeSpan: null, ind: "", agg: "", op: "", val: null, interval: null, timeSpanText: '', valText: '' }
+        { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
     ];
     validateForm!: FormGroup;
 
@@ -111,13 +136,13 @@ export class AlarmManageComponent implements OnInit {
                 id: [0],
                 name: ['', [Validators.required]],
                 projectIdentifier: [this.projectIdentifier],
-                level: [null, [Validators.required]],
+                level: [0, [Validators.required]],
                 category: [0, [Validators.required]],
                 startTime: [''],
                 endTime: [''],
                 silentPeriod: [0, [Validators.required]],
                 isActive: [true, [Validators.required]],
-                subscriberList: []
+                subscriberList: [[]]
             });
         } else {
             this.validateForm.patchValue({
@@ -125,7 +150,7 @@ export class AlarmManageComponent implements OnInit {
                 id: 0,
                 name: '',
                 projectIdentifier: this.projectIdentifier,
-                level: null,
+                level: 0,
                 category: 0,
                 startTime: '',
                 endTime: '',
@@ -311,6 +336,7 @@ export class AlarmManageComponent implements OnInit {
 
     /**
      * 删除预警
+     * @param id 
      */
     deleteAlarm(id: number): void {
         this.isLoading = true;
@@ -336,4 +362,54 @@ export class AlarmManageComponent implements OnInit {
         );
     }
 
+    /**
+     * 监控指标选择回调
+     * @param event 
+     * @param index 
+     */
+    handleRuleIndChange(event: string, index: number): void {
+        const ruleOpItem = this.ruleIndOptionsList.find(item => item.value === event);
+        const ruleItem = this.ruleRules[index];
+        if (ruleOpItem) {
+            const newRuleItem = {
+                ...ruleItem,
+                valText: ruleOpItem.valText
+            };
+            this.ruleRules.splice(index, 1, newRuleItem);
+        }
+    }
+
+    /**
+     * 取值方式选择回调
+     * @param event 
+     * @param index 
+     */
+    handleRuleTypeChange(event: string, index: number): void {
+        const ruleOpItem = this.ruleOpOptionsList.find(item => item.label === event);
+        const ruleItem = this.ruleRules[index];
+        if (ruleOpItem) {
+            const newRuleItem = {
+                ...ruleItem,
+                agg: ruleOpItem.agg,
+                op: ruleOpItem.op,
+                timeSpanText: ruleOpItem.timeSpanText,
+            };
+            this.ruleRules.splice(index, 1, newRuleItem);
+        }
+    }
+
+    /**
+     * 新增一行预警规则
+     */
+    handleAddRule(): void {
+        const newRuleItem = { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' };
+        this.ruleRules.push(newRuleItem);
+    }
+
+    /**
+     * 删除本行预警规则
+     */
+    handleRemoveRule(event: EventEmitter<any>, index: number): void {
+        this.ruleRules.splice(index, 1);
+    }
 }

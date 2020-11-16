@@ -3,9 +3,42 @@
 
     .alarmManage-filterForms {
         margin-bottom: 10px;
-        
+
         .alarmManage-rangePickder {
             margin-bottom: 10px;
         }
+    }
+}
+
+::ng-deep .alarmManage-dialog {
+
+    .alarmManage-row-label {
+        text-align: right;
+    }
+
+    .padr4 {
+        padding-right: 4px;
+    }
+
+    .mgr4 {
+        margin-right: 4px;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+
+    .alarmManage-row-item {
+        margin-top: 24px;
+
+        &:last-child {
+            margin-bottom: 24px;
+        }
+    }
+
+    .alarmManage-row-icon {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
     }
 }
