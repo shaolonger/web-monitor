@@ -5,6 +5,7 @@ import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.scheduler.AlarmScheduler;
 import com.monitor.web.alarm.vo.AlarmVO;
+import com.monitor.web.auth.service.TokenService;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
@@ -43,14 +44,19 @@ public class AlarmService extends ServiceBase {
     private CronTaskRegistrar cronTaskRegistrar;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 新增
      *
+     * @param alarmDTO alarmDTO
+     * @param request  request
      * @return Object
+     * @throws Exception Exception
      */
     @Transactional(rollbackOn = {Exception.class})
-    public Object add(AlarmDTO alarmDTO) throws Exception {
+    public Object add(AlarmDTO alarmDTO, HttpServletRequest request) throws Exception {
 
         // 从DTO中复制属性
         AlarmEntity alarmEntity = new AlarmEntity();
@@ -60,6 +66,15 @@ public class AlarmService extends ServiceBase {
         Date nowTime = new Date();
         alarmEntity.setCreateTime(nowTime);
         alarmEntity.setUpdateTime(nowTime);
+        // createBy
+        Long createBy = tokenService.getUserIdByRequest(request);
+        if (createBy == null) {
+            throw new Exception("token已失效");
+        }
+        alarmEntity.setCreateBy(createBy);
+        // isDeleted
+        alarmEntity.setIsDeleted(0);
+
         alarmDao.save(alarmEntity);
 
         String subscriberList = alarmDTO.getSubscriberList();

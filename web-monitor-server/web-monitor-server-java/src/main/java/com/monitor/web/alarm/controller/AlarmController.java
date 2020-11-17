@@ -30,7 +30,7 @@ public class AlarmController {
      * @return Object
      */
     @RequestMapping(value = "/alarm/add", method = RequestMethod.PUT)
-    public Object add(@Valid AlarmDTO alarmDTO, BindingResult bindingResult) {
+    public Object add(HttpServletRequest request, @Valid AlarmDTO alarmDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -39,7 +39,7 @@ public class AlarmController {
             throw new ValidationException(stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString());
         } else {
             try {
-                return ResponseResultBase.getResponseResultBase(alarmService.add(alarmDTO));
+                return ResponseResultBase.getResponseResultBase(alarmService.add(alarmDTO, request));
             } catch (Exception e) {
                 return ResponseResultBase.getErrorResponseResult(e);
             }

@@ -65,13 +65,11 @@ public class AlarmDTO {
     /**
      * 创建人ID
      */
-    @NotNull(message = "createBy不能为空")
     private Long createBy;
 
     /**
      * 是否已被删除，0-否，1-是
      */
-    @NotNull(message = "isDeleted")
     private int isDeleted;
 
     /**
