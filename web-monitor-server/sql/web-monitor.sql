@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/17 19:59:40                          */
+/* Created on:     2020/11/17 21:20:01                          */
 /*==============================================================*/
 
 
@@ -8,7 +8,7 @@ drop table if exists ams_alarm;
 
 drop table if exists ams_alarm_record;
 
-drop table if exists ams_alarm_task_scheduler_relation;
+drop table if exists ams_alarm_scheduler_relation;
 
 drop table if exists ams_subscriber;
 
@@ -26,9 +26,9 @@ drop table if exists lms_resource_load_error_log;
 
 drop table if exists pms_project;
 
-drop table if exists tms_task_scheduler;
+drop table if exists tms_scheduler;
 
-drop table if exists tms_task_scheduler_record;
+drop table if exists tms_scheduler_record;
 
 drop table if exists ums_user;
 
@@ -75,17 +75,17 @@ create table ams_alarm_record
 alter table ams_alarm_record comment '报警记录表';
 
 /*==============================================================*/
-/* Table: ams_alarm_task_scheduler_relation                     */
+/* Table: ams_alarm_scheduler_relation                          */
 /*==============================================================*/
-create table ams_alarm_task_scheduler_relation
+create table ams_alarm_scheduler_relation
 (
    id                   bigint not null auto_increment comment '唯一自增主键',
    alarm_id             bigint not null default 0 comment '预警id',
-   task_scheduler_id    bigint not null default 0 comment '定时任务id',
+   scheduler_id         bigint not null default 0 comment '定时任务id',
    primary key (id)
 );
 
-alter table ams_alarm_task_scheduler_relation comment '预警定时任务关联表';
+alter table ams_alarm_scheduler_relation comment '预警定时任务关联表';
 
 /*==============================================================*/
 /* Table: ams_subscriber                                        */
@@ -282,9 +282,9 @@ create table pms_project
 alter table pms_project comment '项目表';
 
 /*==============================================================*/
-/* Table: tms_task_scheduler                                    */
+/* Table: tms_scheduler                                         */
 /*==============================================================*/
-create table tms_task_scheduler
+create table tms_scheduler
 (
    id                   bigint not null auto_increment comment '唯一自增主键',
    bean_name            varchar(255) not null default "" comment 'bean名称',
@@ -296,15 +296,15 @@ create table tms_task_scheduler
    primary key (id)
 );
 
-alter table tms_task_scheduler comment '定时任务表';
+alter table tms_scheduler comment '定时任务表';
 
 /*==============================================================*/
-/* Table: tms_task_scheduler_record                             */
+/* Table: tms_scheduler_record                                  */
 /*==============================================================*/
-create table tms_task_scheduler_record
+create table tms_scheduler_record
 (
    id                   bigint not null auto_increment comment '唯一自增主键',
-   task_scheduler_id    bigint not null default 0 comment '定时任务id',
+   scheduler_id         bigint not null default 0 comment '定时任务id',
    state                tinyint(1) not null default 0 comment '执行状态，0-失败，1-成功',
    create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    error_msg            text default null comment '备注，用于记录失败的异常信息',
@@ -312,7 +312,7 @@ create table tms_task_scheduler_record
    primary key (id)
 );
 
-alter table tms_task_scheduler_record comment '定时任务执行记录表';
+alter table tms_scheduler_record comment '定时任务执行记录表';
 
 /*==============================================================*/
 /* Table: ums_user                                              */
@@ -367,4 +367,58 @@ create table ums_user_register_record
 );
 
 alter table ums_user_register_record comment '用户表注册记录表';
+
+alter table ams_alarm add constraint FK_Reference_8 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
+
+alter table ams_alarm_record add constraint FK_Reference_9 foreign key (alarm_id)
+      references ams_alarm (id) on delete restrict on update restrict;
+
+alter table ams_alarm_scheduler_relation add constraint FK_Reference_16 foreign key (alarm_id)
+      references ams_alarm (id) on delete restrict on update restrict;
+
+alter table ams_alarm_scheduler_relation add constraint FK_Reference_17 foreign key (scheduler_id)
+      references tms_scheduler (id) on delete restrict on update restrict;
+
+alter table ams_subscriber add constraint FK_Reference_7 foreign key (alarm_id)
+      references ams_alarm (id) on delete restrict on update restrict;
+
+alter table ams_subscriber_notify_record add constraint FK_Reference_14 foreign key (alarm_record_id)
+      references ams_alarm_record (id) on delete restrict on update restrict;
+
+alter table ams_subscriber_notify_record add constraint FK_Reference_15 foreign key (subscriber_id)
+      references ams_subscriber (id) on delete restrict on update restrict;
+
+alter table lms_custom_error_log add constraint FK_Reference_13 foreign key (c_uuid)
+      references lms_client_user (c_uuid) on delete restrict on update restrict;
+
+alter table lms_custom_error_log add constraint FK_Reference_4 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
+
+alter table lms_http_error_log add constraint FK_Reference_11 foreign key (c_uuid)
+      references lms_client_user (c_uuid) on delete restrict on update restrict;
+
+alter table lms_http_error_log add constraint FK_Reference_2 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
+
+alter table lms_js_error_log add constraint FK_Reference_1 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
+
+alter table lms_js_error_log add constraint FK_Reference_10 foreign key (c_uuid)
+      references lms_client_user (c_uuid) on delete restrict on update restrict;
+
+alter table lms_resource_load_error_log add constraint FK_Reference_12 foreign key (c_uuid)
+      references lms_client_user (c_uuid) on delete restrict on update restrict;
+
+alter table lms_resource_load_error_log add constraint FK_Reference_3 foreign key (project_identifier)
+      references pms_project (project_identifier) on delete restrict on update restrict;
+
+alter table tms_scheduler_record add constraint FK_Reference_18 foreign key (scheduler_id)
+      references tms_scheduler (id) on delete restrict on update restrict;
+
+alter table ums_user_project_relation add constraint FK_Reference_5 foreign key (user_id)
+      references ums_user (id) on delete restrict on update restrict;
+
+alter table ums_user_project_relation add constraint FK_Reference_6 foreign key (project_id)
+      references pms_project (id) on delete restrict on update restrict;
 
