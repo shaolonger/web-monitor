@@ -2,6 +2,7 @@ package com.monitor.web.alarm.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.monitor.web.alarm.dto.AlarmDTO;
+import com.monitor.web.alarm.dto.AlarmSchedulerRelationDTO;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.scheduler.AlarmScheduler;
 import com.monitor.web.alarm.vo.AlarmVO;
@@ -11,6 +12,8 @@ import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
 import com.monitor.web.schedule.component.CronTaskRegistrar;
 import com.monitor.web.schedule.component.SchedulingRunnable;
+import com.monitor.web.schedule.dto.SchedulerDTO;
+import com.monitor.web.schedule.service.SchedulerService;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDAO;
 import com.monitor.web.alarm.entity.AlarmEntity;
@@ -48,6 +51,10 @@ public class AlarmService extends ServiceBase {
     private ProjectService projectService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private SchedulerService schedulerService;
+    @Autowired
+    private AlarmSchedulerRelationService alarmSchedulerRelationService;
 
     /**
      * 新增
@@ -347,6 +354,7 @@ public class AlarmService extends ServiceBase {
      *
      * @param alarmEntity alarmEntity
      */
+    @Transactional(rollbackOn = {Exception.class})
     private void enableAlarmScheduler(AlarmEntity alarmEntity) {
         String params = null;
         try {
@@ -354,7 +362,27 @@ public class AlarmService extends ServiceBase {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        SchedulingRunnable task = new SchedulingRunnable(alarmScheduler.getBeanName(), alarmScheduler.getMethodName(), params);
-        cronTaskRegistrar.addCronTask(task, alarmScheduler.getCronExpression());
+
+        // 保存定时任务
+        SchedulerDTO schedulerDTO = new SchedulerDTO();
+        String beanName = alarmScheduler.getBeanName();
+        String methodName = alarmScheduler.getMethodName();
+        String cronExpression = alarmScheduler.getCronExpression();
+        schedulerDTO.setBeanName(beanName);
+        schedulerDTO.setMethodName(methodName);
+        schedulerDTO.setParams(params);
+        schedulerDTO.setCronExpression(cronExpression);
+        schedulerDTO.setState(1);
+        Long schedulerId = schedulerService.add(schedulerDTO);
+
+        // 保存预警-定时任务关联表
+        AlarmSchedulerRelationDTO alarmSchedulerRelationDTO = new AlarmSchedulerRelationDTO();
+        alarmSchedulerRelationDTO.setAlarmId(alarmEntity.getId());
+        alarmSchedulerRelationDTO.setSchedulerId(schedulerId);
+        alarmSchedulerRelationService.add(alarmSchedulerRelationDTO);
+
+        // 启动定时任务
+        SchedulingRunnable task = new SchedulingRunnable(beanName, methodName, params, schedulerId);
+        cronTaskRegistrar.addCronTask(task, cronExpression);
     }
 }
