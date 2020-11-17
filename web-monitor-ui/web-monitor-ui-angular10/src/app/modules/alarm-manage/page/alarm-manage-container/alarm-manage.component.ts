@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from '@data/service/user.service';
 import { AlarmService } from '@data/service/alarm.service';
 
+import { Project } from '@data/classes/project.class';
 import { Alarm } from '@data/interfaces/alarm.interface';
 
 @Component({
@@ -17,7 +18,7 @@ import { Alarm } from '@data/interfaces/alarm.interface';
 export class AlarmManageComponent implements OnInit {
 
     isLoading = false;
-    projectIdentifier = '';
+    projectSelected: Project = null;
     // 操作模式
     mode = 'add';
     // 显示新增、编辑对话框
@@ -77,13 +78,13 @@ export class AlarmManageComponent implements OnInit {
     ];
     // 监控指标选项列表
     ruleIndOptionsList = [
-        { label: '影响用户数', value: 'uvCount', valText: '个' },
-        { label: '影响用户率', value: 'uvRate', valText: '%' },
-        { label: '人均异常次数', value: 'perPV', valText: '个' },
-        { label: '新增异常数', value: 'newPV', valText: '个' },
+        { label: '影响用户数', value: 'uvCount', valText: '个', aggList: 'count,avg' },
+        { label: '影响用户率', value: 'uvRate', valText: '%', aggList: 'avg' },
+        { label: '人均异常次数', value: 'perPV', valText: '个', aggList: 'count,avg' },
+        { label: '新增异常数', value: 'newPV', valText: '个', aggList: 'count,avg' },
     ];
-    // 监控指标选项列表
-    ruleOpOptionsList = [
+    // 监控指标选项列表-全部数据
+    ruleOpOptionsFullList = [
         { label: '最近N分钟总和大于', agg: 'count', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
         { label: '最近N天总和大于', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1, timeSpanText: '天' },
         { label: '最近N分钟平均值大于', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
@@ -93,6 +94,8 @@ export class AlarmManageComponent implements OnInit {
         { label: '最近N小时平均值与昨天同比上涨大于', agg: 'avg', op: 'd_up', timeSpanSize: 60, interval: 60, timeSpanText: '小时' },
         { label: '最近N小时平均值与上周同比上涨大于', agg: 'avg', op: 'w_up', timeSpanSize: 60, interval: 60, timeSpanText: '小时' },
     ];
+    // 监控指标选项列表-实际显示
+    ruleOpOptionsList = [];
     // 监控条件选择结果
     ruleOp = '&&';
     ruleRules = [
@@ -120,11 +123,10 @@ export class AlarmManageComponent implements OnInit {
      */
     setProjectSelected(): void {
         let projectSelected = this.userService.getProjectSelected();
-        const { projectIdentifier, notifyDtToken, notifyEmail } = projectSelected;
-        this.projectIdentifier = projectIdentifier;
+        this.projectSelected = projectSelected;
 
         // 设置filterForm
-        this.filterForm.projectIdentifier = this.projectIdentifier;
+        this.filterForm.projectIdentifier = this.projectSelected.projectIdentifier;
     }
 
     /**
@@ -135,29 +137,33 @@ export class AlarmManageComponent implements OnInit {
             this.validateForm = this.fb.group({
                 id: [0],
                 name: ['', [Validators.required]],
-                projectIdentifier: [this.projectIdentifier],
+                projectIdentifier: [this.projectSelected.projectIdentifier],
                 level: [0, [Validators.required]],
                 category: [0, [Validators.required]],
-                startTime: [''],
-                endTime: [''],
+                startTime: [null],
+                endTime: [null],
                 silentPeriod: [0, [Validators.required]],
                 isActive: [true, [Validators.required]],
-                subscriberList: [[]]
+                subscriberList: [[], [Validators.required]]
             });
         } else {
             this.validateForm.patchValue({
                 ...this.validateForm.getRawValue(),
                 id: 0,
                 name: '',
-                projectIdentifier: this.projectIdentifier,
+                projectIdentifier: this.projectSelected.projectIdentifier,
                 level: 0,
                 category: 0,
-                startTime: '',
-                endTime: '',
+                startTime: null,
+                endTime: null,
                 silentPeriod: 0,
                 isActive: true,
                 subscriberList: []
             });
+            this.ruleOp = '&&';
+            this.ruleRules = [
+                { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
+            ];
         }
     }
 
@@ -271,18 +277,87 @@ export class AlarmManageComponent implements OnInit {
     }
 
     /**
+     * 获取提交的表单数据
+     */
+    getSubmitFormFromViewForm(): any {
+
+        // 校验表单
+        const isRuleNotFinish = this.ruleRules.some(item => {
+            return !item.ind || !item.agg || !item.op || !item.timeSpan || !item.val || !item.interval;
+        });
+        if (isRuleNotFinish) {
+            this.message.error('报警条件未填写完整');
+            return null;
+        }
+
+        const rawValue = this.validateForm.getRawValue();
+        const formData = {
+            id: rawValue.id,
+            name: rawValue.name,
+            projectIdentifier: rawValue.projectIdentifier,
+            level: rawValue.level,
+            rule: {},
+            category: rawValue.category,
+            startTime: '',
+            endTime: '',
+            silentPeriod: rawValue.silentPeriod,
+            isActive: rawValue.isActive ? 1 : 0,
+            subscriberList: ''
+        };
+
+        // 设置报警规则
+        const rule = {
+            op: this.ruleOp,
+            rules: this.ruleRules.map(item => ({
+                ind: item.ind,
+                agg: item.agg,
+                op: item.op,
+                timeSpan: item.timeSpan,
+                val: item.val,
+                interval: item.interval,
+            }))
+        };
+        formData.rule = JSON.stringify(rule);
+
+        // 报警时段-开始时间
+        if (rawValue.startTime) {
+            formData.startTime = moment(rawValue.startTime).format('HH:mm') + ':00';
+        }
+
+        // 报警时段-结束时间
+        if (rawValue.endTime) {
+            formData.endTime = moment(rawValue.endTime).format('HH:mm') + ':59';
+        }
+
+        // 设置通知方式
+        const subscriberList = [
+            {
+                subscriber: this.projectSelected.notifyDtToken, // TODO 这里将来要改成可选择指定的钉钉机器人
+                category: 1, // 钉钉机器人
+                isActive: rawValue.subscriberList.includes(1) ? 1 : 0
+            },
+            {
+                subscriber: this.projectSelected.notifyEmail, // TODO 这里将来要改成可选择指定的邮箱
+                category: 2, // 邮箱
+                isActive: rawValue.subscriberList.includes(2) ? 1 : 0
+            },
+        ];
+        formData.subscriberList = JSON.stringify(subscriberList);
+
+        return formData;
+    }
+
+    /**
      * 新增预警
      */
     addAlarm(): void {
+        const formData = this.getSubmitFormFromViewForm();
+        if (formData === null) {
+            return;
+        }
         this.isLoading = true;
-        let formData = this.validateForm.getRawValue();
         this.alarmService.addAlarm(
-            {
-                ...formData,
-                userList: JSON.stringify(formData.userList),
-                activeFuncs: formData.activeFuncs.join(','),
-                isAutoUpload: formData.isAutoUpload ? 1 : 0
-            },
+            formData,
             res => {
                 console.log('[成功]新增预警', res);
                 this.isLoading = false;
@@ -376,6 +451,13 @@ export class AlarmManageComponent implements OnInit {
                 valText: ruleOpItem.valText
             };
             this.ruleRules.splice(index, 1, newRuleItem);
+
+            // 动态设置监控指标选项列表
+            this.ruleOpOptionsList = this.ruleOpOptionsFullList.filter(item => ruleOpItem.aggList.indexOf(item.agg) > -1);
+        } else {
+
+            // 动态设置监控指标选项列表
+            this.ruleOpOptionsList = [];
         }
     }
 
@@ -392,6 +474,7 @@ export class AlarmManageComponent implements OnInit {
                 ...ruleItem,
                 agg: ruleOpItem.agg,
                 op: ruleOpItem.op,
+                interval: ruleOpItem.interval,
                 timeSpanText: ruleOpItem.timeSpanText,
             };
             this.ruleRules.splice(index, 1, newRuleItem);

@@ -6,7 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserService } from '@data/service/user.service';
 import { LogService } from '@data/service/log.service';
 
-import { UserRelatedProject } from '@data/classes/project.class';
+import { Project } from '@data/classes/project.class';
 
 @Component({
     selector: 'app-overview',
@@ -24,7 +24,7 @@ export class OverviewComponent implements OnInit {
         endTime: ''
     };
     // 项目列表
-    projectList: UserRelatedProject[] = [];
+    projectList: Project[] = [];
     // 异常数据总览
     overviewStatistic = {
         jsErrorLogCount: 0,

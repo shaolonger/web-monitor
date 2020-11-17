@@ -63,9 +63,9 @@
         nzClassName="alarmManage-dialog">
         <form nz-form [formGroup]="validateForm">
             <nz-form-item nz-row nzJustify="center">
-                <nz-form-label [nzSpan]="2" nzRequired nzFor="name">预警名称</nz-form-label>
+                <nz-form-label [nzSpan]="2" nzFor="name">预警名称</nz-form-label>
                 <nz-form-control [nzSpan]="22" nzErrorTip="请输入预警名称">
-                    <nz-input-group nzPrefixIcon="user">
+                    <nz-input-group>
                         <input type="text" nz-input formControlName="name" placeholder="预警名称" />
                     </nz-input-group>
                 </nz-form-control>
@@ -85,7 +85,7 @@
         <div nz-row>
             <div nz-col nzSpan="2" class="alarmManage-row-label">报警条件：</div>
             <div nz-col nzSpan="22">
-                <nz-radio-group [nzDisabled]="['add','edit'].indexOf(mode)===-1">
+                <nz-radio-group [nzDisabled]="['add','edit'].indexOf(mode)===-1" [ngModel]="ruleOp">
                     <label *ngFor="let option of ruleOperatorOptionsList" nz-radio [nzValue]="option.value"
                         [nzDisabled]="option.disabled">{{option.label}}</label>
                 </nz-radio-group>
@@ -150,7 +150,7 @@
             </nz-form-item>
             <nz-form-item nz-row nzJustify="left">
                 <nz-form-label [nzSpan]="2">通知方式</nz-form-label>
-                <nz-form-control [nzSpan]="6">
+                <nz-form-control [nzSpan]="6" nzErrorTip="请至少选择一种通知方式">
                     <nz-select id="category" formControlName="subscriberList"
                         [nzDisabled]="['add','edit'].indexOf(mode)===-1" nzMode="multiple">
                         <nz-option *ngFor="let option of subscriberListOptionsList" [nzValue]="option.value"
@@ -177,7 +177,7 @@
         </form>
         <ng-template #modalFooter>
             <button nz-button nzType="default" (click)="handleModalOnCancel()">取消</button>
-            <button nz-button nzType="primary" (click)="handleModalOnOk()" [disabled]="!validateForm.valid">确定</button>
+            <button nz-button nzType="primary" (click)="handleModalOnOk()" [disabled]="!validateForm.valid">保存</button>
         </ng-template>
     </nz-modal>
 </div>

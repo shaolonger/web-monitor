@@ -4,7 +4,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserService } from '@data/service/user.service';
 
 import { UserInfo } from '@data/classes/userInfo.class';
-import { UserRelatedProject } from '@data/classes/project.class';
+import { Project } from '@data/classes/project.class';
 
 @Component({
     selector: 'app-content-layout',
@@ -18,9 +18,9 @@ export class ContentLayoutComponent implements OnInit {
     // 用户信息
     userInfo = new UserInfo();
     // 用户关联的项目列表
-    userRelatedProjectList: UserRelatedProject[] = [];
+    userRelatedProjectList: Project[] = [];
     // 用户选中的项目
-    projectSelected: UserRelatedProject = new UserRelatedProject();
+    projectSelected: Project = new Project();
     // 左侧菜单栏折叠状态
     isCollapsed = false;
     // 左侧菜单列表
@@ -81,7 +81,7 @@ export class ContentLayoutComponent implements OnInit {
      * 选中项目
      * @param project 选中的项目
      */
-    handleSelectProject(project: UserRelatedProject) {
+    handleSelectProject(project: Project) {
         this.projectSelected = project;
         this.userService.setProjectSelected(project);
     }

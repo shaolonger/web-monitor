@@ -7,7 +7,7 @@ import { EventService } from '@core/service/event.service';
 import { UserService } from '@data/service/user.service';
 import { LogService } from '@data/service/log.service';
 
-import { UserRelatedProject } from '@data/classes/project.class';
+import { Project } from '@data/classes/project.class';
 import { EventModel } from '@data/classes/event.class';
 import { LogRecordList } from '@data/interfaces/log.interface';
 
@@ -123,7 +123,7 @@ export class CustomErrorLogComponent implements OnInit {
         total: 0
     };
     // 项目列表
-    projectList: UserRelatedProject[] = [];
+    projectList: Project[] = [];
     // 表格时间筛选日历结果
     timeRangePicker: Date[];
     // 表格时间筛选列表

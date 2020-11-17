@@ -1,13 +1,14 @@
-export class UserRelatedProject {
+export class Project {
     id: number;
     projectName: string;
-    projectIdentifier: string;
-    description: string;
+    projectIdentifier?: string;
+    description?: string;
     accessType: string;
-    activeFuncs: string;
+    activeFuncs?: string;
     isAutoUpload: number;
-    notifyDtToken: string;
-    notifyEmail: string;
     createTime: string;
     updateTime: string;
+    userList: string;
+    notifyDtToken: string;
+    notifyEmail: string;
 }

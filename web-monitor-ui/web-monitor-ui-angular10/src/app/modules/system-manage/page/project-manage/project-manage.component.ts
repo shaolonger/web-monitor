@@ -8,7 +8,7 @@ import { EnvService } from '@core/service/env.service';
 import { UserService } from '@data/service/user.service';
 import { ProjectService } from '@data/service/project.service';
 
-import { Project } from '@data/interfaces/project.interface';
+import { Project } from '@data/classes/project.class';
 
 @Component({
     selector: 'app-project-manage',

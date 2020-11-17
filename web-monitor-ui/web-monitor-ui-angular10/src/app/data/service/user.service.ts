@@ -5,7 +5,7 @@ import { EventService } from '@core/service/event.service';
 import { HttpService } from '@core/service/http.service';
 
 import { UserInfo } from '@data/classes/userInfo.class';
-import { UserRelatedProject } from '@data/classes/project.class';
+import { Project } from '@data/classes/project.class';
 import { EventModel } from '@data/classes/event.class';
 
 
@@ -46,9 +46,9 @@ export class UserService {
     // 用户信息
     private userInfo: UserInfo = new UserInfo();
     // 用户关联项目列表
-    private userRelatedProjectList: UserRelatedProject[] = [];
+    private userRelatedProjectList: Project[] = [];
     // 用户选中的项目
-    private projectSelected: UserRelatedProject = new UserRelatedProject();
+    private projectSelected: Project = new Project();
 
     constructor(
         private httpService: HttpService,
@@ -132,14 +132,14 @@ export class UserService {
      * 设置用户获取关联的项目
      * @param list 列表
      */
-    public setUserRelatedProjectList(list: UserRelatedProject[]) {
+    public setUserRelatedProjectList(list: Project[]) {
         this.userRelatedProjectList = list;
     }
 
     /**
      * 获取用户获取关联的项目
      */
-    public getUserRelatedProjectList(): UserRelatedProject[] {
+    public getUserRelatedProjectList(): Project[] {
         return this.userRelatedProjectList;
     }
 
@@ -164,7 +164,7 @@ export class UserService {
      * 设置用户选择的项目
      * @param project 项目
      */
-    setProjectSelected(project: UserRelatedProject) {
+    setProjectSelected(project: Project) {
         this.projectSelected = project;
         let event = new EventModel();
         event.eventName = 'projectSelectedChanged';
@@ -176,7 +176,7 @@ export class UserService {
      * 获取用户选择的项目
      * @param project 项目
      */
-    getProjectSelected(): UserRelatedProject {
+    getProjectSelected(): Project {
         return this.projectSelected;
     }
 }
