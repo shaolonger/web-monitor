@@ -15,13 +15,13 @@ public class SchedulingRunnable implements Runnable {
 
     private String methodName;
 
-    private Object params;
+    private String params;
 
     public SchedulingRunnable(String beanName, String methodName) {
         this(beanName, methodName, null);
     }
 
-    public SchedulingRunnable(String beanName, String methodName, Object params) {
+    public SchedulingRunnable(String beanName, String methodName, String params) {
         this.beanName = beanName;
         this.methodName = methodName;
         this.params = params;
@@ -35,7 +35,7 @@ public class SchedulingRunnable implements Runnable {
             Object target = SpringContextUtils.getBean(beanName);
             Method method = null;
             if (params != null) {
-                method = target.getClass().getDeclaredMethod(methodName, Object.class);
+                method = target.getClass().getDeclaredMethod(methodName, String.class);
             } else {
                 method = target.getClass().getDeclaredMethod(methodName);
             }

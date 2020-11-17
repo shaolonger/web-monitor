@@ -23,8 +23,8 @@ import org.springframework.util.StringUtils;
 import javax.transaction.Transactional;
 import java.util.*;
 
-@Component("AlarmScheduler")
 @Slf4j
+@Component("AlarmScheduler")
 public class AlarmScheduler {
 
     @Autowired
@@ -61,10 +61,15 @@ public class AlarmScheduler {
     /**
      * 预警定时任务
      *
-     * @param object object
+     * @param params params
      */
-    public void startScheduler(Object object) {
-        AlarmEntity alarmEntity = (AlarmEntity) object;
+    public void startScheduler(String params) {
+        AlarmEntity alarmEntity = null;
+        try {
+            alarmEntity = DataConvertUtils.jsonStrToObject(params, AlarmEntity.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         // 获取预警规则
         String rule = alarmEntity.getRule();
         try {

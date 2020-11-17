@@ -15,6 +15,7 @@ import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDAO;
 import com.monitor.web.alarm.entity.AlarmEntity;
 import com.monitor.web.common.service.ServiceBase;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AlarmService extends ServiceBase {
 
@@ -346,7 +348,13 @@ public class AlarmService extends ServiceBase {
      * @param alarmEntity alarmEntity
      */
     private void enableAlarmScheduler(AlarmEntity alarmEntity) {
-        SchedulingRunnable task = new SchedulingRunnable(alarmScheduler.getBeanName(), alarmScheduler.getMethodName(), alarmEntity);
+        String params = null;
+        try {
+            params = DataConvertUtils.objectToJsonStr(alarmEntity);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        SchedulingRunnable task = new SchedulingRunnable(alarmScheduler.getBeanName(), alarmScheduler.getMethodName(), params);
         cronTaskRegistrar.addCronTask(task, alarmScheduler.getCronExpression());
     }
 }
