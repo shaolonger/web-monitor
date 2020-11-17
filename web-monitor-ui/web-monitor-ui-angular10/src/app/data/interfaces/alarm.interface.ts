@@ -9,6 +9,7 @@ export interface Alarm {
     endTime: string;
     silentPeriod: number;
     isActive: number;
+    subscriberList: string;
     createTime: string;
     updateTime: string;
     createBy: number;

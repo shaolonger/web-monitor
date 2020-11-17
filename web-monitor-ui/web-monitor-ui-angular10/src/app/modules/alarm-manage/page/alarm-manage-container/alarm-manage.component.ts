@@ -86,7 +86,7 @@ export class AlarmManageComponent implements OnInit {
     // 监控指标选项列表-全部数据
     ruleOpOptionsFullList = [
         { label: '最近N分钟总和大于', agg: 'count', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
-        { label: '最近N天总和大于', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1, timeSpanText: '天' },
+        { label: '最近N天总和大于', agg: 'count', op: '>', timeSpanSize: 1440, interval: 1440, timeSpanText: '天' },
         { label: '最近N分钟平均值大于', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
         { label: '最近N天平均值大于', agg: 'avg', op: '>', timeSpanSize: 1440, interval: 1440, timeSpanText: '天' },
         { label: '最近N分钟平均值环比上涨大于', agg: 'avg', op: '>', timeSpanSize: 1, interval: 1, timeSpanText: '分钟' },
@@ -258,11 +258,7 @@ export class AlarmManageComponent implements OnInit {
         } else if (mode === 'edit') {
             // 编辑
             this.setMode(mode);
-            this.validateForm.patchValue({
-                ...this.validateForm.getRawValue(),
-                ...data,
-            });
-            this.validateForm.enable();
+            this.setViewFormBySubmitForm(data);
             this.showDetailDialog = true;
         } else if (mode === 'add') {
             this.setMode(mode);
@@ -368,6 +364,53 @@ export class AlarmManageComponent implements OnInit {
     }
 
     /**
+     * 根据详情数据设置页面展示数据
+     * @param data 
+     */
+    setViewFormBySubmitForm(data: Alarm): any {
+
+        // 设置报警规则
+        const ruleObj = JSON.parse(data.rule);
+        if (typeof ruleObj === 'object') {
+            this.ruleOp = ruleObj.op;
+            let ruleRules = [];
+            if (ruleObj.rules instanceof Array && ruleObj.rules.length > 0) {
+                ruleRules = ruleObj.rules.map(rule => {
+                    const ruleIndOption = this.ruleIndOptionsList.find(item => item.value === rule.ind);
+                    const ruleOpOption = this.ruleOpOptionsFullList.find(item => {
+                        return item.agg === rule.agg && item.op === rule.op && item.interval === rule.interval;
+                    });
+                    return {
+                        timeSpan: rule.timeSpan / ruleOpOption.timeSpanSize,
+                        timeSpanSize: ruleOpOption.timeSpanSize,
+                        ind: rule.ind,
+                        type: ruleOpOption.label,
+                        agg: rule.agg,
+                        op: rule.op,
+                        val: rule.val,
+                        interval: rule.interval,
+                        timeSpanText: ruleOpOption.timeSpanText,
+                        valText: ruleIndOption.valText
+                    };
+                });
+            }
+            this.ruleRules = ruleRules;
+        }
+
+        // 设置表单
+        const subscriberList = JSON.parse(data.subscriberList);
+        const nowTimeStr = moment(new Date()).format('YYYY-MM-DD ');
+        this.validateForm.patchValue({
+            ...this.validateForm.getRawValue(),
+            ...data,
+            startTime: new Date(nowTimeStr + data.startTime),
+            endTime: new Date(nowTimeStr + data.endTime),
+            subscriberList: subscriberList.filter(item => item.isActive === 1).map(item => item.category)
+        });
+        this.validateForm.enable();
+    }
+
+    /**
      * 新增预警
      */
     addAlarm(): void {
@@ -401,15 +444,12 @@ export class AlarmManageComponent implements OnInit {
      * 编辑预警
      */
     updateAlarm(): void {
-        this.isLoading = true;
-        let formData = this.validateForm.getRawValue();
+        const formData = this.getSubmitFormFromViewForm();
+        if (formData === null) {
+            return;
+        }
         this.alarmService.updateAlarm(
-            {
-                ...formData,
-                userList: JSON.stringify(formData.userList),
-                activeFuncs: formData.activeFuncs.join(','),
-                isAutoUpload: formData.isAutoUpload ? 1 : 0
-            },
+            formData,
             res => {
                 console.log('[成功]编辑预警', res);
                 this.isLoading = false;
@@ -468,16 +508,31 @@ export class AlarmManageComponent implements OnInit {
         if (ruleOpItem) {
             const newRuleItem = {
                 ...ruleItem,
+                type: '',
+                timeSpan: null,
+                val: null,
+                interval: null,
+                timeSpanSize: 1,
                 valText: ruleOpItem.valText
             };
             this.ruleRules.splice(index, 1, newRuleItem);
+        }
+    }
 
-            // 动态设置监控指标选项列表
-            this.ruleOpOptionsList = this.ruleOpOptionsFullList.filter(item => ruleOpItem.aggList.indexOf(item.agg) > -1);
+    /**
+     * 判断取值方式的选项是否显示
+     * @param option 
+     * @param rule 
+     */
+    isOpOptionDisabled(option, rule) {
+        if (!rule.ind) {
+            return true;
+        }
+        const ruleOpItem = this.ruleIndOptionsList.find(item => item.value === rule.ind);
+        if (ruleOpItem) {
+            return ruleOpItem.aggList.indexOf(option.agg) === -1;
         } else {
-
-            // 动态设置监控指标选项列表
-            this.ruleOpOptionsList = [];
+            return true;
         }
     }
 
@@ -487,7 +542,7 @@ export class AlarmManageComponent implements OnInit {
      * @param index 
      */
     handleRuleTypeChange(event: string, index: number): void {
-        const ruleOpItem = this.ruleOpOptionsList.find(item => item.label === event);
+        const ruleOpItem = this.ruleOpOptionsFullList.find(item => item.label === event);
         const ruleItem = this.ruleRules[index];
         if (ruleOpItem) {
             const newRuleItem = {
@@ -496,7 +551,9 @@ export class AlarmManageComponent implements OnInit {
                 op: ruleOpItem.op,
                 interval: ruleOpItem.interval,
                 timeSpanText: ruleOpItem.timeSpanText,
-                timeSpanSize: ruleOpItem.timeSpanSize
+                timeSpanSize: ruleOpItem.timeSpanSize,
+                timeSpan: null,
+                val: null,
             };
             this.ruleRules.splice(index, 1, newRuleItem);
         }

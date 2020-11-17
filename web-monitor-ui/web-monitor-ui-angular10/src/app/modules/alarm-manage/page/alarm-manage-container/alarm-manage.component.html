@@ -123,9 +123,11 @@
                     <div nz-col nzSpan="10" class="padr4">
                         <nz-select [(ngModel)]="rule.type" (ngModelChange)="handleRuleTypeChange($event, i)"
                             class="width100" nzPlaceHolder="取值方式" [nzDisabled]="['add','edit'].indexOf(mode)===-1">
-                            <nz-option *ngFor="let option of ruleOpOptionsList" [nzValue]="option.label"
-                                [nzLabel]="option.label">
-                            </nz-option>
+                            <ng-container *ngFor="let option of ruleOpOptionsFullList">
+                                <nz-option [nzDisabled]="isOpOptionDisabled(option, rule)" [nzValue]="option.label"
+                                    [nzLabel]="option.label">
+                                </nz-option>
+                            </ng-container>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="4" class="padr4">
