@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/17 21:39:40                          */
+/* Created on:     2020/11/17 22:09:42                          */
 /*==============================================================*/
 
 
@@ -291,6 +291,7 @@ create table tms_scheduler
    bean_name            varchar(255) not null default "" comment 'bean名称',
    method_name          varchar(255) not null default "" comment 'bean中执行的方法名称',
    params               text default null comment '方法的参数内容，JSON格式',
+   cron_expression      varchar(255) default "" comment 'cron表达式',
    create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式为yyyy-MM-dd HH:mm:ss',
    update_time          datetime default CURRENT_TIMESTAMP comment '更新时间，格式为yyyy-MM-dd HH:mm:ss',
    state                tinyint(1) not null default 1 comment '执行状态，0-暂停，1-运行中',
