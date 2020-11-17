@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/17 18:02:38                          */
+/* Created on:     2020/11/17 19:59:40                          */
 /*==============================================================*/
 
 
@@ -308,6 +308,7 @@ create table tms_task_scheduler_record
    state                tinyint(1) not null default 0 comment '执行状态，0-失败，1-成功',
    create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    error_msg            text default null comment '备注，用于记录失败的异常信息',
+   time_cost            int default 0 comment '定时任务执行的时长，单位毫秒',
    primary key (id)
 );
 
