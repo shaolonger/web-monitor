@@ -1,12 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/14 21:19:37                          */
+/* Created on:     2020/11/17 18:02:38                          */
 /*==============================================================*/
 
 
 drop table if exists ams_alarm;
 
 drop table if exists ams_alarm_record;
+
+drop table if exists ams_alarm_task_scheduler_relation;
 
 drop table if exists ams_subscriber;
 
@@ -23,6 +25,10 @@ drop table if exists lms_js_error_log;
 drop table if exists lms_resource_load_error_log;
 
 drop table if exists pms_project;
+
+drop table if exists tms_task_scheduler;
+
+drop table if exists tms_task_scheduler_record;
 
 drop table if exists ums_user;
 
@@ -67,6 +73,19 @@ create table ams_alarm_record
 );
 
 alter table ams_alarm_record comment '报警记录表';
+
+/*==============================================================*/
+/* Table: ams_alarm_task_scheduler_relation                     */
+/*==============================================================*/
+create table ams_alarm_task_scheduler_relation
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   alarm_id             bigint not null default 0 comment '预警id',
+   task_scheduler_id    bigint not null default 0 comment '定时任务id',
+   primary key (id)
+);
+
+alter table ams_alarm_task_scheduler_relation comment '预警定时任务关联表';
 
 /*==============================================================*/
 /* Table: ams_subscriber                                        */
@@ -261,6 +280,38 @@ create table pms_project
 );
 
 alter table pms_project comment '项目表';
+
+/*==============================================================*/
+/* Table: tms_task_scheduler                                    */
+/*==============================================================*/
+create table tms_task_scheduler
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   bean_name            varchar(255) not null default "" comment 'bean名称',
+   method_name          varchar(255) not null default "" comment 'bean中执行的方法名称',
+   params               text default null comment '方法的参数内容，JSON格式',
+   create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间，格式为yyyy-MM-dd HH:mm:ss',
+   update_time          datetime default CURRENT_TIMESTAMP comment '更新时间，格式为yyyy-MM-dd HH:mm:ss',
+   state                tinyint(1) not null default 1 comment '0-暂停，1-运行中',
+   primary key (id)
+);
+
+alter table tms_task_scheduler comment '定时任务表';
+
+/*==============================================================*/
+/* Table: tms_task_scheduler_record                             */
+/*==============================================================*/
+create table tms_task_scheduler_record
+(
+   id                   bigint not null auto_increment comment '唯一自增主键',
+   task_scheduler_id    bigint not null default 0 comment '定时任务id',
+   state                tinyint(1) not null default 0 comment '执行状态，0-失败，1-成功',
+   create_time          datetime not null default CURRENT_TIMESTAMP comment '创建时间',
+   error_msg            text default null comment '备注，用于记录失败的异常信息',
+   primary key (id)
+);
+
+alter table tms_task_scheduler_record comment '定时任务执行记录表';
 
 /*==============================================================*/
 /* Table: ums_user                                              */
