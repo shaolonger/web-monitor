@@ -35,14 +35,31 @@
             </thead>
             <tbody>
                 <tr *ngFor="let data of listData">
-                    <td nzAlign="center">{{ data.name }}</td>
-                    <td nzAlign="center">{{ data.categoryText }}</td>
-                    <td nzAlign="center">{{ data.ruleText }}</td>
-                    <td nzAlign="center">{{ data.silentPeriodText }}</td>
-                    <td nzAlign="center">{{ data.subscribeText }}</td>
-                    <td nzAlign="center">{{ data.levelText }}</td>
-                    <td nzAlign="center">{{ data.isActiveText }}</td>
-                    <td nzAlign="center">
+                    <td nzAlign="center" style="vertical-align: middle;">{{ data.name }}</td>
+                    <td nzAlign="center" style="vertical-align: middle;">
+                        <nz-tag>{{ data.categoryText }}</nz-tag>
+                    </td>
+                    <td nzAlign="center" style="vertical-align: middle;">
+                        <div>{{ data.ruleOperatorText }}</div>
+                        <div *ngFor="let ruleText of data.ruleTextList" style="margin-top: 4px;">
+                            <nz-tag>{{ ruleText }}</nz-tag>
+                        </div>
+                    </td>
+                    <td nzAlign="center" style="vertical-align: middle;">{{ data.startTimeText }}-{{ data.endTimeText }}
+                    </td>
+                    <td nzAlign="center" style="vertical-align: middle;">{{ data.silentPeriodText }}</td>
+                    <td nzAlign="center" style="vertical-align: middle;">
+                        <i *ngIf="data.subscriberActiveList.includes(1)" nz-icon nzType="dingding"
+                            nzTheme="outline"></i>
+                        <i *ngIf="data.subscriberActiveList.includes(2)" nz-icon nzType="mail" nzTheme="outline"></i>
+                    </td>
+                    <td nzAlign="center" style="vertical-align: middle;">{{ data.levelText }}</td>
+                    <td nzAlign="center" style="vertical-align: middle;">
+                        <nz-switch [ngModel]="data.isActive===1" (ngModelChange)="handleChangeIsActive($event, data)"
+                            nzCheckedChildren="是" nzUnCheckedChildren="否">
+                        </nz-switch>
+                    </td>
+                    <td nzAlign="center" style="vertical-align: middle;">
                         <nz-space nzSize="small">
                             <nz-space-item>
                                 <button nz-button (click)="handleShowDetailDialog('edit', data)"
@@ -85,7 +102,7 @@
         <div nz-row>
             <div nz-col nzSpan="2" class="alarmManage-row-label">报警条件：</div>
             <div nz-col nzSpan="22">
-                <nz-radio-group [nzDisabled]="['add','edit'].indexOf(mode)===-1" [ngModel]="ruleOp">
+                <nz-radio-group [nzDisabled]="['add','edit'].indexOf(mode)===-1" [(ngModel)]="ruleOp">
                     <label *ngFor="let option of ruleOperatorOptionsList" nz-radio [nzValue]="option.value"
                         [nzDisabled]="option.disabled">{{option.label}}</label>
                 </nz-radio-group>

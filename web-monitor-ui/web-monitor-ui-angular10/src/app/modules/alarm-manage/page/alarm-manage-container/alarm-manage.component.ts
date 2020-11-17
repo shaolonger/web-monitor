@@ -99,7 +99,7 @@ export class AlarmManageComponent implements OnInit {
     // 监控条件选择结果
     ruleOp = '&&';
     ruleRules = [
-        { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
+        { timeSpan: null, timeSpanSize: 1, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
     ];
     validateForm!: FormGroup;
 
@@ -162,7 +162,7 @@ export class AlarmManageComponent implements OnInit {
             });
             this.ruleOp = '&&';
             this.ruleRules = [
-                { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
+                { timeSpan: null, timeSpanSize: 1, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' }
             ];
         }
     }
@@ -182,11 +182,31 @@ export class AlarmManageComponent implements OnInit {
                     this.message.error(msg || '获取预警列表失败');
                 } else {
                     let { records, totalNum } = data;
-                    this.listData = records.map(item => ({
-                        ...item,
-                        createTime: item.createTime && moment(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
-                        updateTime: item.updateTime && moment(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss')
-                    }));
+                    this.listData = records.map(item => {
+                        const rule = JSON.parse(item.rule);
+                        const subscriberList = JSON.parse(item.subscriberList);
+                        if ((typeof rule !== 'object') || !(subscriberList instanceof Array)) {
+                            return {
+                                ...item,
+                                categoryText: '',
+                                silentPeriodText: '',
+                                levelText: '',
+                                ruleOperatorText: '',
+                                ruleTextList: [],
+                            };
+                        }
+                        return {
+                            ...item,
+                            categoryText: this.getOptionLabelByVal(item.category, this.categoryOptionsList),
+                            startTimeText: item.startTime.substring(0, 5),
+                            endTimeText: item.endTime.substring(0, 5),
+                            silentPeriodText: this.getOptionLabelByVal(item.silentPeriod, this.silentPeriodOptionsList),
+                            levelText: this.getOptionLabelByVal(item.level, this.ruleLevelOptionsList),
+                            ruleOperatorText: this.getOptionLabelByVal(rule.op, this.ruleOperatorOptionsList),
+                            ruleTextList: this.getRuleTextListByRules(rule.rules),
+                            subscriberActiveList: subscriberList.filter(item => item.isActive === 1).map(item => item.category),
+                        };
+                    });
                     this.paginationConfig.total = totalNum;
                 }
             },
@@ -312,7 +332,7 @@ export class AlarmManageComponent implements OnInit {
                 ind: item.ind,
                 agg: item.agg,
                 op: item.op,
-                timeSpan: item.timeSpan,
+                timeSpan: item.timeSpan * item.timeSpanSize,
                 val: item.val,
                 interval: item.interval,
             }))
@@ -476,6 +496,7 @@ export class AlarmManageComponent implements OnInit {
                 op: ruleOpItem.op,
                 interval: ruleOpItem.interval,
                 timeSpanText: ruleOpItem.timeSpanText,
+                timeSpanSize: ruleOpItem.timeSpanSize
             };
             this.ruleRules.splice(index, 1, newRuleItem);
         }
@@ -485,7 +506,7 @@ export class AlarmManageComponent implements OnInit {
      * 新增一行预警规则
      */
     handleAddRule(): void {
-        const newRuleItem = { timeSpan: null, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' };
+        const newRuleItem = { timeSpan: null, timeSpanSize: 1, ind: "", type: "", agg: "", op: "", val: null, interval: null, timeSpanText: ' ', valText: ' ' };
         this.ruleRules.push(newRuleItem);
     }
 
@@ -494,5 +515,70 @@ export class AlarmManageComponent implements OnInit {
      */
     handleRemoveRule(event: EventEmitter<any>, index: number): void {
         this.ruleRules.splice(index, 1);
+    }
+
+    /**
+     * 根据选项值获取文本
+     * @param value 
+     * @param optionList 
+     */
+    getOptionLabelByVal(value: string | number, optionList: Array<any>): string {
+        const option = optionList.find(item => item.value === value);
+        let label = '';
+        if (option) {
+            label = option.label;
+        }
+        return label;
+    }
+
+    /**
+     * 改变预案启动状态
+     * @param isActive 
+     * @param data 
+     */
+    handleChangeIsActive(isActive: boolean, data: any): void {
+        const { id } = data;
+        const newIsActive = isActive ? 1 : 0;
+        this.alarmService.updateAlarm(
+            {
+                id,
+                isActive: newIsActive
+            },
+            res => {
+                console.log('[成功]改变预案启动状态', res);
+                const { success, msg } = res;
+                if (!success) {
+                    this.message.error(msg || '操作失败');
+                } else {
+                    this.message.success('操作成功');
+                }
+            },
+            err => {
+                console.log('[失败]改变预案启动状态', err);
+                this.message.error(err.msg || '操作失败');
+            }
+        );
+    }
+
+    /**
+     * 将后台存放的预警规则字符串，转换为页面显示的列表
+     * @param list 
+     */
+    getRuleTextListByRules(list: Array<any>): Array<string> {
+        if (!(list instanceof Array) || list.length === 0) {
+            return [];
+        }
+        return list.map(rule => {
+            const ruleIndOption = this.ruleIndOptionsList.find(item => item.value === rule.ind);
+            const ruleOpOption = this.ruleOpOptionsFullList.find(item => {
+                return item.agg === rule.agg && item.op === rule.op && item.interval === rule.interval;
+            });
+            let returnStr = '';
+            if (ruleIndOption && ruleOpOption) {
+                returnStr = `${ruleIndOption.label}-${ruleOpOption.label}${rule.val}${ruleIndOption.valText}`;
+                returnStr = returnStr.replace('N', rule.timeSpan);
+            }
+            return returnStr;
+        });
     }
 }

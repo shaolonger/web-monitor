@@ -22,6 +22,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
     declarations: [],
@@ -48,7 +49,8 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
         NzTabsModule,
         NzSwitchModule,
         NzGridModule,
-        NzTimePickerModule
+        NzTimePickerModule,
+        NzTagModule
     ]
 })
 export class NgZorroAntdModule { }

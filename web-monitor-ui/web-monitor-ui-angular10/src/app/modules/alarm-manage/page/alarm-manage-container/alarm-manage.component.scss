@@ -10,35 +10,37 @@
     }
 }
 
-::ng-deep .alarmManage-dialog {
+::ng-deep {
+    .alarmManage-dialog {
 
-    .alarmManage-row-label {
-        text-align: right;
-    }
-
-    .padr4 {
-        padding-right: 4px;
-    }
-
-    .mgr4 {
-        margin-right: 4px;
-    }
-
-    .width100 {
-        width: 100%;
-    }
-
-    .alarmManage-row-item {
-        margin-top: 24px;
-
-        &:last-child {
-            margin-bottom: 24px;
+        .alarmManage-row-label {
+            text-align: right;
         }
-    }
 
-    .alarmManage-row-icon {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
+        .padr4 {
+            padding-right: 4px;
+        }
+
+        .mgr4 {
+            margin-right: 4px;
+        }
+
+        .width100 {
+            width: 100%;
+        }
+
+        .alarmManage-row-item {
+            margin-top: 24px;
+
+            &:last-child {
+                margin-bottom: 24px;
+            }
+        }
+
+        .alarmManage-row-icon {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
     }
 }
