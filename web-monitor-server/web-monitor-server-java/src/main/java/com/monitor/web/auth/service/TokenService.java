@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class TokenService {
 
@@ -49,12 +51,28 @@ public class TokenService {
     }
 
     /**
+     * 根据请求体获取用户id
+     *
+     * @param request request
+     * @return Long
+     */
+    public Long getUserIdByRequest(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        LoginUserDTO loginUserDTO = this.getUserByToken(token);
+        if (loginUserDTO == null) {
+            return null;
+        } else {
+            return loginUserDTO.getId();
+        }
+    }
+
+    /**
      * 添加token
      *
-     * @param token token
-     * @param userId userId
+     * @param token    token
+     * @param userId   userId
      * @param username username
-     * @param isAdmin isAdmin
+     * @param isAdmin  isAdmin
      * @return LoginUser
      */
     public LoginUserDTO addOrUpdateToken(String token, Long userId, String username, Integer isAdmin) {
