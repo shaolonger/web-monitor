@@ -19,7 +19,8 @@
     <div class="alarmManage-table">
         <nz-table #nestedTable [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum"
             [(nzPageSize)]="filterForm.pageSize" nzShowSizeChanger [nzTotal]="paginationConfig.total"
-            (nzPageIndexChange)="getTableList()" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false">
+            (nzPageIndexChange)="getTableList()" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false"
+            [nzScroll]="{y: '560px'}">
             <thead>
                 <tr>
                     <th nzAlign="center"></th>
@@ -80,31 +81,34 @@
                         </td>
                     </tr>
                     <tr [nzExpand]="data.expand">
-                        <nz-table #innerTable [nzData]="data.record" nzSize="middle">
+                        <nz-table #innerTable [nzData]="data.alarmRecordList" [(nzPageIndex)]="data.filterForm.pageNum"
+                            [(nzPageSize)]="data.filterForm.pageSize" nzSize="small" [nzTotal]="data.paginationConfig.total"
+                            (nzPageIndexChange)="getInnerTableList(data)" (nzPageSizeChange)="getInnerTableList(data)"
+                            [nzScroll]="{y: '300px'}">
                             <thead>
                                 <tr>
-                                    <th>报警时间</th>
-                                    <th>报警内容</th>
-                                    <th>操作</th>
+                                    <th nzAlign="center">报警时间</th>
+                                    <th nzAlign="center">报警内容</th>
+                                    <th nzAlign="center">操作</th>
                                 </tr>
                             </thead>
-            <tbody>
-                <tr *ngFor="let data of innerTable.data">
-                    <td>{{ data.createTime }}</td>
-                    <td>{{ data.alarmData }}</td>
-                    <td nzAlign="center" style="vertical-align: middle;">
-                        <nz-space nzSize="small">
-                            <nz-space-item>
-                                <button nz-button nzType="primary">推送记录</button>
-                            </nz-space-item>
-                        </nz-space>
-                    </td>
-                </tr>
+                            <tbody>
+                                <tr *ngFor="let data of innerTable.data">
+                                    <td nzAlign="center">{{ data.createTime }}</td>
+                                    <td nzAlign="center">{{ data.alarmData }}</td>
+                                    <td nzAlign="center" style="vertical-align: middle;">
+                                        <nz-space nzSize="small">
+                                            <nz-space-item>
+                                                <button nz-button nzType="primary">推送记录</button>
+                                            </nz-space-item>
+                                        </nz-space>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </tr>
+                </ng-template>
             </tbody>
-        </nz-table>
-        </tr>
-        </ng-template>
-        </tbody>
         </nz-table>
     </div>
     <nz-modal [(nzVisible)]="showDetailDialog" [nzTitle]="detailDialogTitle" (nzOnCancel)="handleModalOnCancel()"

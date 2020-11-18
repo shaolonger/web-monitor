@@ -197,7 +197,6 @@ export class AlarmManageComponent implements OnInit {
                         }
                         return {
                             ...item,
-                            expand: false,
                             categoryText: this.getOptionLabelByVal(item.category, this.categoryOptionsList),
                             startTimeText: item.startTime.substring(0, 5),
                             endTimeText: item.endTime.substring(0, 5),
@@ -206,6 +205,16 @@ export class AlarmManageComponent implements OnInit {
                             ruleOperatorText: this.getOptionLabelByVal(rule.op, this.ruleOperatorOptionsList),
                             ruleTextList: this.getRuleTextListByRules(rule.rules),
                             subscriberActiveList: subscriberList.filter(item => item.isActive === 1).map(item => item.category),
+                            expand: false,
+                            filterForm: {
+                                pageNum: 1,
+                                pageSize: 10,
+                                alarmId: item.id
+                            },
+                            paginationConfig: {
+                                total: 0
+                            },
+                            alarmRecordList: []
                         };
                     });
                     this.paginationConfig.total = totalNum;
@@ -643,11 +652,45 @@ export class AlarmManageComponent implements OnInit {
     /**
      * 行展开或折叠
      * @param event 
-     * @param data 
+     * @param row 
      */
-    handleRowExpand(event: boolean, data: any): void {
-        console.log('event', event);
-        console.log('data', data);
-        // TODO 在这里异步加载展开的数据
+    handleRowExpand(event: boolean, row: any): void {
+        this.getInnerTableList(row);
+    }
+
+    /**
+     * 获取预警记录列表
+     * @param row 
+     */
+    getInnerTableList(row: any): void {
+        this.isLoading = true;
+        this.alarmService.getAlarmRecord(
+            row.filterForm,
+            res => {
+                console.log('[成功]获取预警记录列表', res);
+                this.isLoading = false;
+                const { success, data, msg } = res;
+                if (!success) {
+                    this.message.error(msg || '获取预警记录列表失败');
+                } else {
+                    let { records, totalNum } = data;
+                    // const index = this.listData.findIndex(item => item === row);
+                    // if (index > -1) {
+                    //     const newRow = {
+                    //         ...row,
+                    //         alarmRecordList: records,
+                    //         paginationConfig: { total: totalNum }
+                    //     };
+                    //     this.listData.splice(index, 1, newRow);
+                    // }
+                    row.alarmRecordList = records;
+                    row.paginationConfig = { total: totalNum };
+                }
+            },
+            err => {
+                console.log('[失败]获取预警记录列表', err);
+                this.isLoading = false;
+            }
+        );
     }
 }

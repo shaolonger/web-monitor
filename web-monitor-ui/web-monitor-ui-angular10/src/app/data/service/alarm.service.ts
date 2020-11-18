@@ -86,7 +86,7 @@ export class AlarmService {
      * @param failCallback
      */
     public getAlarmRecord(params: Object, successCallback?: Function, failCallback?: Function): void {
-        this.httpService.get('/alarmRecrod/get', params).subscribe(
+        this.httpService.get('/alarmRecord/get', params).subscribe(
             (res: any) => {
                 successCallback && successCallback(res);
             },
