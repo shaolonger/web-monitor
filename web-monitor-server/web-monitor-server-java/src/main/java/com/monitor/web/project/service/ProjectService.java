@@ -115,6 +115,18 @@ public class ProjectService extends ServiceBase {
             entity.setActiveFuncs(activeFuncs);
         }
 
+        // notifyDtToken
+        String notifyDtToken = request.getParameter("notifyDtToken");
+        if (!StringUtils.isEmpty(notifyDtToken)) {
+            entity.setNotifyDtToken(notifyDtToken);
+        }
+
+        // notifyEmail
+        String notifyEmail = request.getParameter("notifyEmail");
+        if (!StringUtils.isEmpty(notifyEmail)) {
+            entity.setNotifyEmail(notifyEmail);
+        }
+
         // isAutoUpload
         Integer isAutoUpload = DataConvertUtils.strToIntegerOrNull(request.getParameter("isAutoUpload"));
         if (isAutoUpload != null) {
