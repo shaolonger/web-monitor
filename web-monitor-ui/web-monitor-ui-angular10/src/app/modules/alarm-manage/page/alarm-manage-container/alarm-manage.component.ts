@@ -633,7 +633,7 @@ export class AlarmManageComponent implements OnInit {
             let returnStr = '';
             if (ruleIndOption && ruleOpOption) {
                 returnStr = `${ruleIndOption.label}-${ruleOpOption.label}${rule.val}${ruleIndOption.valText}`;
-                returnStr = returnStr.replace('N', rule.timeSpan);
+                returnStr = returnStr.replace('N', String(rule.timeSpan / ruleOpOption.timeSpanSize));
             }
             return returnStr;
         });
