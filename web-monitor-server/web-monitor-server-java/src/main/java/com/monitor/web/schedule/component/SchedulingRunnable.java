@@ -79,18 +79,20 @@ public class SchedulingRunnable implements Runnable {
         if (params == null) {
             return beanName.equals(that.beanName) &&
                     methodName.equals(that.methodName) &&
+                    schedulerId.equals(that.schedulerId) &&
                     that.params == null;
         }
         return beanName.equals(that.beanName) &&
                 methodName.equals(that.methodName) &&
+                schedulerId.equals(that.schedulerId) &&
                 params.equals(that.params);
     }
 
     @Override
     public int hashCode() {
         if (params == null) {
-            return Objects.hash(beanName, methodName);
+            return Objects.hash(beanName, methodName, schedulerId);
         }
-        return Objects.hash(beanName, methodName, params);
+        return Objects.hash(beanName, methodName, params, schedulerId);
     }
 }

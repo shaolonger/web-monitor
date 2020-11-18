@@ -3,6 +3,7 @@ package com.monitor.web.alarm.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.monitor.web.alarm.dto.AlarmDTO;
 import com.monitor.web.alarm.dto.AlarmSchedulerRelationDTO;
+import com.monitor.web.alarm.entity.AlarmSchedulerRelationEntity;
 import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.scheduler.AlarmScheduler;
 import com.monitor.web.alarm.vo.AlarmVO;
@@ -93,7 +94,7 @@ public class AlarmService extends ServiceBase {
         }
 
         // 启动预警定时任务
-        this.enableAlarmScheduler(alarmEntity);
+        this.startAlarmScheduler(alarmEntity);
 
         return alarmEntity;
     }
@@ -154,6 +155,13 @@ public class AlarmService extends ServiceBase {
             alarmEntity.setSilentPeriod(silentPeriod);
         }
         if (isActive != null) {
+
+            // 若状态改为启动，则先停止已有的定时任务，再重新启动对应的定时任务
+            this.stopAlarmScheduler(alarmEntity);
+            if (isActive == 1) {
+                this.startAlarmScheduler(alarmEntity);
+            }
+
             alarmEntity.setIsActive(isActive);
         }
         if (createBy != null) {
@@ -163,8 +171,10 @@ public class AlarmService extends ServiceBase {
             alarmEntity.setIsDeleted(isDeleted);
         }
         if (!StringUtils.isEmpty(subscriberList)) {
+
             // 先删除已有的关联关系
             subscriberService.deleteAllByAlarmId(alarmEntity.getId());
+
             // 再创建新的关联关系
             List<HashMap<String, Object>> list = DataConvertUtils.jsonStrToObject(subscriberList, List.class);
             for (HashMap<String, Object> map : list) {
@@ -174,7 +184,11 @@ public class AlarmService extends ServiceBase {
                 subscriberService.add(subscriberEntity);
             }
         }
-        return alarmDao.save(alarmEntity);
+
+        // 保存实体
+        alarmDao.save(alarmEntity);
+
+        return alarmEntity;
     }
 
     /**
@@ -285,13 +299,17 @@ public class AlarmService extends ServiceBase {
      */
     @Transactional(rollbackOn = {Exception.class})
     public Object delete(Long id) throws Exception {
-        boolean isExisted = alarmDao.existsById(id);
-        if (!isExisted) throw new Exception("项目不存在");
+        AlarmEntity alarmEntity = alarmDao.findById(id).orElseThrow(() -> new Exception("项目不存在"));
 
-        // 先删除关联的订阅者
+        // 删除关联的订阅者
         subscriberService.deleteAllByAlarmId(id);
 
+        // 停止预警定时任务
+        this.stopAlarmScheduler(alarmEntity);
+
+        // 删除实体记录
         alarmDao.deleteById(id);
+
         return true;
     }
 
@@ -352,7 +370,7 @@ public class AlarmService extends ServiceBase {
      * @param alarmEntity alarmEntity
      */
     @Transactional(rollbackOn = {Exception.class})
-    void enableAlarmScheduler(AlarmEntity alarmEntity) {
+    void startAlarmScheduler(AlarmEntity alarmEntity) {
         String params = null;
         try {
             params = DataConvertUtils.objectToJsonStr(alarmEntity);
@@ -382,5 +400,36 @@ public class AlarmService extends ServiceBase {
 
         // 启动定时任务
         schedulerService.startScheduler(schedulerEntity);
+    }
+
+    /**
+     * 停止预警定时任务
+     *
+     * @param alarmEntity alarmEntity
+     */
+    void stopAlarmScheduler(AlarmEntity alarmEntity) {
+
+        int isActive = alarmEntity.getIsActive();
+        if (isActive == 0) return;
+
+        // 如果为启动中的预警
+        long alarmId = alarmEntity.getId();
+        List<AlarmSchedulerRelationEntity> list = alarmSchedulerRelationService.findAllByAlarmId(alarmId);
+        if (list.size() == 0) return;
+
+        list.forEach(entity -> {
+            long schedulerId = entity.getSchedulerId();
+            SchedulerEntity schedulerEntity = schedulerService.getById(schedulerId).orElse(null);
+            if (schedulerEntity == null) return;
+
+            // 终止其关联的执行中的定时任务
+            schedulerService.stopScheduler(schedulerEntity);
+
+            // 删除定时任务
+            schedulerService.deleteByEntity(schedulerEntity);
+
+            // 删除预警-定时任务关联表
+            alarmSchedulerRelationService.deleteByEntity(entity);
+        });
     }
 }

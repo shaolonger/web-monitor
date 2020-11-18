@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AlarmSchedulerRelationService {
@@ -28,5 +29,24 @@ public class AlarmSchedulerRelationService {
         alarmSchedulerRelationDAO.save(alarmSchedulerRelationEntity);
 
         return true;
+    }
+
+    /**
+     * 通过alarmId查找实体
+     *
+     * @param alarmId alarmId
+     * @return SchedulerEntity
+     */
+    public List<AlarmSchedulerRelationEntity> findAllByAlarmId(long alarmId) {
+        return alarmSchedulerRelationDAO.findAllByAlarmId(alarmId);
+    }
+
+    /**
+     * 删除
+     *
+     * @param entity entity
+     */
+    public void deleteByEntity(AlarmSchedulerRelationEntity entity) {
+        alarmSchedulerRelationDAO.delete(entity);
     }
 }
