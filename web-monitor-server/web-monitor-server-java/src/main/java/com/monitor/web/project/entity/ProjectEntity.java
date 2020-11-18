@@ -57,13 +57,13 @@ public class ProjectEntity {
     /**
      * 预警模块中的钉钉机器人access_token，用于预警模块中发送报警推送，多个用英文逗号隔开
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String notifyDtToken;
 
     /**
      * 预警模块中的邮件推送地址，多个用英文逗号隔开
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String notifyEmail;
 
     /**

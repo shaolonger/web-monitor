@@ -38,6 +38,7 @@ public class SchedulerRecordEntity {
     /**
      * 执行失败的异常信息
      */
+    @Column(columnDefinition = "TEXT")
     private String errorMsg;
 
     /**

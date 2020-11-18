@@ -19,7 +19,7 @@ public class SubscriberEntity {
     @Column(nullable = false)
     private Long alarmId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String subscriber;
 
     @Column(nullable = false)

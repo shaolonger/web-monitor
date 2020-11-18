@@ -33,6 +33,7 @@ public class SchedulerEntity {
     /**
      * 方法的参数内容，JSON格式
      */
+    @Column(columnDefinition = "TEXT")
     private String params;
 
     /**

@@ -24,7 +24,7 @@ public class AlarmRecordEntity {
     /**
      * 报警内容，格式为JSON字符串
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String alarmData;
 
     /**
