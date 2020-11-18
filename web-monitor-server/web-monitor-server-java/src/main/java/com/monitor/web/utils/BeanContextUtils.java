@@ -27,4 +27,16 @@ public class BeanContextUtils implements ApplicationContextAware {
     public static <T> T getBean(Class<T> tClass) {
         return (T) applicationContext.getBean(tClass);
     }
+
+    public static boolean containsBean(String name) {
+        return applicationContext.containsBean(name);
+    }
+
+    public static boolean isSingleton(String name) {
+        return applicationContext.isSingleton(name);
+    }
+
+    public static Class<? extends Object> getType(String name) {
+        return applicationContext.getType(name);
+    }
 }
