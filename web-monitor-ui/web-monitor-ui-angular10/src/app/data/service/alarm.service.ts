@@ -78,4 +78,21 @@ export class AlarmService {
             }
         );
     }
+
+    /**
+     * 获取预警记录列表
+     * @param params
+     * @param successCallback
+     * @param failCallback
+     */
+    public getAlarmRecord(params: Object, successCallback?: Function, failCallback?: Function): void {
+        this.httpService.get('/alarmRecrod/get', params).subscribe(
+            (res: any) => {
+                successCallback && successCallback(res);
+            },
+            (err: HttpErrorResponse) => {
+                failCallback && failCallback(err);
+            }
+        );
+    }
 }

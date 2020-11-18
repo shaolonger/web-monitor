@@ -197,6 +197,7 @@ export class AlarmManageComponent implements OnInit {
                         }
                         return {
                             ...item,
+                            expand: false,
                             categoryText: this.getOptionLabelByVal(item.category, this.categoryOptionsList),
                             startTimeText: item.startTime.substring(0, 5),
                             endTimeText: item.endTime.substring(0, 5),
@@ -637,5 +638,16 @@ export class AlarmManageComponent implements OnInit {
             }
             return returnStr;
         });
+    }
+
+    /**
+     * 行展开或折叠
+     * @param event 
+     * @param data 
+     */
+    handleRowExpand(event: boolean, data: any): void {
+        console.log('event', event);
+        console.log('data', data);
+        // TODO 在这里异步加载展开的数据
     }
 }
