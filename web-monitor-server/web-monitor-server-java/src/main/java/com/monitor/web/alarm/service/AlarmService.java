@@ -10,9 +10,8 @@ import com.monitor.web.auth.service.TokenService;
 import com.monitor.web.common.api.PageResultBase;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
-import com.monitor.web.schedule.component.CronTaskRegistrar;
-import com.monitor.web.schedule.component.SchedulingRunnable;
 import com.monitor.web.schedule.dto.SchedulerDTO;
+import com.monitor.web.schedule.entity.SchedulerEntity;
 import com.monitor.web.schedule.service.SchedulerService;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.alarm.dao.AlarmDAO;
@@ -45,8 +44,6 @@ public class AlarmService extends ServiceBase {
     private SubscriberService subscriberService;
     @Autowired
     private AlarmScheduler alarmScheduler;
-    @Autowired
-    private CronTaskRegistrar cronTaskRegistrar;
     @Autowired
     private ProjectService projectService;
     @Autowired
@@ -373,16 +370,17 @@ public class AlarmService extends ServiceBase {
         schedulerDTO.setParams(params);
         schedulerDTO.setCronExpression(cronExpression);
         schedulerDTO.setState(1);
-        Long schedulerId = schedulerService.add(schedulerDTO);
+        SchedulerEntity schedulerEntity = schedulerService.add(schedulerDTO);
 
         // 保存预警-定时任务关联表
+        Long alarmId = alarmEntity.getId();
+        Long schedulerId = schedulerEntity.getId();
         AlarmSchedulerRelationDTO alarmSchedulerRelationDTO = new AlarmSchedulerRelationDTO();
-        alarmSchedulerRelationDTO.setAlarmId(alarmEntity.getId());
+        alarmSchedulerRelationDTO.setAlarmId(alarmId);
         alarmSchedulerRelationDTO.setSchedulerId(schedulerId);
         alarmSchedulerRelationService.add(alarmSchedulerRelationDTO);
 
         // 启动定时任务
-        SchedulingRunnable task = new SchedulingRunnable(beanName, methodName, params, schedulerId);
-        cronTaskRegistrar.addCronTask(task, cronExpression);
+        schedulerService.startScheduler(schedulerEntity);
     }
 }
