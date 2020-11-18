@@ -190,7 +190,7 @@ public class ProjectService extends ServiceBase {
             paramSqlBuilder.append(" and t.project_name like :projectName");
             paramMap.put("projectName", "%" + projectName + "%");
         }
-        dataSqlBuilder.append(paramSqlBuilder).append(" group by t.project_name order by t.create_time desc");
+        dataSqlBuilder.append(paramSqlBuilder).append(" order by t.create_time desc");
         countSqlBuilder.append(paramSqlBuilder);
         Page<ProjectEntity> page = this.findPageBySqlAndParam(ProjectEntity.class, dataSqlBuilder.toString(), countSqlBuilder.toString(), pageable, paramMap);
 
