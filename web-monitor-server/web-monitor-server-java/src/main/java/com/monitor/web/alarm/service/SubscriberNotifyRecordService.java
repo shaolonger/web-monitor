@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SubscriberNotifyRecordService {
@@ -45,5 +46,15 @@ public class SubscriberNotifyRecordService {
 
         subscriberNotifyRecordDAO.save(entity);
         return true;
+    }
+
+    /**
+     * 根据alarmRecordId获取所有记录
+     *
+     * @param alarmRecordId alarmRecordId
+     * @return List
+     */
+    public List<SubscriberNotifyRecordEntity> findAllByAlarmRecordId(long alarmRecordId) {
+        return subscriberNotifyRecordDAO.findAllByAlarmRecordId(alarmRecordId);
     }
 }
