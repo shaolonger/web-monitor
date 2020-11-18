@@ -25,6 +25,8 @@ public class AlarmSchedulerRelationService {
         Date nowTime = new Date();
         alarmSchedulerRelationEntity.setCreateTime(nowTime);
 
+        alarmSchedulerRelationDAO.save(alarmSchedulerRelationEntity);
+
         return true;
     }
 }
