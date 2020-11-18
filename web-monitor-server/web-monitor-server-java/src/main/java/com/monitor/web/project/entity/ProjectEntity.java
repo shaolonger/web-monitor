@@ -69,11 +69,12 @@ public class ProjectEntity {
     /**
      * 创建时间
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "datetime")
     private Date createTime;
 
     /**
      * 更新时间
      */
+    @Column(columnDefinition = "datetime")
     private Date updateTime;
 }

@@ -34,6 +34,6 @@ public class AlarmSchedulerRelationEntity {
     /**
      * 创建时间
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "datetime")
     private Date createTime;
 }

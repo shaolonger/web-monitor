@@ -35,6 +35,7 @@ public class ResourceLoadErrorLogEntity {
     /**
      * 创建时间
      */
+    @Column(columnDefinition = "datetime")
     private Date createTime;
 
     /**

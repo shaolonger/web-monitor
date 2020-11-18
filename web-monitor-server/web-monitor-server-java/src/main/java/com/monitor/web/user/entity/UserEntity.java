@@ -61,10 +61,12 @@ public class UserEntity {
     /**
      * 创建时间
      */
+    @Column(columnDefinition = "datetime")
     private Date createTime;
 
     /**
      * 更新时间
      */
+    @Column(columnDefinition = "datetime")
     private Date updateTime;
 }

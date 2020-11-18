@@ -72,11 +72,13 @@ public class AlarmEntity {
     /**
      * 创建时间，格式yyyy-MM-dd HH:mm:ss
      */
+    @Column(columnDefinition = "datetime")
     private Date createTime;
 
     /**
      * 更新时间，格式yyyy-MM-dd HH:mm:ss
      */
+    @Column(columnDefinition = "datetime")
     private Date updateTime;
 
     /**

@@ -38,6 +38,7 @@ public class JsErrorLogEntity {
     /**
      * 创建时间
      */
+    @Column(columnDefinition = "datetime")
     private Date createTime;
 
     /**

@@ -36,6 +36,7 @@ public class CustomErrorLogEntity {
     /**
      * 创建时间
      */
+    @Column(columnDefinition = "datetime")
     private Date createTime;
 
     /**
