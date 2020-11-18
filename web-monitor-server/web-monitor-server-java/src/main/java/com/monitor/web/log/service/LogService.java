@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -40,7 +41,7 @@ public class LogService extends ServiceBase {
      */
     public Object add(HttpServletRequest request) throws Exception {
         String logType = request.getParameter("logType");
-        if (logType == null || logType.isEmpty()) throw new Exception("logType不能为空");
+        if (StringUtils.isEmpty(logType)) throw new Exception("logType不能为空");
         switch (logType) {
             case "JS_ERROR":
                 return jsErrorLogService.add(request);
@@ -100,7 +101,7 @@ public class LogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }

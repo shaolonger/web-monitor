@@ -186,7 +186,7 @@ public class ProjectService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目名称
-        if (projectName != null && !projectName.isEmpty()) {
+        if (!StringUtils.isEmpty(projectName)) {
             paramSqlBuilder.append(" and t.project_name like :projectName");
             paramMap.put("projectName", "%" + projectName + "%");
         }

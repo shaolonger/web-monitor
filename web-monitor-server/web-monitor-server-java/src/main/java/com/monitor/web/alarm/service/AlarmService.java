@@ -132,7 +132,7 @@ public class AlarmService extends ServiceBase {
 
         // 修改
         AlarmEntity alarmEntity = alarmDao.getById(id).orElseThrow(() -> new Exception("该预警不存在"));
-        if (name != null && !name.isEmpty()) {
+        if (!StringUtils.isEmpty(name)) {
             alarmEntity.setName(name);
         }
         if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
@@ -144,13 +144,13 @@ public class AlarmService extends ServiceBase {
         if (category != null) {
             alarmEntity.setCategory(category);
         }
-        if (rule != null && !rule.isEmpty()) {
+        if (!StringUtils.isEmpty(rule)) {
             alarmEntity.setRule(rule);
         }
-        if (startTime != null && !startTime.isEmpty()) {
+        if (!StringUtils.isEmpty(startTime)) {
             alarmEntity.setStartTime(startTime);
         }
-        if (endTime != null && !endTime.isEmpty()) {
+        if (!StringUtils.isEmpty(endTime)) {
             alarmEntity.setEndTime(endTime);
         }
         if (silentPeriod != null) {
@@ -211,12 +211,12 @@ public class AlarmService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 预警名称
-        if (name != null && !name.isEmpty()) {
+        if (!StringUtils.isEmpty(name)) {
             paramSqlBuilder.append(" and t.name like :name");
             paramMap.put("name", "%" + name + "%");
         }
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
@@ -231,17 +231,17 @@ public class AlarmService extends ServiceBase {
             paramMap.put("category", category);
         }
         // 预警规则
-        if (rule != null && !rule.isEmpty()) {
+        if (!StringUtils.isEmpty(rule)) {
             paramSqlBuilder.append(" and t.rule like :rule");
             paramMap.put("rule", "%" + rule + "%");
         }
         // 报警时段-开始时间
-        if (startTime != null && !startTime.isEmpty()) {
+        if (!StringUtils.isEmpty(startTime)) {
             paramSqlBuilder.append(" and t.start_time = :startTime");
             paramMap.put("startTime", startTime);
         }
         // 报警时段-结束时间
-        if (endTime != null && !endTime.isEmpty()) {
+        if (!StringUtils.isEmpty(endTime)) {
             paramSqlBuilder.append(" and t.end_time = :endTime");
             paramMap.put("endTime", endTime);
         }
@@ -355,7 +355,7 @@ public class AlarmService extends ServiceBase {
      * @param alarmEntity alarmEntity
      */
     @Transactional(rollbackOn = {Exception.class})
-    private void enableAlarmScheduler(AlarmEntity alarmEntity) {
+    void enableAlarmScheduler(AlarmEntity alarmEntity) {
         String params = null;
         try {
             params = DataConvertUtils.objectToJsonStr(alarmEntity);

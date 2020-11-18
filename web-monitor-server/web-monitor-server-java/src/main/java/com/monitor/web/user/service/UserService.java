@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -87,13 +88,13 @@ public class UserService extends ServiceBase {
             StringBuilder paramSqlBuilder = new StringBuilder();
 
             // 用户名
-            if (username != null && !username.isEmpty()) {
+            if (!StringUtils.isEmpty(username)) {
                 paramSqlBuilder.append(" and t.username like :username");
                 paramMap.put("username", "%" + username + "%");
             }
 
             // 电话
-            if (phone != null && !phone.isEmpty()) {
+            if (!StringUtils.isEmpty(phone)) {
                 paramSqlBuilder.append(" and t.phone like :phone");
                 paramMap.put("phone", "%" + phone + "%");
             }

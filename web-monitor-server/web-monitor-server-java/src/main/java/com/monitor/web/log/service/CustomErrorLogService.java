@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -57,12 +58,12 @@ public class CustomErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -79,22 +80,22 @@ public class CustomErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // JS错误类型
-        if (errorType != null && !errorType.isEmpty()) {
+        if (!StringUtils.isEmpty(errorType)) {
             paramSqlBuilder.append(" and t.error_type like :errorType");
             paramMap.put("errorType", "%" + errorType + "%");
         }
         // JS错误信息
-        if (errorMessage != null && !errorMessage.isEmpty()) {
+        if (!StringUtils.isEmpty(errorMessage)) {
             paramSqlBuilder.append(" and t.error_message like :errorMessage");
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
@@ -141,12 +142,12 @@ public class CustomErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -163,22 +164,22 @@ public class CustomErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // JS错误类型
-        if (errorType != null && !errorType.isEmpty()) {
+        if (!StringUtils.isEmpty(errorType)) {
             paramSqlBuilder.append(" and t.error_type like :errorType");
             paramMap.put("errorType", "%" + errorType + "%");
         }
         // JS错误信息
-        if (errorMessage != null && !errorMessage.isEmpty()) {
+        if (!StringUtils.isEmpty(errorMessage)) {
             paramSqlBuilder.append(" and t.error_message like :errorMessage");
             paramMap.put("errorMessage", "%" + errorMessage + "%");
         }
@@ -285,19 +286,19 @@ public class CustomErrorLogService extends ServiceBase {
         Date createTime = new Date();
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             throw new Exception("projectIdentifier不能为空");
         }
-        if (cUuid == null || cUuid.isEmpty()) {
+        if (!StringUtils.isEmpty(cUuid)) {
             throw new Exception("cUuid不能为空");
         }
-        if (logType == null || logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             throw new Exception("logType不能为空");
         }
-        if (pageUrl == null || pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             throw new Exception("pageUrl不能为空");
         }
-        if (errorMessage == null || errorMessage.isEmpty()) {
+        if (!StringUtils.isEmpty(errorMessage)) {
             throw new Exception("errorMessage不能为空");
         }
 

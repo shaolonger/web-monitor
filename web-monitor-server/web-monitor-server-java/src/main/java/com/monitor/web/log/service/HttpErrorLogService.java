@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -57,12 +58,12 @@ public class HttpErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -79,37 +80,37 @@ public class HttpErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // Http类型，如request、response
-        if (httpType != null && !httpType.isEmpty()) {
+        if (!StringUtils.isEmpty(httpType)) {
             paramSqlBuilder.append(" and t.http_type like :httpType");
             paramMap.put("httpType", "%" + httpType + "%");
         }
         // 完整的Http请求地址
-        if (httpUrlComplete != null && !httpUrlComplete.isEmpty()) {
+        if (!StringUtils.isEmpty(httpUrlComplete)) {
             paramSqlBuilder.append(" and t.http_url_complete like :httpUrlComplete");
             paramMap.put("httpUrlComplete", "%" + httpUrlComplete + "%");
         }
         // 缩写的Http请求地址
-        if (httpUrlShort != null && !httpUrlShort.isEmpty()) {
+        if (!StringUtils.isEmpty(httpUrlShort)) {
             paramSqlBuilder.append(" and t.http_url_short like :httpUrlShort");
             paramMap.put("httpUrlShort", "%" + httpUrlShort + "%");
         }
         // 状态
-        if (status != null && !status.isEmpty()) {
+        if (!StringUtils.isEmpty(status)) {
             paramSqlBuilder.append(" and t.status like :status");
             paramMap.put("status", "%" + status + "%");
         }
         // 状态的文字描述
-        if (statusText != null && !statusText.isEmpty()) {
+        if (!StringUtils.isEmpty(statusText)) {
             paramSqlBuilder.append(" and t.status_text like :statusText");
             paramMap.put("statusText", "%" + statusText + "%");
         }
@@ -158,12 +159,12 @@ public class HttpErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -180,37 +181,37 @@ public class HttpErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // Http类型，如request、response
-        if (httpType != null && !httpType.isEmpty()) {
+        if (!StringUtils.isEmpty(httpType)) {
             paramSqlBuilder.append(" and t.http_type like :httpType");
             paramMap.put("httpType", "%" + httpType + "%");
         }
         // 完整的Http请求地址
-        if (httpUrlComplete != null && !httpUrlComplete.isEmpty()) {
+        if (!StringUtils.isEmpty(httpUrlComplete)) {
             paramSqlBuilder.append(" and t.http_url_complete like :httpUrlComplete");
             paramMap.put("httpUrlComplete", "%" + httpUrlComplete + "%");
         }
         // 缩写的Http请求地址
-        if (httpUrlShort != null && !httpUrlShort.isEmpty()) {
+        if (!StringUtils.isEmpty(httpUrlShort)) {
             paramSqlBuilder.append(" and t.http_url_short like :httpUrlShort");
             paramMap.put("httpUrlShort", "%" + httpUrlShort + "%");
         }
         // 状态
-        if (status != null && !status.isEmpty()) {
+        if (!StringUtils.isEmpty(status)) {
             paramSqlBuilder.append(" and t.status like :status");
             paramMap.put("status", "%" + status + "%");
         }
         // 状态的文字描述
-        if (statusText != null && !statusText.isEmpty()) {
+        if (!StringUtils.isEmpty(statusText)) {
             paramSqlBuilder.append(" and t.status_text like :statusText");
             paramMap.put("statusText", "%" + statusText + "%");
         }
@@ -326,22 +327,22 @@ public class HttpErrorLogService extends ServiceBase {
         String resTime = request.getParameter("resTime");
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+        if (StringUtils.isEmpty(projectIdentifier)) {
             throw new Exception("projectIdentifier不能为空");
         }
-        if (cUuid == null || cUuid.isEmpty()) {
+        if (StringUtils.isEmpty(cUuid)) {
             throw new Exception("cUuid不能为空");
         }
-        if (logType == null || logType.isEmpty()) {
+        if (StringUtils.isEmpty(logType)) {
             throw new Exception("logType不能为空");
         }
-        if (pageUrl == null || pageUrl.isEmpty()) {
+        if (StringUtils.isEmpty(pageUrl)) {
             throw new Exception("pageUrl不能为空");
         }
-        if (httpUrlComplete == null || httpUrlComplete.isEmpty()) {
+        if (StringUtils.isEmpty(httpUrlComplete)) {
             throw new Exception("httpUrlComplete不能为空");
         }
-        if (status == null || status.isEmpty()) {
+        if (StringUtils.isEmpty(status)) {
             throw new Exception("status不能为空");
         }
 
@@ -382,7 +383,7 @@ public class HttpErrorLogService extends ServiceBase {
      * 查询某个时间段内的日志总数
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return int
      */
     public int getCountByIdBetweenStartTimeAndEndTime(String projectIdentifier, Date startTime, Date endTime) {
@@ -393,7 +394,7 @@ public class HttpErrorLogService extends ServiceBase {
      * 按小时间隔，获取各小时内的日志数量
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByHours(Date startTime, Date endTime, String projectIdentifier) {
@@ -404,7 +405,7 @@ public class HttpErrorLogService extends ServiceBase {
      * 按天时间隔，获取各天内的日志数量
      *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return List
      */
     public List<Map<String, Object>> getLogCountByDays(Date startTime, Date endTime, String projectIdentifier) {
@@ -426,7 +427,7 @@ public class HttpErrorLogService extends ServiceBase {
 
         // 参数校验
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
 
         return httpErrorLogDao.getLogCountByState(startTime, endTime, projectIdentifier);
     }

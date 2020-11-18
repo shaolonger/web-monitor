@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -58,12 +59,12 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -80,27 +81,27 @@ public class ResourceLoadErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // 资源链接
-        if (resourceUrl != null && !resourceUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(resourceUrl)) {
             paramSqlBuilder.append(" and t.resource_url like :resourceUrl");
             paramMap.put("resourceUrl", "%" + resourceUrl + "%");
         }
         // 资源类型
-        if (resourceType != null && !resourceType.isEmpty()) {
+        if (!StringUtils.isEmpty(resourceType)) {
             paramSqlBuilder.append(" and t.resource_type like :resourceType");
             paramMap.put("resourceType", "%" + resourceType + "%");
         }
         // 状态
-        if (status != null && !status.isEmpty()) {
+        if (!StringUtils.isEmpty(status)) {
             paramSqlBuilder.append(" and t.status like :status");
             paramMap.put("status", "%" + status + "%");
         }
@@ -148,12 +149,12 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 项目标识
-        if (projectIdentifier != null && !projectIdentifier.isEmpty()) {
+        if (!StringUtils.isEmpty(projectIdentifier)) {
             paramSqlBuilder.append(" and t.project_identifier = :projectIdentifier");
             paramMap.put("projectIdentifier", projectIdentifier);
         }
         // 日志类型
-        if (logType != null && !logType.isEmpty()) {
+        if (!StringUtils.isEmpty(logType)) {
             paramSqlBuilder.append(" and t.log_type like :logType");
             paramMap.put("logType", "%" + logType + "%");
         }
@@ -170,27 +171,27 @@ public class ResourceLoadErrorLogService extends ServiceBase {
             paramMap.put("endTime", endTime);
         }
         // 用户名
-        if (bUname != null && !bUname.isEmpty()) {
+        if (!StringUtils.isEmpty(bUname)) {
             paramSqlBuilder.append(" and t.b_uname like :bUname");
             paramMap.put("bUname", "%" + bUname + "%");
         }
         // 页面URL
-        if (pageUrl != null && !pageUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(pageUrl)) {
             paramSqlBuilder.append(" and t.page_url like :pageUrl");
             paramMap.put("pageUrl", "%" + pageUrl + "%");
         }
         // 资源链接
-        if (resourceUrl != null && !resourceUrl.isEmpty()) {
+        if (!StringUtils.isEmpty(resourceUrl)) {
             paramSqlBuilder.append(" and t.resource_url like :resourceUrl");
             paramMap.put("resourceUrl", "%" + resourceUrl + "%");
         }
         // 资源类型
-        if (resourceType != null && !resourceType.isEmpty()) {
+        if (!StringUtils.isEmpty(resourceType)) {
             paramSqlBuilder.append(" and t.resource_type like :resourceType");
             paramMap.put("resourceType", "%" + resourceType + "%");
         }
         // 状态
-        if (status != null && !status.isEmpty()) {
+        if (!StringUtils.isEmpty(status)) {
             paramSqlBuilder.append(" and t.status like :status");
             paramMap.put("status", "%" + status + "%");
         }
@@ -300,25 +301,25 @@ public class ResourceLoadErrorLogService extends ServiceBase {
         Date createTime = new Date();
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) {
+        if (StringUtils.isEmpty(projectIdentifier)) {
             throw new Exception("projectIdentifier不能为空");
         }
-        if (cUuid == null || cUuid.isEmpty()) {
+        if (StringUtils.isEmpty(cUuid)) {
             throw new Exception("cUuid不能为空");
         }
-        if (logType == null || logType.isEmpty()) {
+        if (StringUtils.isEmpty(logType)) {
             throw new Exception("logType不能为空");
         }
-        if (pageUrl == null || pageUrl.isEmpty()) {
+        if (StringUtils.isEmpty(pageUrl)) {
             throw new Exception("pageUrl不能为空");
         }
-        if (resourceUrl == null || resourceUrl.isEmpty()) {
+        if (StringUtils.isEmpty(resourceUrl)) {
             throw new Exception("resourceUrl不能为空");
         }
-        if (resourceType == null || resourceType.isEmpty()) {
+        if (StringUtils.isEmpty(resourceType)) {
             throw new Exception("resourceType不能为空");
         }
-        if (status == null || status.isEmpty()) {
+        if (StringUtils.isEmpty(status)) {
             throw new Exception("status不能为空");
         }
 
@@ -397,7 +398,7 @@ public class ResourceLoadErrorLogService extends ServiceBase {
 
         // 参数校验
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
 
         return resourceLoadErrorLogDao.getOverallByTimeRange(startTime, endTime, projectIdentifier);
     }

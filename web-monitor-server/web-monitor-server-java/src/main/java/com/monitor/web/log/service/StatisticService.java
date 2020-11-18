@@ -5,6 +5,7 @@ import com.monitor.web.utils.DateUtils;
 import com.monitor.web.log.vo.StatisticRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -35,7 +36,7 @@ public class StatisticService {
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
         int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
         int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
@@ -66,8 +67,8 @@ public class StatisticService {
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (logType == null || logType.isEmpty()) throw new Exception("logType错误");
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(logType)) throw new Exception("logType错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
 
         Map<String, Map<String, Object>> resultMap = new HashMap<>();
         long hoursGap = DateUtils.getHoursBetweenDateRange(startTime, endTime);
@@ -139,8 +140,8 @@ public class StatisticService {
 
         // 校验参数
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (logType == null || logType.isEmpty()) throw new Exception("logType错误");
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(logType)) throw new Exception("logType错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
 
         long daysGap = DateUtils.getDaysBetweenDateRange(startTime, endTime);
         Map<String, Object> resultMap = new LinkedHashMap<>();
@@ -195,10 +196,10 @@ public class StatisticService {
         int timeInterval = DataConvertUtils.strToInt(request.getParameter("timeInterval"));
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (logTypeList == null || logTypeList.isEmpty()) throw new Exception("logTypeList不能为空");
-        if (indicatorList == null || indicatorList.isEmpty()) throw new Exception("indicatorList不能为空");
+        if (StringUtils.isEmpty(logTypeList)) throw new Exception("logTypeList不能为空");
+        if (StringUtils.isEmpty(indicatorList)) throw new Exception("indicatorList不能为空");
         if (timeInterval < 60) throw new Exception("timeInterval不能为空或不能小于60");
 
         String[] logTypeLists = logTypeList.split(",");
@@ -307,10 +308,10 @@ public class StatisticService {
         String indicator = request.getParameter("indicator");
 
         // 校验参数
-        if (projectIdentifier == null || projectIdentifier.isEmpty()) throw new Exception("projectIdentifier错误");
+        if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        if (logType == null) throw new Exception("logType不能为空");
-        if (indicator == null) throw new Exception("indicator不能为空");
+        if (StringUtils.isEmpty(logType)) throw new Exception("logType不能为空");
+        if (StringUtils.isEmpty(indicator)) throw new Exception("indicator不能为空");
         ArrayList<String> indicatorLegalList = new ArrayList<String>() {{
             add("net_type"); // 网络类型
             add("device_name"); // 设备类型
