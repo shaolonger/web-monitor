@@ -683,7 +683,10 @@ export class AlarmManageComponent implements OnInit {
                     //     };
                     //     this.listData.splice(index, 1, newRow);
                     // }
-                    row.alarmRecordList = records;
+                    row.alarmRecordList = records.map(item => ({
+                        ...item,
+                        createTimeText: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss")
+                    }));
                     row.paginationConfig = { total: totalNum };
                 }
             },
