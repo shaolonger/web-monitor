@@ -76,6 +76,9 @@ public class AlarmRecordService extends ServiceBase {
         // 预警id
         if (alarmId == null || alarmId <= 0) {
             throw new Exception("alarmId不能为空或格式不正确");
+        } else {
+            paramSqlBuilder.append(" and t.alarm_id = :alarmId");
+            paramMap.put("alarmId", alarmId);
         }
 
         // 开始时间、结束时间
