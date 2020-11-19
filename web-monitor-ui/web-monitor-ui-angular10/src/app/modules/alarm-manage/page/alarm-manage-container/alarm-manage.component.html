@@ -20,13 +20,13 @@
         <nz-table #nestedTable [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum"
             [(nzPageSize)]="filterForm.pageSize" nzShowSizeChanger [nzTotal]="paginationConfig.total"
             (nzPageIndexChange)="getTableList()" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false"
-            [nzScroll]="{y: '560px'}">
+            [nzScroll]="{y: '700px'}">
             <thead>
                 <tr>
                     <th nzAlign="center"></th>
                     <th nzAlign="center">预警名称</th>
                     <th nzAlign="center">预警条件</th>
-                    <th nzAlign="center">报警规则</th>
+                    <th nzAlign="center" [nzWidth]="'300px'">报警规则</th>
                     <th nzAlign="center">报警时段</th>
                     <th nzAlign="center">静默期</th>
                     <th nzAlign="center">通知方式</th>
@@ -94,7 +94,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of innerTable.data">
-                                    <td nzAlign="center">{{ data.createTime }}</td>
+                                    <td nzAlign="center">{{ data.createTimeText }}</td>
                                     <td nzAlign="center">{{ data.alarmData }}</td>
                                     <td nzAlign="center" style="vertical-align: middle;">
                                         <nz-space nzSize="small">
