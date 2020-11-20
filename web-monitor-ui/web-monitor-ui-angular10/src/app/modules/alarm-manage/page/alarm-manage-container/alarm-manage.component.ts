@@ -655,7 +655,15 @@ export class AlarmManageComponent implements OnInit {
      * @param row 
      */
     handleRowExpand(event: boolean, row: any): void {
-        this.getInnerTableList(row);
+        if (event) {
+            this.getInnerTableList(row);
+            // 展开本行时，将其他行折叠起来，一次只能有一行展开
+            // this.listData.forEach((item: any) => {
+            //     if (item !== row) {
+            //         item.expand = false;
+            //     }
+            // });
+        }
     }
 
     /**
@@ -674,15 +682,6 @@ export class AlarmManageComponent implements OnInit {
                     this.message.error(msg || '获取预警记录列表失败');
                 } else {
                     let { records, totalNum } = data;
-                    // const index = this.listData.findIndex(item => item === row);
-                    // if (index > -1) {
-                    //     const newRow = {
-                    //         ...row,
-                    //         alarmRecordList: records,
-                    //         paginationConfig: { total: totalNum }
-                    //     };
-                    //     this.listData.splice(index, 1, newRow);
-                    // }
                     row.alarmRecordList = records.map(item => ({
                         ...item,
                         createTimeText: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss")

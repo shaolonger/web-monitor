@@ -26,7 +26,7 @@
                     <th nzAlign="center"></th>
                     <th nzAlign="center">预警名称</th>
                     <th nzAlign="center">预警条件</th>
-                    <th nzAlign="center" [nzWidth]="'300px'">报警规则</th>
+                    <th nzAlign="center" [nzWidth]="'360px'">报警规则</th>
                     <th nzAlign="center">报警时段</th>
                     <th nzAlign="center">静默期</th>
                     <th nzAlign="center">通知方式</th>
@@ -84,7 +84,7 @@
                         <nz-table #innerTable [nzData]="data.alarmRecordList" [(nzPageIndex)]="data.filterForm.pageNum"
                             [(nzPageSize)]="data.filterForm.pageSize" nzSize="small" [nzTotal]="data.paginationConfig.total"
                             (nzPageIndexChange)="getInnerTableList(data)" (nzPageSizeChange)="getInnerTableList(data)"
-                            [nzScroll]="{y: '300px'}">
+                            [nzScroll]="{y: '300px'}" [nzFrontPagination]="false">
                             <thead>
                                 <tr>
                                     <th nzAlign="center">报警时间</th>
@@ -94,8 +94,8 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of innerTable.data">
-                                    <td nzAlign="center">{{ data.createTimeText }}</td>
-                                    <td nzAlign="center">{{ data.alarmData }}</td>
+                                    <td nzAlign="center" style="vertical-align: middle;">{{ data.createTimeText }}</td>
+                                    <td nzAlign="center" style="vertical-align: middle;">{{ data.alarmData }}</td>
                                     <td nzAlign="center" style="vertical-align: middle;">
                                         <nz-space nzSize="small">
                                             <nz-space-item>
