@@ -17,13 +17,13 @@
         </nz-space>
     </div>
     <div class="alarmManage-table">
-        <nz-table #nestedTable [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum"
+        <nz-table #alarmTable [nzData]="listData" [(nzPageIndex)]="filterForm.pageNum"
             [(nzPageSize)]="filterForm.pageSize" nzShowSizeChanger [nzTotal]="paginationConfig.total"
             (nzPageIndexChange)="getTableList()" (nzPageSizeChange)="getTableList()" [nzFrontPagination]="false"
             [nzScroll]="{y: '700px'}">
             <thead>
                 <tr>
-                    <th nzAlign="center"></th>
+                    <th nzAlign="center" [nzWidth]="'40px'"></th>
                     <th nzAlign="center">预警名称</th>
                     <th nzAlign="center">预警条件</th>
                     <th nzAlign="center" [nzWidth]="'360px'">报警规则</th>
@@ -36,74 +36,94 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+                <ng-template ngFor let-alarm [ngForOf]="alarmTable.data">
                     <tr>
-                        <td nzAlign="center" [(nzExpand)]="data.expand" (nzExpandChange)="handleRowExpand($event, data)"
+                        <td nzAlign="center" [(nzExpand)]="alarm.expand" (nzExpandChange)="handleAlarmRowExpand($event, alarm)"
                             style="vertical-align: middle;"></td>
-                        <td nzAlign="center" style="vertical-align: middle;">{{ data.name }}</td>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarm.name }}</td>
                         <td nzAlign="center" style="vertical-align: middle;">
-                            <nz-tag>{{ data.categoryText }}</nz-tag>
+                            <nz-tag>{{ alarm.categoryText }}</nz-tag>
                         </td>
                         <td nzAlign="center" style="vertical-align: middle;">
-                            <div>{{ data.ruleOperatorText }}</div>
-                            <div *ngFor="let ruleText of data.ruleTextList" style="margin-top: 4px;">
+                            <div>{{ alarm.ruleOperatorText }}</div>
+                            <div *ngFor="let ruleText of alarm.ruleTextList" style="margin-top: 4px;">
                                 <nz-tag>{{ ruleText }}</nz-tag>
                             </div>
                         </td>
                         <td nzAlign="center" style="vertical-align: middle;">
-                            {{ data.startTimeText }}-{{ data.endTimeText }}
+                            {{ alarm.startTimeText }}-{{ alarm.endTimeText }}
                         </td>
-                        <td nzAlign="center" style="vertical-align: middle;">{{ data.silentPeriodText }}</td>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarm.silentPeriodText }}</td>
                         <td nzAlign="center" style="vertical-align: middle;">
-                            <i *ngIf="data.subscriberActiveList.includes(1)" nz-icon nzType="dingding"
+                            <i *ngIf="alarm.subscriberActiveList.includes(1)" nz-icon nzType="dingding"
                                 nzTheme="outline"></i>
-                            <i *ngIf="data.subscriberActiveList.includes(2)" nz-icon nzType="mail"
+                            <i *ngIf="alarm.subscriberActiveList.includes(2)" nz-icon nzType="mail"
                                 nzTheme="outline"></i>
                         </td>
-                        <td nzAlign="center" style="vertical-align: middle;">{{ data.levelText }}</td>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarm.levelText }}</td>
                         <td nzAlign="center" style="vertical-align: middle;">
-                            <nz-switch [ngModel]="data.isActive===1"
-                                (ngModelChange)="handleChangeIsActive($event, data)" nzCheckedChildren="是"
+                            <nz-switch [ngModel]="alarm.isActive===1"
+                                (ngModelChange)="handleChangeIsActive($event, alarm)" nzCheckedChildren="是"
                                 nzUnCheckedChildren="否">
                             </nz-switch>
                         </td>
                         <td nzAlign="center" style="vertical-align: middle;">
                             <nz-space nzSize="small">
                                 <nz-space-item>
-                                    <button nz-button (click)="handleShowDetailDialog('edit', data)"
+                                    <button nz-button (click)="handleShowDetailDialog('edit', alarm)"
                                         nzType="primary">编辑</button>
                                 </nz-space-item>
                                 <nz-space-item>
-                                    <button nz-button (click)="handleShowDetailDialog('delete', data)" nzDanger
+                                    <button nz-button (click)="handleShowDetailDialog('delete', alarm)" nzDanger
                                         nzType="primary">删除</button>
                                 </nz-space-item>
                             </nz-space>
                         </td>
                     </tr>
-                    <tr [nzExpand]="data.expand">
-                        <nz-table #innerTable [nzData]="data.alarmRecordList" [(nzPageIndex)]="data.filterForm.pageNum"
-                            [(nzPageSize)]="data.filterForm.pageSize" nzSize="small" [nzTotal]="data.paginationConfig.total"
-                            (nzPageIndexChange)="getInnerTableList(data)" (nzPageSizeChange)="getInnerTableList(data)"
+                    <tr [nzExpand]="alarm.expand">
+                        <nz-table #alarmRecordTable [nzData]="alarm.children" [(nzPageIndex)]="alarm.filterForm.pageNum"
+                            [(nzPageSize)]="alarm.filterForm.pageSize" [nzTotal]="alarm.paginationConfig.total"
+                            (nzPageIndexChange)="getAlarmRecordList(alarm)" (nzPageSizeChange)="getAlarmRecordList(alarm)"
                             [nzScroll]="{y: '300px'}" [nzFrontPagination]="false">
                             <thead>
                                 <tr>
-                                    <th nzAlign="center">报警时间</th>
+                                    <th nzAlign="center" [nzWidth]="'40px'"></th>
+                                    <th nzAlign="center" [nzWidth]="'180px'">报警时间</th>
                                     <th nzAlign="center">报警内容</th>
-                                    <th nzAlign="center">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of innerTable.data">
-                                    <td nzAlign="center" style="vertical-align: middle;">{{ data.createTimeText }}</td>
-                                    <td nzAlign="center" style="vertical-align: middle;">{{ data.alarmData }}</td>
-                                    <td nzAlign="center" style="vertical-align: middle;">
-                                        <nz-space nzSize="small">
-                                            <nz-space-item>
-                                                <button nz-button nzType="primary">推送记录</button>
-                                            </nz-space-item>
-                                        </nz-space>
-                                    </td>
-                                </tr>
+                                <ng-template ngFor let-alarmRecord [ngForOf]="alarmRecordTable.data">
+                                    <tr>
+                                        <td nzAlign="center" [(nzExpand)]="alarmRecord.expand" (nzExpandChange)="handleNotifyRowExpand($event, alarmRecord)"
+                                            style="vertical-align: middle;"></td>
+                                        <td nzAlign="center" style="vertical-align: middle;">{{ alarmRecord.createTimeText }}</td>
+                                        <td nzAlign="center" style="vertical-align: middle;">{{ alarmRecord.alarmData }}</td>
+                                    </tr>
+                                    <tr [nzExpand]="alarmRecord.expand">
+                                        <nz-table #notifyRecordTable [nzData]="alarmRecord.children" [(nzPageIndex)]="alarmRecord.filterForm.pageNum"
+                                            [(nzPageSize)]="alarmRecord.filterForm.pageSize" [nzTotal]="alarmRecord.paginationConfig.total"
+                                            (nzPageIndexChange)="getNotifyRecordList(alarmRecord)" (nzPageSizeChange)="getNotifyRecordList(alarmRecord)"
+                                            [nzScroll]="{y: '300px'}" [nzFrontPagination]="false">
+                                            <thead>
+                                                <tr>
+                                                    <th nzAlign="center" [nzWidth]="'180px'">通知时间</th>
+                                                    <th nzAlign="center">通知内容</th>
+                                                    <th nzAlign="center" [nzWidth]="'120px'">通知方式</th>
+                                                    <th nzAlign="center" [nzWidth]="'120px'">推送结果</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let notifyRecord of notifyRecordTable.data">
+                                                    <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.createTimeText }}</td>
+                                                    <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.content }}</td>
+                                                    <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.state }}</td>
+                                                    <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.stateText }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </nz-table>
+                                    </tr>
+                                </ng-template>
                             </tbody>
                         </nz-table>
                     </tr>

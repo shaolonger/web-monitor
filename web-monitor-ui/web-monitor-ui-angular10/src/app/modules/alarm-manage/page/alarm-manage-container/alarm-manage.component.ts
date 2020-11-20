@@ -6,9 +6,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from '@data/service/user.service';
 import { AlarmService } from '@data/service/alarm.service';
+import { SubscriberService } from '@data/service/subscriber.service';
 
 import { Project } from '@data/classes/project.class';
 import { Alarm } from '@data/interfaces/alarm.interface';
+
+import { NOTIFY_STATE_MAP } from '@core/constants/alarm-manage.const';
 
 @Component({
     selector: 'app-alarm-manage',
@@ -106,6 +109,7 @@ export class AlarmManageComponent implements OnInit {
     constructor(
         private userService: UserService,
         private alarmService: AlarmService,
+        private subscriberService: SubscriberService,
         private message: NzMessageService,
         private modal: NzModalService,
         private fb: FormBuilder
@@ -214,7 +218,7 @@ export class AlarmManageComponent implements OnInit {
                             paginationConfig: {
                                 total: 0
                             },
-                            alarmRecordList: []
+                            children: []
                         };
                     });
                     this.paginationConfig.total = totalNum;
@@ -654,9 +658,9 @@ export class AlarmManageComponent implements OnInit {
      * @param event 
      * @param row 
      */
-    handleRowExpand(event: boolean, row: any): void {
+    handleAlarmRowExpand(event: boolean, row: any): void {
         if (event) {
-            this.getInnerTableList(row);
+            this.getAlarmRecordList(row);
             // 展开本行时，将其他行折叠起来，一次只能有一行展开
             // this.listData.forEach((item: any) => {
             //     if (item !== row) {
@@ -670,7 +674,7 @@ export class AlarmManageComponent implements OnInit {
      * 获取预警记录列表
      * @param row 
      */
-    getInnerTableList(row: any): void {
+    getAlarmRecordList(row: any): void {
         this.isLoading = true;
         this.alarmService.getAlarmRecord(
             row.filterForm,
@@ -682,15 +686,73 @@ export class AlarmManageComponent implements OnInit {
                     this.message.error(msg || '获取预警记录列表失败');
                 } else {
                     let { records, totalNum } = data;
-                    row.alarmRecordList = records.map(item => ({
+                    row.children = records.map(item => ({
                         ...item,
-                        createTimeText: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss")
+                        createTimeText: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss"),
+                        expand: false,
+                        filterForm: {
+                            pageNum: 1,
+                            pageSize: 10,
+                            alarmRecordId: item.id
+                        },
+                        paginationConfig: {
+                            total: 0
+                        },
+                        children: []
                     }));
                     row.paginationConfig = { total: totalNum };
                 }
             },
             err => {
                 console.log('[失败]获取预警记录列表', err);
+                this.isLoading = false;
+            }
+        );
+    }
+
+    /**
+     * 报警记录行展开或折叠
+     * @param event 
+     * @param row 
+     */
+    handleNotifyRowExpand(event: boolean, row: any): void {
+        if (event) {
+            this.getNotifyRecordList(row);
+            // 展开本行时，将其他行折叠起来，一次只能有一行展开
+            // this.listData.forEach((item: any) => {
+            //     if (item !== row) {
+            //         item.expand = false;
+            //     }
+            // });
+        }
+    }
+
+    /**
+     * 获取报警记录列表
+     * @param row 
+     */
+    getNotifyRecordList(row: any): void {
+        this.isLoading = true;
+        this.subscriberService.getSubscriberNotifyRecord(
+            row.filterForm,
+            res => {
+                console.log('[成功]获取报警记录列表', res);
+                this.isLoading = false;
+                const { success, data, msg } = res;
+                if (!success) {
+                    this.message.error(msg || '获取预警记录列表失败');
+                } else {
+                    let { records, totalNum } = data;
+                    row.children = records.map(item => ({
+                        ...item,
+                        createTimeText: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss"),
+                        stateText: NOTIFY_STATE_MAP[item.state]
+                    }));
+                    row.paginationConfig = { total: totalNum };
+                }
+            },
+            err => {
+                console.log('[失败]获取报警记录列表', err);
                 this.isLoading = false;
             }
         );
