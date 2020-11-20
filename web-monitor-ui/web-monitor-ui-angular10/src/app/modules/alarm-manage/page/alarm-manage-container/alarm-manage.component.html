@@ -117,7 +117,12 @@
                                                 <tr *ngFor="let notifyRecord of notifyRecordTable.data">
                                                     <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.createTimeText }}</td>
                                                     <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.content }}</td>
-                                                    <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.state }}</td>
+                                                    <td nzAlign="center" style="vertical-align: middle;">
+                                                        <i *ngIf="notifyRecord.category === 1" nz-icon nzType="dingding"
+                                                        nzTheme="outline"></i>
+                                                        <i *ngIf="notifyRecord.category === 2" nz-icon nzType="mail"
+                                                            nzTheme="outline"></i>
+                                                    </td>
                                                     <td nzAlign="center" style="vertical-align: middle;">{{ notifyRecord.stateText }}</td>
                                                 </tr>
                                             </tbody>
