@@ -1,10 +1,13 @@
 <div class="contentLayout">
     <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
     <div class="contentLayout-menu">
-        <!-- <div class="contentLayout-menu-title">nuall</div> -->
+        <!-- <div class="contentLayout-menu-title">web-monitor</div> -->
         <ul class="contentLayout-menu-list" nz-menu nzMode="inline" nzTheme="dark" [nzInlineCollapsed]="isCollapsed">
             <li class="contentLayout-menu-text" nz-menu-item [nzDisabled]="true">
-                <span>nuall</span>
+                <span *ngIf="!isCollapsed; else short">web-monitor</span>
+                <ng-template #short>
+                    <span>WM</span>
+                </ng-template>
             </li>
             <ng-container *ngFor="let menu of menuList">
                 <li *ngIf="menu.children?.length; else elseMenu" nz-submenu [nzTitle]="menu.name" [nzIcon]="menu.icon">
