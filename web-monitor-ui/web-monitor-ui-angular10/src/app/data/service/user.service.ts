@@ -31,7 +31,11 @@ let userMenuList = [
         ],
     },
     {
-        name: '监控预警', pageUrl: '/alarmManage', icon: 'alert', children: []
+        name: '预警管理', pageUrl: '/alarmManage', icon: 'alert', children: [
+            { name: '预警配置', pageUrl: '/alarmManage/alarmConfig' },
+            { name: '报警记录', pageUrl: '/alarmManage/alarmRecord' },
+            { name: '报警通知记录', pageUrl: '/alarmManage/notifyRecord' },
+        ]
     },
     {
         name: '高级查询', pageUrl: '/advancedSearch', icon: 'file-search', children: []

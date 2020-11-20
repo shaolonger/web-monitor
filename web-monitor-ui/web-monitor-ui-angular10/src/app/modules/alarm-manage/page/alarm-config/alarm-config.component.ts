@@ -11,14 +11,14 @@ import { SubscriberService } from '@data/service/subscriber.service';
 import { Project } from '@data/classes/project.class';
 import { Alarm } from '@data/interfaces/alarm.interface';
 
-import { NOTIFY_STATE_MAP } from '@core/constants/alarm-manage.const';
+import { NOTIFY_STATE_MAP } from '@core/constants/alarm-config.const';
 
 @Component({
-    selector: 'app-alarm-manage',
-    templateUrl: './alarm-manage.component.html',
-    styleUrls: ['./alarm-manage.component.scss']
+    selector: 'app-alarm-config',
+    templateUrl: './alarm-config.component.html',
+    styleUrls: ['./alarm-config.component.scss']
 })
-export class AlarmManageComponent implements OnInit {
+export class AlarmConfigComponent implements OnInit {
 
     isLoading = false;
     projectSelected: Project = null;

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AlarmManageComponent } from './page/alarm-manage-container/alarm-manage.component';
+import { AlarmConfigComponent } from './page/alarm-config/alarm-config.component';
 
 const routes: Routes = [
     {
-        path: '',
-        component: AlarmManageComponent
+        path: 'alarmConfig',
+        component: AlarmConfigComponent
     }
 ];
 
