@@ -23,10 +23,6 @@ public class AlarmRecordController {
      */
     @RequestMapping(value = "/alarmRecord/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
-        try {
-            return ResponseResultBase.getResponseResultBase(alarmRecordService.get(request));
-        } catch (Exception e) {
-            return ResponseResultBase.getErrorResponseResult(e);
-        }
+        return ResponseResultBase.getResponseResultBase(alarmRecordService.get(request));
     }
 }

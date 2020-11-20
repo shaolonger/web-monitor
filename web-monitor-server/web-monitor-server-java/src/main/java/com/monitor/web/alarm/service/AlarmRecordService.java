@@ -57,7 +57,7 @@ public class AlarmRecordService extends ServiceBase {
      * @param request request
      * @return Object
      */
-    public Object get(HttpServletRequest request) throws Exception {
+    public Object get(HttpServletRequest request) {
 
         // 获取请求参数
         int pageNum = DataConvertUtils.strToInt(request.getParameter("pageNum"));
@@ -65,6 +65,7 @@ public class AlarmRecordService extends ServiceBase {
         Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
         Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
         Long alarmId = DataConvertUtils.strToLong(request.getParameter("alarmId"));
+        String alarmData = request.getParameter("alarmData");
 
         // 拼接sql，分页查询
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
@@ -74,11 +75,15 @@ public class AlarmRecordService extends ServiceBase {
         StringBuilder paramSqlBuilder = new StringBuilder();
 
         // 预警id
-        if (alarmId == null || alarmId <= 0) {
-            throw new Exception("alarmId不能为空或格式不正确");
-        } else {
+        if (alarmId != null) {
             paramSqlBuilder.append(" and t.alarm_id = :alarmId");
             paramMap.put("alarmId", alarmId);
+        }
+
+        // 报警内容，格式为JSON字符串
+        if (!StringUtils.isEmpty(alarmData)) {
+            paramSqlBuilder.append(" and t.alarm_data like :alarmData");
+            paramMap.put("alarmData", "%" + alarmData + "%");
         }
 
         // 开始时间、结束时间
