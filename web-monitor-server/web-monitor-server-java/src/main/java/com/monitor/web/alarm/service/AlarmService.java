@@ -93,8 +93,10 @@ public class AlarmService extends ServiceBase {
             subscriberService.add(subscriberEntity);
         }
 
-        // 启动预警定时任务
-        this.startAlarmScheduler(alarmEntity);
+        if (alarmEntity.getIsActive() == 1) {
+            // 启动预警定时任务
+            this.startAlarmScheduler(alarmEntity);
+        }
 
         return alarmEntity;
     }
