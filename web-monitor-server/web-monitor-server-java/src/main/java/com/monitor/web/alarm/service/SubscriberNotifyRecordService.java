@@ -2,6 +2,7 @@ package com.monitor.web.alarm.service;
 
 import com.monitor.web.alarm.dao.SubscriberNotifyRecordDAO;
 import com.monitor.web.alarm.dto.SubscriberNotifyRecordDTO;
+import com.monitor.web.alarm.entity.SubscriberEntity;
 import com.monitor.web.alarm.entity.SubscriberNotifyRecordEntity;
 import com.monitor.web.alarm.vo.SubscriberNotifyRecordVO;
 import com.monitor.web.common.api.PageResultBase;
@@ -28,6 +29,8 @@ public class SubscriberNotifyRecordService extends ServiceBase {
 
     @Autowired
     SubscriberNotifyRecordDAO subscriberNotifyRecordDAO;
+    @Autowired
+    SubscriberService subscriberService;
 
     /**
      * 新增
@@ -156,6 +159,12 @@ public class SubscriberNotifyRecordService extends ServiceBase {
     private SubscriberNotifyRecordVO transEntityToVO(SubscriberNotifyRecordEntity subscriberNotifyRecordEntity) {
         SubscriberNotifyRecordVO subscriberNotifyRecordVO = new SubscriberNotifyRecordVO();
         BeanUtils.copyProperties(subscriberNotifyRecordEntity, subscriberNotifyRecordVO);
+
+        Long subscriberId = subscriberNotifyRecordEntity.getSubscriberId();
+        SubscriberEntity subscriberEntity = subscriberService.findOneById(subscriberId).orElse(null);
+        if (subscriberEntity != null) {
+            subscriberNotifyRecordVO.setCategory(subscriberEntity.getCategory());
+        }
 
         return subscriberNotifyRecordVO;
     }

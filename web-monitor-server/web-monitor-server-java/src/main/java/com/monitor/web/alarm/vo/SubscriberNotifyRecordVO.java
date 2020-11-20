@@ -20,6 +20,11 @@ public class SubscriberNotifyRecordVO {
     private String content;
 
     /**
+     * 订阅类型，1-钉钉机器人，2-邮箱
+     */
+    private int category;
+
+    /**
      * 创建时间
      */
     private Date createTime;
