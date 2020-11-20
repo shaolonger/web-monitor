@@ -109,7 +109,7 @@ public class AlarmRecordService extends ServiceBase {
     }
 
     /**
-     * AlarmRecordEntity转VO
+     * Entity转VO
      *
      * @param alarmRecordEntity alarmRecordEntity
      * @return AlarmRecordVO
@@ -117,11 +117,6 @@ public class AlarmRecordService extends ServiceBase {
     private AlarmRecordVO transEntityToVO(AlarmRecordEntity alarmRecordEntity) {
         AlarmRecordVO alarmRecordVO = new AlarmRecordVO();
         BeanUtils.copyProperties(alarmRecordEntity, alarmRecordVO);
-
-        long alarmRecordId = alarmRecordVO.getId();
-        List<SubscriberNotifyRecordEntity> notifyRecord = subscriberNotifyRecordService.findAllByAlarmRecordId(alarmRecordId);
-
-        alarmRecordVO.setNotifyRecord(notifyRecord);
 
         return alarmRecordVO;
     }

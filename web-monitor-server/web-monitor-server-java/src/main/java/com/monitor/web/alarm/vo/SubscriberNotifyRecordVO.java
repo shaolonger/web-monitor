@@ -5,19 +5,19 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class AlarmRecordVO {
+public class SubscriberNotifyRecordVO {
 
     private Long id;
 
     /**
-     * 预警规则id
+     * 通知状态，0-失败，1-成功
      */
-    private Long alarmId;
+    private int state;
 
     /**
-     * 报警内容，格式为JSON字符串
+     * 通知内容
      */
-    private String alarmData;
+    private String content;
 
     /**
      * 创建时间
