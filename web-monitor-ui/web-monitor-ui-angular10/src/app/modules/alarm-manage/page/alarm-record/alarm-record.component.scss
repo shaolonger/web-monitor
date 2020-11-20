@@ -1,0 +1,46 @@
+.alarmRecord {
+    padding: 10px;
+
+    .alarmRecord-filterForms {
+        margin-bottom: 10px;
+
+        .alarmRecord-rangePickder {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+::ng-deep {
+    .alarmRecord-dialog {
+
+        .alarmRecord-row-label {
+            text-align: right;
+        }
+
+        .padr4 {
+            padding-right: 4px;
+        }
+
+        .mgr4 {
+            margin-right: 4px;
+        }
+
+        .width100 {
+            width: 100%;
+        }
+
+        .alarmRecord-row-item {
+            margin-top: 24px;
+
+            &:last-child {
+                margin-bottom: 24px;
+            }
+        }
+
+        .alarmRecord-row-icon {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+    }
+}

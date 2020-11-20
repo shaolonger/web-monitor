@@ -1,0 +1,51 @@
+<div class="alarmRecord">
+    <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
+    <div class="alarmRecord-filterForms">
+        <nz-space nzSize="small">
+            <nz-space-item>
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input [(ngModel)]="filterForm.alarmData" (ngModelChange)="getAlarmRecord()"
+                        placeholder="输入报警内容进行查询" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </nz-space-item>
+            <nz-space-item>
+                <nz-range-picker nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="timeRangePicker"
+                    (ngModelChange)="onTableSelectTimeRange($event)" [nzAllowClear]="false">
+                </nz-range-picker>
+            </nz-space-item>
+            <nz-space-item>
+                <nz-radio-group [(ngModel)]="timeRange" (ngModelChange)="onTableTimeRangeChange()">
+                    <label *ngFor="let timeInterval of timeIntervalList" nz-radio-button
+                        [nzValue]="timeInterval.value">{{timeInterval.label}}</label>
+                </nz-radio-group>
+            </nz-space-item>
+        </nz-space>
+    </div>
+    <div class="alarmRecord-table">
+        <nz-table #alarmRecordTable [nzData]="tableData" [(nzPageIndex)]="filterForm.pageNum"
+            [(nzPageSize)]="filterForm.pageSize" nzShowSizeChanger [nzTotal]="paginationConfig.total"
+            (nzPageIndexChange)="getAlarmRecord()" (nzPageSizeChange)="getAlarmRecord()" [nzFrontPagination]="false"
+            [nzScroll]="{y: '700px'}" [nzShowTotal]="totalTemplate">
+            <thead>
+                <tr>
+                    <th nzAlign="center" [nzWidth]="'200px'">报警时间</th>
+                    <th nzAlign="center">报警内容</th>
+                    <th nzAlign="center" [nzWidth]="'200px'">预警名称</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-template ngFor let-alarmRecord [ngForOf]="alarmRecordTable.data">
+                    <tr>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarmRecord.createTimeText }}</td>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarmRecord.alarmData }}</td>
+                        <td nzAlign="center" style="vertical-align: middle;">{{ alarmRecord.alarmName }}</td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </nz-table>
+        <ng-template #totalTemplate let-total> 共 {{ paginationConfig.total }} 条 </ng-template>
+    </div>
+</div>

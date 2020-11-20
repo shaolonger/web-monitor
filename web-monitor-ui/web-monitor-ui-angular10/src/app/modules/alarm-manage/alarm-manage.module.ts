@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/shared.module';
 
-import { AlarmConfigComponent } from './page/alarm-config/alarm-config.component';
 import { AlarmManageRoutingModule } from './alarm-manage.routing';
+
+import { AlarmConfigComponent } from './page/alarm-config/alarm-config.component';
+import { AlarmRecordComponent } from './page/alarm-record/alarm-record.component';
 
 
 
 @NgModule({
-  declarations: [AlarmConfigComponent],
+  declarations: [AlarmConfigComponent, AlarmRecordComponent],
   imports: [
     CommonModule,
     SharedModule,
