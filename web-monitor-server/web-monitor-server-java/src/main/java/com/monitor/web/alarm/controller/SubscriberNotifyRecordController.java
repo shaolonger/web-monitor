@@ -25,4 +25,15 @@ public class SubscriberNotifyRecordController {
     public Object get(HttpServletRequest request) {
         return ResponseResultBase.getResponseResultBase(subscriberNotifyRecordService.get(request));
     }
+
+    /**
+     * 查询-带关联信息（预警名称）
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/subscriberNotifyRecord/getWithRelatedInfo", method = RequestMethod.GET)
+    public Object getWithRelatedInfo(HttpServletRequest request) {
+        return ResponseResultBase.getResponseResultBase(subscriberNotifyRecordService.getWithRelatedInfo(request));
+    }
 }
