@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AlarmConfigComponent } from './page/alarm-config/alarm-config.component';
 import { AlarmRecordComponent } from './page/alarm-record/alarm-record.component';
+import { AlarmNotifyRecordComponent } from './page/alarm-notify-record/alarm-notify-record.component';
 
 const routes: Routes = [
     {
@@ -12,6 +13,10 @@ const routes: Routes = [
     {
         path: 'alarmRecord',
         component: AlarmRecordComponent
+    },
+    {
+        path: 'alarmNotifyRecord',
+        component: AlarmNotifyRecordComponent
     },
 ];
 

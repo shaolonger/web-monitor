@@ -1,0 +1,46 @@
+.alarmNotifyRecord {
+    padding: 10px;
+
+    .alarmNotifyRecord-filterForms {
+        margin-bottom: 10px;
+
+        .alarmNotifyRecord-rangePickder {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+::ng-deep {
+    .alarmNotifyRecord-dialog {
+
+        .alarmNotifyRecord-row-label {
+            text-align: right;
+        }
+
+        .padr4 {
+            padding-right: 4px;
+        }
+
+        .mgr4 {
+            margin-right: 4px;
+        }
+
+        .width100 {
+            width: 100%;
+        }
+
+        .alarmNotifyRecord-row-item {
+            margin-top: 24px;
+
+            &:last-child {
+                margin-bottom: 24px;
+            }
+        }
+
+        .alarmNotifyRecord-row-icon {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+    }
+}

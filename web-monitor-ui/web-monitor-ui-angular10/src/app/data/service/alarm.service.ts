@@ -95,4 +95,21 @@ export class AlarmService {
             }
         );
     }
+
+    /**
+     * 获取预警记录列表
+     * @param params
+     * @param successCallback
+     * @param failCallback
+     */
+    public getWithRelatedInfo(params: Object, successCallback?: Function, failCallback?: Function): void {
+        this.httpService.get('/subscriberNotifyRecord/getWithRelatedInfo', params).subscribe(
+            (res: any) => {
+                successCallback && successCallback(res);
+            },
+            (err: HttpErrorResponse) => {
+                failCallback && failCallback(err);
+            }
+        );
+    }
 }
