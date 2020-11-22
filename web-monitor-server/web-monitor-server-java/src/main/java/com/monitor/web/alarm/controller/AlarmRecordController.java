@@ -23,6 +23,6 @@ public class AlarmRecordController {
      */
     @RequestMapping(value = "/alarmRecord/get", method = RequestMethod.GET)
     public Object get(HttpServletRequest request) {
-        return ResponseResultBase.getResponseResultBase(alarmRecordService.get(request));
+        return ResponseResultBase.getResponseResultBase(alarmRecordService.getWithRelatedInfo(request));
     }
 }

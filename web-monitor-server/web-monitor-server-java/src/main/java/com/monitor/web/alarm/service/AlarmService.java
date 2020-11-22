@@ -294,6 +294,16 @@ public class AlarmService extends ServiceBase {
     }
 
     /**
+     * 根据id返回查询实体
+     *
+     * @param id id
+     * @return AlarmEntity
+     */
+    public AlarmEntity getEntityById(long id) {
+        return alarmDao.getById(id).orElse(null);
+    }
+
+    /**
      * 删除
      *
      * @param id id
