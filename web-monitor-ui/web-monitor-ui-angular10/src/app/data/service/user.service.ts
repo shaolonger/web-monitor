@@ -13,7 +13,7 @@ import { EventModel } from '@data/classes/event.class';
 // 注：目前暂时写死
 let userMenuList = [
     {
-        name: '首页', pageUrl: '/home', icon: 'home', children: []
+        name: '实时大盘', pageUrl: '/home', icon: 'home', children: []
     },
     {
         name: '项目日志', pageUrl: '/project', icon: 'read', children: [

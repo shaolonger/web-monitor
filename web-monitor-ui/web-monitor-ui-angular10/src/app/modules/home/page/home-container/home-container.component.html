@@ -1,6 +1,10 @@
 <div class="homeContainer">
     <app-spinner [isLoading]="isLoading" message="加载中，请稍候"></app-spinner>
     <div class="homeContainer-banner">
+        <p>
+            <span>数据更新于：</span>
+            <span>{{dataUpdateTime}}</span>
+        </p>
         <nz-radio-group [(ngModel)]="timeRange" (ngModelChange)="getPageData()">
             <label *ngFor="let timeInterval of timeIntervalList" nz-radio-button
                 [nzValue]="timeInterval.value">{{timeInterval.label}}</label>

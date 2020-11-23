@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { EChartOption } from 'echarts';
 
@@ -9,15 +9,20 @@ import { LogService } from '@data/service/log.service';
 
 import { EventModel } from '@data/classes/event.class';
 
+import { AUTO_REFRESH_DATA_INTERVAL } from '@core/constants/home.const';
+
 @Component({
     selector: 'app-home-container',
     templateUrl: './home-container.component.html',
     styleUrls: ['./home-container.component.scss']
 })
-export class HomeContainerComponent implements OnInit {
+export class HomeContainerComponent implements OnInit, OnDestroy {
 
     // 加载状态
     isLoading = false;
+    // 数据更新于
+    dataUpdateTime: string;
+    dataRrefreshInterval: number;
     // 时间筛选
     timeIntervalList = [
         { label: '近一小时', value: '近一小时' },
@@ -277,6 +282,10 @@ export class HomeContainerComponent implements OnInit {
         this.getPageData();
     }
 
+    ngOnDestroy(): void {
+        this.disableDataRrefresh();
+    }
+
     /**
      * 绑定事件监听器
      */
@@ -324,6 +333,7 @@ export class HomeContainerComponent implements OnInit {
         this.filterForm = { ...this.filterForm, startTime, endTime, timeInterval };
         this.getDayData(this.filterForm);
         this.getDetailData(this.filterForm);
+        this.enableDataRefresh(); // 开启定时刷新统计数据的功能
     }
 
     /**
@@ -420,6 +430,36 @@ export class HomeContainerComponent implements OnInit {
         this.chartOptionCus.xAxis[0].data = customErrorLog.map(item => item.key);
         this.chartOptionCus.series[0].data = customErrorLog.map(item => item.count);
         this.chartOptionCus = { ...this.chartOptionCus };
+
+        // 设置数据更新时间
+        this.setDataUpdateTime();
+    }
+
+    /**
+     * 设置数据更新时间
+     */
+    setDataUpdateTime(): void {
+        this.dataUpdateTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    }
+
+    /**
+     * 开启定时刷新统计数据的功能
+     */
+    enableDataRefresh(): void {
+        if (this.dataRrefreshInterval) return;
+        this.dataRrefreshInterval = setInterval(() => {
+            this.getPageData();
+        }, AUTO_REFRESH_DATA_INTERVAL);
+    }
+
+    /**
+     * 停止定时刷新统计数据的功能
+     */
+    disableDataRrefresh(): void {
+        if (this.dataRrefreshInterval) {
+            clearInterval(this.dataRrefreshInterval);
+            this.dataRrefreshInterval = null;
+        }
     }
 
 }
