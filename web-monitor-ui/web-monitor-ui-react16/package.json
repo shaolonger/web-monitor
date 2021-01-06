@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^4.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "echarts": "^4.7.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
