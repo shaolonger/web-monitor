@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:web_monitor_app/common/net/result_data.dart';
+import 'package:web_monitor_app/config/environment_config.dart';
 
 import 'code.dart';
 import 'interceptors/error_interceptor.dart';
@@ -18,9 +19,14 @@ class HttpManager {
 
   /// 发起网络请求
   Future<dynamic> httpFetch(
-      url, params, Map<String, dynamic> header, Options option,
-      {noTip = false}) async {
+    url, {
+    params,
+    Map<String, dynamic> header,
+    Options option,
+    noTip = false,
+  }) async {
     Map<String, dynamic> headers = new HashMap();
+    String _url = EnvironmentConfig.API_URL + url;
 
     if (header != null) {
       headers.addAll(header);
@@ -52,8 +58,8 @@ class HttpManager {
 
     Response response;
     try {
-      response = await _dio.request(url, data: params, options: option);
-    } on DioError catch(e) {
+      response = await _dio.request(_url, data: params, options: option);
+    } on DioError catch (e) {
       return resultError(e);
     }
     return response;
