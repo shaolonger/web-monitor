@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
+import 'package:web_monitor_app/modules/module_login/services/service_login.dart';
 
 class ModuleLogin extends StatefulWidget {
   @override
@@ -14,10 +15,10 @@ class _ModuleLoginState extends State<ModuleLogin> {
   var _formKey = GlobalKey<FormState>();
 
   /// 登录
-  void _login() {
+  void _login() async {
     if ((_formKey.currentState).validate()) {
-      print("username: ${_username.text}");
-      print("password: ${_password.text}");
+      var res = await ServiceLogin.login(_username.text, _password.text);
+      print("res: $res");
     }
   }
 

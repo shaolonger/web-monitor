@@ -30,10 +30,16 @@ dependencies:
   # (WiFi & mobile/cellular) connectivity on Android and iOS.
   connectivity: ^2.0.0
 
+  # Wraps platform-specific persistent storage for simple data
+  # (NSUserDefaults on iOS and macOS, SharedPreferences on Android, etc.).
+  shared_preferences: '>=0.5.12 <2.0.0'
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+
+  # A wrapper around InheritedWidget to make them easier to use and more reusable.
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:
