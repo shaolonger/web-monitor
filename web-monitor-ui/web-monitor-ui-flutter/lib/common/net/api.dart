@@ -64,6 +64,50 @@ class HttpManager {
     }
     return response;
   }
+
+  /// GET请求
+  Future<dynamic> httpGet(
+    url, {
+    params,
+    Map<String, dynamic> header,
+    Options option,
+    noTip = false,
+  }) {
+    return httpFetch(
+      url,
+      params: params ?? null,
+      header: header ?? null,
+      option: option ?? null,
+      noTip: noTip ?? false,
+    );
+  }
+
+  /// POST请求
+  Future<dynamic> httpPost(
+    url, {
+    params,
+    Map<String, dynamic> header,
+    Options option,
+    noTip = false,
+  }) {
+    Map<String, dynamic> headers = new HashMap();
+    if (header != null) {
+      headers.addAll(header);
+    }
+
+    if (option == null) {
+      option = new Options(method: "post");
+    }
+    option.headers = headers;
+
+    return httpFetch(
+      url,
+      params: params ?? null,
+      header: header ?? null,
+      option: option ?? null,
+      noTip: noTip ?? false,
+    );
+  }
 }
 
 final HttpManager httpManager = new HttpManager();

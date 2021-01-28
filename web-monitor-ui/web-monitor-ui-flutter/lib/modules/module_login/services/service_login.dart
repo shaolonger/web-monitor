@@ -9,7 +9,7 @@ class ServiceLogin {
       "username": username,
       "password": password,
     };
-    var res = await httpManager.httpFetch(_url, params: _params);
+    var res = await httpManager.httpPost(_url, params: _params);
     return res;
   }
 }
