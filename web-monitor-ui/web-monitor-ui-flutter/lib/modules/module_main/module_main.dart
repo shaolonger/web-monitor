@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:web_monitor_app/models/model_theme.dart';
 import 'package:web_monitor_app/modules/module_startup/module_startup.dart';
@@ -21,6 +22,7 @@ class ModuleMain extends StatelessWidget {
             // 路由表定义
             routes: routes,
             home: ModuleStartup(),
+            builder: EasyLoading.init(),
           );
         },
       ),

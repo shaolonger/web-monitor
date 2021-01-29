@@ -15,10 +15,9 @@ class _ModuleLoginState extends State<ModuleLogin> {
   var _formKey = GlobalKey<FormState>();
 
   /// 登录
-  void _login() async {
+  void _login() {
     if ((_formKey.currentState).validate()) {
-      var res = await ServiceLogin.login(_username.text, _password.text);
-      print("res: $res");
+      ServiceLogin.login(this.context, _username.text, _password.text);
     }
   }
 

@@ -41,6 +41,10 @@ dependencies:
   # A wrapper around InheritedWidget to make them easier to use and more reusable.
   provider: ^4.3.3
 
+  # A clean and lightweight loading/toast widget for Flutter,
+  # easy to use without context, support iOS、Android and Web
+  flutter_easyloading: ^2.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

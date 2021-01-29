@@ -1,32 +1,35 @@
 import 'dart:collection';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:web_monitor_app/common/net/result_data.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
 
-import 'code.dart';
 import 'interceptors/error_interceptor.dart';
 
 class HttpManager {
   static const CONTENT_TYPE_JSON = "application/json";
   static const CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
 
-  Dio _dio = new Dio(); // 使用默认配置
+  Dio _dio = Dio(BaseOptions(
+    baseUrl: EnvironmentConfig.API_URL,
+    connectTimeout: 5000,
+    receiveTimeout: 5000,
+  ));
 
   HttpManager() {
-    _dio.interceptors.add(new ErrorInterceptors(_dio));
+    _dio.interceptors.add(ErrorInterceptors(_dio));
   }
 
   /// 发起网络请求
-  Future<dynamic> httpFetch(
+  Future<ResultData<T>> httpFetch<T>(
     url, {
     params,
     Map<String, dynamic> header,
     Options option,
     noTip = false,
   }) async {
-    Map<String, dynamic> headers = new HashMap();
-    String _url = EnvironmentConfig.API_URL + url;
+    Map<String, dynamic> headers = HashMap();
 
     if (header != null) {
       headers.addAll(header);
@@ -35,45 +38,34 @@ class HttpManager {
     if (option != null) {
       option.headers = headers;
     } else {
-      option = new Options(method: "get");
+      option = Options(method: "get");
       option.headers = headers;
     }
 
-    resultError(DioError e) {
-      Response errorResponse;
-      if (e.response != null) {
-        errorResponse = e.response;
-      } else {
-        errorResponse = new Response(statusCode: 666);
-      }
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
-        errorResponse.statusCode = Code.NETWORK_TIMEOUT;
-      }
-      return new ResultData(
-          Code.errorHandleFunction(errorResponse.statusCode, e.message, noTip),
-          false,
-          errorResponse.statusCode);
-    }
-
-    Response response;
+    ResultData<T> _resultData;
+    // 显示loading
+    EasyLoading.show(status: "加载中，请稍候", maskType: EasyLoadingMaskType.black);
     try {
-      response = await _dio.request(_url, data: params, options: option);
+      var _response = await _dio.request(url, data: params, options: option);
+      _resultData = ResultData<T>.success(_response);
     } on DioError catch (e) {
-      return resultError(e);
+      _resultData = ResultData<T>.error(e);
     }
-    return response;
+    // 隐藏loading
+    EasyLoading.dismiss();
+    return _resultData;
   }
 
-  /// GET请求
-  Future<dynamic> httpGet(
+  /// 业务GET请求
+  /// 说明：用于发起业务端的http请求
+  Future<ResultData<BizResultData>> httpGet(
     url, {
     params,
     Map<String, dynamic> header,
     Options option,
     noTip = false,
   }) {
-    return httpFetch(
+    return httpFetch<BizResultData>(
       url,
       params: params ?? null,
       header: header ?? null,
@@ -82,25 +74,26 @@ class HttpManager {
     );
   }
 
-  /// POST请求
-  Future<dynamic> httpPost(
+  /// 业务POST请求
+  /// 说明：用于发起业务端的http请求
+  Future<ResultData<BizResultData>> httpPost<BizResultData>(
     url, {
     params,
     Map<String, dynamic> header,
     Options option,
     noTip = false,
   }) {
-    Map<String, dynamic> headers = new HashMap();
+    Map<String, dynamic> headers = HashMap();
     if (header != null) {
       headers.addAll(header);
     }
 
     if (option == null) {
-      option = new Options(method: "post");
+      option = Options(method: "post");
     }
     option.headers = headers;
 
-    return httpFetch(
+    return httpFetch<BizResultData>(
       url,
       params: params ?? null,
       header: header ?? null,
@@ -108,6 +101,17 @@ class HttpManager {
       noTip: noTip ?? false,
     );
   }
+
+  /// 获取业务返回数据
+  /// 说明：该方法用于统一从ResultData结构出真实的业务返回数据
+  Future<dynamic> getBizResultData(ResultData<BizResultData> resultData) async {
+    if (resultData.success && resultData.data?.success) {
+      return resultData.data?.data;
+    } else {
+      EasyLoading.showError(resultData.data?.msg?.toString() ?? "请求失败");
+      return null;
+    }
+  }
 }
 
-final HttpManager httpManager = new HttpManager();
+final HttpManager httpManager = HttpManager();
