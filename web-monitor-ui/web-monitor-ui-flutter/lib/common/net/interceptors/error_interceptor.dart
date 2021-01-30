@@ -14,10 +14,14 @@ class ErrorInterceptors extends InterceptorsWrapper {
     // 没有网络的情况
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      return _dio.resolve(ResultData<String>(
+      return _dio.reject<ResultData>(
+        ResultData(
           success: false,
-          data: Code.errorHandleFunction(Code.NETWORK_ERROR, "", false),
-          statusCode: Code.NETWORK_ERROR));
+          data: null,
+          msg: "网络连接异常",
+          statusCode: Code.NETWORK_ERROR,
+        ),
+      );
     }
   }
 }

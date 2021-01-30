@@ -21,13 +21,14 @@ class HttpManager {
     _dio.interceptors.add(ErrorInterceptors(_dio));
   }
 
-  /// 发起网络请求
-  Future<ResultData<T>> httpFetch<T>(
-    url, {
-    params,
+  /// 通用的网络请求
+  Future<ResultData> httpFetch(
+    String url, {
+    dynamic params,
     Map<String, dynamic> header,
     Options option,
-    noTip = false,
+    bool showErrorTip = true,
+    String defaultErrorTip,
   }) async {
     Map<String, dynamic> headers = HashMap();
 
@@ -42,14 +43,17 @@ class HttpManager {
       option.headers = headers;
     }
 
-    ResultData<T> _resultData;
+    ResultData _resultData;
     // 显示loading
     EasyLoading.show(status: "加载中，请稍候", maskType: EasyLoadingMaskType.black);
     try {
-      var _response = await _dio.request(url, data: params, options: option);
-      _resultData = ResultData<T>.success(_response);
+      var _response = await _dio.request(url, queryParameters: params, options: option);
+      _resultData = ResultData.success(_response);
     } on DioError catch (e) {
-      _resultData = ResultData<T>.error(e);
+      _resultData = ResultData.error(e);
+      if (showErrorTip) {
+        EasyLoading.showError(_resultData.msg ?? defaultErrorTip);
+      }
     }
     // 隐藏loading
     EasyLoading.dismiss();
@@ -58,58 +62,57 @@ class HttpManager {
 
   /// 业务GET请求
   /// 说明：用于发起业务端的http请求
-  Future<ResultData<BizResultData>> httpGet(
-    url, {
-    params,
-    Map<String, dynamic> header,
-    Options option,
-    noTip = false,
-  }) {
-    return httpFetch<BizResultData>(
+  Future<BizResultData> bizHttpGet(
+    String url, {
+    dynamic params,
+    bool showErrorTip,
+    String defaultErrorTip,
+  }) async {
+    var resultData = await httpFetch(
       url,
-      params: params ?? null,
-      header: header ?? null,
-      option: option ?? null,
-      noTip: noTip ?? false,
+      params: params,
+      showErrorTip: showErrorTip ?? true,
+      defaultErrorTip: defaultErrorTip,
     );
+    return getBizResultDataByResultData(resultData,
+        showErrorTip: showErrorTip ?? true, defaultErrorTip: defaultErrorTip);
   }
 
   /// 业务POST请求
   /// 说明：用于发起业务端的http请求
-  Future<ResultData<BizResultData>> httpPost<BizResultData>(
-    url, {
-    params,
-    Map<String, dynamic> header,
-    Options option,
-    noTip = false,
-  }) {
-    Map<String, dynamic> headers = HashMap();
-    if (header != null) {
-      headers.addAll(header);
-    }
-
-    if (option == null) {
-      option = Options(method: "post");
-    }
-    option.headers = headers;
-
-    return httpFetch<BizResultData>(
+  Future<BizResultData> bizHttpPost(
+    String url, {
+    dynamic params,
+    bool showErrorTip,
+    String defaultErrorTip,
+  }) async {
+    var option = Options(method: "post");
+    var resultData = await httpFetch(
       url,
-      params: params ?? null,
-      header: header ?? null,
-      option: option ?? null,
-      noTip: noTip ?? false,
+      params: params,
+      option: option,
+      showErrorTip: showErrorTip ?? true,
+      defaultErrorTip: defaultErrorTip,
     );
+    return getBizResultDataByResultData(resultData,
+        showErrorTip: showErrorTip ?? true, defaultErrorTip: defaultErrorTip);
   }
 
-  /// 获取业务返回数据
+  /// 从通用的ResultData中解构出BizResultData
   /// 说明：该方法用于统一从ResultData结构出真实的业务返回数据
-  Future<dynamic> getBizResultData(ResultData<BizResultData> resultData) async {
-    if (resultData.success && resultData.data?.success) {
-      return resultData.data?.data;
+  BizResultData getBizResultDataByResultData(
+    ResultData resultData, {
+    bool showErrorTip = true,
+    String defaultErrorTip,
+  }) {
+    if (resultData.success) {
+      BizResultData bizResultData = BizResultData.fromJson(resultData.data);
+      if (!bizResultData.success && showErrorTip) {
+        EasyLoading.showError(bizResultData.msg ?? defaultErrorTip);
+      }
+      return bizResultData;
     } else {
-      EasyLoading.showError(resultData.data?.msg?.toString() ?? "请求失败");
-      return null;
+      return BizResultData.error(resultData.msg);
     }
   }
 }

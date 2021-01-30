@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:web_monitor_app/common/net/code.dart';
 
 /// 请求响应的结果
-class ResultData<T> {
+class ResultData {
   /// 请求结果是否成功，true-成功，false-失败
   bool success;
 
   /// 请求返回的数据
-  T data;
+  dynamic data;
+
+  /// 信息
+  String msg;
 
   /// 请求结果的statusCode
   int statusCode;
 
-  ResultData({@required this.success, @required this.data, this.statusCode});
+  ResultData({
+    @required this.success,
+    @required this.data,
+    this.msg,
+    this.statusCode,
+  });
 
   /// 成功
   ResultData.success(Response response) {
@@ -35,7 +43,8 @@ class ResultData<T> {
       errorResponse.statusCode = Code.NETWORK_TIMEOUT;
     }
     success = false;
-    data = Code.errorHandleFunction(errorResponse.statusCode, e.message, false) as T;
+    data = null;
+    msg = e.message;
     statusCode = errorResponse.statusCode;
   }
 }
@@ -45,8 +54,8 @@ class BizResultData {
   /// 请求结果是否成功，true-成功，false-失败
   bool success;
 
-  /// 后台返回的数据
-  var data;
+  /// 数据
+  dynamic data;
 
   /// 请求结果描述
   String msg;
@@ -56,4 +65,15 @@ class BizResultData {
     this.data,
     this.msg = "",
   });
+
+  BizResultData.error(String msg) {
+    this.success = false;
+    this.msg = msg;
+  }
+
+  BizResultData.fromJson(Map<String, dynamic> json) {
+    this.success = json["success"];
+    this.data = json["data"];
+    this.msg = json["msg"];
+  }
 }

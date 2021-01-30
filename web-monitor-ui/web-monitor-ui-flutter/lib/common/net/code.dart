@@ -11,12 +11,4 @@ class Code {
 
   /// 无响应体异常
   static const NO_RESPONSE_ERROR = 666;
-
-  static String errorHandleFunction(
-      int statusCode, String message, bool noTip) {
-    if (noTip) {
-      return message;
-    }
-    return message;
-  }
 }

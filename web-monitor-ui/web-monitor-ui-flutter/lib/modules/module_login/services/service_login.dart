@@ -12,16 +12,20 @@ class ServiceLogin {
       "username": username,
       "password": password,
     };
-    var res = await httpManager.httpPost(_url, params: _params);
-    var data = await httpManager.getBizResultData(res);
-    if (data != null) {
+    var res = await httpManager.bizHttpPost(
+      _url,
+      params: _params,
+      defaultErrorTip: "登录失败",
+    );
+    if (res.success) {
       var _loginUser = LoginUser(
-        id: data["id"],
-        username: data["username"],
-        isAdmin: data["isAdmin"],
-        token: data["token"],
+        id: res.data?.id,
+        username: res.data?.username,
+        isAdmin: res.data?.isAdmin,
+        token: res.data?.token,
       );
-      Provider.of<ModelLoginUser>(context, listen: false).loginUser = _loginUser;
+      Provider.of<ModelLoginUser>(context, listen: false).loginUser =
+          _loginUser;
     }
   }
 }
