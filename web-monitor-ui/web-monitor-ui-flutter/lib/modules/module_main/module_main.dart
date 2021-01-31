@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'package:web_monitor_app/models/model_login_user.dart';
 import 'package:web_monitor_app/models/model_theme.dart';
 import 'package:web_monitor_app/modules/module_startup/module_startup.dart';
 import 'package:web_monitor_app/routes/routes.dart';
@@ -11,6 +12,7 @@ class ModuleMain extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: ModelTheme()),
+        ChangeNotifierProvider.value(value: ModelLoginUser()),
       ],
       child: Consumer<ModelTheme>(
         builder: (BuildContext context, ModelTheme modelTheme, Widget child) {
