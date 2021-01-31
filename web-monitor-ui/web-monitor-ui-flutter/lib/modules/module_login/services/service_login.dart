@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:web_monitor_app/common/net/api.dart';
 import 'package:web_monitor_app/models/model_login_user.dart';
 import 'package:web_monitor_app/models/model_profile.dart';
+import 'package:web_monitor_app/routes/routes.dart';
 
 class ServiceLogin {
   /// 登录
@@ -18,14 +19,10 @@ class ServiceLogin {
       defaultErrorTip: "登录失败",
     );
     if (res.success) {
-      var _loginUser = LoginUser(
-        id: res.data?.id,
-        username: res.data?.username,
-        isAdmin: res.data?.isAdmin,
-        token: res.data?.token,
-      );
+      var _loginUser = LoginUser.fromJson(res.data);
       Provider.of<ModelLoginUser>(context, listen: false).loginUser =
           _loginUser;
+      Navigator.pushReplacementNamed(context, moduleHome);
     }
   }
 }
