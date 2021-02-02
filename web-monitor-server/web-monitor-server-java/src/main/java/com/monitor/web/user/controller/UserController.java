@@ -55,6 +55,6 @@ public class UserController {
      */
     @RequestMapping(value = "/user/getRelatedProjectList")
     public Object getRelatedProjectList(HttpServletRequest request) {
-        return ResponseResultBase.getResponseResultBase(userService.getRelatedProjectList(request));
+        return ResponseResultBase.getResponseResultBase(userService.getRelatedProjectListByRequest(request));
     }
 }

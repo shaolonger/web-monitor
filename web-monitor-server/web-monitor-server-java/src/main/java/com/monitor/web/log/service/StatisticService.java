@@ -1,8 +1,10 @@
 package com.monitor.web.log.service;
 
+import com.monitor.web.log.vo.StatisticRecordVO;
+import com.monitor.web.project.entity.ProjectEntity;
+import com.monitor.web.user.service.UserService;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.utils.DateUtils;
-import com.monitor.web.log.vo.StatisticRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,6 +15,8 @@ import java.util.*;
 @Service
 public class StatisticService {
 
+    @Autowired
+    UserService userService;
     @Autowired
     JsErrorLogService jsErrorLogService;
     @Autowired
@@ -28,7 +32,7 @@ public class StatisticService {
      * @param request request
      * @return Object
      */
-    public Object getOverallByTimeRange(HttpServletRequest request) throws Exception {
+    public Object getOverallByTimeRangeByRequest(HttpServletRequest request) throws Exception {
 
         // 获取查询参数
         String projectIdentifier = request.getParameter("projectIdentifier");
@@ -38,18 +42,8 @@ public class StatisticService {
         // 校验参数
         if (StringUtils.isEmpty(projectIdentifier)) throw new Exception("projectIdentifier错误");
         if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
-        int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
-        int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
-        int jsErrorLogCount = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
-        int resourceLoadErrorLogCount = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
 
-        HashMap<String, Integer> resultMap = new HashMap<>();
-        resultMap.put("customErrorLogCount", customErrorLogCount);
-        resultMap.put("httpErrorLogCount", httpErrorLogCount);
-        resultMap.put("jsErrorLogCount", jsErrorLogCount);
-        resultMap.put("resourceLoadErrorLogCount", resourceLoadErrorLogCount);
-
-        return resultMap;
+        return this.getOverallByTimeRange(projectIdentifier, startTime, endTime);
     }
 
     /**
@@ -360,6 +354,63 @@ public class StatisticService {
         }
 
         return resultList;
+    }
+
+    /**
+     * 获取用户关联的所有项目的统计情况列表
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getAllProjectOverviewListBetweenDiffDate(HttpServletRequest request) throws Exception {
+
+        // 获取查询参数
+        Date startTime = DateUtils.strToDate(request.getParameter("startTime"), "yyyy-MM-dd HH:mm:ss");
+        Date endTime = DateUtils.strToDate(request.getParameter("endTime"), "yyyy-MM-dd HH:mm:ss");
+
+        // 校验参数
+        if (startTime == null || endTime == null) throw new Exception("startTime或endTime不能为空");
+
+        ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
+
+        // 根据用户获取关联的项目
+        List<ProjectEntity> projectEntityList = userService.getRelatedProjectListByRequest(request);
+        if (projectEntityList.size() > 0) {
+            projectEntityList.forEach(projectEntity -> {
+                String projectIdentifier = projectEntity.getProjectIdentifier();
+                HashMap<String, Object> resultMap = new HashMap<>();
+                HashMap<String, Integer> overviewMap = this.getOverallByTimeRange(projectIdentifier, startTime, endTime);
+                resultMap.put("projectName", projectEntity.getProjectName());
+                resultMap.put("data", overviewMap);
+                resultList.add(resultMap);
+            });
+        }
+        return resultList;
+    }
+
+    /**
+     * 获取总览统计信息
+     *
+     * @param projectIdentifier 项目标识
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return HashMap
+     * @throws Exception
+     */
+    public HashMap<String, Integer> getOverallByTimeRange(String projectIdentifier, Date startTime, Date endTime) {
+
+        int customErrorLogCount = customErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int httpErrorLogCount = httpErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int jsErrorLogCount = jsErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+        int resourceLoadErrorLogCount = resourceLoadErrorLogService.getCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime);
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("customErrorLogCount", customErrorLogCount);
+        resultMap.put("httpErrorLogCount", httpErrorLogCount);
+        resultMap.put("jsErrorLogCount", jsErrorLogCount);
+        resultMap.put("resourceLoadErrorLogCount", resourceLoadErrorLogCount);
+
+        return resultMap;
     }
 
     /**

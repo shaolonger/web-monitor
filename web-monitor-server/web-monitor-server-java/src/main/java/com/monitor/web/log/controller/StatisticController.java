@@ -24,7 +24,7 @@ public class StatisticController {
     @RequestMapping(value = "/statistic/getOverallByTimeRange", method = RequestMethod.GET)
     public Object getOverall(HttpServletRequest request) {
         try {
-            return ResponseResultBase.getResponseResultBase(statisticService.getOverallByTimeRange(request));
+            return ResponseResultBase.getResponseResultBase(statisticService.getOverallByTimeRangeByRequest(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }
@@ -85,6 +85,21 @@ public class StatisticController {
     public Object getLogDistributionBetweenDiffDate(HttpServletRequest request) {
         try {
             return ResponseResultBase.getResponseResultBase(statisticService.getLogDistributionBetweenDiffDate(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
+     * 获取用户关联的所有项目的统计情况列表
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/statistic/getAllProjectOverviewListBetweenDiffDate", method = RequestMethod.GET)
+    public Object getAllProjectOverviewListBetweenDiffDate(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(statisticService.getAllProjectOverviewListBetweenDiffDate(request));
         } catch (Exception e) {
             return ResponseResultBase.getErrorResponseResult(e);
         }

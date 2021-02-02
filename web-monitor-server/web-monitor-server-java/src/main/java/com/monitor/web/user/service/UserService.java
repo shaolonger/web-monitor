@@ -155,7 +155,7 @@ public class UserService extends ServiceBase {
      * @param request request
      * @return Object
      */
-    public Object getRelatedProjectList(HttpServletRequest request) {
+    public List<ProjectEntity> getRelatedProjectListByRequest(HttpServletRequest request) {
 
         // 通过获取userId
         String token = request.getHeader("token");
