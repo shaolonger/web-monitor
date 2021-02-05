@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web_monitor_app/common/config/config.dart';
+import 'package:web_monitor_app/common/local/local_storage.dart';
 import 'package:web_monitor_app/common/net/api.dart';
 import 'package:web_monitor_app/common/net/url_address.dart';
 import 'package:web_monitor_app/models/model_login_user.dart';
@@ -22,6 +24,11 @@ class ServiceLogin {
       var _loginUser = LoginUser.fromJson(res.data);
       Provider.of<ModelLoginUser>(context, listen: false).loginUser =
           _loginUser;
+
+      // 保存到本地缓存
+      String token = _loginUser.token;
+      LocalStorage.save(Config.TOKEN_KEY, token);
+
       Navigator.pushReplacementNamed(context, moduleHome);
     }
   }

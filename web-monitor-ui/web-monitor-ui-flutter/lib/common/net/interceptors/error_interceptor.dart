@@ -23,5 +23,6 @@ class ErrorInterceptors extends InterceptorsWrapper {
         ),
       );
     }
+    return options;
   }
 }

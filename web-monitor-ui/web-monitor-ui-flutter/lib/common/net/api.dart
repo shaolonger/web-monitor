@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:web_monitor_app/common/net/interceptors/token_interceptor.dart';
 import 'package:web_monitor_app/common/net/result_data.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
 
@@ -19,6 +20,7 @@ class HttpManager {
 
   HttpManager() {
     _dio.interceptors.add(ErrorInterceptors(_dio));
+    _dio.interceptors.add(TokenInterceptor());
   }
 
   /// 通用的网络请求

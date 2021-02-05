@@ -23,6 +23,13 @@ class ModuleMain extends StatelessWidget {
             ),
             // 路由表定义
             routes: routes,
+            supportedLocales: [
+              Locale("en"),
+              Locale("zh"),
+            ],
+            localizationsDelegates: [
+
+            ],
             home: ModuleStartup(),
             builder: EasyLoading.init(),
           );
