@@ -45,6 +45,11 @@ dependencies:
   # easy to use without context, support iOS、Android and Web
   flutter_easyloading: ^2.2.2
 
+  # Contains code to deal with internationalized/localized messages,
+  # date and number formatting and parsing, bi-directional text, and other
+  # internationalization issues.
+  intl: ^0.16.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
