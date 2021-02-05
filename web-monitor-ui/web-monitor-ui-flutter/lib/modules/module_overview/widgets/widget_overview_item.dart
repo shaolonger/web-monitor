@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_monitor_app/modules/module_overview/models/model_overview_item.dart';
 
 class WidgetOverviewItem extends StatelessWidget {
-  ModelOverviewListItem item;
+  final ModelOverviewListItem item;
 
   WidgetOverviewItem({
     @required this.item,
