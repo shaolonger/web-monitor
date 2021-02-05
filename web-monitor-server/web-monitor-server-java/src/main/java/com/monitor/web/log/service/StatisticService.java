@@ -380,7 +380,9 @@ public class StatisticService {
                 String projectIdentifier = projectEntity.getProjectIdentifier();
                 HashMap<String, Object> resultMap = new HashMap<>();
                 HashMap<String, Integer> overviewMap = this.getOverallByTimeRange(projectIdentifier, startTime, endTime);
+                resultMap.put("projectId", projectEntity.getId());
                 resultMap.put("projectName", projectEntity.getProjectName());
+                resultMap.put("projectIdentifier", projectEntity.getProjectIdentifier());
                 resultMap.put("data", overviewMap);
                 resultList.add(resultMap);
             });
