@@ -7,6 +7,6 @@ class UtilDateTime {
     String pattern = "yyyy-MM-dd HH:mm:ss",
     @required DateTime dateTime,
   }) {
-    return DateFormat(pattern, "zh").format(dateTime);
+    return DateFormat(pattern).format(dateTime);
   }
 }

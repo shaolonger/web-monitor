@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:web_monitor_app/common/net/api.dart';
 import 'package:web_monitor_app/common/net/url_address.dart';
 import 'package:web_monitor_app/modules/module_overview/models/model_overview_item.dart';
@@ -9,7 +7,7 @@ class ServiceOverview {
   /// 获取用户关联的所有项目的统计情况列表
   static Future<List> getAllRelatedProjectOverview() async {
     List<ModelOverviewListItem> overviewList = [];
-    var endDateTime = DateTime.now();
+    var endDateTime = DateTime.now().toLocal();
     var startDateTime = endDateTime.subtract(Duration(minutes: 1));
     String startTime =
         UtilDateTime.getDateStrByFormatAndDateTime(dateTime: startDateTime);

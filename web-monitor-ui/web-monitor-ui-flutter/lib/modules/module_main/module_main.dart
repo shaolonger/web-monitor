@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:web_monitor_app/models/model_login_user.dart';
 import 'package:web_monitor_app/models/model_theme.dart';
@@ -24,11 +25,11 @@ class ModuleMain extends StatelessWidget {
             // 路由表定义
             routes: routes,
             supportedLocales: [
-              Locale("en"),
-              Locale("zh"),
+              Locale("zh","CH"),
+              Locale("en","US"),
             ],
             localizationsDelegates: [
-
+              GlobalMaterialLocalizations.delegate,
             ],
             home: ModuleStartup(),
             builder: EasyLoading.init(),

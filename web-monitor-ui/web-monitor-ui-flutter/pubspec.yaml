@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   # A powerful Http client for Dart, which supports Interceptors,
   # FormData, Request Cancellation, File Downloading, Timeout etc.
   dio: ^3.0.0
