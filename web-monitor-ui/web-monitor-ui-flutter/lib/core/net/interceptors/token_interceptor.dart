@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:web_monitor_app/config/global_config.dart';
+import 'package:web_monitor_app/core/Global.dart';
 
 import 'package:web_monitor_app/core/auth/auth_manager.dart';
+import 'package:web_monitor_app/routes/routes.dart';
 
 class TokenInterceptor extends InterceptorsWrapper {
   String _token;
@@ -16,11 +19,20 @@ class TokenInterceptor extends InterceptorsWrapper {
         if (token != null) {
           _token = token;
         }
-      } else {
-        // TODO 若请求的接口非无需token的白名单，则需要跳转登录页
       }
       options.headers["token"] = _token;
     }
     return options;
+  }
+
+  @override
+  Future onResponse(Response response) {
+    var jsonData = response.data;
+    // 若token已失效，则跳转回首页重新登录
+    if (jsonData != null &&jsonData["msg"] == GlobalConfig.TOKEN_EXPIRE_SERVER_MSG) {
+      Global.navigatorKey.currentState
+          .pushNamedAndRemoveUntil(moduleLogin, (route) => false);
+    }
+    return super.onResponse(response);
   }
 }
