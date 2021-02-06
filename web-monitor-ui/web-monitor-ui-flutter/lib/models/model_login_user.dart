@@ -1,4 +1,4 @@
-import 'package:web_monitor_app/common/model_profile_change_notifier.dart';
+import 'package:web_monitor_app/core/model_profile_change_notifier.dart';
 import 'package:web_monitor_app/models/model_profile.dart';
 
 class ModelLoginUser extends ModelProfileChangeNotifier {

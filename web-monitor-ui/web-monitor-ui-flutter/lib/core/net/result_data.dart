@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:web_monitor_app/common/net/code.dart';
+import 'package:web_monitor_app/core/net/code.dart';
 
 /// 请求响应的结果
 class ResultData {

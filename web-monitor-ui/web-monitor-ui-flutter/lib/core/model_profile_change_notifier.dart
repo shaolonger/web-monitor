@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_monitor_app/common/Global.dart';
+import 'package:web_monitor_app/core/Global.dart';
 import 'package:web_monitor_app/models/model_profile.dart';
 
 class ModelProfileChangeNotifier extends ChangeNotifier {

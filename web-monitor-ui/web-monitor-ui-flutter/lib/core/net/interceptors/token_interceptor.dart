@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:web_monitor_app/common/auth/auth_manager.dart';
+
+import 'package:web_monitor_app/core/auth/auth_manager.dart';
 
 class TokenInterceptor extends InterceptorsWrapper {
   String _token;

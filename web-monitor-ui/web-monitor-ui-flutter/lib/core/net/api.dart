@@ -2,8 +2,8 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:web_monitor_app/common/net/interceptors/token_interceptor.dart';
-import 'package:web_monitor_app/common/net/result_data.dart';
+import 'package:web_monitor_app/core/net/interceptors/token_interceptor.dart';
+import 'package:web_monitor_app/core/net/result_data.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
 
 import 'interceptors/error_interceptor.dart';

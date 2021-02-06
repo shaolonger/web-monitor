@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:web_monitor_app/common/Global.dart';
-import 'package:web_monitor_app/common/model_profile_change_notifier.dart';
+import 'package:web_monitor_app/core/Global.dart';
+import 'package:web_monitor_app/core/model_profile_change_notifier.dart';
 
 class ModelTheme extends ModelProfileChangeNotifier {
   // 获取当前主题，如果未设置主题，则默认使用蓝色主题

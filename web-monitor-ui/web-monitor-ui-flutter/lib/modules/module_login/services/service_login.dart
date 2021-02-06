@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:web_monitor_app/common/config/config.dart';
-import 'package:web_monitor_app/common/local/local_storage.dart';
-import 'package:web_monitor_app/common/net/api.dart';
-import 'package:web_monitor_app/common/net/url_address.dart';
+import 'package:web_monitor_app/core/config/config.dart';
+import 'package:web_monitor_app/core/local/local_storage.dart';
+import 'package:web_monitor_app/core/net/api.dart';
+import 'package:web_monitor_app/core/net/url_address.dart';
 import 'package:web_monitor_app/models/model_login_user.dart';
 import 'package:web_monitor_app/models/model_profile.dart';
 import 'package:web_monitor_app/routes/routes.dart';
