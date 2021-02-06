@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
+import 'package:web_monitor_app/config/global_config.dart';
 import 'package:web_monitor_app/modules/module_login/services/service_login.dart';
 
 class ModuleLogin extends StatefulWidget {
@@ -31,7 +32,7 @@ class _ModuleLoginState extends State<ModuleLogin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Web Monitor",
+                  GlobalConfig.APP_NAME_SHORT,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0),
                 ),
                 Padding(

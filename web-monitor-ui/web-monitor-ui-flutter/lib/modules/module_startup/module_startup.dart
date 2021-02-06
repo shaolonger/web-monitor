@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_monitor_app/config/global_config.dart';
 import 'package:web_monitor_app/routes/routes.dart';
 
 class ModuleStartup extends StatefulWidget {
@@ -21,7 +22,7 @@ class _ModuleStartupState extends State<ModuleStartup> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Web Monitor App",
+              GlobalConfig.APP_NAME_FULL,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0),
             ),
             Padding(
@@ -31,7 +32,7 @@ class _ModuleStartupState extends State<ModuleStartup> {
                 right: 20.0,
               ),
               child: Text(
-                "A monitor platform for both mobile and desktop web applications",
+                GlobalConfig.APP_INTRODUCTION,
                 textAlign: TextAlign.center,
               ),
             ),
