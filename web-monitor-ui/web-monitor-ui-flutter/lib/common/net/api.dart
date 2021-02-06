@@ -29,6 +29,7 @@ class HttpManager {
     dynamic params,
     Map<String, dynamic> header,
     Options option,
+    bool showLoading = false,
     bool showErrorTip = true,
     String defaultErrorTip,
   }) async {
@@ -47,7 +48,9 @@ class HttpManager {
 
     ResultData _resultData;
     // 显示loading
-    EasyLoading.show(status: "加载中，请稍候", maskType: EasyLoadingMaskType.black);
+    if (showLoading) {
+      EasyLoading.show(status: "加载中，请稍候", maskType: EasyLoadingMaskType.black);
+    }
     try {
       var _response = await _dio.request(url, queryParameters: params, options: option);
       _resultData = ResultData.success(_response);
@@ -67,12 +70,14 @@ class HttpManager {
   Future<BizResultData> bizHttpGet(
     String url, {
     dynamic params,
+    bool showLoading,
     bool showErrorTip,
     String defaultErrorTip,
   }) async {
     var resultData = await httpFetch(
       url,
       params: params,
+      showLoading: showLoading ?? false,
       showErrorTip: showErrorTip ?? true,
       defaultErrorTip: defaultErrorTip,
     );
@@ -85,6 +90,7 @@ class HttpManager {
   Future<BizResultData> bizHttpPost(
     String url, {
     dynamic params,
+    bool showLoading,
     bool showErrorTip,
     String defaultErrorTip,
   }) async {
@@ -93,6 +99,7 @@ class HttpManager {
       url,
       params: params,
       option: option,
+      showLoading: showLoading ?? true,
       showErrorTip: showErrorTip ?? true,
       defaultErrorTip: defaultErrorTip,
     );
