@@ -5,7 +5,7 @@ import 'package:web_monitor_app/utils/util_date_time.dart';
 
 class ServiceOverview {
   /// 获取用户关联的所有项目的统计情况列表
-  static Future<List> getAllRelatedProjectOverview() async {
+  static Future<List<ModelOverviewListItem>> getAllRelatedProjectOverview() async {
     List<ModelOverviewListItem> overviewList = [];
     var endDateTime = DateTime.now().toLocal();
     var startDateTime = endDateTime.subtract(Duration(minutes: 1));

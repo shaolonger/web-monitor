@@ -22,14 +22,33 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   void getAllRelatedProjectOverview() async {
     var overviewList = await ServiceOverview.getAllRelatedProjectOverview();
     setState(() {
-      _overviewList = overviewList;
+      // _overviewList = overviewList;
+      _overviewList
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList)
+        ..addAll(overviewList);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: _overviewList.map((e) => WidgetOverviewItem(item: e)).toList(),
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      children:
+      _overviewList.map((e) => WidgetOverviewItem(item: e)).toList(),
     );
   }
 }
