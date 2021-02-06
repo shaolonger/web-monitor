@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:web_monitor_app/modules/module_overview/services/service_overview.dart';
 import 'package:web_monitor_app/modules/module_overview/widgets/widget_overview_item.dart';
 
@@ -19,36 +20,23 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   }
 
   /// 获取用户关联的所有项目的统计情况列表
-  void getAllRelatedProjectOverview() async {
+  Future getAllRelatedProjectOverview() async {
     var overviewList = await ServiceOverview.getAllRelatedProjectOverview();
     setState(() {
-      // _overviewList = overviewList;
-      _overviewList
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList)
-        ..addAll(overviewList);
+      _overviewList = overviewList;
     });
+    EasyLoading.showToast("当前已是最新数据");
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      children:
-      _overviewList.map((e) => WidgetOverviewItem(item: e)).toList(),
+    return RefreshIndicator(
+      child: ListView(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        children:
+            _overviewList.map((e) => WidgetOverviewItem(item: e)).toList(),
+      ),
+      onRefresh: getAllRelatedProjectOverview,
     );
   }
 }
