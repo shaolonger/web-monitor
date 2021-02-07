@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:web_monitor_app/core/Global.dart';
-import 'package:web_monitor_app/core/model_profile_change_notifier.dart';
+import 'package:web_monitor_app/core/config/config_global.dart';
+import 'package:web_monitor_app/core/notifier/model_profile_change_notifier.dart';
 
-class ModelTheme extends ModelProfileChangeNotifier {
+class ModelThemeChangeNotifier extends ModelProfileChangeNotifier {
   // 获取当前主题，如果未设置主题，则默认使用蓝色主题
-  ColorSwatch get theme => Global.themes.firstWhere(
+  ColorSwatch get theme => ConfigGlobal.themes.firstWhere(
       (element) => element.value == modelProfile.theme,
       orElse: () => Colors.blue);
 

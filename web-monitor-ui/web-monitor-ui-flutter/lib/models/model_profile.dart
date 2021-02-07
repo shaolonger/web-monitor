@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'model_login_user.dart';
+
 class ModelProfile {
-  LoginUser loginUser;
+  ModelLoginUser loginUser;
   int theme;
 
   ModelProfile({
@@ -17,31 +19,4 @@ class ModelProfile {
         "loginUser": json.encode(loginUser),
         "theme": theme,
       };
-}
-
-class LoginUser {
-  int id;
-  String username;
-  int isAdmin;
-  String token;
-
-  LoginUser({
-    this.id,
-    this.username,
-    this.isAdmin,
-    this.token,
-  });
-
-  LoginUser.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        username = json["username"],
-        isAdmin = json["isAdmin"],
-        token = json["token"];
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    "id": id,
-    "username": username,
-    "isAdmin": isAdmin,
-    "token": token,
-  };
 }

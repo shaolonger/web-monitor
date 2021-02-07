@@ -1,17 +1,26 @@
-import 'package:web_monitor_app/core/model_profile_change_notifier.dart';
-import 'package:web_monitor_app/models/model_profile.dart';
+class ModelLoginUser {
+  int id;
+  String username;
+  int isAdmin;
+  String token;
 
-class ModelLoginUser extends ModelProfileChangeNotifier {
-  LoginUser get loginUser => modelProfile.loginUser;
+  ModelLoginUser({
+    this.id,
+    this.username,
+    this.isAdmin,
+    this.token,
+  });
 
-  // 若有用户信息，则表示已登录过
-  bool get isLogin => loginUser != null;
+  ModelLoginUser.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        username = json["username"],
+        isAdmin = json["isAdmin"],
+        token = json["token"];
 
-  // 用户信息发生变化，则更新并通知所有子孙组件更新
-  set loginUser(LoginUser loginUser) {
-    if (loginUser?.id != modelProfile.loginUser?.id) {
-      modelProfile.loginUser = loginUser;
-      notifyListeners();
-    }
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    "id": id,
+    "username": username,
+    "isAdmin": isAdmin,
+    "token": token,
+  };
 }

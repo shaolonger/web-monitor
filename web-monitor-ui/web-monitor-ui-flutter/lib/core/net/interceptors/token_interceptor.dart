@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:web_monitor_app/config/global_config.dart';
-import 'package:web_monitor_app/core/Global.dart';
 
 import 'package:web_monitor_app/core/auth/auth_manager.dart';
+import 'package:web_monitor_app/core/config/config_global.dart';
 import 'package:web_monitor_app/routes/routes.dart';
 
 class TokenInterceptor extends InterceptorsWrapper {
@@ -30,7 +30,7 @@ class TokenInterceptor extends InterceptorsWrapper {
     var jsonData = response.data;
     // 若token已失效，则跳转回首页重新登录
     if (jsonData != null &&jsonData["msg"] == GlobalConfig.TOKEN_EXPIRE_SERVER_MSG) {
-      Global.navigatorKey.currentState
+      ConfigGlobal.navigatorKey.currentState
           .pushNamedAndRemoveUntil(moduleLogin, (route) => false);
     }
     return super.onResponse(response);

@@ -1,4 +1,4 @@
-import 'package:web_monitor_app/core/config/config.dart';
+import 'package:web_monitor_app/core/consts/const_auth.dart';
 import 'package:web_monitor_app/core/local/local_storage.dart';
 import 'package:web_monitor_app/core/net/url_address.dart';
 
@@ -16,6 +16,6 @@ class AuthManager {
 
   /// 从本地缓存中获取token
   static Future<String> getToken() async {
-    return await LocalStorage.get(Config.TOKEN_KEY);
+    return await LocalStorage.get(ConstAuth.TOKEN_KEY);
   }
 }

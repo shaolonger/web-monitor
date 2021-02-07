@@ -13,7 +13,7 @@ const _themes = <MaterialColor>[
   Colors.red,
 ];
 
-class Global {
+class ConfigGlobal {
   static const _preferenceKey = "modelProfile";
   static SharedPreferences _preferences;
   static ModelProfile modelProfile = ModelProfile();
