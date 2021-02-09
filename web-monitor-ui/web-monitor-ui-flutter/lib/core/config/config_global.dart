@@ -19,7 +19,8 @@ class ConfigGlobal {
   static ModelProfile modelProfile = ModelProfile();
 
   /// 用于全局路由控制
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   /// 可选的主题列表
   static List<MaterialColor> get themes => _themes;
