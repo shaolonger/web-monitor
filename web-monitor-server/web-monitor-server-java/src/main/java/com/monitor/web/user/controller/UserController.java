@@ -32,6 +32,21 @@ public class UserController {
     }
 
     /**
+     * 查询详情
+     *
+     * @param request request
+     * @return Object
+     */
+    @RequestMapping(value = "/user/getDetail", method = RequestMethod.GET)
+    public Object getDetail(HttpServletRequest request) {
+        try {
+            return ResponseResultBase.getResponseResultBase(userService.getDetail(request));
+        } catch (Exception e) {
+            return ResponseResultBase.getErrorResponseResult(e);
+        }
+    }
+
+    /**
      * 登录
      *
      * @param request request

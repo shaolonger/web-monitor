@@ -1,17 +1,17 @@
 package com.monitor.web.user.service;
 
-import com.monitor.web.user.dao.UserProjectRelationDAO;
-import com.monitor.web.user.entity.UserEntity;
-import com.monitor.web.user.entity.UserProjectRelationEntity;
 import com.monitor.web.auth.dto.LoginUserDTO;
 import com.monitor.web.auth.service.TokenService;
+import com.monitor.web.common.api.PageResultBase;
+import com.monitor.web.common.service.ServiceBase;
 import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
 import com.monitor.web.user.dao.UserDAO;
-import com.monitor.web.common.api.PageResultBase;
-import com.monitor.web.common.service.ServiceBase;
-import com.monitor.web.utils.TokenUtils;
+import com.monitor.web.user.dao.UserProjectRelationDAO;
+import com.monitor.web.user.entity.UserEntity;
+import com.monitor.web.user.entity.UserProjectRelationEntity;
 import com.monitor.web.utils.DataConvertUtils;
+import com.monitor.web.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -118,6 +118,21 @@ public class UserService extends ServiceBase {
             return pageResultBase;
         } else {
             throw new Exception("isNeedPaging参数不正确");
+        }
+    }
+
+    /**
+     * 获取用户详情
+     *
+     * @param request request
+     * @return Object
+     */
+    public Object getDetail(HttpServletRequest request) throws Exception {
+        Long id = tokenService.getUserIdByRequest(request);
+        if (id == null) {
+            throw new Exception("请求错误，用户不存在");
+        } else {
+            return userDao.findById(id).orElseThrow(() -> new Exception("用户不存在"));
         }
     }
 
