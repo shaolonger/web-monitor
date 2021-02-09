@@ -8,11 +8,13 @@ import com.monitor.web.project.entity.ProjectEntity;
 import com.monitor.web.project.service.ProjectService;
 import com.monitor.web.user.dao.UserDAO;
 import com.monitor.web.user.dao.UserProjectRelationDAO;
+import com.monitor.web.user.dto.UserInfoDTO;
 import com.monitor.web.user.entity.UserEntity;
 import com.monitor.web.user.entity.UserProjectRelationEntity;
 import com.monitor.web.utils.DataConvertUtils;
 import com.monitor.web.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -132,7 +134,10 @@ public class UserService extends ServiceBase {
         if (id == null) {
             throw new Exception("请求错误，用户不存在");
         } else {
-            return userDao.findById(id).orElseThrow(() -> new Exception("用户不存在"));
+            UserEntity userEntity = userDao.findById(id).orElseThrow(() -> new Exception("用户不存在"));
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            BeanUtils.copyProperties(userEntity, userInfoDTO);
+            return userInfoDTO;
         }
     }
 
