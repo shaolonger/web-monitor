@@ -15,10 +15,10 @@ class WidgetOverviewItem extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        color: Color(0xF2F2F2FF),
+        color: Colors.grey[100],
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Colors.grey[400],
             blurRadius: 3.0,
           )
         ],

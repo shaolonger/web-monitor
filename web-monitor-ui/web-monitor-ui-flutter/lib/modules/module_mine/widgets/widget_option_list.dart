@@ -46,6 +46,7 @@ class _WidgetOptionListState extends State<WidgetOptionList> {
               padding: EdgeInsets.only(
                   top: 16.0, right: 16.0, bottom: 16.0, left: 32.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
@@ -56,10 +57,13 @@ class _WidgetOptionListState extends State<WidgetOptionList> {
                       ),
                     ],
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20.0,
-                    color: Colors.grey[100],
+                  Padding(
+                    padding: EdgeInsets.only(right: 24.0),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20.0,
+                      color: Colors.grey[400],
+                    ),
                   ),
                 ],
               ),
