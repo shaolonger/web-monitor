@@ -5,6 +5,9 @@ class UrlAddress {
   /// 获取用户详情
   static const String getUserDetail = "/user/getDetail";
 
+  /// 根据用户获取关联的项目
+  static const String getRelatedProjectList = "/user/getRelatedProjectList";
+
   /// 获取用户关联的所有项目的统计情况列表
   static const String getAllRelatedProjectOverview =
       "/statistic/getAllProjectOverviewListBetweenDiffDate";
