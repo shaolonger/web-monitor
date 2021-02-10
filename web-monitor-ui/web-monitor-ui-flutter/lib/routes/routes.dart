@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_monitor_app/modules/module_about/module_about.dart';
+import 'package:web_monitor_app/modules/module_log/module_log.dart';
 import 'package:web_monitor_app/modules/module_login/module_login.dart';
 import 'package:web_monitor_app/modules/module_home/module_home.dart';
 import 'package:web_monitor_app/modules/module_overview/module_overview.dart';
@@ -28,6 +29,8 @@ const moduleProjectManage = "/projectManage";
 const moduleAbout = "/about";
 // 个人信息页
 const modulePersonalInfo = "/personalInfo";
+// 日志页
+const moduleLog = "/log";
 
 // 路由List
 final routeList = [
@@ -39,6 +42,7 @@ final routeList = [
   {"routeName": moduleProjectManage, "routeClass": () => ModuleProjectManage()},
   {"routeName": moduleAbout, "routeClass": () => ModuleAbout()},
   {"routeName": modulePersonalInfo, "routeClass": () => ModulePersonalInfo()},
+  {"routeName": moduleLog, "routeClass": () => ModuleLog()},
 ];
 
 // 路由Map

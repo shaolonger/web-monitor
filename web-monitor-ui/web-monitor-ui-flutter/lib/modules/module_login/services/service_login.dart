@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web_monitor_app/core/auth/auth_manager.dart';
 import 'package:web_monitor_app/core/consts/const_auth.dart';
 import 'package:web_monitor_app/core/local/local_storage.dart';
 import 'package:web_monitor_app/core/net/api.dart';
@@ -29,7 +30,7 @@ class ServiceLogin {
 
       // 保存到本地缓存
       String token = _loginUser.token;
-      LocalStorage.save(ConstAuth.TOKEN_KEY, token);
+      await AuthManager.saveToken(token);
 
       // 登录成功后，获取用户详情信息
       ServiceMine.getUserInfo(context);
