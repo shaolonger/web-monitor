@@ -29,10 +29,11 @@ class TokenInterceptor extends InterceptorsWrapper {
   Future onResponse(Response response) async {
     var jsonData = response.data;
     if (jsonData != null) {
-
       // 登录后，将新的token存入本类成员变量_token中，更新token
       // ，避免_token缓存问题
-      if (jsonData["data"] != null && jsonData["data"]["token"] != null) {
+      if (jsonData["data"] != null &&
+          jsonData["data"] is Map &&
+          jsonData["data"]["token"] != null) {
         String token = jsonData["data"]["token"];
         _token = token;
         await AuthManager.saveToken(token);
