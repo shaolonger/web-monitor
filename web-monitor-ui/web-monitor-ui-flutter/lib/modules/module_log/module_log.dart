@@ -1,10 +1,5 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
-import 'package:web_monitor_app/modules/module_log/widgets/widget_cus_log.dart';
-import 'package:web_monitor_app/modules/module_log/widgets/widget_http_log.dart';
-import 'package:web_monitor_app/modules/module_log/widgets/widget_js_log.dart';
-import 'package:web_monitor_app/modules/module_log/widgets/widget_res_log.dart';
+import 'package:web_monitor_app/modules/module_log/screens/screen_log_js.dart';
 
 class ModuleLog extends StatefulWidget {
   @override
@@ -23,22 +18,31 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
       _tabList = [
         {
           "tabName": "JS",
-          "tabContent": WidgetJsLog(
+          "tabContent": ScreenLogJs(
             projectName: _projectName,
             projectIdentifier: _projectIdentifier,
           ),
         },
         {
           "tabName": "HTTP",
-          "tabContent": WidgetHttpLog(),
+          "tabContent": ScreenLogJs(
+            projectName: _projectName,
+            projectIdentifier: _projectIdentifier,
+          ),
         },
         {
           "tabName": "RES",
-          "tabContent": WidgetResLog(),
+          "tabContent": ScreenLogJs(
+            projectName: _projectName,
+            projectIdentifier: _projectIdentifier,
+          ),
         },
         {
           "tabName": "CUS",
-          "tabContent": WidgetCusLog(),
+          "tabContent": ScreenLogJs(
+            projectName: _projectName,
+            projectIdentifier: _projectIdentifier,
+          ),
         },
       ];
     });
