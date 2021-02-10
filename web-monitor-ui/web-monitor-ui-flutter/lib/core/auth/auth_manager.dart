@@ -18,4 +18,9 @@ class AuthManager {
   static Future<String> getToken() async {
     return await LocalStorage.get(ConstAuth.TOKEN_KEY);
   }
+
+  /// 将token保存到本地缓存中
+  static Future<bool> saveToken(String token) {
+    return LocalStorage.save(ConstAuth.TOKEN_KEY, token);
+  }
 }

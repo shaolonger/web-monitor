@@ -26,12 +26,23 @@ class TokenInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onResponse(Response response) {
+  Future onResponse(Response response) async {
     var jsonData = response.data;
-    // 若token已失效，则跳转回首页重新登录
-    if (jsonData != null &&jsonData["msg"] == GlobalConfig.TOKEN_EXPIRE_SERVER_MSG) {
-      ConfigGlobal.navigatorKey.currentState
-          .pushNamedAndRemoveUntil(moduleLogin, (route) => false);
+    if (jsonData != null) {
+
+      // 登录后，将新的token存入本类成员变量_token中，更新token
+      // ，避免_token缓存问题
+      if (jsonData["data"] != null && jsonData["data"]["token"] != null) {
+        String token = jsonData["data"]["token"];
+        _token = token;
+        await AuthManager.saveToken(token);
+      }
+
+      // 若token已失效，则跳转回首页重新登录
+      if (jsonData["msg"] == GlobalConfig.TOKEN_EXPIRE_SERVER_MSG) {
+        ConfigGlobal.navigatorKey.currentState
+            .pushNamedAndRemoveUntil(moduleLogin, (route) => false);
+      }
     }
     return super.onResponse(response);
   }
