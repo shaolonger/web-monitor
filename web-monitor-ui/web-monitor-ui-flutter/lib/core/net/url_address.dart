@@ -11,4 +11,8 @@ class UrlAddress {
   /// 获取用户关联的所有项目的统计情况列表
   static const String getAllRelatedProjectOverview =
       "/statistic/getAllProjectOverviewListBetweenDiffDate";
+
+  /// 获取两个日期之间的对比数据
+  static const String getLogCountBetweenDiffDate =
+      "/statistic/getLogCountBetweenDiffDate";
 }
