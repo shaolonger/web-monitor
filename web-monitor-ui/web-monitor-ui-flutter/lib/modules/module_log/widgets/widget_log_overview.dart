@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:web_monitor_app/modules/module_log/models/model_log_overview.dart';
 
 class WidgetLogOverview extends StatelessWidget {
-  final String count;
-  final String uv;
-  final String rate;
-  final String countPercent;
-  final String uvPercent;
-  final String ratePercent;
+  final ModelLogOverview overview;
 
   const WidgetLogOverview({
     Key key,
-    this.count = "0",
-    this.uv = "0",
-    this.rate = "-",
-    this.countPercent = "-",
-    this.uvPercent = "-",
-    this.ratePercent = "-",
+    @required this.overview,
   }) : super(key: key);
 
   @override
@@ -45,13 +36,13 @@ class WidgetLogOverview extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    count,
+                    overview.count.today.toString(),
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
                   ),
                 ),
                 Text(
-                  "对比昨日：$countPercent",
+                  "对比昨日：${overview.count.rate}",
                   style: TextStyle(color: Colors.grey[500]),
                 ),
               ],
@@ -73,13 +64,13 @@ class WidgetLogOverview extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    uv,
+                    overview.affectUV.today.toString(),
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
                   ),
                 ),
                 Text(
-                  "对比昨日：$uvPercent",
+                  "对比昨日：${overview.affectUV.rate}",
                   style: TextStyle(color: Colors.grey[500]),
                 ),
               ],
@@ -101,13 +92,13 @@ class WidgetLogOverview extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    rate,
+                    overview.affectUVPercent.today.toString(),
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
                   ),
                 ),
                 Text(
-                  "对比昨日：$ratePercent",
+                  "对比昨日：${overview.affectUVPercent.rate}",
                   style: TextStyle(color: Colors.grey[500]),
                 ),
               ],

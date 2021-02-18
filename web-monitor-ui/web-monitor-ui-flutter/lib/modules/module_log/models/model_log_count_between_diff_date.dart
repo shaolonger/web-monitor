@@ -1,8 +1,8 @@
 class ModelLogCountBetweenDiffDate {
-  List jsErrorLog;
-  List httpErrorLog;
-  List resourceLoadErrorLog;
-  List customErrorLog;
+  List<Map<String, dynamic>> jsErrorLog;
+  List<Map<String, dynamic>> httpErrorLog;
+  List<Map<String, dynamic>> resourceLoadErrorLog;
+  List<Map<String, dynamic>> customErrorLog;
 
   ModelLogCountBetweenDiffDate({
     this.jsErrorLog,
@@ -11,7 +11,8 @@ class ModelLogCountBetweenDiffDate {
     this.customErrorLog,
   });
 
-  ModelLogCountBetweenDiffDate.fromJson(Map<String, dynamic> json) {
+  ModelLogCountBetweenDiffDate.fromJson(
+      Map<String, List<Map<String, dynamic>>> json) {
     this.jsErrorLog = json["jsErrorLog"];
     this.httpErrorLog = json["httpErrorLog"];
     this.resourceLoadErrorLog = json["resourceLoadErrorLog"];
