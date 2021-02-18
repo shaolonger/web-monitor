@@ -11,6 +11,7 @@ class WidgetLogOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("overview" + overview.toString());
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(

@@ -43,12 +43,12 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       endTime: widget.endTime,
       timeInterval: 86400,
     );
-    List<Map<String, dynamic>> result = model.jsErrorLog;
+    List<dynamic> result = model.jsErrorLog;
     _setOverviewData(result);
   }
 
   /// 设置总览数据
-  void _setOverviewData(List<Map<String, dynamic>> result) {
+  void _setOverviewData(List<dynamic> result) {
     var overview = ModelLogOverview();
     if (result.length > 1) {
       var yesterday = result[0];

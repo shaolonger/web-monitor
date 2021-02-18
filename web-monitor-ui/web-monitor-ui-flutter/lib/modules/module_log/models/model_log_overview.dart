@@ -1,22 +1,22 @@
 class ModelLogOverview {
-  ModelLogOverviewItem count;
-  ModelLogOverviewItem affectUV;
-  ModelLogOverviewItem affectUVPercent;
+  ModelLogOverviewItem count = ModelLogOverviewItem();
+  ModelLogOverviewItem affectUV = ModelLogOverviewItem();
+  ModelLogOverviewItem affectUVPercent = ModelLogOverviewItem();
 
   ModelLogOverview({
-    this.count,
-    this.affectUV,
-    this.affectUVPercent,
+    this.count = const ModelLogOverviewItem(),
+    this.affectUV = const ModelLogOverviewItem(),
+    this.affectUVPercent = const ModelLogOverviewItem(),
   });
 }
 
 class ModelLogOverviewItem {
-  dynamic yesterday;
-  dynamic today;
-  int change;
-  String rate;
+  final dynamic yesterday;
+  final dynamic today;
+  final int change;
+  final String rate;
 
-  ModelLogOverviewItem({
+  const ModelLogOverviewItem({
     this.yesterday = 0,
     this.today = 0,
     this.change = 0,
