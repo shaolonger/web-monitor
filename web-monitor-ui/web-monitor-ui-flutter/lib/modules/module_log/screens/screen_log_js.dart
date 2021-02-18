@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:web_monitor_app/modules/module_log/consts/const_log.dart';
 import 'package:web_monitor_app/modules/module_log/models/model_log_count_between_diff_date.dart';
 import 'package:web_monitor_app/modules/module_log/models/model_log_overview.dart';
@@ -44,7 +45,9 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       timeInterval: 86400,
     );
     List<dynamic> result = model.jsErrorLog;
+    EasyLoading.show(status: "数据处理中，请稍候", maskType: EasyLoadingMaskType.black);
     _setOverviewData(result);
+    EasyLoading.dismiss();
   }
 
   /// 设置总览数据
@@ -55,10 +58,10 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       var today = result[1];
       var affectUVPercentYesterday = yesterday["count"] == 0
           ? "-"
-          : "${((yesterday["uv"] / yesterday["count"]) * 100).toFixed(2)}%";
+          : "${((yesterday["uv"] / yesterday["count"]) * 100).toStringAsFixed(2)}%";
       var affectUVPercentToday = today["count"] == 0
           ? "-"
-          : "${((today["uv"] / today["count"]) * 100).toFixed(2)}%";
+          : "${((today["uv"] / today["count"]) * 100).toStringAsFixed(2)}%";
       var affectUVPercentChange = 0;
       var affectUVPercentRate = "-";
       if (affectUVPercentYesterday != "-" && affectUVPercentToday != "-") {
@@ -70,20 +73,20 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
             : 0;
         affectUVPercentRate = affectUVPercentYesterdayRate == 0
             ? '-'
-            : "${(((affectUVPercentTodayRate - affectUVPercentYesterdayRate) / affectUVPercentYesterdayRate) * 100).toFixed(2)}%";
+            : "${(((affectUVPercentTodayRate - affectUVPercentYesterdayRate) / affectUVPercentYesterdayRate) * 100).toStringAsFixed(2)}%";
       }
       var countChange = today["count"] != yesterday["count"]
           ? (today["count"] > yesterday["count"] ? 1 : -1)
           : 0;
       var countRate = yesterday["count"] == 0
           ? "-"
-          : "${(((today["count"] - yesterday["count"]) / yesterday["count"]) * 100).toFixed(2)}%";
+          : "${(((today["count"] - yesterday["count"]) / yesterday["count"]) * 100).toStringAsFixed(2)}%";
       var affectUVChange = today["uv"] != yesterday["uv"]
           ? (today["uv"] > yesterday["uv"] ? 1 : -1)
           : 0;
       var affectUVRate = yesterday["uv"] == 0
           ? "-"
-          : "${(((today["uv"] - yesterday["uv"]) / yesterday["uv"]) * 100).toFixed(2)}%";
+          : "${(((today["uv"] - yesterday["uv"]) / yesterday["uv"]) * 100).toStringAsFixed(2)}%";
       overview.count = ModelLogOverviewItem(
         yesterday: yesterday["count"],
         today: today["count"],
