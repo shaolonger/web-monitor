@@ -8,12 +8,12 @@ import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview.d
 import 'package:web_monitor_app/utils/util_date_time.dart';
 
 class ScreenLogJs extends StatefulWidget {
-  final String projectIdentifier;
-  final String startTime;
-  final String endTime;
-  final int timeInterval;
+  String projectIdentifier;
+  String startTime;
+  String endTime;
+  int timeInterval;
 
-  const ScreenLogJs({
+  ScreenLogJs({
     Key key,
     @required this.projectIdentifier,
     @required this.startTime,
@@ -32,8 +32,12 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
   void _getOverviewData() async {
     var nowDate = DateTime.now().toLocal();
     var startDate = nowDate.subtract(Duration(days: 1));
+    var endDate = nowDate.add(Duration(days: 1));
     String startTime = UtilDateTime.getDateStrByFormatAndDateTime(
             dateTime: startDate, pattern: "yyyy-MM-dd") +
+        " 00:00:00";
+    String endTime = UtilDateTime.getDateStrByFormatAndDateTime(
+            dateTime: endDate, pattern: "yyyy-MM-dd") +
         " 00:00:00";
     ModelLogCountBetweenDiffDate model =
         await ServiceLog.getLogCountBetweenDiffDate(
@@ -41,7 +45,7 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       logTypeList: ConstLog.LOG_TYPE_LIST_MAP["JS"],
       indicatorList: "count,uv",
       startTime: startTime,
-      endTime: widget.endTime,
+      endTime: endTime,
       timeInterval: 86400,
     );
     List<dynamic> result = model.jsErrorLog;
@@ -132,14 +136,17 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
   }
 
   @override
+  void didUpdateWidget(covariant ScreenLogJs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _getOverviewData();
+    _getDetailData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.all(20.0),
       children: [
-        Text(widget.projectIdentifier),
-        Text(widget.startTime),
-        Text(widget.endTime),
-        Text(widget.timeInterval.toString()),
         WidgetLogOverview(overview: _overview),
       ],
     );

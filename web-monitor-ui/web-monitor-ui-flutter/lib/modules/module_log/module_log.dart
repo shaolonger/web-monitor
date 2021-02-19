@@ -9,10 +9,23 @@ class ModuleLog extends StatefulWidget {
 }
 
 class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
-  String _projectName;
-  String _projectIdentifier;
+  String _projectName = "";
+  String _projectIdentifier = "";
   TabController _tabController;
-  List _tabList = [];
+  final List _tabList = [
+    {
+      "tabName": "JS",
+    },
+    {
+      "tabName": "HTTP",
+    },
+    {
+      "tabName": "RES",
+    },
+    {
+      "tabName": "CUS",
+    },
+  ];
 
   // 查询条件
   String _startTime = "";
@@ -24,9 +37,11 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
     var nowDate = DateTime.now().toLocal();
     var endDate = nowDate.add(Duration(days: 1));
     String startTime = UtilDateTime.getDateStrByFormatAndDateTime(
-        dateTime: nowDate, pattern: "yyyy-MM-dd") + " 00:00:00";
+            dateTime: nowDate, pattern: "yyyy-MM-dd") +
+        " 00:00:00";
     String endTime = UtilDateTime.getDateStrByFormatAndDateTime(
-        dateTime: endDate, pattern: "yyyy-MM-dd") + " 00:00:00";
+            dateTime: endDate, pattern: "yyyy-MM-dd") +
+        " 00:00:00";
     setState(() {
       _startTime = startTime;
       _endTime = endTime;
@@ -36,46 +51,8 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
   /// 初始化tab
   void _initTab() {
     setState(() {
-      _tabList = [
-        {
-          "tabName": "JS",
-          "tabContent": ScreenLogJs(
-            projectIdentifier: _projectIdentifier,
-            startTime: _startTime,
-            endTime: _endTime,
-            timeInterval: _timeInterval,
-          ),
-        },
-        {
-          "tabName": "HTTP",
-          "tabContent": ScreenLogJs(
-            projectIdentifier: _projectIdentifier,
-            startTime: _startTime,
-            endTime: _endTime,
-            timeInterval: _timeInterval,
-          ),
-        },
-        {
-          "tabName": "RES",
-          "tabContent": ScreenLogJs(
-            projectIdentifier: _projectIdentifier,
-            startTime: _startTime,
-            endTime: _endTime,
-            timeInterval: _timeInterval,
-          ),
-        },
-        {
-          "tabName": "CUS",
-          "tabContent": ScreenLogJs(
-            projectIdentifier: _projectIdentifier,
-            startTime: _startTime,
-            endTime: _endTime,
-            timeInterval: _timeInterval,
-          ),
-        },
-      ];
+      _tabController = TabController(length: _tabList.length, vsync: this);
     });
-    _tabController = TabController(length: _tabList.length, vsync: this);
   }
 
   /// 获取路由传参
@@ -87,7 +64,6 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
       _projectIdentifier = params["projectIdentifier"] ?? "";
     });
     _initSearchParams();
-    _initTab();
   }
 
   /// 打开抽屉
@@ -100,19 +76,29 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
   void _setSearchParams({String startTime, String endTime, int timeInterval}) {
     setState(() {
       if (startTime.isNotEmpty && endTime.isNotEmpty) {
-        this._startTime = startTime;
-        this._endTime = endTime;
+        _startTime = startTime;
+        _endTime = endTime;
       }
       if (timeInterval > 0) {
-        this._timeInterval = timeInterval;
+        _timeInterval = timeInterval;
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    _getRouteParams(context);
+  void initState() {
+    super.initState();
+    _initTab();
 
+    // 原本路由参数的获取应该放在build中，但考虑到放build内，则当setState引起的rebuild时，
+    // 会再次触发该函数，导致参数被覆盖，因此将其放在initState中，并通过异步的方式执行
+    Future.delayed(Duration.zero, () {
+      _getRouteParams(context);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_projectName),
@@ -138,7 +124,32 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
-        children: _tabList.map<Widget>((e) => e["tabContent"]).toList(),
+        children: [
+          ScreenLogJs(
+            projectIdentifier: _projectIdentifier,
+            startTime: _startTime,
+            endTime: _endTime,
+            timeInterval: _timeInterval,
+          ),
+          ScreenLogJs(
+            projectIdentifier: _projectIdentifier,
+            startTime: _startTime,
+            endTime: _endTime,
+            timeInterval: _timeInterval,
+          ),
+          ScreenLogJs(
+            projectIdentifier: _projectIdentifier,
+            startTime: _startTime,
+            endTime: _endTime,
+            timeInterval: _timeInterval,
+          ),
+          ScreenLogJs(
+            projectIdentifier: _projectIdentifier,
+            startTime: _startTime,
+            endTime: _endTime,
+            timeInterval: _timeInterval,
+          ),
+        ],
       ),
     );
   }

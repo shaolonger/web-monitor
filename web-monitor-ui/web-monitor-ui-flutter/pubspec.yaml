@@ -52,6 +52,10 @@ dependencies:
   # internationalization issues.
   intl: ^0.16.1
 
+  # A date time picker for flutter, you can choose date / time / date&time
+  # in English Dutch and Chinese, and you can also custom your own picker content
+  flutter_datetime_picker: ^1.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
