@@ -11,16 +11,17 @@ class ModelLoginUser {
     this.token,
   });
 
-  ModelLoginUser.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        username = json["username"],
-        isAdmin = json["isAdmin"],
-        token = json["token"];
+  ModelLoginUser.fromJson(Map<String, dynamic> json) {
+    this.id = json["id"];
+    this.username = json["username"];
+    this.isAdmin = json["isAdmin"];
+    this.token = json["token"];
+  }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    "id": id,
-    "username": username,
-    "isAdmin": isAdmin,
-    "token": token,
-  };
+        "id": id,
+        "username": username,
+        "isAdmin": isAdmin,
+        "token": token,
+      };
 }

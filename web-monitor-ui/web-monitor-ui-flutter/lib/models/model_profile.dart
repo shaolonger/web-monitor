@@ -15,10 +15,11 @@ class ModelProfile {
     this.theme,
   });
 
-  ModelProfile.fromJson(Map<String, dynamic> jsonStr)
-      : loginUser = json.decode(jsonStr["loginUser"]),
-        userInfo = json.decode(jsonStr["userInfo"]),
-        theme = jsonStr["theme"];
+  ModelProfile.fromJson(Map<String, dynamic> jsonStr) {
+    this.loginUser = ModelLoginUser.fromJson(json.decode(jsonStr["loginUser"]));
+    this.userInfo = ModelUserInfo.fromJson(json.decode(jsonStr["userInfo"]));
+    this.theme = jsonStr["theme"];
+  }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         "loginUser": json.encode(loginUser),
