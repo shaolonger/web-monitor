@@ -23,10 +23,10 @@ class WidgetLogSearchDrawer extends StatefulWidget {
 
 class _WidgetLogSearchDrawerState extends State<WidgetLogSearchDrawer> {
   final _timeIntervalOptionList = [
-    {
-      "label": "分钟",
-      "value": 60,
-    },
+    // {
+    //   "label": "分钟",
+    //   "value": 60,
+    // },
     {
       "label": "小时",
       "value": 3600,
@@ -76,6 +76,7 @@ class _WidgetLogSearchDrawerState extends State<WidgetLogSearchDrawer> {
         endTime: _endTime,
         timeInterval: _timeInterval,
       );
+      _closeDrawer();
     }
   }
 
@@ -104,6 +105,11 @@ class _WidgetLogSearchDrawerState extends State<WidgetLogSearchDrawer> {
     setState(() {
       _timeInterval = value;
     });
+  }
+
+  /// 关闭抽屉
+  void _closeDrawer() {
+    Navigator.pop(context);
   }
 
   @override
@@ -211,7 +217,7 @@ class _WidgetLogSearchDrawerState extends State<WidgetLogSearchDrawer> {
                   ),
                   RaisedButton(
                     child: Text("取消"),
-                    onPressed: () {},
+                    onPressed: _closeDrawer,
                   ),
                 ],
               ),

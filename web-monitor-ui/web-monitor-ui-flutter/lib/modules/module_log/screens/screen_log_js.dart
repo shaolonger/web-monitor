@@ -5,6 +5,7 @@ import 'package:web_monitor_app/modules/module_log/models/model_log_count_betwee
 import 'package:web_monitor_app/modules/module_log/models/model_log_overview.dart';
 import 'package:web_monitor_app/modules/module_log/services/service_log.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview.dart';
+import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview_chart.dart';
 import 'package:web_monitor_app/utils/util_date_time.dart';
 
 class ScreenLogJs extends StatefulWidget {
@@ -27,6 +28,7 @@ class ScreenLogJs extends StatefulWidget {
 
 class _ScreenLogJsState extends State<ScreenLogJs> {
   ModelLogOverview _overview = ModelLogOverview();
+  List<dynamic> _chartData = [];
 
   /// 获取总览数据
   void _getOverviewData() async {
@@ -126,20 +128,28 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       endTime: widget.endTime,
       timeInterval: widget.timeInterval,
     );
+    List<dynamic> chartData = model.jsErrorLog;
+    setState(() {
+      _chartData = chartData;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _getOverviewData();
-    _getDetailData();
+    if (widget.projectIdentifier.isNotEmpty) {
+      _getOverviewData();
+      _getDetailData();
+    }
   }
 
   @override
   void didUpdateWidget(covariant ScreenLogJs oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _getOverviewData();
-    _getDetailData();
+    if (widget.projectIdentifier.isNotEmpty) {
+      _getOverviewData();
+      _getDetailData();
+    }
   }
 
   @override
@@ -147,7 +157,12 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
     return ListView(
       padding: EdgeInsets.all(20.0),
       children: [
-        WidgetLogOverview(overview: _overview),
+        Column(
+          children: [
+            WidgetLogOverview(overview: _overview),
+            WidgetLogOverviewChart(_chartData),
+          ],
+        ),
       ],
     );
   }

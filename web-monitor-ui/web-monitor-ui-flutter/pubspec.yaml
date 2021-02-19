@@ -56,6 +56,10 @@ dependencies:
   # in English Dutch and Chinese, and you can also custom your own picker content
   flutter_datetime_picker: ^1.5.0
 
+  # A powerful Flutter chart library, currently supporting Line Chart,
+  # Bar Chart and Pie Chart.
+  fl_chart: ^0.12.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
