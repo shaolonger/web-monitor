@@ -42,8 +42,18 @@ class WidgetLogOverview extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "对比昨日：${overview.count.rate}",
+                  "对比昨日",
                   style: TextStyle(color: Colors.grey[500]),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.0),
+                  child: Text(
+                    overview.count.rate,
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 12.0,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -70,8 +80,18 @@ class WidgetLogOverview extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "对比昨日：${overview.affectUV.rate}",
+                  "对比昨日",
                   style: TextStyle(color: Colors.grey[500]),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.0),
+                  child: Text(
+                    overview.affectUV.rate,
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 12.0,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -98,8 +118,18 @@ class WidgetLogOverview extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "对比昨日：${overview.affectUVPercent.rate}",
+                  "对比昨日",
                   style: TextStyle(color: Colors.grey[500]),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.0),
+                  child: Text(
+                    overview.affectUVPercent.rate,
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 12.0,
+                    ),
+                  ),
                 ),
               ],
             ),
