@@ -1,22 +1,21 @@
 class ModelLoginUser {
-  int id;
-  String username;
-  int isAdmin;
-  String token;
+  final int id;
+  final String username;
+  final int isAdmin;
+  final String token;
 
-  ModelLoginUser({
-    this.id,
-    this.username,
-    this.isAdmin,
-    this.token,
+  const ModelLoginUser({
+    this.id = 0,
+    this.username = "",
+    this.isAdmin = 0,
+    this.token = "",
   });
 
-  ModelLoginUser.fromJson(Map<String, dynamic> json) {
-    this.id = json["id"];
-    this.username = json["username"];
-    this.isAdmin = json["isAdmin"];
-    this.token = json["token"];
-  }
+  ModelLoginUser.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        username = json["username"],
+        isAdmin = json["isAdmin"],
+        token = json["token"];
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         "id": id,

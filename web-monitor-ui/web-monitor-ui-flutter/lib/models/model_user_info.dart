@@ -1,24 +1,24 @@
 class ModelUserInfo {
-  int id;
-  String username;
-  String phone;
-  String icon;
-  int gender;
-  String email;
-  int isAdmin;
-  String createTime;
-  String updateTime;
+  final int id;
+  final String username;
+  final String phone;
+  final String icon;
+  final int gender;
+  final String email;
+  final int isAdmin;
+  final String createTime;
+  final String updateTime;
 
-  ModelUserInfo({
-    this.id,
-    this.username,
-    this.phone,
-    this.icon,
-    this.gender,
-    this.email,
-    this.isAdmin,
-    this.createTime,
-    this.updateTime,
+  const ModelUserInfo({
+    this.id = 0,
+    this.username = "",
+    this.phone = "",
+    this.icon = "",
+    this.gender = 0,
+    this.email = "",
+    this.isAdmin = 0,
+    this.createTime = "",
+    this.updateTime = "",
   });
 
   ModelUserInfo.fromJson(Map<String, dynamic> json)

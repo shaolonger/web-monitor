@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:web_monitor_app/config/environment_config.dart';
 import 'package:web_monitor_app/config/global_config.dart';
+import 'package:web_monitor_app/core/notifier/model_login_setting_change_notifier.dart';
+import 'package:web_monitor_app/models/model_login_setting.dart';
 import 'package:web_monitor_app/modules/module_login/services/service_login.dart';
 
 class ModuleLogin extends StatefulWidget {
@@ -10,16 +13,68 @@ class ModuleLogin extends StatefulWidget {
 
 class _ModuleLoginState extends State<ModuleLogin> {
   final String _environment = EnvironmentConfig.ENV;
-
+  ModelLoginSetting _loginSetting;
+  bool _isRememberPassword = false;
+  bool _isAutoLogin = false;
   var _username = TextEditingController();
   var _password = TextEditingController();
   var _formKey = GlobalKey<FormState>();
+
+  /// 获取登录配置
+  void _getLoginSetting() {
+    var loginSetting =
+        Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
+            .loginSetting;
+    setState(() {
+      _loginSetting = loginSetting;
+      _isRememberPassword = loginSetting.isRememberPassword;
+      _isAutoLogin = loginSetting.isAutoLogin;
+    });
+    // 若选择了【记住密码】，则回显账号密码
+    if (loginSetting.isRememberPassword) {
+      _username.text = loginSetting.username;
+      _password.text = loginSetting.password;
+    }
+    // 若选择了【自动登录】，则直接登录
+    if (loginSetting.isAutoLogin) {
+      _login();
+    }
+  }
+
+  /// 保存登录配置
+  void _saveLoginSetting() {
+    Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
+        .loginSetting = _loginSetting;
+  }
+
+  /// 保存【记住密码】
+  void _saveIsRememberPassword(bool value) {
+    setState(() {
+      _isRememberPassword = value;
+    });
+    _loginSetting.isRememberPassword = value;
+    _saveLoginSetting();
+  }
+
+  /// 保存【记住密码】
+  void _saveIsAutoLogin(bool value) {
+    setState(() {
+      _isAutoLogin = value;
+    });
+    _saveLoginSetting();
+  }
 
   /// 登录
   void _login() {
     if ((_formKey.currentState).validate()) {
       ServiceLogin.login(this.context, _username.text, _password.text);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getLoginSetting();
   }
 
   @override
@@ -65,6 +120,34 @@ class _ModuleLoginState extends State<ModuleLogin> {
                             validator: (v) {
                               return v.trim().length > 0 ? null : "密码不能为空";
                             },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _isRememberPassword,
+                                      onChanged: (value) =>
+                                          _saveIsRememberPassword(value),
+                                    ),
+                                    Text("记住密码"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _isAutoLogin,
+                                      onChanged: (value) =>
+                                          _saveIsAutoLogin(value),
+                                    ),
+                                    Text("自动登录"),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(
                             width: double.infinity,
