@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_monitor_app/core/consts/const_global.dart';
+import 'package:web_monitor_app/core/local/local_storage.dart';
 import 'package:web_monitor_app/models/model_profile.dart';
 
 // 五套可选的主题色
@@ -14,8 +15,6 @@ const _themes = <MaterialColor>[
 ];
 
 class ConfigGlobal {
-  static const _preferenceKey = "modelProfile";
-  static SharedPreferences _preferences;
   static ModelProfile modelProfile = ModelProfile();
 
   /// 用于全局路由控制
@@ -27,8 +26,7 @@ class ConfigGlobal {
 
   /// 初始化全局信息，在APP启动时执行
   static Future init() async {
-    _preferences = await SharedPreferences.getInstance();
-    var _modelProfile = _preferences.getString(_preferenceKey);
+    var _modelProfile = await LocalStorage.get(ConstGlobal.MODEL_PROFILE_KEY);
     if (_modelProfile != null) {
       try {
         modelProfile = ModelProfile.fromJson(jsonDecode(_modelProfile));
@@ -39,7 +37,8 @@ class ConfigGlobal {
   }
 
   /// 保存Profile信息
-  static saveModelProfile() {
-    _preferences.setString(_preferenceKey, jsonEncode(modelProfile.toJson()));
+  static Future<bool> saveModelProfile() async {
+    return await LocalStorage.save(
+        ConstGlobal.MODEL_PROFILE_KEY, jsonEncode(modelProfile.toJson()));
   }
 }
