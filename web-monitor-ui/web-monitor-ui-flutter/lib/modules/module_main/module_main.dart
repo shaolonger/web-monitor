@@ -6,6 +6,7 @@ import 'package:web_monitor_app/config/global_config.dart';
 import 'package:web_monitor_app/core/config/config_global.dart';
 import 'package:web_monitor_app/core/notifier/model_login_user_change_notifier.dart';
 import 'package:web_monitor_app/core/notifier/model_theme_change_notifier.dart';
+import 'package:web_monitor_app/core/notifier/model_user_info_change_notifier.dart';
 import 'package:web_monitor_app/modules/module_startup/module_startup.dart';
 import 'package:web_monitor_app/routes/routes.dart';
 
@@ -16,6 +17,7 @@ class ModuleMain extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: ModelThemeChangeNotifier()),
         ChangeNotifierProvider.value(value: ModelLoginUserChangeNotifier()),
+        ChangeNotifierProvider.value(value: ModelUserInfoChangeNotifier()),
       ],
       child: Consumer<ModelThemeChangeNotifier>(
         builder: (BuildContext context, ModelThemeChangeNotifier modelTheme, Widget child) {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_monitor_app/core/config/config_global.dart';
-import 'package:web_monitor_app/core/notifier/model_login_user_change_notifier.dart';
-import 'package:web_monitor_app/models/model_login_user.dart';
+import 'package:web_monitor_app/core/notifier/model_user_info_change_notifier.dart';
 import 'package:web_monitor_app/routes/routes.dart';
 
 class ModulePersonalInfo extends StatefulWidget {
@@ -26,7 +25,7 @@ class _ModulePersonalInfoState extends State<ModulePersonalInfo> {
       2: "女",
     };
     var userInfo =
-        Provider.of<ModelLoginUserChangeNotifier>(context, listen: false)
+        Provider.of<ModelUserInfoChangeNotifier>(context, listen: false)
             .userInfo;
     if (userInfo != null) {
       setState(() {

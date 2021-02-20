@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_monitor_app/core/net/api.dart';
 import 'package:web_monitor_app/core/net/url_address.dart';
-import 'package:web_monitor_app/core/notifier/model_login_user_change_notifier.dart';
+import 'package:web_monitor_app/core/notifier/model_user_info_change_notifier.dart';
 import 'package:web_monitor_app/models/model_user_info.dart';
 
 class ServiceMine {
@@ -14,7 +14,7 @@ class ServiceMine {
     );
     if (res.success) {
       var userInfo = ModelUserInfo.fromJson(res.data);
-      Provider.of<ModelLoginUserChangeNotifier>(context, listen: false)
+      Provider.of<ModelUserInfoChangeNotifier>(context, listen: false)
           .userInfo = userInfo;
     }
   }

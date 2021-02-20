@@ -9,10 +9,10 @@ import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview_c
 import 'package:web_monitor_app/utils/util_date_time.dart';
 
 class ScreenLogJs extends StatefulWidget {
-  String projectIdentifier;
-  String startTime;
-  String endTime;
-  int timeInterval;
+  final String projectIdentifier;
+  final String startTime;
+  final String endTime;
+  final int timeInterval;
 
   ScreenLogJs({
     Key key,
