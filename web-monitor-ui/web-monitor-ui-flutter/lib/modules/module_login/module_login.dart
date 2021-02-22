@@ -64,10 +64,13 @@ class _ModuleLoginState extends State<ModuleLogin> {
     _saveLoginSetting();
   }
 
-  /// 保存【记住密码】
+  /// 保存【自动登录】
   void _saveIsAutoLogin(bool value) {
     setState(() {
       _isAutoLogin = value;
+      if (value) {
+        _isRememberPassword = true;
+      }
     });
     _saveLoginSetting();
   }
