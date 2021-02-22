@@ -18,6 +18,10 @@ class ConstLog {
     "BROWSER_NAME": "browser_name",
     // 网络类型
     "NET_TYPE": "net_type",
+    // 状态码
+    "STATUS": "status",
+    // 资源类型
+    "RESOURCE_TYPE": "resource_type",
   };
   /// 图标颜色集合
   static const CHART_COLORS_LIST = [

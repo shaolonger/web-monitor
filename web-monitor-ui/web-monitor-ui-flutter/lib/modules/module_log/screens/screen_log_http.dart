@@ -9,16 +9,17 @@ import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_devi
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_net_type.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_os.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_overview.dart';
+import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_status.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview.dart';
 import 'package:web_monitor_app/utils/util_date_time.dart';
 
-class ScreenLogJs extends StatefulWidget {
+class ScreenLogHttp extends StatefulWidget {
   final String projectIdentifier;
   final String startTime;
   final String endTime;
   final int timeInterval;
 
-  ScreenLogJs({
+  ScreenLogHttp({
     Key key,
     @required this.projectIdentifier,
     @required this.startTime,
@@ -27,17 +28,18 @@ class ScreenLogJs extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ScreenLogJsState createState() => _ScreenLogJsState();
+  _ScreenLogHttpState createState() => _ScreenLogHttpState();
 }
 
-class _ScreenLogJsState extends State<ScreenLogJs> {
-  final String _logType = ConstLog.LOG_TYPE_LIST_MAP["JS"];
+class _ScreenLogHttpState extends State<ScreenLogHttp> {
+  final String _logType = ConstLog.LOG_TYPE_LIST_MAP["HTTP"];
   ModelLogOverview _overview = ModelLogOverview();
   List<dynamic> _chartOverviewData = [];
   List<dynamic> _chartDeviceNameData = [];
   List<dynamic> _chartOsData = [];
   List<dynamic> _chartBrowserNameData = [];
   List<dynamic> _chartNetTypeData = [];
+  List<dynamic> _chartStatusData = [];
 
   /// 获取总览数据
   void _getOverviewData() async {
@@ -59,7 +61,7 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       endTime: endTime,
       timeInterval: 86400,
     );
-    List<dynamic> result = model.jsErrorLog;
+    List<dynamic> result = model.httpErrorLog;
     EasyLoading.show(status: "数据处理中，请稍候", maskType: EasyLoadingMaskType.black);
     _setOverviewData(result);
     EasyLoading.dismiss();
@@ -137,7 +139,7 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       endTime: widget.endTime,
       timeInterval: widget.timeInterval,
     );
-    List<dynamic> chartData = model.jsErrorLog;
+    List<dynamic> chartData = model.httpErrorLog;
     setState(() {
       _chartOverviewData = chartData;
     });
@@ -203,6 +205,21 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
     });
   }
 
+  /// 获取环形图，状态码数据
+  void _geChartStatusData() async {
+    List<dynamic> resultList =
+        await ServiceLog.getLogDistributionBetweenDiffDate(
+      projectIdentifier: widget.projectIdentifier,
+      logType: _logType,
+      indicator: ConstLog.INDICATOR_LIST_MAP["STATUS"],
+      startTime: widget.startTime,
+      endTime: widget.endTime,
+    );
+    setState(() {
+      _chartStatusData = resultList;
+    });
+  }
+
   /// 获取页面所需的数据
   void _getPageData() {
     if (widget.projectIdentifier.isNotEmpty) {
@@ -212,6 +229,7 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       _geChartOsData();
       _geChartBrowserNameData();
       _geChartNetTypeData();
+      _geChartStatusData();
     }
   }
 
@@ -222,7 +240,7 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
   }
 
   @override
-  void didUpdateWidget(covariant ScreenLogJs oldWidget) {
+  void didUpdateWidget(covariant ScreenLogHttp oldWidget) {
     super.didUpdateWidget(oldWidget);
     _getPageData();
   }
@@ -246,6 +264,8 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
             WidgetLogChartBrowserName(_chartBrowserNameData),
             // 环形图，网络类型
             WidgetLogChartNetType(_chartNetTypeData),
+            // 环形图，状态码
+            WidgetLogChartStatus(_chartStatusData),
           ],
         ),
       ],

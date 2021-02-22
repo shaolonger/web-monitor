@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_monitor_app/modules/module_log/screens/screen_log_http.dart';
 import 'package:web_monitor_app/modules/module_log/screens/screen_log_js.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_search_drawer.dart';
 import 'package:web_monitor_app/utils/util_date_time.dart';
@@ -132,7 +133,7 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
             endTime: _endTime,
             timeInterval: _timeInterval,
           ),
-          ScreenLogJs(
+          ScreenLogHttp(
             projectIdentifier: _projectIdentifier,
             startTime: _startTime,
             endTime: _endTime,
