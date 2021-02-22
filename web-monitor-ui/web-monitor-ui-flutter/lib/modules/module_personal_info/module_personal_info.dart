@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_monitor_app/core/config/config_global.dart';
+import 'package:web_monitor_app/core/notifier/model_login_setting_change_notifier.dart';
 import 'package:web_monitor_app/core/notifier/model_user_info_change_notifier.dart';
+import 'package:web_monitor_app/models/model_login_setting.dart';
 import 'package:web_monitor_app/routes/routes.dart';
 
 class ModulePersonalInfo extends StatefulWidget {
@@ -62,6 +64,13 @@ class _ModulePersonalInfoState extends State<ModulePersonalInfo> {
 
   /// 退出
   void _logout() {
+    // 退出后，则取消登录配置中的【自动登录】，否则退出返回登录页后，又触发自动登录
+    var loginSetting = Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false).loginSetting;
+    if (loginSetting.isAutoLogin) {
+      var newLoginSetting = ModelLoginSetting.fromExisted(loginSetting, isAutoLogin: false);
+      Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
+          .loginSetting = newLoginSetting;
+    }
     ConfigGlobal.navigatorKey.currentState
         .pushNamedAndRemoveUntil(moduleLogin, (route) => false);
   }

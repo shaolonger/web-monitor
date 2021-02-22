@@ -1,6 +1,5 @@
 import 'package:web_monitor_app/core/notifier/model_profile_change_notifier.dart';
 import 'package:web_monitor_app/models/model_login_setting.dart';
-import 'package:web_monitor_app/models/model_login_user.dart';
 
 class ModelLoginSettingChangeNotifier extends ModelProfileChangeNotifier {
   ModelLoginSetting get loginSetting => modelProfile.loginSetting;
