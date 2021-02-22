@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:web_monitor_app/modules/module_log/consts/const_log.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_indicator.dart';
 
-class WidgetLogChartDeviceName extends StatefulWidget {
+class WidgetLogChartBrowserName extends StatefulWidget {
   final List<dynamic> chartData;
 
-  WidgetLogChartDeviceName(this.chartData);
+  WidgetLogChartBrowserName(this.chartData);
 
   @override
-  _WidgetLogChartDeviceNameState createState() =>
-      _WidgetLogChartDeviceNameState();
+  _WidgetLogChartBrowserNameState createState() =>
+      _WidgetLogChartBrowserNameState();
 }
 
-class _WidgetLogChartDeviceNameState extends State<WidgetLogChartDeviceName> {
-  final _title = "设备类型";
+class _WidgetLogChartBrowserNameState extends State<WidgetLogChartBrowserName> {
+  final String _title = "浏览器";
   int _touchedIndex;
 
   /// 获取数据
