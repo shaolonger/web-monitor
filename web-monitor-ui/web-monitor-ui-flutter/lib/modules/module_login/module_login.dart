@@ -13,7 +13,6 @@ class ModuleLogin extends StatefulWidget {
 
 class _ModuleLoginState extends State<ModuleLogin> {
   final String _environment = EnvironmentConfig.ENV;
-  ModelLoginSetting _loginSetting;
   bool _isRememberPassword = false;
   bool _isAutoLogin = false;
   var _username = TextEditingController();
@@ -26,7 +25,6 @@ class _ModuleLoginState extends State<ModuleLogin> {
         Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
             .loginSetting;
     setState(() {
-      _loginSetting = loginSetting;
       _isRememberPassword = loginSetting.isRememberPassword;
       _isAutoLogin = loginSetting.isAutoLogin;
     });
@@ -37,14 +35,25 @@ class _ModuleLoginState extends State<ModuleLogin> {
     }
     // 若选择了【自动登录】，则直接登录
     if (loginSetting.isAutoLogin) {
-      _login();
+      // 这里用延时是因为需要等待上面的setState生效
+      Future.delayed(Duration.zero).then((value) => _login());
     }
   }
 
   /// 保存登录配置
   void _saveLoginSetting() {
+    var loginSetting =
+        Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
+            .loginSetting;
+    var newLoginSetting = ModelLoginSetting.fromExisted(
+      loginSetting,
+      isRememberPasswordNew: _isRememberPassword,
+      isAutoLogin: _isAutoLogin,
+      username: _username.text,
+      password: _password.text,
+    );
     Provider.of<ModelLoginSettingChangeNotifier>(context, listen: false)
-        .loginSetting = _loginSetting;
+        .loginSetting = newLoginSetting;
   }
 
   /// 保存【记住密码】
@@ -52,7 +61,6 @@ class _ModuleLoginState extends State<ModuleLogin> {
     setState(() {
       _isRememberPassword = value;
     });
-    _loginSetting.isRememberPassword = value;
     _saveLoginSetting();
   }
 
@@ -67,7 +75,13 @@ class _ModuleLoginState extends State<ModuleLogin> {
   /// 登录
   void _login() {
     if ((_formKey.currentState).validate()) {
-      ServiceLogin.login(this.context, _username.text, _password.text);
+      ServiceLogin.login(this.context, _username.text, _password.text)
+          .then((success) {
+        if (success) {
+          // 登录成功后，保存登录配置
+          _saveLoginSetting();
+        }
+      });
     }
   }
 

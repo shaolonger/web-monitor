@@ -10,8 +10,11 @@ import 'package:web_monitor_app/routes/routes.dart';
 
 class ServiceLogin {
   /// 登录
-  static void login(
-      BuildContext context, String username, String password) async {
+  static Future<bool> login(
+    BuildContext context,
+    String username,
+    String password,
+  ) async {
     var _params = {
       "username": username,
       "password": password,
@@ -34,6 +37,10 @@ class ServiceLogin {
       ServiceMine.getUserInfo(context);
 
       Navigator.pushReplacementNamed(context, moduleHome);
+
+      return true;
+    } else {
+      return false;
     }
   }
 }
