@@ -15,4 +15,8 @@ class UrlAddress {
   /// 获取两个日期之间的对比数据
   static const String getLogCountBetweenDiffDate =
       "/statistic/getLogCountBetweenDiffDate";
+
+  /// 获取两个日期之间的设备、操作系统、浏览器、网络类型、状态码、资源类型的统计数据
+  static const String getLogDistributionBetweenDiffDate =
+      "/statistic/getLogDistributionBetweenDiffDate";
 }

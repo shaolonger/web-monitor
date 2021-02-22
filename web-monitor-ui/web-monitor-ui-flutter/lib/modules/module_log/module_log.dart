@@ -30,7 +30,7 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
   // 查询条件
   String _startTime = "";
   String _endTime = "";
-  int _timeInterval = 60;
+  int _timeInterval = 3600;
 
   /// 初始化查询参数
   void _initSearchParams() {
@@ -124,6 +124,7 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
         children: [
           ScreenLogJs(
             projectIdentifier: _projectIdentifier,

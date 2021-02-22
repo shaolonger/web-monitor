@@ -31,4 +31,30 @@ class ServiceLog {
     }
     return model;
   }
+
+  /// 获取两个日期之间的设备、操作系统、浏览器、网络类型、状态码、资源类型的统计数据
+  static Future<List<dynamic>> getLogDistributionBetweenDiffDate({
+    @required String projectIdentifier,
+    @required String logType,
+    @required String indicator,
+    @required String startTime,
+    @required String endTime,
+  }) async {
+    List<dynamic> resultList = [];
+    var res = await httpManager.bizHttpGet(
+      UrlAddress.getLogDistributionBetweenDiffDate,
+      params: {
+        "projectIdentifier": projectIdentifier,
+        "logType": logType,
+        "indicator": indicator,
+        "startTime": startTime,
+        "endTime": endTime,
+      },
+      defaultErrorTip: "获取两个日期之间的对比数据失败",
+    );
+    if (res.success) {
+      resultList = res.data;
+    }
+    return resultList;
+  }
 }

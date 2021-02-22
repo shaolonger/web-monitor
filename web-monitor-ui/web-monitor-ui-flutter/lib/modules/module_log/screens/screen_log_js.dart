@@ -4,8 +4,9 @@ import 'package:web_monitor_app/modules/module_log/consts/const_log.dart';
 import 'package:web_monitor_app/modules/module_log/models/model_log_count_between_diff_date.dart';
 import 'package:web_monitor_app/modules/module_log/models/model_log_overview.dart';
 import 'package:web_monitor_app/modules/module_log/services/service_log.dart';
+import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_device_name.dart';
+import 'package:web_monitor_app/modules/module_log/widgets/widget_log_chart_overview.dart';
 import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview.dart';
-import 'package:web_monitor_app/modules/module_log/widgets/widget_log_overview_chart.dart';
 import 'package:web_monitor_app/utils/util_date_time.dart';
 
 class ScreenLogJs extends StatefulWidget {
@@ -28,7 +29,8 @@ class ScreenLogJs extends StatefulWidget {
 
 class _ScreenLogJsState extends State<ScreenLogJs> {
   ModelLogOverview _overview = ModelLogOverview();
-  List<dynamic> _chartData = [];
+  List<dynamic> _chartOverviewData = [];
+  List<dynamic> _chartDeviceNameData = [];
 
   /// 获取总览数据
   void _getOverviewData() async {
@@ -117,8 +119,8 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
     });
   }
 
-  /// 获取详细数据
-  void _getDetailData() async {
+  /// 获取折线图，日志数-时间表数据
+  void _getChartOverviewData() async {
     ModelLogCountBetweenDiffDate model =
         await ServiceLog.getLogCountBetweenDiffDate(
       projectIdentifier: widget.projectIdentifier,
@@ -130,26 +132,44 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
     );
     List<dynamic> chartData = model.jsErrorLog;
     setState(() {
-      _chartData = chartData;
+      _chartOverviewData = chartData;
     });
+  }
+
+  /// 获取环形图，设备类型数据
+  void _geChartDeviceNameData() async {
+    List<dynamic> resultList =
+        await ServiceLog.getLogDistributionBetweenDiffDate(
+      projectIdentifier: widget.projectIdentifier,
+      logType: ConstLog.LOG_TYPE_LIST_MAP["JS"],
+      indicator: ConstLog.INDICATOR_LIST_MAP["DEVICE_NAME"],
+      startTime: widget.startTime,
+      endTime: widget.endTime,
+    );
+    setState(() {
+      _chartDeviceNameData = resultList;
+    });
+  }
+
+  /// 获取页面所需的数据
+  void _getPageData() {
+    if (widget.projectIdentifier.isNotEmpty) {
+      _getOverviewData();
+      _getChartOverviewData();
+      _geChartDeviceNameData();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.projectIdentifier.isNotEmpty) {
-      _getOverviewData();
-      _getDetailData();
-    }
+    _getPageData();
   }
 
   @override
   void didUpdateWidget(covariant ScreenLogJs oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.projectIdentifier.isNotEmpty) {
-      _getOverviewData();
-      _getDetailData();
-    }
+    _getPageData();
   }
 
   @override
@@ -159,8 +179,15 @@ class _ScreenLogJsState extends State<ScreenLogJs> {
       children: [
         Column(
           children: [
+            // 统计总览
             WidgetLogOverview(overview: _overview),
-            WidgetLogOverviewChart(_chartData),
+            // 折线图，日志数-时间表
+            WidgetLogChartOverview(_chartOverviewData),
+            // 环形图，设备类型
+            WidgetLogChartDeviceName(_chartDeviceNameData),
+            // 环形图，操作系统
+            // 环形图，浏览器
+            // 环形图，网络类型
           ],
         ),
       ],
