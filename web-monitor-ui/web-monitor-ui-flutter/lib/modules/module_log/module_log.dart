@@ -110,6 +110,17 @@ class _ModuleLogState extends State<ModuleLog> with TickerProviderStateMixin {
           controller: _tabController,
           tabs: _tabList.map((e) => Tab(text: e["tabName"])).toList(),
         ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(
+                Icons.arrow_back_outlined,
+                color: Colors.white,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            );
+          },
+        ),
         actions: [
           Builder(builder: (BuildContext context) {
             return IconButton(
