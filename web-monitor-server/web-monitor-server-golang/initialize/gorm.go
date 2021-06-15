@@ -8,6 +8,7 @@ import (
 	"os"
 	"web.monitor.com/global"
 	"web.monitor.com/initialize/internal"
+	"web.monitor.com/model"
 )
 
 func Gorm() *gorm.DB {
@@ -68,4 +69,17 @@ func gormConfig(mod bool) *gorm.Config {
 		config.Logger = internal.Default.LogMode(logger.Silent)
 	}
 	return config
+}
+
+// AutoMigrateMysqlTables
+// @description: 自动迁移数据库表结构
+func AutoMigrateMysqlTables(db *gorm.DB) {
+	err := db.AutoMigrate(
+		model.AmsAlarm{},
+	)
+	if err != nil {
+		global.WM_LOG.Error("自动迁移数据库表结构失败", zap.Any("err", err))
+		os.Exit(0)
+	}
+	global.WM_LOG.Info("自动迁移数据库表结构成功")
 }

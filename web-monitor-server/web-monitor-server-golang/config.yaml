@@ -16,7 +16,7 @@ zap:
 mysql:
   path: "localhost:3306"
   config: ""
-  db-name: "web_monitor"
+  db-name: "web_monitor_test"
   username: "root"
   password: "root"
   max-idle-conns: 10
