@@ -1,0 +1,13 @@
+# 配置文件
+
+# zap日志配置
+zap:
+  level: 'info'
+  format: 'console'
+  prefix: '[WEB_MONITOR]'
+  directory: 'log'
+  link-name: 'latest_log'
+  show-line: true
+  encode-level: 'LowercaseColorLevelEncoder'
+  stacktrace-key: 'stacktrace'
+  log-in-console: true
