@@ -76,6 +76,7 @@ func gormConfig(mod bool) *gorm.Config {
 func AutoMigrateMysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
 		model.AmsAlarm{},
+		model.AmsAlarmRecord{},
 	)
 	if err != nil {
 		global.WM_LOG.Error("自动迁移数据库表结构失败", zap.Any("err", err))
