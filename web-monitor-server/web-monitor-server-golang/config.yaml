@@ -11,3 +11,15 @@ zap:
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
   log-in-console: true
+
+# mysql数据库配置
+mysql:
+  path: "localhost:3306"
+  config: ""
+  db-name: "web_monitor"
+  username: "root"
+  password: "root"
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: true
+  log-zap: "zap"
