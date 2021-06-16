@@ -77,6 +77,20 @@ func AutoMigrateMysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
 		model.AmsAlarm{},
 		model.AmsAlarmRecord{},
+		model.AmsAlarmSchedulerRelation{},
+		model.AmsSubscriber{},
+		model.AmsSubscriberNotifyRecord{},
+		model.LmsClientUser{},
+		model.LmsCustomErrorLog{},
+		model.LmsHttpErrorLog{},
+		model.LmsJsErrorLog{},
+		model.LmsResourceLoadErrorLog{},
+		model.PmsProject{},
+		model.TmsScheduler{},
+		model.TmsSchedulerRecord{},
+		model.UmsUser{},
+		model.UmsUserProjectRelation{},
+		model.UmsUserRegisterRecord{},
 	)
 	if err != nil {
 		global.WM_LOG.Error("自动迁移数据库表结构失败", zap.Any("err", err))
