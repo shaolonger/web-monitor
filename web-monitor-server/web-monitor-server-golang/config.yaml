@@ -23,3 +23,9 @@ mysql:
   max-open-conns: 100
   log-mode: true
   log-zap: "zap"
+
+# redis配置
+redis:
+  db: 0
+  addr: 'localhost:6379'
+  password: ''
