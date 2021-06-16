@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/11/17 23:14:09                          */
+/* Created on:     2021/6/16 14:15:20                           */
 /*==============================================================*/
 
 
@@ -325,7 +325,7 @@ create table ums_user
    username             varchar(64) not null comment '用户名',
    password             varchar(64) not null comment '密码',
    phone                varchar(64) default "" comment '电话',
-   icon                 varchar(500) default "" comment '头像',
+   icon                 text default "" comment '头像',
    gender               tinyint(1) default 0 comment '性别，0-未知，1-男，2-女',
    email                varchar(100) not null comment '邮箱',
    is_admin             tinyint(1) not null default 0 comment '是否超级管理员，0-否，1-是',
