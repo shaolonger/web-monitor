@@ -1,5 +1,10 @@
 # 配置文件
 
+system:
+  env: 'dev'
+  addr: 6001
+  db-type: 'mysql'
+
 # zap日志配置
 zap:
   level: 'info'

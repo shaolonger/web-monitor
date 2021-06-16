@@ -25,4 +25,7 @@ func main() {
 
 	// 初始化redis服务
 	initialize.Redis()
+
+	// 运行http服务
+	core.RunWindowsServer()
 }
