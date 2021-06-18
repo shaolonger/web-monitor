@@ -3,6 +3,7 @@ package initialize
 import (
 	"github.com/gin-gonic/gin"
 	"web.monitor.com/global"
+	"web.monitor.com/middleware"
 	"web.monitor.com/router"
 )
 
@@ -23,6 +24,7 @@ func Router() *gin.Engine {
 	{
 		router.InitAuthRouterPrivate(PrivateGroup)
 	}
+	PrivateGroup.Use(middleware.TokenAuth())
 	global.WM_LOG.Info("路由注册成功")
 	return Router
 }

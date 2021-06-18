@@ -34,3 +34,4 @@ redis:
   db: 0
   addr: 'localhost:6379'
   password: ''
+  expire-time: 60
