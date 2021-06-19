@@ -20,7 +20,7 @@ zap:
 # mysql数据库配置
 mysql:
   path: "localhost:3306"
-  config: ""
+  config: "parseTime=true"
   db-name: "web_monitor_test"
   username: "root"
   password: "root"
