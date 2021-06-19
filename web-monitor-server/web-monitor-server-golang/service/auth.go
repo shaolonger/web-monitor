@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"gorm.io/gorm"
+	"math"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
@@ -27,4 +28,36 @@ func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entit
 	}
 	err = global.WM_DB.Create(&e).Error
 	return err, e
+}
+
+func GetUserRegisterRecord(r validation.GetUserRegisterRecord) (err error, data interface{}) {
+	limit := r.PageSize
+	offset := limit * (r.PageNum - 1)
+	db := global.WM_DB.Model(&model.UmsUserRegisterRecord{})
+	var totalNum int64
+	var records []model.UmsUserRegisterRecord
+
+	// 审核结果
+	if r.AuditResult != "" {
+		db = db.Where("`audit_result` = ?", r.AuditResult)
+	}
+	// 开始时间、结束时间
+	if r.StartTime != "" && r.EndTime != "" {
+		db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
+	} else if r.StartTime != "" {
+		db = db.Where("`create_time` >= ?", r.StartTime)
+	} else if r.EndTime != "" {
+		db = db.Where("`create_time` <= ?", r.EndTime)
+	}
+
+	err = db.Count(&totalNum).Error
+	err = db.Limit(limit).Offset(offset).Find(&records).Error
+	data = map[string]interface{}{
+		"totalNum":  totalNum,
+		"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+		"pageNum":   r.PageNum,
+		"pageSize":  r.PageSize,
+		"records":   records,
+	}
+	return err, data
 }

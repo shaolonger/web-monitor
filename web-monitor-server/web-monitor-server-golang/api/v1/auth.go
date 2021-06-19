@@ -29,7 +29,19 @@ func AddUserRegisterRecord(c *gin.Context) {
 }
 
 func GetUserRegisterRecord(c *gin.Context) {
-
+	var r validation.GetUserRegisterRecord
+	_ = c.Bind(&r)
+	if err := utils.ValidateStruct(r); err != nil {
+		global.WM_LOG.Error("查询注册记录失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		if err, data := service.GetUserRegisterRecord(r); err != nil {
+			global.WM_LOG.Error("查询注册记录失败", zap.Any("err", err))
+			response.FailWithError(err, c)
+		} else {
+			response.SuccessWithData(data, c)
+		}
+	}
 }
 
 func AuditUserRegisterRecord(c *gin.Context) {

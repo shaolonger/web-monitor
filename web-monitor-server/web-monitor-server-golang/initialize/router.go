@@ -21,10 +21,10 @@ func Router() *gin.Engine {
 	}
 	// PrivateGroup，即需要权限校验的私有API
 	PrivateGroup := Router.Group("")
+	PrivateGroup.Use(middleware.TokenAuth())
 	{
 		router.InitAuthRouterPrivate(PrivateGroup)
 	}
-	PrivateGroup.Use(middleware.TokenAuth())
 	global.WM_LOG.Info("路由注册成功")
 	return Router
 }
