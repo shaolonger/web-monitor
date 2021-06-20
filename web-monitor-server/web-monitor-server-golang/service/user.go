@@ -8,6 +8,7 @@ import (
 	"web.monitor.com/global"
 	"web.monitor.com/model"
 	"web.monitor.com/model/validation"
+	"web.monitor.com/utils"
 )
 
 func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entity model.UmsUserRegisterRecord) {
@@ -60,4 +61,28 @@ func GetUserRegisterRecord(r validation.GetUserRegisterRecord) (err error, data 
 		"records":   records,
 	}
 	return err, data
+}
+
+func Login(r validation.Login) (err error, data interface{}) {
+	db := global.WM_DB.Model(&model.UmsUser{})
+	db = db.Where("`username` = ? AND `password` = ?", r.Username, r.Password)
+	var userList []model.UmsUser
+	err = db.Find(&userList).Error
+
+	// 找不到用户
+	if len(userList) == 0 {
+		err = errors.New("用户名或密码不正确")
+		data = nil
+		return
+	}
+
+	// 创建token
+	token := utils.GetToken()
+	user := userList[0]
+	err, loginUser := AddOrUpdateToken(token, user.Id, user.Username, user.IsAdmin)
+	if err != nil {
+		return
+	} else {
+		return nil, loginUser
+	}
 }

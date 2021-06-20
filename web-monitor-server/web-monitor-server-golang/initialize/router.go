@@ -17,13 +17,13 @@ func Router() *gin.Engine {
 	// PublicGroup，即免权限校验的公开API
 	PublicGroup := Router.Group("")
 	{
-		router.InitAuthRouterPublic(PublicGroup)
+		router.InitUserRouterPublic(PublicGroup)
 	}
 	// PrivateGroup，即需要权限校验的私有API
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.TokenAuth())
 	{
-		router.InitAuthRouterPrivate(PrivateGroup)
+		router.InitUserRouterPrivate(PrivateGroup)
 	}
 	global.WM_LOG.Info("路由注册成功")
 	return Router

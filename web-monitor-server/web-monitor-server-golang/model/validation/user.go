@@ -15,3 +15,8 @@ type GetUserRegisterRecord struct {
 	EndTime     string `form:"endTime" validate:"omitempty,datetime=2006-01-02 15:04:05"`
 	AuditResult string `form:"auditResult" validate:"omitempty,oneof='0' '-1' '1'"`
 }
+
+type Login struct {
+	Username string `form:"username" validate:"required"`
+	Password string `form:"password" validate:"required"`
+}

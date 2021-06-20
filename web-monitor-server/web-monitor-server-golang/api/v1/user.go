@@ -47,3 +47,19 @@ func GetUserRegisterRecord(c *gin.Context) {
 func AuditUserRegisterRecord(c *gin.Context) {
 
 }
+
+func Login(c *gin.Context) {
+	var r validation.Login
+	_ = c.Bind(&r)
+	if err := utils.ValidateStruct(r); err != nil {
+		global.WM_LOG.Error("登录失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		if err, data := service.Login(r); err != nil {
+			global.WM_LOG.Error("登录失败", zap.Any("err", err))
+			response.FailWithError(err, c)
+		} else {
+			response.SuccessWithData(data, c)
+		}
+	}
+}
