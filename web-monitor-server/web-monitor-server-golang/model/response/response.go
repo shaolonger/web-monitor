@@ -24,5 +24,5 @@ func SuccessWithData(data interface{}, c *gin.Context) {
 }
 
 func FailWithError(err error, c *gin.Context) {
-	ResponseFactory(false, err.Error(), "", c)
+	ResponseFactory(false, nil, err.Error(), c)
 }
