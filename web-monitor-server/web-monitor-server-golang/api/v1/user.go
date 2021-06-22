@@ -28,6 +28,24 @@ func AddUserRegisterRecord(c *gin.Context) {
 	}
 }
 
+func AuditUserRegisterRecord(c *gin.Context) {
+	var r validation.AuditUserRegisterRecord
+	_ = c.Bind(&r)
+	if err := utils.ValidateStruct(r); err != nil {
+		global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		// 保存实体
+		if err, entity := service.AuditUserRegisterRecord(r); err != nil {
+			global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
+			response.FailWithError(err, c)
+		} else {
+			global.WM_LOG.Info("注册审批成功", zap.Any("entity", entity))
+			response.SuccessWithData(entity, c)
+		}
+	}
+}
+
 func GetUserRegisterRecord(c *gin.Context) {
 	var r validation.GetUserRegisterRecord
 	_ = c.Bind(&r)
@@ -42,10 +60,6 @@ func GetUserRegisterRecord(c *gin.Context) {
 			response.SuccessWithData(data, c)
 		}
 	}
-}
-
-func AuditUserRegisterRecord(c *gin.Context) {
-
 }
 
 func Login(c *gin.Context) {

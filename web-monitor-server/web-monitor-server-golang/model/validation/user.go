@@ -9,6 +9,11 @@ type AddUserRegisterRecord struct {
 	Email    string `form:"email" validate:"required,email"`
 }
 
+type AuditUserRegisterRecord struct {
+	AuditId     string `form:"auditId" validate:"required"`
+	AuditResult string `form:"auditResult" validate:"required,oneof='0' '-1' '1'"`
+}
+
 type GetUserRegisterRecord struct {
 	PageInfo
 	StartTime   string `form:"startTime" validate:"omitempty,datetime=2006-01-02 15:04:05"`

@@ -2,8 +2,10 @@ package service
 
 import (
 	"errors"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"math"
+	"strconv"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
@@ -29,6 +31,52 @@ func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entit
 	}
 	err = global.WM_DB.Create(&e).Error
 	return err, e
+}
+
+func AuditUserRegisterRecord(r validation.AuditUserRegisterRecord) (err error, data interface{}) {
+	var registerRecord model.UmsUserRegisterRecord
+	var user model.UmsUser
+	db := global.WM_DB.Model(&model.UmsUserRegisterRecord{})
+	db = db.Where("`id` = ?", r.AuditId)
+
+	// 找到审批对象
+	err = db.Find(&registerRecord).Error
+	if err != nil {
+		err = errors.New("找不到要审批的记录")
+		return
+	}
+
+	// 若已审批
+	if registerRecord.AuditResult == 0 || registerRecord.AuditResult == 1 {
+		err = errors.New("该记录已审批")
+		return
+	}
+
+	// 保存用户记录审批表
+	user = model.UmsUser{}
+	auditResult, _ := strconv.Atoi(r.AuditResult)
+	registerRecord.AuditResult = int8(auditResult)
+	registerRecord.UpdateTime = time.Now()
+	db.Save(registerRecord)
+
+	// 若为审批通过，则需在用户表中新增用户
+	if auditResult == 1 {
+		user = model.UmsUser{
+			Username:   registerRecord.Username,
+			Password:   registerRecord.Password,
+			Phone:      registerRecord.Phone,
+			Icon:       registerRecord.Icon,
+			Gender:     registerRecord.Gender,
+			Email:      registerRecord.Email,
+			IsAdmin:    0, // 默认注册的都不是管理员
+			CreateTime: time.Now(),
+			UpdateTime: time.Now(),
+		}
+		err = createUser(&user)
+		return err, user
+	} else {
+		return nil, registerRecord
+	}
 }
 
 func GetUserRegisterRecord(r validation.GetUserRegisterRecord) (err error, data interface{}) {
@@ -84,5 +132,16 @@ func Login(r validation.Login) (err error, data interface{}) {
 		return
 	} else {
 		return nil, loginUser
+	}
+}
+
+func createUser(user *model.UmsUser) error {
+	db := global.WM_DB.Model(&model.UmsUser{})
+	result := db.Create(&user)
+	if err := result.Error; err != nil {
+		return err
+	} else {
+		global.WM_LOG.Info("新增用户成功", zap.Any("user", user))
+		return nil
 	}
 }
