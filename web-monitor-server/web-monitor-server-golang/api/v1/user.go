@@ -48,7 +48,8 @@ func AuditUserRegisterRecord(c *gin.Context) {
 
 func GetUserRegisterRecord(c *gin.Context) {
 	var r validation.GetUserRegisterRecord
-	_ = c.Bind(&r)
+	err := c.Bind(&r)
+	global.WM_LOG.Error("Bind失败", zap.Any("err", err))
 	if err := utils.ValidateStruct(r); err != nil {
 		global.WM_LOG.Error("查询注册记录失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -71,6 +72,22 @@ func Login(c *gin.Context) {
 	} else {
 		if err, data := service.Login(r); err != nil {
 			global.WM_LOG.Error("登录失败", zap.Any("err", err))
+			response.FailWithError(err, c)
+		} else {
+			response.SuccessWithData(data, c)
+		}
+	}
+}
+
+func GetUser(c *gin.Context) {
+	var r validation.GetUser
+	_ = c.Bind(&r)
+	if err := utils.ValidateStruct(r); err != nil {
+		global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		if err, data := service.GetUser(r); err != nil {
+			global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
 			response.FailWithError(err, c)
 		} else {
 			response.SuccessWithData(data, c)

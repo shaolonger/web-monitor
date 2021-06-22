@@ -5,7 +5,6 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"math"
-	"strconv"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
@@ -54,13 +53,12 @@ func AuditUserRegisterRecord(r validation.AuditUserRegisterRecord) (err error, d
 
 	// 保存用户记录审批表
 	user = model.UmsUser{}
-	auditResult, _ := strconv.Atoi(r.AuditResult)
-	registerRecord.AuditResult = int8(auditResult)
+	registerRecord.AuditResult = *r.AuditResult
 	registerRecord.UpdateTime = time.Now()
 	db.Save(registerRecord)
 
 	// 若为审批通过，则需在用户表中新增用户
-	if auditResult == 1 {
+	if *r.AuditResult == 1 {
 		user = model.UmsUser{
 			Username:   registerRecord.Username,
 			Password:   registerRecord.Password,
@@ -87,7 +85,7 @@ func GetUserRegisterRecord(r validation.GetUserRegisterRecord) (err error, data 
 	var records []model.UmsUserRegisterRecord
 
 	// 审核结果
-	if r.AuditResult != "" {
+	if r.AuditResult != nil {
 		db = db.Where("`audit_result` = ?", r.AuditResult)
 	}
 	// 开始时间、结束时间
@@ -133,6 +131,40 @@ func Login(r validation.Login) (err error, data interface{}) {
 	} else {
 		return nil, loginUser
 	}
+}
+
+func GetUser(r validation.GetUser) (err error, data interface{}) {
+	//limit := r.PageSize
+	//offset := limit * (r.PageNum - 1)
+	//db := global.WM_DB.Model(&model.UmsUserRegisterRecord{})
+	//var totalNum int64
+	//var records []model.UmsUserRegisterRecord
+	//
+	//// 审核结果
+	//if r.AuditResult != "" {
+	//	db = db.Where("`audit_result` = ?", r.AuditResult)
+	//}
+	//// 开始时间、结束时间
+	//if r.StartTime != "" && r.EndTime != "" {
+	//	db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
+	//} else if r.StartTime != "" {
+	//	db = db.Where("`create_time` >= ?", r.StartTime)
+	//} else if r.EndTime != "" {
+	//	db = db.Where("`create_time` <= ?", r.EndTime)
+	//}
+	//
+	//err = db.Count(&totalNum).Error
+	//err = db.Limit(limit).Offset(offset).Find(&records).Error
+	//data = map[string]interface{}{
+	//	"totalNum":  totalNum,
+	//	"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+	//	"pageNum":   r.PageNum,
+	//	"pageSize":  r.PageSize,
+	//	"records":   records,
+	//}
+	//return err, data
+
+	return
 }
 
 func createUser(user *model.UmsUser) error {
