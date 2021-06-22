@@ -7,3 +7,7 @@ type AmsSubscriberNotifyRecord struct {
 	State         int8   `json:"state" gorm:"not null;type:tinyint(1);comment:通知状态，0-失败，1-成功"`
 	Content       string `json:"content" gorm:"not null;type:text;comment:通知内容"`
 }
+
+func (a AmsSubscriberNotifyRecord) TableName() string {
+	return "ams_subscriber_notify_record"
+}

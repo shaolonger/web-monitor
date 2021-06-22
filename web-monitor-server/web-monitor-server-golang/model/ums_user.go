@@ -14,3 +14,7 @@ type UmsUser struct {
 	CreateTime time.Time `json:"createTime" gorm:"not null;comment:创建时间，格式为yyyy-MM-dd HH:mm:ss"`
 	UpdateTime time.Time `json:"updateTime" gorm:"comment:更新时间，格式为yyyy-MM-dd HH:mm:ss"`
 }
+
+func (u UmsUser) TableName() string {
+	return "ums_user"
+}

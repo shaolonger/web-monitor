@@ -24,3 +24,7 @@ type LmsResourceLoadErrorLog struct {
 	ResourceType      string    `json:"resourceType" gorm:"type:varchar(20);comment:资源类型"`
 	Status            string    `json:"status" gorm:"type:varchar(1);comment:加载状态"`
 }
+
+func (l LmsResourceLoadErrorLog) TableName() string {
+	return "lms_resource_load_error_log"
+}

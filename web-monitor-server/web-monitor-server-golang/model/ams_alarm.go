@@ -18,3 +18,7 @@ type AmsAlarm struct {
 	ProjectIdentifier string    `json:"projectIdentifier" gorm:"not null;type:varchar(200);comment:项目标识"`
 	IsDeleted         int8      `json:"isDeleted" gorm:"not null;type:tinyint(1);comment:是否已被删除，0-否，1-是"`
 }
+
+func (a AmsAlarm) TableName() string {
+	return "ams_alarm"
+}

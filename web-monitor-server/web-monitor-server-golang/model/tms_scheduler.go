@@ -12,3 +12,7 @@ type TmsScheduler struct {
 	UpdateTime     time.Time `json:"updateTime" gorm:"comment:更新时间，格式为yyyy-MM-dd HH:mm:ss"`
 	State          int8      `json:"state" gorm:"not null;type:tinyint(1);comment:执行状态，0-暂停，1-运行中"`
 }
+
+func (t TmsScheduler) TableName() string {
+	return "tms_scheduler"
+}

@@ -10,3 +10,7 @@ type TmsSchedulerRecord struct {
 	TimeCost    int8      `json:"timeCost" gorm:"type:int;comment:定时任务执行的时长，单位毫秒"`
 	ErrorMsg    string    `json:"errorMsg" gorm:"type:text;comment:执行失败的异常信息"`
 }
+
+func (t TmsSchedulerRecord) TableName() string {
+	return "tms_scheduler_record"
+}

@@ -9,3 +9,7 @@ type AmsSubscriber struct {
 	SchedulerId uint64    `json:"schedulerId" gorm:"not null;comment:定时任务id"`
 	CreateTime  time.Time `json:"createTime" gorm:"not null;comment:创建时间，格式为yyyy-MM-dd HH:mm:ss"`
 }
+
+func (a AmsSubscriber) TableName() string {
+	return "ams_subscriber"
+}

@@ -15,3 +15,7 @@ type PmsProject struct {
 	NotifyDtToken     int8      `json:"notifyDtToken" gorm:"type:text;comment:预警模块中的钉钉机器人access_token，用于预警模块中发送报警推送，多个用英文逗号隔开"`
 	NotifyEmail       int8      `json:"notifyEmail" gorm:"type:text;comment:预警模块中的邮件推送地址，多个用英文逗号隔开"`
 }
+
+func (p PmsProject) TableName() string {
+	return "pms_project"
+}

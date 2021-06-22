@@ -24,3 +24,7 @@ type LmsCustomErrorLog struct {
 	ErrorMessage      string    `json:"errorMessage" gorm:"not null;type:text;comment:错误信息"`
 	ErrorStack        string    `json:"errorStack" gorm:"type:text;comment:错误堆栈信息"`
 }
+
+func (l LmsCustomErrorLog) TableName() string {
+	return "lms_custom_error_log"
+}

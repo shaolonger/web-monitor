@@ -27,3 +27,7 @@ type LmsHttpErrorLog struct {
 	StatusText        string    `json:"statusText" gorm:"type:varchar(50);comment:请求状态文字描述"`
 	ResTime           string    `json:"resTime" gorm:"type:varchar(13);comment:响应时间"`
 }
+
+func (l LmsHttpErrorLog) TableName() string {
+	return "lms_http_error_log"
+}

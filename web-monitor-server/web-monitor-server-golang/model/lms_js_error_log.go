@@ -24,3 +24,7 @@ type LmsJsErrorLog struct {
 	ErrorMessage      string    `json:"errorMessage" gorm:"not null;type:text;comment:错误信息"`
 	ErrorStack        string    `json:"errorStack" gorm:"type:text;comment:错误堆栈信息"`
 }
+
+func (l LmsJsErrorLog) TableName() string {
+	return "lms_js_error_log"
+}

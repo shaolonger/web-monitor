@@ -10,3 +10,7 @@ type AmsAlarmSchedulerRelation struct {
 	Category    int8      `json:"category" gorm:"not null;type:tinyint(1);comment:订阅类型，1-钉钉机器人，2-邮箱"`
 	CreateTime  time.Time `json:"createTime" gorm:"comment:创建时间，即通知时间，格式为yyyy-MM-dd HH:mm:ss"`
 }
+
+func (a AmsAlarmSchedulerRelation) TableName() string {
+	return "ams_alarm_scheduler_relation"
+}

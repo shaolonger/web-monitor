@@ -15,3 +15,7 @@ type UmsUserRegisterRecord struct {
 	AuditUser   uint64    `json:"auditUser" gorm:"comment:审批人"`
 	AuditResult int8      `json:"auditResult" gorm:"type:tinyint(1);comment:审批结果，-1-未审核，0-不通过，1-通过"`
 }
+
+func (u UmsUserRegisterRecord) TableName() string {
+	return "ums_user_register_record"
+}
