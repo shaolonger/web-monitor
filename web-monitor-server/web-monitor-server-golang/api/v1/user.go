@@ -11,46 +11,48 @@ import (
 )
 
 func AddUserRegisterRecord(c *gin.Context) {
+	var err error
 	var r validation.AddUserRegisterRecord
-	_ = c.Bind(&r)
-	if err := utils.ValidateStruct(r); err != nil {
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("注册失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, entity := service.AddUserRegisterRecord(r); err != nil {
 		global.WM_LOG.Error("注册失败", zap.Any("err", err))
 		response.FailWithError(err, c)
 	} else {
-		// 保存实体
-		if err, entity := service.AddUserRegisterRecord(r); err != nil {
-			global.WM_LOG.Error("注册失败", zap.Any("err", err))
-			response.FailWithError(err, c)
-		} else {
-			global.WM_LOG.Info("注册成功", zap.Any("entity", entity))
-			response.SuccessWithData(entity, c)
-		}
+		global.WM_LOG.Info("注册成功", zap.Any("entity", entity))
+		response.SuccessWithData(entity, c)
 	}
 }
 
 func AuditUserRegisterRecord(c *gin.Context) {
+	var err error
 	var r validation.AuditUserRegisterRecord
-	_ = c.Bind(&r)
-	if err := utils.ValidateStruct(r); err != nil {
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, entity := service.AuditUserRegisterRecord(r); err != nil {
 		global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
 		response.FailWithError(err, c)
 	} else {
-		// 保存实体
-		if err, entity := service.AuditUserRegisterRecord(r); err != nil {
-			global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
-			response.FailWithError(err, c)
-		} else {
-			global.WM_LOG.Info("注册审批成功", zap.Any("entity", entity))
-			response.SuccessWithData(entity, c)
-		}
+		global.WM_LOG.Info("注册审批成功", zap.Any("entity", entity))
+		response.SuccessWithData(entity, c)
 	}
 }
 
 func GetUserRegisterRecord(c *gin.Context) {
+	var err error
 	var r validation.GetUserRegisterRecord
-	err := c.Bind(&r)
-	global.WM_LOG.Error("Bind失败", zap.Any("err", err))
-	if err := utils.ValidateStruct(r); err != nil {
+	err = c.ShouldBindQuery(&r)
+	if err != nil {
 		global.WM_LOG.Error("查询注册记录失败", zap.Any("err", err))
 		response.FailWithError(err, c)
 	} else {
@@ -64,18 +66,21 @@ func GetUserRegisterRecord(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
+	var err error
 	var r validation.Login
-	_ = c.Bind(&r)
-	if err := utils.ValidateStruct(r); err != nil {
+	err = c.ShouldBind(&r)
+	if err != nil {
 		global.WM_LOG.Error("登录失败", zap.Any("err", err))
 		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.Login(r)
+	if err != nil {
+		global.WM_LOG.Error("登录失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
 	} else {
-		if err, data := service.Login(r); err != nil {
-			global.WM_LOG.Error("登录失败", zap.Any("err", err))
-			response.FailWithError(err, c)
-		} else {
-			response.SuccessWithData(data, c)
-		}
+		response.SuccessWithData(data, c)
 	}
 }
 

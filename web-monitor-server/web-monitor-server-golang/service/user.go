@@ -41,7 +41,10 @@ func AuditUserRegisterRecord(r validation.AuditUserRegisterRecord) (err error, d
 	// 找到审批对象
 	err = db.First(&registerRecord).Error
 	if err != nil {
-		err = errors.New("找不到要审批的记录")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("找不到要审批的记录")
+		}
+		data = nil
 		return
 	}
 
@@ -112,19 +115,20 @@ func GetUserRegisterRecord(r validation.GetUserRegisterRecord) (err error, data 
 func Login(r validation.Login) (err error, data interface{}) {
 	db := global.WM_DB.Model(&model.UmsUser{})
 	db = db.Where("`username` = ? AND `password` = ?", r.Username, r.Password)
-	var userList []model.UmsUser
-	err = db.Find(&userList).Error
+	var user model.UmsUser
+	err = db.First(&user).Error
 
 	// 找不到用户
-	if len(userList) == 0 {
-		err = errors.New("用户名或密码不正确")
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("用户名或密码不正确")
+		}
 		data = nil
 		return
 	}
 
 	// 创建token
 	token := utils.GetToken()
-	user := userList[0]
 	err, loginUser := AddOrUpdateToken(token, user.Id, user.Username, user.IsAdmin)
 	if err != nil {
 		return
