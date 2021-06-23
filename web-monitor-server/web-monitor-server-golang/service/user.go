@@ -19,7 +19,7 @@ func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entit
 		Email:       r.Email,
 		Phone:       r.Phone,
 		Icon:        r.Icon,
-		Gender:      r.Gender,
+		Gender:      *r.Gender,
 		CreateTime:  time.Now(),
 		UpdateTime:  time.Now(),
 		AuditResult: -1,
@@ -39,7 +39,7 @@ func AuditUserRegisterRecord(r validation.AuditUserRegisterRecord) (err error, d
 	db = db.Where("`id` = ?", r.AuditId)
 
 	// 找到审批对象
-	err = db.Find(&registerRecord).Error
+	err = db.First(&registerRecord).Error
 	if err != nil {
 		err = errors.New("找不到要审批的记录")
 		return
