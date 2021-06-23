@@ -141,6 +141,8 @@ func (c *customLogger) Printf(message string, data ...interface{}) {
 			global.WM_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]))
 		case 4:
 			global.WM_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]), zap.Any("sql", data[3]))
+		case 5:
+			global.WM_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("error", data[1]), zap.Any("duration", data[2]), zap.Any("rows", data[3]), zap.Any("sql", data[4]))
 		}
 		return
 	}
