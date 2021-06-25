@@ -138,37 +138,45 @@ func Login(r validation.Login) (err error, data interface{}) {
 }
 
 func GetUser(r validation.GetUser) (err error, data interface{}) {
-	//limit := r.PageSize
-	//offset := limit * (r.PageNum - 1)
-	//db := global.WM_DB.Model(&model.UmsUserRegisterRecord{})
-	//var totalNum int64
-	//var records []model.UmsUserRegisterRecord
-	//
-	//// 审核结果
-	//if r.AuditResult != "" {
-	//	db = db.Where("`audit_result` = ?", r.AuditResult)
-	//}
-	//// 开始时间、结束时间
-	//if r.StartTime != "" && r.EndTime != "" {
-	//	db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
-	//} else if r.StartTime != "" {
-	//	db = db.Where("`create_time` >= ?", r.StartTime)
-	//} else if r.EndTime != "" {
-	//	db = db.Where("`create_time` <= ?", r.EndTime)
-	//}
-	//
-	//err = db.Count(&totalNum).Error
-	//err = db.Limit(limit).Offset(offset).Find(&records).Error
-	//data = map[string]interface{}{
-	//	"totalNum":  totalNum,
-	//	"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
-	//	"pageNum":   r.PageNum,
-	//	"pageSize":  r.PageSize,
-	//	"records":   records,
-	//}
-	//return err, data
-
-	return
+	var records []model.UmsUser
+	db := global.WM_DB.Model(&model.UmsUser{})
+	if *r.IsNeedPaging == 0 {
+		// 若不分页
+		err = db.Find(&records).Error
+		return err, records
+	} else if *r.IsNeedPaging == 1 {
+		// 若分页
+		var totalNum int64
+		limit := r.PageSize
+		offset := limit * (r.PageNum - 1)
+		// 用户名
+		if r.Username != "" {
+			db = db.Where("`username` like ?", "%"+r.Username+"%")
+		}
+		// 电话
+		if r.Phone != "" {
+			db = db.Where("`phone` like ?", "%"+r.Phone+"%")
+		}
+		// 性别
+		if r.Gender != nil {
+			db = db.Where("`gender` = ?", *r.Gender)
+		}
+		// 邮箱
+		if r.Email != "" {
+			db = db.Where("`email` like ?", "%"+r.Email+"%")
+		}
+		err = db.Count(&totalNum).Error
+		err = db.Limit(limit).Offset(offset).Find(&records).Error
+		data = map[string]interface{}{
+			"totalNum":  totalNum,
+			"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+			"pageNum":   r.PageNum,
+			"pageSize":  r.PageSize,
+			"records":   records,
+		}
+		return err, data
+	}
+	return nil, nil
 }
 
 func createUser(user *model.UmsUser) error {

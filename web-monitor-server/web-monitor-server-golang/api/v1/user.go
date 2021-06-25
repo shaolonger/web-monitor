@@ -7,7 +7,6 @@ import (
 	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
 	"web.monitor.com/service"
-	"web.monitor.com/utils"
 )
 
 func AddUserRegisterRecord(c *gin.Context) {
@@ -85,17 +84,19 @@ func Login(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
+	var err error
 	var r validation.GetUser
-	_ = c.Bind(&r)
-	if err := utils.ValidateStruct(r); err != nil {
+	err = c.ShouldBindQuery(&r)
+	if err != nil {
+		global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.GetUser(r)
+	if err != nil {
 		global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
 		response.FailWithError(err, c)
 	} else {
-		if err, data := service.GetUser(r); err != nil {
-			global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
-			response.FailWithError(err, c)
-		} else {
-			response.SuccessWithData(data, c)
-		}
+		response.SuccessWithData(data, c)
 	}
 }

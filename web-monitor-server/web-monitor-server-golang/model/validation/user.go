@@ -27,11 +27,11 @@ type Login struct {
 }
 
 type GetUser struct {
-	IsNeedPaging string `form:"isNeedPaging" binding:"required,oneof='0' '1'"`
-	PageNum      int    `form:"pageNum" binding:"omitempty,number,gt=0"`
-	PageSize     int    `form:"pageSize" binding:"omitempty,number,gt=0"`
+	IsNeedPaging *int8  `form:"isNeedPaging" binding:"omitempty,number,oneof=0 1"`
+	PageNum      int    `form:"pageNum" binding:"required_if=IsNeedPaging 1,number,gt=0"`
+	PageSize     int    `form:"pageSize" binding:"required_if=IsNeedPaging 1,number,gt=0"`
 	Username     string `form:"username"`
 	Phone        string `form:"phone"`
-	Gender       int8   `form:"gender" binding:"omitempty,oneof=0 1 2"`
-	Email        string `form:"email" binding:"omitempty,email"`
+	Gender       *int8  `form:"gender" binding:"omitempty,number,oneof=0 1 2"`
+	Email        string `form:"email"`
 }
