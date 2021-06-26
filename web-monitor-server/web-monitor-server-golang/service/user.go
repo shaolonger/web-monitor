@@ -179,6 +179,21 @@ func GetUser(r validation.GetUser) (err error, data interface{}) {
 	return nil, nil
 }
 
+func GetUserDetail(userId uint64) (err error, data interface{}) {
+	var user model.UmsUser
+	db := global.WM_DB.Model(&model.UmsUser{})
+	db = db.Where("`id` = ?", userId)
+	err = db.First(&user).Error
+
+	// 找不到用户
+	if err != nil {
+		err = errors.New("请求错误，用户不存在")
+		data = nil
+		return
+	}
+	return nil, user
+}
+
 func createUser(user *model.UmsUser) error {
 	db := global.WM_DB.Model(&model.UmsUser{})
 	result := db.Create(&user)

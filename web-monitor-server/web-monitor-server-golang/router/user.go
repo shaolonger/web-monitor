@@ -26,6 +26,7 @@ func InitUserRouterPrivate(Router *gin.RouterGroup) {
 	}
 	BaseRouter2 := Router.Group("user")
 	{
-		BaseRouter2.GET("get", v1.GetUser) // 多条件分页查询用户列表
+		BaseRouter2.GET("get", v1.GetUser)             // 多条件分页查询用户列表
+		BaseRouter2.GET("getDetail", v1.GetUserDetail) // 查询详情
 	}
 }

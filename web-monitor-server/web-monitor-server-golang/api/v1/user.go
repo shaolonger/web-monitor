@@ -100,3 +100,20 @@ func GetUser(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetUserDetail(c *gin.Context) {
+	var err error
+	err, userId := service.GetUserIdByContext(c)
+	if err != nil {
+		global.WM_LOG.Error("查询用户详情失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.GetUserDetail(userId)
+	if err != nil {
+		global.WM_LOG.Error("查询用户详情失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	response.SuccessWithData(data, c)
+}

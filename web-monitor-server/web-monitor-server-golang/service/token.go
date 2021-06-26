@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"errors"
+	"github.com/gin-gonic/gin"
 	"strconv"
 	"time"
 	"web.monitor.com/global"
@@ -61,6 +62,15 @@ func GetUserByToken(token string) (err error, loginUser response.LoginUser) {
 	}
 }
 
+func GetUserIdByContext(c *gin.Context) (err error, userId uint64) {
+	token := GetTokenByContext(c)
+	err, loginUser := GetUserByToken(token)
+	if err != nil {
+		return err, 0
+	}
+	return nil, loginUser.Id
+}
+
 func getExpiration() time.Duration {
 	expiration, err := strconv.Atoi(global.WM_CONFIG.Redis.Expiration)
 	if err != nil {
@@ -68,4 +78,8 @@ func getExpiration() time.Duration {
 	} else {
 		return time.Duration(expiration) * time.Minute
 	}
+}
+
+func GetTokenByContext(c *gin.Context) (token string) {
+	return c.GetHeader("token")
 }
