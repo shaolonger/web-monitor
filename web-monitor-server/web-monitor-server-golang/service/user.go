@@ -8,6 +8,7 @@ import (
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
+	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
 	"web.monitor.com/utils"
 )
@@ -179,8 +180,7 @@ func GetUser(r validation.GetUser) (err error, data interface{}) {
 	return nil, nil
 }
 
-func GetUserDetail(userId uint64) (err error, data interface{}) {
-	var user model.UmsUser
+func GetUserDetail(userId uint64) (err error, user model.UmsUser) {
 	db := global.WM_DB.Model(&model.UmsUser{})
 	db = db.Where("`id` = ?", userId)
 	err = db.First(&user).Error
@@ -188,10 +188,40 @@ func GetUserDetail(userId uint64) (err error, data interface{}) {
 	// 找不到用户
 	if err != nil {
 		err = errors.New("请求错误，用户不存在")
-		data = nil
 		return
 	}
 	return nil, user
+}
+
+func GetRelatedProjectList(userId uint64) (err error, data interface{}) {
+	var user model.UmsUser
+	err, user = GetUserDetail(userId)
+
+	// 找不到用户
+	if err != nil {
+		err = errors.New("请求错误，用户不存在")
+		data = nil
+		return
+	}
+
+	db := global.WM_DB.Model(&model.UmsUser{})
+	err = db.Preload("PmsProjects").First(&user, userId).Error
+
+	if err != nil {
+		err = errors.New("找不到用户关联的项目")
+		data = nil
+		return
+	}
+	global.WM_LOG.Info("用户关联的项目", zap.Any("user", user))
+
+	var list []response.RelatedProject
+	for _, project := range user.PmsProjects {
+		list = append(list, response.RelatedProject{
+			ProjectId:   project.Id,
+			ProjectName: project.ProjectName,
+		})
+	}
+	return nil, list
 }
 
 func createUser(user *model.UmsUser) error {

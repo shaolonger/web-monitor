@@ -109,7 +109,24 @@ func GetUserDetail(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	err, data := service.GetUserDetail(userId)
+	err, user := service.GetUserDetail(userId)
+	if err != nil {
+		global.WM_LOG.Error("查询用户详情失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	response.SuccessWithData(user, c)
+}
+
+func GetRelatedProjectList(c *gin.Context) {
+	var err error
+	err, userId := service.GetUserIdByContext(c)
+	if err != nil {
+		global.WM_LOG.Error("查询用户详情失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.GetRelatedProjectList(userId)
 	if err != nil {
 		global.WM_LOG.Error("查询用户详情失败", zap.Any("err", err))
 		response.FailWithError(err, c)

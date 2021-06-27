@@ -6,3 +6,8 @@ type LoginUser struct {
 	IsAdmin  int8   `json:"isAdmin"`
 	Token    string `json:"token"`
 }
+
+type RelatedProject struct {
+	ProjectId   uint64 `json:"projectId"`
+	ProjectName string `json:"projectName"`
+}

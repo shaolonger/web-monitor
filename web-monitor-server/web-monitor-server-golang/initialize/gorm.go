@@ -74,23 +74,37 @@ func gormConfig(mod bool) *gorm.Config {
 // AutoMigrateMysqlTables
 // @description: 自动迁移数据库表结构
 func AutoMigrateMysqlTables(db *gorm.DB) {
-	err := db.AutoMigrate(
-		model.AmsAlarm{},
-		model.AmsAlarmRecord{},
-		model.AmsAlarmSchedulerRelation{},
-		model.AmsSubscriber{},
-		model.AmsSubscriberNotifyRecord{},
-		model.LmsClientUser{},
-		model.LmsCustomErrorLog{},
-		model.LmsHttpErrorLog{},
-		model.LmsJsErrorLog{},
-		model.LmsResourceLoadErrorLog{},
-		model.PmsProject{},
-		model.TmsScheduler{},
-		model.TmsSchedulerRecord{},
-		model.UmsUser{},
-		model.UmsUserProjectRelation{},
-		model.UmsUserRegisterRecord{},
+	var err error
+
+	// 自定义连接表(也就是gorm里所谓的"JoinTable"，实际上就是associative table或junction table)
+	err = db.SetupJoinTable(&model.UmsUser{}, "PmsProjects", &model.UmsUserProjectRelation{})
+	if err != nil {
+		global.WM_LOG.Error("自定义连接表失败:UmsUserProjectRelation", zap.Any("err", err))
+		os.Exit(0)
+	}
+	err = db.SetupJoinTable(&model.PmsProject{}, "UmsUsers", &model.UmsUserProjectRelation{})
+	if err != nil {
+		global.WM_LOG.Error("自定义连接表失败:UmsUserProjectRelation", zap.Any("err", err))
+		os.Exit(0)
+	}
+
+	// 自动迁移数据库表结构
+	err = db.AutoMigrate(
+		&model.AmsAlarm{},
+		&model.AmsAlarmRecord{},
+		&model.AmsAlarmSchedulerRelation{},
+		&model.AmsSubscriber{},
+		&model.AmsSubscriberNotifyRecord{},
+		&model.LmsClientUser{},
+		&model.LmsCustomErrorLog{},
+		&model.LmsHttpErrorLog{},
+		&model.LmsJsErrorLog{},
+		&model.LmsResourceLoadErrorLog{},
+		&model.PmsProject{},
+		&model.TmsScheduler{},
+		&model.TmsSchedulerRecord{},
+		&model.UmsUser{},
+		&model.UmsUserRegisterRecord{},
 	)
 	if err != nil {
 		global.WM_LOG.Error("自动迁移数据库表结构失败", zap.Any("err", err))
