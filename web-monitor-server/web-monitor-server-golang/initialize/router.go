@@ -24,6 +24,7 @@ func Router() *gin.Engine {
 	PrivateGroup.Use(middleware.TokenAuth())
 	{
 		router.InitUserRouterPrivate(PrivateGroup)
+		router.InitProjectRouterPrivate(PrivateGroup)
 	}
 	global.WM_LOG.Info("路由注册成功")
 	return Router

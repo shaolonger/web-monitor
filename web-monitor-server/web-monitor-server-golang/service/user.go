@@ -14,7 +14,7 @@ import (
 )
 
 func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entity model.UmsUserRegisterRecord) {
-	e := model.UmsUserRegisterRecord{
+	entity = model.UmsUserRegisterRecord{
 		Username:    r.Username,
 		Password:    r.Password,
 		Email:       r.Email,
@@ -26,11 +26,11 @@ func AddUserRegisterRecord(r validation.AddUserRegisterRecord) (err error, entit
 		AuditResult: -1,
 	}
 	// 判断用户名是否已注册
-	if !errors.Is(global.WM_DB.Where("username = ?", e.Username).First(&e).Error, gorm.ErrRecordNotFound) {
-		return errors.New("用户已注册"), e
+	if !errors.Is(global.WM_DB.Where("username = ?", entity.Username).First(&entity).Error, gorm.ErrRecordNotFound) {
+		return errors.New("用户已注册"), entity
 	}
-	err = global.WM_DB.Create(&e).Error
-	return err, e
+	err = global.WM_DB.Create(&entity).Error
+	return err, entity
 }
 
 func AuditUserRegisterRecord(r validation.AuditUserRegisterRecord) (err error, data interface{}) {
@@ -224,10 +224,16 @@ func GetRelatedProjectList(userId uint64) (err error, data interface{}) {
 	return nil, list
 }
 
+func GetUserListByUserIdList(userIdList []uint64) (err error, userList []*model.UmsUser) {
+	db := global.WM_DB.Model(&model.UmsUser{})
+	err = db.Where("`id` IN ?", userIdList).Find(&userList).Error
+	return err, userList
+}
+
 func createUser(user *model.UmsUser) error {
 	db := global.WM_DB.Model(&model.UmsUser{})
-	result := db.Create(&user)
-	if err := result.Error; err != nil {
+	err := db.Create(&user).Error
+	if err != nil {
 		return err
 	} else {
 		global.WM_LOG.Info("新增用户成功", zap.Any("user", user))
