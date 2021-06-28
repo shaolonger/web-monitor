@@ -33,7 +33,7 @@ func AddProject(r validation.AddProject) (err error, data interface{}) {
 		UpdateTime:        time.Now(),
 		NotifyDtToken:     r.NotifyDtToken,
 		NotifyEmail:       r.NotifyEmail,
-		//UmsUsers:          userList,
+		UmsUsers:          userList,
 	}
 	err = db.Create(&project).Error
 	if err != nil {
