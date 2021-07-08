@@ -11,7 +11,7 @@ type Response struct {
 	Msg     string      `json:"msg"`
 }
 
-func ResponseFactory(success bool, data interface{}, msg string, c *gin.Context) {
+func Factory(success bool, data interface{}, msg string, c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
 		Success: success,
 		Data:    data,
@@ -20,9 +20,9 @@ func ResponseFactory(success bool, data interface{}, msg string, c *gin.Context)
 }
 
 func SuccessWithData(data interface{}, c *gin.Context) {
-	ResponseFactory(true, data, "", c)
+	Factory(true, data, "", c)
 }
 
 func FailWithError(err error, c *gin.Context) {
-	ResponseFactory(false, nil, err.Error(), c)
+	Factory(false, nil, err.Error(), c)
 }

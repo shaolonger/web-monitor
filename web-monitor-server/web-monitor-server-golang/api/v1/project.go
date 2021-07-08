@@ -29,3 +29,21 @@ func AddProject(c *gin.Context) {
 		response.SuccessWithData(entity, c)
 	}
 }
+
+func GetProject(c *gin.Context) {
+	var err error
+	var r validation.GetProject
+	err = c.ShouldBindQuery(&r)
+	if err != nil {
+		global.WM_LOG.Error("查询项目列表失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.GetProject(r)
+	if err != nil {
+		global.WM_LOG.Error("查询项目列表失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		response.SuccessWithData(data, c)
+	}
+}

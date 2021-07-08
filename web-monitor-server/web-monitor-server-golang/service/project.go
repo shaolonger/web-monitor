@@ -1,11 +1,13 @@
 package service
 
 import (
-	"fmt"
 	"go.uber.org/zap"
+	"math"
+	"strconv"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
+	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
 )
 
@@ -40,6 +42,48 @@ func AddProject(r validation.AddProject) (err error, data interface{}) {
 		global.WM_LOG.Error("保存项目实体失败", zap.Any("err", err))
 		return err, nil
 	}
-	fmt.Println(userList)
 	return nil, project
+}
+
+func GetProject(r validation.GetProject) (err error, data interface{}) {
+	var projects []model.PmsProject
+	var records []response.ProjectListItem
+	db := global.WM_DB.Model(&model.PmsProject{})
+	var totalNum int64
+	limit := r.PageSize
+	offset := limit * (r.PageNum - 1)
+	// 项目名称
+	if r.ProjectName != "" {
+		db = db.Where("`project_name` like ?", "%"+r.ProjectName+"%")
+	}
+	err = db.Count(&totalNum).Error
+	err = db.Limit(limit).Offset(offset).Find(&projects).Error
+	if err != nil {
+		return err, nil
+	}
+	for _, project := range projects {
+		var userList string
+		if len(project.UmsUsers) > 0 {
+			for _, umsUser := range project.UmsUsers {
+				userList = userList + strconv.FormatUint(umsUser.Id, 10) + ","
+			}
+		}
+		records = append(records, response.ProjectListItem{
+			Id:                project.Id,
+			ProjectName:       project.ProjectName,
+			ProjectIdentifier: project.ProjectIdentifier,
+			Description:       project.Description,
+			CreateTime:        project.CreateTime,
+			UpdateTime:        project.UpdateTime,
+			UserList:          userList,
+		})
+	}
+	data = map[string]interface{}{
+		"totalNum":  totalNum,
+		"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+		"pageNum":   r.PageNum,
+		"pageSize":  r.PageSize,
+		"records":   records,
+	}
+	return err, data
 }

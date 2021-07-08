@@ -5,7 +5,7 @@ import (
 	"web.monitor.com/api/v1"
 )
 
-// 公开路由，不需要权限校验
+// InitUserRouterPublic 公开路由，不需要权限校验
 func InitUserRouterPublic(Router *gin.RouterGroup) {
 	BaseRouter1 := Router.Group("userRegisterRecord")
 	{
@@ -17,7 +17,7 @@ func InitUserRouterPublic(Router *gin.RouterGroup) {
 	}
 }
 
-// 私有路由，需要权限校验
+// InitUserRouterPrivate 私有路由，需要权限校验
 func InitUserRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter1 := Router.Group("userRegisterRecord")
 	{
