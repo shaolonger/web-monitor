@@ -11,3 +11,14 @@ type ProjectListItem struct {
 	UpdateTime        time.Time `json:"updateTime"`
 	UserList          string    `json:"userList"`
 }
+
+type GetByProjectIdentifier struct {
+	Id                uint64    `json:"id"`
+	ProjectName       string    `json:"projectName"`
+	ProjectIdentifier string    `json:"projectIdentifier"`
+	Description       string    `json:"description"`
+	AccessType        string    `json:"accessType"`
+	ActiveFuncs       string    `json:"activeFuncs"`
+	CreateTime        time.Time `json:"createTime"`
+	UpdateTime        time.Time `json:"updateTime"`
+}

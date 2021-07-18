@@ -18,6 +18,7 @@ func Router() *gin.Engine {
 	PublicGroup := Router.Group("")
 	{
 		router.InitUserRouterPublic(PublicGroup)
+		router.InitProjectRouterPublic(PublicGroup)
 	}
 	// PrivateGroup，即需要权限校验的私有API
 	PrivateGroup := Router.Group("")

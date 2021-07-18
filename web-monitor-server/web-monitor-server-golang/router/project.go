@@ -5,6 +5,14 @@ import (
 	v1 "web.monitor.com/api/v1"
 )
 
+// InitProjectRouterPublic 公开路由，不需要权限校验
+func InitProjectRouterPublic(Router *gin.RouterGroup) {
+	BaseRouter := Router.Group("project")
+	{
+		BaseRouter.GET("getByProjectIdentifier", v1.GetProjectByProjectIdentifier) // 根据项目标识查询项目
+	}
+}
+
 // InitProjectRouterPrivate 私有路由，需要权限校验
 func InitProjectRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("project")

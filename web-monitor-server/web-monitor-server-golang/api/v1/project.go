@@ -47,3 +47,21 @@ func GetProject(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetProjectByProjectIdentifier(c *gin.Context) {
+	var err error
+	var r validation.GetProjectByProjectIdentifier
+	err = c.ShouldBindQuery(&r)
+	if err != nil {
+		global.WM_LOG.Error("根据项目标识查询项目失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.GetProjectByProjectIdentifier(r)
+	if err != nil {
+		global.WM_LOG.Error("根据项目标识查询项目失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		response.SuccessWithData(data, c)
+	}
+}

@@ -88,3 +88,27 @@ func GetProject(r validation.GetProject) (err error, data interface{}) {
 	}
 	return err, data
 }
+
+func GetProjectByProjectIdentifier(r validation.GetProjectByProjectIdentifier) (err error, data interface{}) {
+	var project model.PmsProject
+	db := global.WM_DB.Model(&model.PmsProject{})
+	// 项目标识
+	if r.ProjectIdentifier != "" {
+		db = db.Where("`project_identifier` = ?", r.ProjectIdentifier)
+	}
+	err = db.First(&project).Error
+	if err != nil {
+		return err, nil
+	}
+	projectRes := response.GetByProjectIdentifier{
+		Id:                project.Id,
+		ProjectName:       project.ProjectName,
+		ProjectIdentifier: project.ProjectIdentifier,
+		Description:       project.Description,
+		AccessType:        project.AccessType,
+		ActiveFuncs:       project.ActiveFuncs,
+		CreateTime:        project.CreateTime,
+		UpdateTime:        project.UpdateTime,
+	}
+	return err, projectRes
+}

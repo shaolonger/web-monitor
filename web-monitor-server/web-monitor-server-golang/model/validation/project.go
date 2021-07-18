@@ -16,3 +16,7 @@ type GetProject struct {
 	PageInfo
 	ProjectName string `form:"projectName"`
 }
+
+type GetProjectByProjectIdentifier struct {
+	ProjectIdentifier string `form:"projectIdentifier" binding:"required"`
+}
