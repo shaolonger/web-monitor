@@ -67,6 +67,7 @@ func GetProject(r validation.GetProject) (err error, data interface{}) {
 			for _, umsUser := range project.UmsUsers {
 				userList = userList + strconv.FormatUint(umsUser.Id, 10) + ","
 			}
+			userList = userList[:len(userList)-1] // 移除最后一个逗号
 		}
 		records = append(records, response.ProjectListItem{
 			Id:                project.Id,
