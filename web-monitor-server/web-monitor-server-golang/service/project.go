@@ -1,7 +1,9 @@
 package service
 
 import (
+	"errors"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"math"
 	"strconv"
 	"time"
@@ -111,4 +113,51 @@ func GetProjectByProjectIdentifier(r validation.GetProjectByProjectIdentifier) (
 		UpdateTime:        project.UpdateTime,
 	}
 	return err, projectRes
+}
+
+func UpdateProject(r validation.UpdateProject) (err error, data interface{}) {
+	var project model.PmsProject
+	var userList []*model.UmsUser
+	db := global.WM_DB.Model(&model.PmsProject{})
+	db = db.Where("`id` = ?", r.Id)
+	// 获取要更新的实体
+	err = db.Preload("UmsUsers").First(&project).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("项目不存在")
+		}
+		return err, nil
+	}
+	// 保存关联关系
+	err, userList = GetUserListByUserIdList(r.UserList)
+	if err != nil {
+		global.WM_LOG.Error("查询用户列表失败", zap.Any("err", err))
+		return err, nil
+	}
+	// 保存实体
+	project.ProjectName = r.ProjectName
+	project.ProjectIdentifier = r.ProjectIdentifier
+	project.Description = r.Description
+	project.AccessType = r.AccessType
+	project.ActiveFuncs = r.ActiveFuncs
+	project.IsAutoUpload = r.IsAutoUpload
+	project.UpdateTime = time.Now()
+	project.UmsUsers = userList
+	err = db.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&project).Error
+	if err != nil {
+		global.WM_LOG.Error("更新项目实体失败", zap.Any("err", err))
+		return err, nil
+	}
+	projectRes := response.UpdateByProjectIdentifier{
+		Id:                project.Id,
+		ProjectName:       project.ProjectName,
+		ProjectIdentifier: project.ProjectIdentifier,
+		Description:       project.Description,
+		AccessType:        project.AccessType,
+		ActiveFuncs:       project.ActiveFuncs,
+		IsAutoUpload:      project.IsAutoUpload,
+		CreateTime:        project.CreateTime,
+		UpdateTime:        project.UpdateTime,
+	}
+	return nil, projectRes
 }

@@ -20,3 +20,14 @@ type GetProject struct {
 type GetProjectByProjectIdentifier struct {
 	ProjectIdentifier string `form:"projectIdentifier" binding:"required"`
 }
+
+type UpdateProject struct {
+	Id                uint64   `json:"id"`
+	ProjectName       string   `form:"projectName"`
+	ProjectIdentifier string   `form:"projectIdentifier"`
+	Description       string   `form:"description"`
+	UserList          []uint64 `form:"userList"`
+	AccessType        string   `form:"accessType"`
+	ActiveFuncs       string   `form:"activeFuncs"`
+	IsAutoUpload      uint8    `form:"isAutoUpload"`
+}
