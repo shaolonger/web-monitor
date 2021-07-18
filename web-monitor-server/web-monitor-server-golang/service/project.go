@@ -57,7 +57,7 @@ func GetProject(r validation.GetProject) (err error, data interface{}) {
 		db = db.Where("`project_name` like ?", "%"+r.ProjectName+"%")
 	}
 	err = db.Count(&totalNum).Error
-	err = db.Limit(limit).Offset(offset).Find(&projects).Error
+	err = db.Limit(limit).Offset(offset).Preload("UmsUsers").Find(&projects).Error
 	if err != nil {
 		return err, nil
 	}
