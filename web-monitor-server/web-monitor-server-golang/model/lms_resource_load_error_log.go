@@ -8,7 +8,7 @@ type LmsResourceLoadErrorLog struct {
 	ProjectIdentifier string    `json:"projectIdentifier" gorm:"not null;type:varchar(200);comment:关联的项目标识"`
 	CreateTime        time.Time `json:"createTime" gorm:"not null;comment:创建时间，格式为yyyy-MM-dd HH:mm:ss"`
 	Cuuid             string    `json:"cUuid" gorm:"column:c_uuid;not null;type:char(36);comment:客户端唯一识别码，全称client uuid"`
-	Buid              uint64    `json:"bUid" gorm:"column:b_uuid;comment:业务用户ID"`
+	Buid              uint64    `json:"bUid" gorm:"column:b_uid;comment:业务用户ID"`
 	Buname            string    `json:"bUname" gorm:"column:b_uname;type:varchar(64);comment:业务用户名"`
 	PageUrl           string    `json:"pageUrl" gorm:"type:text;comment:页面URL"`
 	PageKey           string    `json:"pageKey" gorm:"type:varchar(50);comment:页面关键字"`
