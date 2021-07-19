@@ -20,6 +20,7 @@ func Router() *gin.Engine {
 		router.InitUserRouterPublic(PublicGroup)
 		router.InitProjectRouterPublic(PublicGroup)
 		router.InitJsErrorLogRouterPublic(PublicGroup)
+		router.InitCustomErrorLogRouterPublic(PublicGroup)
 	}
 	// PrivateGroup，即需要权限校验的私有API
 	PrivateGroup := Router.Group("")
@@ -28,6 +29,7 @@ func Router() *gin.Engine {
 		router.InitUserRouterPrivate(PrivateGroup)
 		router.InitProjectRouterPrivate(PrivateGroup)
 		router.InitJsErrorLogRouterPrivate(PrivateGroup)
+		router.InitCustomErrorLogRouterPrivate(PrivateGroup)
 	}
 	global.WM_LOG.Info("路由注册成功")
 	return Router
