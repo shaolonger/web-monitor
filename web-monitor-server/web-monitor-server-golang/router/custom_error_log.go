@@ -9,7 +9,7 @@ import (
 func InitCustomErrorLogRouterPublic(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("customErrorLog")
 	{
-		BaseRouter.PUT("add", v1.AddCustomErrorLog) // 新增js异常日志
+		BaseRouter.PUT("add", v1.AddCustomErrorLog) // 新增custom异常日志
 	}
 }
 
@@ -17,6 +17,7 @@ func InitCustomErrorLogRouterPublic(Router *gin.RouterGroup) {
 func InitCustomErrorLogRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("customErrorLog")
 	{
-		BaseRouter.GET("get", v1.GetCustomErrorLog) // 条件查询js异常日志
+		BaseRouter.GET("get", v1.GetCustomErrorLog)               // 条件查询custom异常日志
+		BaseRouter.GET("getByGroup", v1.GetCustomErrorLogByGroup) // 聚合查询custom异常日志
 	}
 }
