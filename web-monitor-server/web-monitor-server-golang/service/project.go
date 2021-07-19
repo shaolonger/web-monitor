@@ -136,9 +136,16 @@ func UpdateProject(r validation.UpdateProject) (err error, data interface{}) {
 		global.WM_LOG.Error("查询关联的用户列表失败", zap.Any("err", err))
 		return err, nil
 	}
-	err = global.WM_DB.Model(&project).Association("UmsUsers").Replace(userList)
+	// 先删除旧的关联关系
+	err = global.WM_DB.Model(&project).Association("UmsUsers").Clear()
 	if err != nil {
-		global.WM_LOG.Error("更新项目-用户关联关系失败", zap.Any("err", err))
+		global.WM_LOG.Error("更新项目-删除旧的关联关系", zap.Any("err", err))
+		return err, nil
+	}
+	// 再添加新的关联关系
+	err = global.WM_DB.Model(&project).Association("UmsUsers").Append(userList)
+	if err != nil {
+		global.WM_LOG.Error("更新项目-添加新的关联关系失败", zap.Any("err", err))
 		return err, nil
 	}
 
