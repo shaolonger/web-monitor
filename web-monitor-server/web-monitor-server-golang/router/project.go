@@ -17,8 +17,9 @@ func InitProjectRouterPublic(Router *gin.RouterGroup) {
 func InitProjectRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("project")
 	{
-		BaseRouter.PUT("add", v1.AddProject)        // 新增项目
-		BaseRouter.GET("get", v1.GetProject)        // 条件查询项目
-		BaseRouter.POST("update", v1.UpdateProject) // 更新项目
+		BaseRouter.PUT("add", v1.AddProject)              // 新增项目
+		BaseRouter.GET("get", v1.GetProject)              // 条件查询项目
+		BaseRouter.POST("update", v1.UpdateProject)       // 更新项目
+		BaseRouter.DELETE("delete/:id", v1.DeleteProject) // 删除项目
 	}
 }

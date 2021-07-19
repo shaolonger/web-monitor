@@ -188,3 +188,17 @@ func UpdateProject(r validation.UpdateProject) (err error, data interface{}) {
 	}
 	return nil, projectRes
 }
+
+func DeleteProject(projectId uint64) (err error, data interface{}) {
+	var project model.PmsProject
+	db := global.WM_DB.Model(&model.PmsProject{})
+	err = db.Where("`id` = ?", projectId).First(&project).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.New("项目不存在"), false
+	}
+	err = db.Delete(&project).Error
+	if err != nil {
+		return err, false
+	}
+	return nil, true
+}

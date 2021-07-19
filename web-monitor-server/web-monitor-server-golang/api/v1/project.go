@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strconv"
 	"web.monitor.com/global"
 	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
@@ -84,5 +85,28 @@ func UpdateProject(c *gin.Context) {
 	} else {
 		global.WM_LOG.Info("更新项目成功", zap.Any("entity", entity))
 		response.SuccessWithData(entity, c)
+	}
+}
+
+func DeleteProject(c *gin.Context) {
+	var err error
+	id := c.Param("id")
+	if id == "" {
+		global.WM_LOG.Error("删除项目失败，id不能为空", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	projectId, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		global.WM_LOG.Error("删除项目失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.DeleteProject(projectId)
+	if err != nil {
+		global.WM_LOG.Error("删除项目失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		response.SuccessWithData(data, c)
 	}
 }
