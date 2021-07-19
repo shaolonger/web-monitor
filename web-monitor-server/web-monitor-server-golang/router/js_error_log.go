@@ -17,6 +17,7 @@ func InitJsErrorLogRouterPublic(Router *gin.RouterGroup) {
 func InitJsErrorLogRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("jsErrorLog")
 	{
-		BaseRouter.GET("get", v1.GetJsErrorLog) // 条件查询js异常日志
+		BaseRouter.GET("get", v1.GetJsErrorLog)               // 条件查询js异常日志
+		BaseRouter.GET("getByGroup", v1.GetJsErrorLogByGroup) // 聚合查询js异常日志
 	}
 }

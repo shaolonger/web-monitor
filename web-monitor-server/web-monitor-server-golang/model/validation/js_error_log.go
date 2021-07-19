@@ -32,3 +32,15 @@ type GetJsErrorLog struct {
 	ErrorType         string `form:"errorType"`
 	ErrorMessage      string `form:"errorMessage"`
 }
+
+type GetJsErrorLogByGroup struct {
+	PageInfo
+	StartTime         string `form:"startTime" binding:"omitempty,datetime=2006-01-02 15:04:05"`
+	EndTime           string `form:"endTime" binding:"omitempty,datetime=2006-01-02 15:04:05"`
+	LogType           string `form:"logType"`
+	ProjectIdentifier string `form:"projectIdentifier"`
+	Buname            string `form:"bUname"`
+	PageUrl           string `form:"pageUrl"`
+	ErrorType         string `form:"errorType"`
+	ErrorMessage      string `form:"errorMessage"`
+}
