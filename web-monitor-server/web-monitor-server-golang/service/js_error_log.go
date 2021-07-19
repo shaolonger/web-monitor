@@ -2,6 +2,7 @@ package service
 
 import (
 	"go.uber.org/zap"
+	"math"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
@@ -39,4 +40,57 @@ func AddJsErrorLog(r validation.AddJsErrorLog) (err error, data interface{}) {
 		return err, false
 	}
 	return nil, true
+}
+
+func GetJsErrorLog(r validation.GetJsErrorLog) (err error, data interface{}) {
+	limit := r.PageSize
+	offset := limit * (r.PageNum - 1)
+	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
+	var totalNum int64
+	var records []model.LmsJsErrorLog
+
+	// 日志类型
+	if r.LogType != "" {
+		db = db.Where("`log_type` like ?", "%"+r.LogType+"%")
+	}
+	// 项目标识
+	if r.ProjectIdentifier != "" {
+		db = db.Where("`project_identifier` = ?", r.ProjectIdentifier)
+	}
+	// 用户名
+	if r.Buname != "" {
+		db = db.Where("`b_uname` like ?", "%"+r.Buname+"%")
+	}
+	// 页面URL
+	if r.PageUrl != "" {
+		db = db.Where("`page_url` like ?", "%"+r.PageUrl+"%")
+	}
+	// JS错误类型
+	if r.ErrorType != "" {
+		db = db.Where("`error_type` like ?", "%"+r.ErrorType+"%")
+	}
+	// JS错误信息
+	if r.ErrorMessage != "" {
+		db = db.Where("`error_message` like ?", "%"+r.ErrorMessage+"%")
+	}
+
+	// 开始时间、结束时间
+	if r.StartTime != "" && r.EndTime != "" {
+		db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
+	} else if r.StartTime != "" {
+		db = db.Where("`create_time` >= ?", r.StartTime)
+	} else if r.EndTime != "" {
+		db = db.Where("`create_time` <= ?", r.EndTime)
+	}
+
+	err = db.Count(&totalNum).Error
+	err = db.Limit(limit).Offset(offset).Find(&records).Error
+	data = map[string]interface{}{
+		"totalNum":  totalNum,
+		"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+		"pageNum":   r.PageNum,
+		"pageSize":  r.PageSize,
+		"records":   records,
+	}
+	return err, data
 }
