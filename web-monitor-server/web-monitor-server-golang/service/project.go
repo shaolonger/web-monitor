@@ -117,49 +117,60 @@ func GetProjectByProjectIdentifier(r validation.GetProjectByProjectIdentifier) (
 
 func UpdateProject(r validation.UpdateProject) (err error, data interface{}) {
 	var project model.PmsProject
-	var userList []*model.UmsUser
-	db := global.WM_DB.Model(&model.PmsProject{})
-	db = db.Where("`id` = ?", r.Id)
 
-	// 获取实体
-	err = db.First(&project).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			err = errors.New("项目不存在")
+	// 使用事务的方式提交，避免中途异常后导致错误改动了关联关系的问题
+	err = global.WM_DB.Transaction(func(tx *gorm.DB) error {
+		var userList []*model.UmsUser
+		db := tx.Model(&model.PmsProject{})
+		db = db.Where("`id` = ?", r.Id)
+
+		// 获取实体
+		err = db.First(&project).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				err = errors.New("项目不存在")
+			}
+			return err
 		}
-		return err, nil
-	}
 
-	// 更新关联关系
-	err, userList = GetUserListByUserIdList(r.UserList)
-	if err != nil {
-		global.WM_LOG.Error("查询关联的用户列表失败", zap.Any("err", err))
-		return err, nil
-	}
-	// 先删除旧的关联关系
-	err = global.WM_DB.Model(&project).Association("UmsUsers").Clear()
-	if err != nil {
-		global.WM_LOG.Error("更新项目-删除旧的关联关系", zap.Any("err", err))
-		return err, nil
-	}
-	// 再添加新的关联关系
-	err = global.WM_DB.Model(&project).Association("UmsUsers").Append(userList)
-	if err != nil {
-		global.WM_LOG.Error("更新项目-添加新的关联关系失败", zap.Any("err", err))
-		return err, nil
-	}
+		// 更新关联关系
+		err, userList = GetUserListByUserIdList(r.UserList)
+		if err != nil {
+			global.WM_LOG.Error("查询关联的用户列表失败", zap.Any("err", err))
+			return err
+		}
+		// 先删除旧的关联关系
+		err = tx.Model(&project).Association("UmsUsers").Clear()
+		if err != nil {
+			global.WM_LOG.Error("更新项目-删除旧的关联关系", zap.Any("err", err))
+			return err
+		}
+		// 再添加新的关联关系
+		err = tx.Model(&project).Association("UmsUsers").Append(userList)
+		if err != nil {
+			global.WM_LOG.Error("更新项目-添加新的关联关系失败", zap.Any("err", err))
+			return err
+		}
 
-	// 更新实体
-	project.ProjectName = r.ProjectName
-	project.ProjectIdentifier = r.ProjectIdentifier
-	project.Description = r.Description
-	project.AccessType = r.AccessType
-	project.ActiveFuncs = r.ActiveFuncs
-	project.IsAutoUpload = r.IsAutoUpload
-	project.UpdateTime = time.Now()
-	err = db.Save(&project).Error
+		// 更新实体
+		project.ProjectName = r.ProjectName
+		project.ProjectIdentifier = r.ProjectIdentifier
+		project.Description = r.Description
+		project.AccessType = r.AccessType
+		project.ActiveFuncs = r.ActiveFuncs
+		project.IsAutoUpload = r.IsAutoUpload
+		project.UpdateTime = time.Now()
+		err = db.Save(&project).Error
+		if err != nil {
+			global.WM_LOG.Error("更新项目实体失败", zap.Any("err", err))
+			return err
+		}
+
+		return nil
+	})
+
 	if err != nil {
-		global.WM_LOG.Error("更新项目实体失败", zap.Any("err", err))
+		global.WM_LOG.Error("更新项目实体失败-事务回滚", zap.Any("err", err))
 		return err, nil
 	}
 
