@@ -120,7 +120,7 @@ func GetHttpErrorLogByGroup(r validation.GetHttpErrorLogByGroup) (err error, dat
 
 	// 基础查询
 	dbCount := global.WM_DB.Model(&model.LmsHttpErrorLog{})
-	dbData := db.Select("count(id) as count, max(create_time) as latest_record_time, count(distinct c_uuid) as affect_user_count, http_url_complete")
+	dbData := db.Select("count(id) as count, max(create_time) as latest_record_time, count(distinct c_uuid) as affect_user_count, http_url_complete as error_message")
 
 	// 日志类型
 	if r.LogType != "" {
