@@ -172,3 +172,14 @@ func GetCustomErrorLogByGroup(r validation.GetCustomErrorLogByGroup) (err error,
 	}
 	return err, data
 }
+
+// GetCusCountByIdBetweenStartTimeAndEndTime 查询某个时间段内的日志总数
+func GetCusCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTime string, endTime string) (error, int64) {
+	var err error
+	var count int64
+	db := global.WM_DB.Model(&model.LmsCustomErrorLog{})
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	err = db.Count(&count).Error
+	return err, count
+}

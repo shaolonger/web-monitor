@@ -197,3 +197,14 @@ func GetOverallByTimeRange(r validation.GetOverallByTimeRange) (err error, data 
 	}
 	return nil, result
 }
+
+// GetResCountByIdBetweenStartTimeAndEndTime 查询某个时间段内的日志总数
+func GetResCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTime string, endTime string) (error, int64) {
+	var err error
+	var count int64
+	db := global.WM_DB.Model(&model.LmsResourceLoadErrorLog{})
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	err = db.Count(&count).Error
+	return err, count
+}

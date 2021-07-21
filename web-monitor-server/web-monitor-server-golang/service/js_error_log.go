@@ -172,3 +172,14 @@ func GetJsErrorLogByGroup(r validation.GetJsErrorLogByGroup) (err error, data in
 	}
 	return err, data
 }
+
+// GetJsCountByIdBetweenStartTimeAndEndTime 查询某个时间段内的日志总数
+func GetJsCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTime string, endTime string) (error, int64) {
+	var err error
+	var count int64
+	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	err = db.Count(&count).Error
+	return err, count
+}

@@ -218,3 +218,14 @@ func GetLogCountByState(r validation.GetLogCountByState) (err error, data interf
 	}
 	return nil, results
 }
+
+// GetHttpCountByIdBetweenStartTimeAndEndTime 查询某个时间段内的日志总数
+func GetHttpCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTime string, endTime string) (error, int64) {
+	var err error
+	var count int64
+	db := global.WM_DB.Model(&model.LmsHttpErrorLog{})
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	err = db.Count(&count).Error
+	return err, count
+}
