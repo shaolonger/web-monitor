@@ -17,7 +17,8 @@ func InitHttpErrorLogRouterPublic(Router *gin.RouterGroup) {
 func InitHttpErrorLogRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("httpErrorLog")
 	{
-		BaseRouter.GET("get", v1.GetHttpErrorLog)               // 条件查询http异常日志
-		BaseRouter.GET("getByGroup", v1.GetHttpErrorLogByGroup) // 聚合查询http异常日志
+		BaseRouter.GET("get", v1.GetHttpErrorLog)                   // 条件查询http异常日志
+		BaseRouter.GET("getByGroup", v1.GetHttpErrorLogByGroup)     // 聚合查询http异常日志
+		BaseRouter.GET("getLogCountByState", v1.GetLogCountByState) // 按status分类获取http日志数量
 	}
 }

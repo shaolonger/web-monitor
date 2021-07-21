@@ -202,3 +202,19 @@ func GetHttpErrorLogByGroup(r validation.GetHttpErrorLogByGroup) (err error, dat
 	}
 	return err, data
 }
+
+func GetLogCountByState(r validation.GetLogCountByState) (err error, data interface{}) {
+	var results []response.GetLogCountByState
+	db := global.WM_DB.Model(&model.LmsHttpErrorLog{})
+
+	// 筛选条件
+	db = db.Select("status, count(id) as count").Where("`project_identifier` = ?", r.ProjectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
+	db = db.Group("status")
+
+	err = db.Find(&results).Error
+	if err != nil {
+		return err, nil
+	}
+	return nil, results
+}

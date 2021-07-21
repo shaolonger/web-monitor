@@ -8,3 +8,8 @@ type GetHttpErrorLogByGroup struct {
 	AffectUserCount  uint64    `json:"affectUserCount"`
 	ErrorMessage     string    `json:"errorMessage"`
 }
+
+type GetLogCountByState struct {
+	Status string `json:"status"`
+	Count  uint64 `json:"count"`
+}
