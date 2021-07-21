@@ -181,3 +181,19 @@ func GetResourceLoadErrorLogByGroup(r validation.GetResourceLoadErrorLogByGroup)
 	}
 	return err, data
 }
+
+func GetOverallByTimeRange(r validation.GetOverallByTimeRange) (err error, data interface{}) {
+	var result response.GetOverallByTimeRange
+	db := global.WM_DB.Model(&model.LmsResourceLoadErrorLog{})
+
+	// 筛选条件
+	db = db.Select("count(id) as affect_counts, count(distinct page_url) as affect_pages, count(distinct c_uuid) as affect_users")
+	db = db.Where("`project_identifier` = ?", r.ProjectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", r.StartTime, r.EndTime)
+
+	err = db.Scan(&result).Error
+	if err != nil {
+		return err, nil
+	}
+	return nil, result
+}

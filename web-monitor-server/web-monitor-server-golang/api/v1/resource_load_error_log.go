@@ -65,3 +65,22 @@ func GetResourceLoadErrorLogByGroup(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetOverallByTimeRange(c *gin.Context) {
+	var err error
+	var r validation.GetOverallByTimeRange
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("获取总览统计信息失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.GetOverallByTimeRange(r); err != nil {
+		global.WM_LOG.Error("获取总览统计信息失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("获取总览统计信息成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

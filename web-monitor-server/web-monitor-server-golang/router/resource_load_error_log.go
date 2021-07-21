@@ -17,7 +17,8 @@ func InitResourceLoadErrorLogRouterPublic(Router *gin.RouterGroup) {
 func InitResourceLoadErrorLogRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("resourceLoadErrorLog")
 	{
-		BaseRouter.GET("get", v1.GetResourceLoadErrorLog)               // 条件查询resourceLoad异常日志
-		BaseRouter.GET("getByGroup", v1.GetResourceLoadErrorLogByGroup) // 聚合查询resourceLoad异常日志
+		BaseRouter.GET("get", v1.GetResourceLoadErrorLog)                 // 条件查询resourceLoad异常日志
+		BaseRouter.GET("getByGroup", v1.GetResourceLoadErrorLogByGroup)   // 聚合查询resourceLoad异常日志
+		BaseRouter.GET("getOverallByTimeRange", v1.GetOverallByTimeRange) // 获取总览统计信息
 	}
 }
