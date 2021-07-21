@@ -208,3 +208,16 @@ func GetResCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTi
 	err = db.Count(&count).Error
 	return err, count
 }
+
+// getResLogCountByHours 按小时间隔获取各小时内的日志数量
+func getResLogCountByHours(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByHours) {
+	var err error
+	var results []response.GetLogCountByHours
+	db := global.WM_DB.Model(&model.LmsResourceLoadErrorLog{})
+	db = db.Select("date_format(create_time, '%Y-%m-%d %H') as hour, count(id) as count")
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	db = db.Group("hour")
+	err = db.Find(&results).Error
+	return err, results
+}

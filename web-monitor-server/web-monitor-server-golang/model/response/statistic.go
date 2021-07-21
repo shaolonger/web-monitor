@@ -6,3 +6,8 @@ type GetStatisticOverallByTimeRange struct {
 	ResourceLoadErrorLogCount int64 `json:"resourceLoadErrorLogCount"`
 	JsErrorLogCount           int64 `json:"jsErrorLogCount"`
 }
+
+type GetLogCountByHours struct {
+	Hour  string `json:"hour"`
+	Count int64  `json:"count"`
+}

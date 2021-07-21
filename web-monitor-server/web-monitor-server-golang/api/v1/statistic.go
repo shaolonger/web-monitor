@@ -27,3 +27,22 @@ func GetStatisticOverallByTimeRange(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetLogCountByHours(c *gin.Context) {
+	var err error
+	var r validation.GetLogCountByHours
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("按小时间隔获取各小时内的日志数量失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.GetLogCountByHours(r); err != nil {
+		global.WM_LOG.Error("按小时间隔获取各小时内的日志数量失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("按小时间隔获取各小时内的日志数量成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

@@ -10,5 +10,6 @@ func InitStatisticRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("statistic")
 	{
 		BaseRouter.GET("getOverallByTimeRange", v1.GetStatisticOverallByTimeRange) // 获取总览页信息
+		BaseRouter.GET("getLogCountByHours", v1.GetLogCountByHours)                // 按小时间隔获取各小时内的日志数量
 	}
 }
