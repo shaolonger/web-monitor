@@ -44,3 +44,17 @@ type GetAllLogsBetweenStartTimeAndEndTimeResult struct {
 	Count int64  `json:"count"`
 	Key   string `json:"key"`
 }
+
+type GetAllProjectOverviewListBetweenDiffDateData struct {
+	CustomErrorLogCount       int64 `json:"customErrorLogCount"`
+	HttpErrorLogCount         int64 `json:"httpErrorLogCount"`
+	ResourceLoadErrorLogCount int64 `json:"resourceLoadErrorLogCount"`
+	JsErrorLogCount           int64 `json:"jsErrorLogCount"`
+}
+
+type GetAllProjectOverviewListBetweenDiffDate struct {
+	Data              GetAllProjectOverviewListBetweenDiffDateData `json:"data"`
+	ProjectName       string                                       `json:"projectName"`
+	ProjectIdentifier string                                       `json:"projectIdentifier"`
+	ProjectId         uint64                                       `json:"projectId"`
+}

@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"strings"
 	"time"
 	"web.monitor.com/model/response"
@@ -328,4 +329,55 @@ func GetLogDistributionBetweenDiffDate(r validation.GetLogDistributionBetweenDif
 	}
 
 	return nil, resultList
+}
+
+func GetAllProjectOverviewListBetweenDiffDate(c *gin.Context, r validation.GetAllProjectOverviewListBetweenDiffDate) (err error, data interface{}) {
+	// 根据用户获取关联的项目
+	err, projectEntityList := GetRelatedProjectListByRequest(c)
+	if err != nil {
+		return err, nil
+	}
+
+	resultList := make([]response.GetAllProjectOverviewListBetweenDiffDate, 0)
+	if len(projectEntityList) > 0 {
+		for _, projectEntity := range projectEntityList {
+			var resultMap response.GetAllProjectOverviewListBetweenDiffDate
+			err, overviewMap := getOverallByTimeRange(projectEntity.ProjectIdentifier, r.StartTime, r.EndTime)
+			if err != nil {
+				return err, nil
+			}
+			resultMap.ProjectId = projectEntity.Id
+			resultMap.ProjectName = projectEntity.ProjectName
+			resultMap.ProjectIdentifier = projectEntity.ProjectIdentifier
+			resultMap.Data = *overviewMap
+			resultList = append(resultList, resultMap)
+		}
+	}
+	return nil, resultList
+}
+
+func getOverallByTimeRange(projectIdentifier string, startTime string, endTime string) (error, *response.GetAllProjectOverviewListBetweenDiffDateData) {
+	err, jsErrorLogCount := GetJsCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime)
+	if err != nil {
+		return err, nil
+	}
+	err, httpErrorLogCount := GetHttpCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime)
+	if err != nil {
+		return err, nil
+	}
+	err, resLoadErrorLogCount := GetResCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime)
+	if err != nil {
+		return err, nil
+	}
+	err, cusErrorLogCount := GetCusCountByIdBetweenStartTimeAndEndTime(projectIdentifier, startTime, endTime)
+	if err != nil {
+		return err, nil
+	}
+	result := response.GetAllProjectOverviewListBetweenDiffDateData{
+		CustomErrorLogCount:       cusErrorLogCount,
+		HttpErrorLogCount:         httpErrorLogCount,
+		ResourceLoadErrorLogCount: resLoadErrorLogCount,
+		JsErrorLogCount:           jsErrorLogCount,
+	}
+	return nil, &result
 }

@@ -36,3 +36,8 @@ type GetLogDistributionBetweenDiffDate struct {
 	LogType           string `form:"logType" binding:"required"`
 	Indicator         string `form:"indicator" binding:"required"`
 }
+
+type GetAllProjectOverviewListBetweenDiffDate struct {
+	StartTime string `form:"startTime" binding:"required,datetime=2006-01-02 15:04:05"`
+	EndTime   string `form:"endTime" binding:"required,datetime=2006-01-02 15:04:05"`
+}

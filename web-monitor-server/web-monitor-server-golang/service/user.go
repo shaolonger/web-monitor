@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"math"
@@ -183,7 +184,7 @@ func GetUser(r validation.GetUser) (err error, data interface{}) {
 func GetUserDetail(userId uint64) (err error, user model.UmsUser) {
 	db := global.WM_DB.Model(&model.UmsUser{})
 	db = db.Where("`id` = ?", userId)
-	err = db.First(&user).Error
+	err = db.Preload("PmsProjects").First(&user).Error
 
 	// 找不到用户
 	if err != nil {
@@ -193,7 +194,7 @@ func GetUserDetail(userId uint64) (err error, user model.UmsUser) {
 	return nil, user
 }
 
-func GetRelatedProjectList(userId uint64) (err error, data interface{}) {
+func GetRelatedProjectList(userId uint64) (err error, data []response.RelatedProject) {
 	var user model.UmsUser
 	err, user = GetUserDetail(userId)
 
@@ -239,4 +240,20 @@ func createUser(user *model.UmsUser) error {
 		global.WM_LOG.Info("新增用户成功", zap.Any("user", user))
 		return nil
 	}
+}
+
+func GetRelatedProjectListByRequest(c *gin.Context) (error, []*model.PmsProject) {
+	// 获取登录用户信息
+	token := GetTokenByContext(c)
+	err, loginUser := GetUserByToken(token)
+	if err != nil {
+		return err, nil
+	}
+	err, user := GetUserDetail(loginUser.Id)
+	if err != nil {
+		return err, nil
+	}
+
+	// 获取关联的项目列表
+	return nil, user.PmsProjects
 }
