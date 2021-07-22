@@ -267,3 +267,15 @@ func GetHttpLogListByCreateTimeAndProjectIdentifier(projectIdentifier string, st
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// GetHttpAllLogsBetweenStartTimeAndEndTime 获取时间间隔内的所有日志
+func GetHttpAllLogsBetweenStartTimeAndEndTime(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetAllLogsBetweenStartTimeAndEndTime) {
+	var err error
+	var results []response.GetAllLogsBetweenStartTimeAndEndTime
+	db := global.WM_DB.Model(&model.LmsHttpErrorLog{})
+	db = db.Select("net_type, device_name, os, browser_name, status")
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	err = db.Find(&results).Error
+	return err, results
+}

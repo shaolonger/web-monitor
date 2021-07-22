@@ -237,3 +237,95 @@ func GetLogCountBetweenDiffDate(r validation.GetLogCountBetweenDiffDate) (err er
 	}
 	return nil, resultMap
 }
+
+func GetLogDistributionBetweenDiffDate(r validation.GetLogDistributionBetweenDiffDate) (err error, data interface{}) {
+	// 参数校验
+	// indicator合法的查询范围
+	indicatorLegalList := []string{
+		"net_type",      // 网络类型
+		"device_name",   // 设备类型
+		"os",            // 操作系统
+		"browser_name",  // 浏览器
+		"status",        // 状态码
+		"resource_type", // 资源类型
+	}
+	if !utils.IsStringArrContainsStr(indicatorLegalList, r.Indicator) {
+		return errors.New("indicator不合法"), nil
+	}
+
+	startTime, err := utils.ParseTimeStrInLocationByDefault(r.StartTime)
+	if err != nil {
+		return err, nil
+	}
+	endTime, err := utils.ParseTimeStrInLocationByDefault(r.EndTime)
+	if err != nil {
+		return err, nil
+	}
+
+	rawResultList := make([]response.GetAllLogsBetweenStartTimeAndEndTime, 0)
+	resultList := make([]response.GetAllLogsBetweenStartTimeAndEndTimeResult, 0)
+
+	switch r.LogType {
+	case "jsErrorLog":
+		err, rawResultList = GetJsAllLogsBetweenStartTimeAndEndTime(r.ProjectIdentifier, startTime, endTime)
+		if err != nil {
+			return err, nil
+		}
+		break
+	case "httpErrorLog":
+		err, rawResultList = GetHttpAllLogsBetweenStartTimeAndEndTime(r.ProjectIdentifier, startTime, endTime)
+		if err != nil {
+			return err, nil
+		}
+		break
+	case "resourceLoadErrorLog":
+		err, rawResultList = GetResAllLogsBetweenStartTimeAndEndTime(r.ProjectIdentifier, startTime, endTime)
+		if err != nil {
+			return err, nil
+		}
+		break
+	case "customErrorLog":
+		err, rawResultList = GetCusAllLogsBetweenStartTimeAndEndTime(r.ProjectIdentifier, startTime, endTime)
+		if err != nil {
+			return err, nil
+		}
+		break
+	}
+
+	if len(rawResultList) > 0 {
+		// 转换传参的indicator，与struct的field对应
+		indicatorFieldMap := map[string]string{
+			"net_type":      "NetType",      // 网络类型
+			"device_name":   "DeviceName",   // 设备类型
+			"os":            "Os",           // 操作系统
+			"browser_name":  "BrowserName",  // 浏览器
+			"status":        "Status",       // 状态码
+			"resource_type": "ResourceType", // 资源类型
+		}
+
+		for _, item := range rawResultList {
+			err, key := utils.GetStringValueByField(item, indicatorFieldMap[r.Indicator])
+			if err != nil || key == "" {
+				continue
+			}
+			var tempItem *response.GetAllLogsBetweenStartTimeAndEndTimeResult
+			for _, resultItem := range resultList {
+				if resultItem.Key == key {
+					tempItem = &resultItem
+					break
+				}
+			}
+			if tempItem == nil {
+				tempItem = &response.GetAllLogsBetweenStartTimeAndEndTimeResult{
+					Count: 1,
+					Key:   key,
+				}
+				resultList = append(resultList, *tempItem)
+			} else {
+				tempItem.Count++
+			}
+		}
+	}
+
+	return nil, resultList
+}

@@ -84,3 +84,22 @@ func GetLogCountBetweenDiffDate(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetLogDistributionBetweenDiffDate(c *gin.Context) {
+	var err error
+	var r validation.GetLogDistributionBetweenDiffDate
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.GetLogDistributionBetweenDiffDate(r); err != nil {
+		global.WM_LOG.Error("获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("获取两个日期之间的设备、操作系统、浏览器、网络类型的统计数据成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

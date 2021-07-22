@@ -28,3 +28,11 @@ type GetLogCountBetweenDiffDate struct {
 	IndicatorList     string `form:"indicatorList" binding:"required"`
 	TimeInterval      int    `form:"timeInterval" binding:"required,number,gt=60"`
 }
+
+type GetLogDistributionBetweenDiffDate struct {
+	StartTime         string `form:"startTime" binding:"required,datetime=2006-01-02 15:04:05"`
+	EndTime           string `form:"endTime" binding:"required,datetime=2006-01-02 15:04:05"`
+	ProjectIdentifier string `form:"projectIdentifier" binding:"required"`
+	LogType           string `form:"logType" binding:"required"`
+	Indicator         string `form:"indicator" binding:"required"`
+}

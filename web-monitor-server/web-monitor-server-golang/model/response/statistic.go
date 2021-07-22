@@ -30,3 +30,17 @@ type GetLogListByCreateTimeAndProjectIdentifierResult struct {
 	Count int64  `json:"count"`
 	Key   string `json:"key"`
 }
+
+type GetAllLogsBetweenStartTimeAndEndTime struct {
+	NetType      string `json:"netType"`
+	DeviceName   string `json:"deviceName"`
+	Os           string `json:"os"`
+	BrowserName  string `json:"browserName"`
+	Status       string `json:"status"`
+	ResourceType string `json:"resourceType"`
+}
+
+type GetAllLogsBetweenStartTimeAndEndTimeResult struct {
+	Count int64  `json:"count"`
+	Key   string `json:"key"`
+}
