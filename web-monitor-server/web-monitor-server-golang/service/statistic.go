@@ -98,3 +98,48 @@ func GetLogCountByHours(r validation.GetLogCountByHours) (err error, data interf
 	resultMap["ago"] = agoMap
 	return nil, resultMap
 }
+
+func GetLogCountByDays(r validation.GetLogCountByDays) (err error, data interface{}) {
+	var resultMap = make(map[string]int64)
+
+	layout := "2006-01-02"
+	startTime, err := utils.ParseTimeStrInLocationByLayout(r.StartTime, layout)
+	if err != nil {
+		return err, nil
+	}
+	endTime, err := utils.ParseTimeStrInLocationByLayout(r.EndTime, layout)
+	if err != nil {
+		return err, nil
+	}
+
+	daysGap := utils.GetDaysBetweenDateRange(startTime, endTime)
+	for i := 0; i < daysGap; i++ {
+		nowtStartDate := startTime.Add(time.Hour * time.Duration(i*24))
+		nowKey := nowtStartDate.Format("2006-01-02")
+		resultMap[nowKey] = 0
+	}
+
+	var searchList []response.GetLogCountByDays
+	switch r.LogType {
+	case "jsErrorLog":
+		_, searchList = getJsLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		break
+	case "httpErrorLog":
+		_, searchList = getHttpLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		break
+	case "resourceLoadErrorLog":
+		_, searchList = getResLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		break
+	case "customErrorLog":
+		_, searchList = getCusLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		break
+	}
+
+	if searchList != nil {
+		for _, valueMap := range searchList {
+			resultMap[valueMap.Day] = valueMap.Count
+		}
+	}
+
+	return nil, resultMap
+}

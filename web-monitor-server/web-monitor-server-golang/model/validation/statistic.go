@@ -12,3 +12,10 @@ type GetLogCountByHours struct {
 	LogType           string `form:"logType" binding:"required"`
 	ProjectIdentifier string `form:"projectIdentifier" binding:"required"`
 }
+
+type GetLogCountByDays struct {
+	StartTime         string `form:"startTime" binding:"required,datetime=2006-01-02"`
+	EndTime           string `form:"endTime" binding:"required,datetime=2006-01-02"`
+	LogType           string `form:"logType" binding:"required"`
+	ProjectIdentifier string `form:"projectIdentifier" binding:"required"`
+}

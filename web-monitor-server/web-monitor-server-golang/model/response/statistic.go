@@ -11,3 +11,8 @@ type GetLogCountByHours struct {
 	Hour  string `json:"hour"`
 	Count int64  `json:"count"`
 }
+
+type GetLogCountByDays struct {
+	Day   string `json:"day"`
+	Count int64  `json:"count"`
+}

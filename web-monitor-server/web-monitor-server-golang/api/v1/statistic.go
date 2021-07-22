@@ -46,3 +46,22 @@ func GetLogCountByHours(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetLogCountByDays(c *gin.Context) {
+	var err error
+	var r validation.GetLogCountByDays
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("按天间隔获取各日期内的日志数量失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.GetLogCountByDays(r); err != nil {
+		global.WM_LOG.Error("按天间隔获取各日期内的日志数量失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("按天间隔获取各日期内的日志数量成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

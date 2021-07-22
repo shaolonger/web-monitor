@@ -196,3 +196,16 @@ func getCusLogCountByHours(projectIdentifier string, startTime time.Time, endTim
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// getCusLogCountByDays 按天间隔获取各天内的日志数量
+func getCusLogCountByDays(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByDays) {
+	var err error
+	var results []response.GetLogCountByDays
+	db := global.WM_DB.Model(&model.LmsCustomErrorLog{})
+	db = db.Select("date_format(create_time, '%Y-%m-%d') as day, count(id) as count")
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
+	db = db.Group("day")
+	err = db.Find(&results).Error
+	return err, results
+}
