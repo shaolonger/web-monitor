@@ -65,3 +65,22 @@ func GetLogCountByDays(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetLogCountBetweenDiffDate(c *gin.Context) {
+	var err error
+	var r validation.GetLogCountBetweenDiffDate
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("按天间隔获取两个日期之间的对比数据失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.GetLogCountBetweenDiffDate(r); err != nil {
+		global.WM_LOG.Error("按天间隔获取两个日期之间的对比数据失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("按天间隔获取两个日期之间的对比数据成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"strings"
 	"time"
 	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
@@ -68,20 +70,20 @@ func GetLogCountByHours(r validation.GetLogCountByHours) (err error, data interf
 
 	switch r.LogType {
 	case "jsErrorLog":
-		_, nowSearchList = getJsLogCountByHours(r.ProjectIdentifier, startTime, endTime)
-		_, agoSearchList = getJsLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
+		_, nowSearchList = GetJsLogCountByHours(r.ProjectIdentifier, startTime, endTime)
+		_, agoSearchList = GetJsLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
 		break
 	case "httpErrorLog":
-		_, nowSearchList = getHttpLogCountByHours(r.ProjectIdentifier, startTime, endTime)
-		_, agoSearchList = getHttpLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
+		_, nowSearchList = GetHttpLogCountByHours(r.ProjectIdentifier, startTime, endTime)
+		_, agoSearchList = GetHttpLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
 		break
 	case "resourceLoadErrorLog":
-		_, nowSearchList = getResLogCountByHours(r.ProjectIdentifier, startTime, endTime)
-		_, agoSearchList = getResLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
+		_, nowSearchList = GetResLogCountByHours(r.ProjectIdentifier, startTime, endTime)
+		_, agoSearchList = GetResLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
 		break
 	case "customErrorLog":
-		_, nowSearchList = getCusLogCountByHours(r.ProjectIdentifier, startTime, endTime)
-		_, agoSearchList = getCusLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
+		_, nowSearchList = GetCusLogCountByHours(r.ProjectIdentifier, startTime, endTime)
+		_, agoSearchList = GetCusLogCountByHours(r.ProjectIdentifier, agoStartTime, agoEndTime)
 		break
 	}
 
@@ -122,16 +124,16 @@ func GetLogCountByDays(r validation.GetLogCountByDays) (err error, data interfac
 	var searchList []response.GetLogCountByDays
 	switch r.LogType {
 	case "jsErrorLog":
-		_, searchList = getJsLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		_, searchList = GetJsLogCountByDays(r.ProjectIdentifier, startTime, endTime)
 		break
 	case "httpErrorLog":
-		_, searchList = getHttpLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		_, searchList = GetHttpLogCountByDays(r.ProjectIdentifier, startTime, endTime)
 		break
 	case "resourceLoadErrorLog":
-		_, searchList = getResLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		_, searchList = GetResLogCountByDays(r.ProjectIdentifier, startTime, endTime)
 		break
 	case "customErrorLog":
-		_, searchList = getCusLogCountByDays(r.ProjectIdentifier, startTime, endTime)
+		_, searchList = GetCusLogCountByDays(r.ProjectIdentifier, startTime, endTime)
 		break
 	}
 
@@ -141,5 +143,97 @@ func GetLogCountByDays(r validation.GetLogCountByDays) (err error, data interfac
 		}
 	}
 
+	return nil, resultMap
+}
+
+func GetLogCountBetweenDiffDate(r validation.GetLogCountBetweenDiffDate) (err error, data interface{}) {
+	// 校验参数
+	logTypeLists := strings.Split(r.LogTypeList, ",")
+	if len(logTypeLists) == 0 {
+		err = errors.New("logTypeList格式错误，要以,隔开")
+		return err, nil
+	}
+	IndicatorList := strings.Split(r.IndicatorList, ",")
+	if len(IndicatorList) == 0 {
+		err = errors.New("indicatorList格式错误，要以,隔开")
+		return err, nil
+	}
+
+	resultMap := make(map[string]interface{})
+	for _, logType := range logTypeLists {
+		originResultList := make([]response.GetLogListByCreateTimeAndProjectIdentifier, 0)
+		startTime, err := utils.ParseTimeStrInLocationByDefault(r.StartTime)
+		if err != nil {
+			return err, nil
+		}
+		endTime, err := utils.ParseTimeStrInLocationByDefault(r.EndTime)
+		if err != nil {
+			return err, nil
+		}
+		switch logType {
+		case "jsErrorLog":
+			_, originResultList = GetJsLogListByCreateTimeAndProjectIdentifier(r.ProjectIdentifier, startTime, endTime)
+			break
+		case "httpErrorLog":
+			_, originResultList = GetHttpLogListByCreateTimeAndProjectIdentifier(r.ProjectIdentifier, startTime, endTime)
+			break
+		case "resourceLoadErrorLog":
+			_, originResultList = GetResLogListByCreateTimeAndProjectIdentifier(r.ProjectIdentifier, startTime, endTime)
+			break
+		case "customErrorLog":
+			_, originResultList = GetCusLogListByCreateTimeAndProjectIdentifier(r.ProjectIdentifier, startTime, endTime)
+			break
+		}
+		countGap := utils.GetCountBetweenDateRange(startTime, endTime, r.TimeInterval)
+		var startDate time.Time
+		var endDate time.Time
+		tempMap := make(map[string][]response.GetLogListByCreateTimeAndProjectIdentifier, 0)
+		for i := 0; i < countGap; i++ {
+			if startDate.IsZero() {
+				startDate = startTime
+			} else {
+				startDate = startDate.Add(time.Second * time.Duration(r.TimeInterval))
+			}
+			if endDate.IsZero() {
+				endDate = startTime.Add(time.Second * time.Duration((i+1)*r.TimeInterval))
+			} else {
+				endDate = endDate.Add(time.Second * time.Duration(r.TimeInterval))
+			}
+			startDateStr := startDate.Format(utils.DefaultLayout)
+			tempList := tempMap[startDateStr]
+			if tempList == nil {
+				tempList = make([]response.GetLogListByCreateTimeAndProjectIdentifier, 0)
+			}
+			for _, valueItem := range originResultList {
+				if valueItem.CreateTime.After(startDate) && valueItem.CreateTime.Before(endDate) {
+					tempList = append(tempList, valueItem)
+				}
+			}
+			tempMap[startDateStr] = tempList
+		}
+
+		logTypeResultList := make([]map[string]interface{}, 0)
+		for key, valueItem := range tempMap {
+			dataMap := make(map[string]interface{})
+			dataMap[key] = key
+
+			// 计算count，日志数量
+			if utils.IsStringArrContainsStr(IndicatorList, "count") {
+				dataMap["count"] = len(valueItem)
+			}
+
+			// 计算uv，影响的用户数
+			if utils.IsStringArrContainsStr(IndicatorList, "uv") {
+				tempSet := make(map[string]bool)
+				for _, value := range valueItem {
+					tempSet[value.Cuuid] = true
+				}
+				dataMap["uv"] = len(tempSet)
+			}
+
+			logTypeResultList = append(logTypeResultList, dataMap)
+		}
+		resultMap[logType] = logTypeResultList
+	}
 	return nil, resultMap
 }

@@ -184,8 +184,8 @@ func GetJsCountByIdBetweenStartTimeAndEndTime(projectIdentifier string, startTim
 	return err, count
 }
 
-// getJsLogCountByHours 按小时间隔获取各小时内的日志数量
-func getJsLogCountByHours(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByHours) {
+// GetJsLogCountByHours 按小时间隔获取各小时内的日志数量
+func GetJsLogCountByHours(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByHours) {
 	var err error
 	var results []response.GetLogCountByHours
 	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
@@ -197,8 +197,8 @@ func getJsLogCountByHours(projectIdentifier string, startTime time.Time, endTime
 	return err, results
 }
 
-// getJsLogCountByDays 按天间隔获取各天内的日志数量
-func getJsLogCountByDays(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByDays) {
+// GetJsLogCountByDays 按天间隔获取各天内的日志数量
+func GetJsLogCountByDays(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogCountByDays) {
 	var err error
 	var results []response.GetLogCountByDays
 	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
@@ -206,6 +206,18 @@ func getJsLogCountByDays(projectIdentifier string, startTime time.Time, endTime 
 	db = db.Where("`project_identifier` = ?", projectIdentifier)
 	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
 	db = db.Group("day")
+	err = db.Find(&results).Error
+	return err, results
+}
+
+// GetJsLogListByCreateTimeAndProjectIdentifier 获取时间间隔内的简易日志信息
+func GetJsLogListByCreateTimeAndProjectIdentifier(projectIdentifier string, startTime time.Time, endTime time.Time) (error, []response.GetLogListByCreateTimeAndProjectIdentifier) {
+	var err error
+	var results []response.GetLogListByCreateTimeAndProjectIdentifier
+	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
+	db = db.Select("id, c_uuid, create_time")
+	db = db.Where("`project_identifier` = ?", projectIdentifier)
+	db = db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime)
 	err = db.Find(&results).Error
 	return err, results
 }

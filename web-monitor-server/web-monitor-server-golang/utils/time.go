@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	Layout = "2006-01-02 15:04:05"
+	DefaultLayout = "2006-01-02 15:04:05"
 )
 
 // ParseTimeStrInLocationByDefault 将时间字符串转为time.Time
 func ParseTimeStrInLocationByDefault(timeStr string) (time.Time, error) {
-	result, err := time.ParseInLocation(Layout, timeStr, time.Local)
+	result, err := time.ParseInLocation(DefaultLayout, timeStr, time.Local)
 	return result, err
 }
 
@@ -29,6 +29,11 @@ func GetHoursBetweenDateRange(startTime time.Time, endTime time.Time) int {
 // GetDaysBetweenDateRange 获取两个日期之间相差的天数
 func GetDaysBetweenDateRange(startTime time.Time, endTime time.Time) int {
 	return int(math.Abs(endTime.Sub(startTime).Hours() / 24))
+}
+
+// GetCountBetweenDateRange 根据传入的单位(秒)，获取两个日期之间相差的单位数
+func GetCountBetweenDateRange(startTime time.Time, endTime time.Time, timeInterval int) int {
+	return int(math.Abs(endTime.Sub(startTime).Seconds() / float64(timeInterval)))
 }
 
 // GetDateBeforeOrAfterByDays 获取在参考日期相隔days天的日期
