@@ -53,8 +53,8 @@ func GetLogCountByHours(r validation.GetLogCountByHours) (err error, data interf
 	hoursGap := utils.GetHoursBetweenDateRange(startTime, endTime)
 
 	for i := 0; i < hoursGap; i++ {
-		nowtStartDate := startTime.Add(time.Second * time.Duration((i+1)*3600))
-		agoStartDate := startTime.Add(time.Second * time.Duration((i+1)*3600-7*24*3600))
+		nowtStartDate := startTime.Add(time.Hour * time.Duration(i+1))
+		agoStartDate := startTime.Add(time.Hour * time.Duration((i+1)-7*24))
 		nowKey := nowtStartDate.Format("2006-01-02 15")
 		agoKey := agoStartDate.Format("2006-01-02 15")
 		nowMap[nowKey] = 0
