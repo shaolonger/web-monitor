@@ -9,6 +9,7 @@ import (
 func InitLogRouterPublic(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("log")
 	{
-		BaseRouter.GET("add", v1.AddLog) // 通用日志打点上传
+		BaseRouter.GET("add", v1.AddLog)           // 通用日志打点上传
+		BaseRouter.GET("client/add", v1.AddClient) // 新增日志客户端用户
 	}
 }

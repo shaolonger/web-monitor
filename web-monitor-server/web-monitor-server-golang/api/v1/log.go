@@ -59,3 +59,22 @@ func AddLog(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func AddClient(c *gin.Context) {
+	var err error
+	var r validation.AddClient
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("新增日志客户端用户失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	// 保存实体
+	if err, data := service.AddClient(r); err != nil {
+		global.WM_LOG.Error("新增日志客户端用户失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("新增日志客户端用户成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}
