@@ -23,6 +23,7 @@ func Router() *gin.Engine {
 		router.InitCustomErrorLogRouterPublic(PublicGroup)
 		router.InitHttpErrorLogRouterPublic(PublicGroup)
 		router.InitResourceLoadErrorLogRouterPublic(PublicGroup)
+		router.InitLogRouterPublic(PublicGroup)
 	}
 	// PrivateGroup，即需要权限校验的私有API
 	PrivateGroup := Router.Group("")
