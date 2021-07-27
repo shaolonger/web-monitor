@@ -18,7 +18,6 @@ func AddResourceLoadErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.AddResourceLoadErrorLog(r); err != nil {
 		global.WM_LOG.Error("新增resourceLoad异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -37,7 +36,6 @@ func GetResourceLoadErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetResourceLoadErrorLog(r); err != nil {
 		global.WM_LOG.Error("条件查询resourceLoad异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -56,7 +54,6 @@ func GetResourceLoadErrorLogByGroup(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetResourceLoadErrorLogByGroup(r); err != nil {
 		global.WM_LOG.Error("聚合查询resourceLoad异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -75,7 +72,6 @@ func GetOverallByTimeRange(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetOverallByTimeRange(r); err != nil {
 		global.WM_LOG.Error("获取总览统计信息失败", zap.Any("err", err))
 		response.FailWithError(err, c)

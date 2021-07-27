@@ -18,7 +18,6 @@ func AddHttpErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.AddHttpErrorLog(r); err != nil {
 		global.WM_LOG.Error("新增http异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -37,7 +36,6 @@ func GetHttpErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetHttpErrorLog(r); err != nil {
 		global.WM_LOG.Error("条件查询http异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -56,7 +54,6 @@ func GetHttpErrorLogByGroup(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetHttpErrorLogByGroup(r); err != nil {
 		global.WM_LOG.Error("聚合查询http异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -75,7 +72,6 @@ func GetLogCountByState(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetLogCountByState(r); err != nil {
 		global.WM_LOG.Error("按status分类获取http日志数量失败", zap.Any("err", err))
 		response.FailWithError(err, c)

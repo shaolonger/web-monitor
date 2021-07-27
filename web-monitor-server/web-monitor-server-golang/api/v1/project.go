@@ -21,7 +21,6 @@ func AddProject(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, entity := service.AddProject(r); err != nil {
 		global.WM_LOG.Error("新增项目失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -78,7 +77,6 @@ func UpdateProject(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, entity := service.UpdateProject(r); err != nil {
 		global.WM_LOG.Error("更新项目失败", zap.Any("err", err))
 		response.FailWithError(err, c)

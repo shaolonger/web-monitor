@@ -18,7 +18,6 @@ func AddCustomErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.AddCustomErrorLog(r); err != nil {
 		global.WM_LOG.Error("新增custom异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -37,7 +36,6 @@ func GetCustomErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetCustomErrorLog(r); err != nil {
 		global.WM_LOG.Error("条件查询custom异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -56,7 +54,6 @@ func GetCustomErrorLogByGroup(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetCustomErrorLogByGroup(r); err != nil {
 		global.WM_LOG.Error("聚合查询custom异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)

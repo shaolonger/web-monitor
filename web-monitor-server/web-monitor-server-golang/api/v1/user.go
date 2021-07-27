@@ -18,7 +18,6 @@ func AddUserRegisterRecord(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, entity := service.AddUserRegisterRecord(r); err != nil {
 		global.WM_LOG.Error("注册失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -37,7 +36,6 @@ func AuditUserRegisterRecord(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, entity := service.AuditUserRegisterRecord(r); err != nil {
 		global.WM_LOG.Error("注册审批失败", zap.Any("err", err))
 		response.FailWithError(err, c)

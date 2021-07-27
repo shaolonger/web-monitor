@@ -18,7 +18,6 @@ func AddJsErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.AddJsErrorLog(r); err != nil {
 		global.WM_LOG.Error("新增js异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -37,7 +36,6 @@ func GetJsErrorLog(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetJsErrorLog(r); err != nil {
 		global.WM_LOG.Error("条件查询js异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)
@@ -56,7 +54,6 @@ func GetJsErrorLogByGroup(c *gin.Context) {
 		response.FailWithError(err, c)
 		return
 	}
-	// 保存实体
 	if err, data := service.GetJsErrorLogByGroup(r); err != nil {
 		global.WM_LOG.Error("聚合查询js异常日志失败", zap.Any("err", err))
 		response.FailWithError(err, c)

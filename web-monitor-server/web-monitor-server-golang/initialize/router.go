@@ -36,6 +36,7 @@ func Router() *gin.Engine {
 		router.InitHttpErrorLogRouterPrivate(PrivateGroup)
 		router.InitResourceLoadErrorLogRouterPrivate(PrivateGroup)
 		router.InitStatisticRouterPrivate(PrivateGroup)
+		router.InitLogRouterPrivate(PrivateGroup)
 	}
 	global.WM_LOG.Info("路由注册成功")
 	return Router
