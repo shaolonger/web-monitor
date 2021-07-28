@@ -33,6 +33,7 @@ func AddClient(r validation.AddClient) (err error, data interface{}) {
 
 func ListLog(r validation.ListLog) (err error, data interface{}) {
 	var db *gorm.DB
+	var records = make([]map[string]interface{}, 0)
 	limit := r.PageSize
 	offset := limit * (r.PageNum - 1)
 	var totalNum int64
@@ -72,45 +73,14 @@ func ListLog(r validation.ListLog) (err error, data interface{}) {
 		db = setParamSqlBuilder(db, con.Key, con.Value, con.Op)
 	}
 
-	// TODO 这里对recordsReturn的处理不够优雅，switch代码里冗余过多
-	// 主要是因为db.Find里如果直接传入recordsReturn会导致无法获取正确的结果
-	// 后续看是否有更好的处理方式
-	var recordsReturn interface{}
-	switch r.LogType {
-	case "jsErrorLog":
-		var records []model.LmsJsErrorLog
-		err = db.Count(&totalNum).Error
-		err = db.Limit(limit).Offset(offset).Find(&records).Order("create_time desc").Error
-		recordsReturn = records
-		break
-	case "httpErrorLog":
-		var records []model.LmsHttpErrorLog
-		err = db.Count(&totalNum).Error
-		err = db.Limit(limit).Offset(offset).Find(&records).Order("create_time desc").Error
-		recordsReturn = records
-		break
-	case "resourceLoadErrorLog":
-		var records []model.LmsResourceLoadErrorLog
-		err = db.Count(&totalNum).Error
-		err = db.Limit(limit).Offset(offset).Find(&records).Order("create_time desc").Error
-		recordsReturn = records
-		break
-	case "customErrorLog":
-		var records []model.LmsCustomErrorLog
-		err = db.Count(&totalNum).Error
-		err = db.Limit(limit).Offset(offset).Find(&records).Order("create_time desc").Error
-		recordsReturn = records
-		break
-	default:
-		err = errors.New("logType参数不合规")
-		return err, nil
-	}
+	err = db.Count(&totalNum).Error
+	err = db.Limit(limit).Offset(offset).Find(&records).Order("create_time desc").Error
 	data = map[string]interface{}{
 		"totalNum":  totalNum,
 		"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
 		"pageNum":   r.PageNum,
 		"pageSize":  r.PageSize,
-		"records":   recordsReturn,
+		"records":   records,
 	}
 	return err, data
 }
