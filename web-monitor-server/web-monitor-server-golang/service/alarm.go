@@ -149,11 +149,7 @@ func UpdateAlarm(r validation.UpdateAlarm) (err error, data interface{}) {
 		}
 		entity.UpdateTime = time.Now()
 		err = db.Save(&entity).Error
-		if err != nil {
-			return err
-		}
-
-		return nil
+		return err
 	})
 
 	if err != nil {
@@ -226,4 +222,38 @@ func GetAlarm(r validation.GetAlarm) (err error, data interface{}) {
 		"records":   records,
 	}
 	return err, data
+}
+
+func DeleteAlarm(alarmId uint64) (err error, data interface{}) {
+	var entity model.AmsAlarm
+
+	// 使用事务的方式提交，避免中途异常后导致错误改动了关联关系的问题
+	err = global.WM_DB.Transaction(func(tx *gorm.DB) error {
+
+		db := tx.Model(&model.AmsAlarm{})
+		err = db.Where("`id` = ?", alarmId).First(&entity).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("预警不存在")
+		}
+
+		// 删除关联的订阅者
+		err = DeleteAllByAlarmId(tx, alarmId)
+		if err != nil {
+			return err
+		}
+
+		// 停止预警定时任务
+		// TODO 停止已有的定时任务
+
+		// 删除实体记录
+		err = db.Delete(&entity).Error
+		return err
+	})
+
+	if err != nil {
+		global.WM_LOG.Error("删除预警失败-事务回滚", zap.Any("err", err))
+		return err, nil
+	}
+
+	return nil, true
 }

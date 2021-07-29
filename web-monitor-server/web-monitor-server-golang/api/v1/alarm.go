@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strconv"
 	"web.monitor.com/global"
 	"web.monitor.com/model/response"
 	"web.monitor.com/model/validation"
@@ -69,6 +70,29 @@ func GetAlarm(c *gin.Context) {
 		response.FailWithError(err, c)
 	} else {
 		global.WM_LOG.Info("查询预警成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}
+
+func DeleteAlarm(c *gin.Context) {
+	var err error
+	id := c.Param("id")
+	if id == "" {
+		global.WM_LOG.Error("删除预警失败，id不能为空", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	alarmId, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		global.WM_LOG.Error("删除预警失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	err, data := service.DeleteAlarm(alarmId)
+	if err != nil {
+		global.WM_LOG.Error("删除预警失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
 		response.SuccessWithData(data, c)
 	}
 }
