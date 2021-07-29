@@ -25,3 +25,10 @@ func AddSubscriber(tx *gorm.DB, s validation.Subscriber, alarmId uint64) (err er
 	}
 	return err
 }
+
+// DeleteAllByAlarmId 根据alarmId删除所有关联的subscriber
+func DeleteAllByAlarmId(tx *gorm.DB, alarmId uint64) (err error) {
+	db := tx.Model(&model.AmsSubscriber{})
+	err = db.Where("`alarm_id` = ?", alarmId).Delete(model.AmsSubscriber{}).Error
+	return err
+}

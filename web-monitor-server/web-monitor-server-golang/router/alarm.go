@@ -9,6 +9,7 @@ import (
 func InitAlarmRouterPrivate(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("alarm")
 	{
-		BaseRouter.PUT("add", v1.AddAlarm) // 新增预警
+		BaseRouter.PUT("add", v1.AddAlarm)        // 新增预警
+		BaseRouter.POST("update", v1.UpdateAlarm) // 编辑预警
 	}
 }
