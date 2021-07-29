@@ -28,3 +28,18 @@ type UpdateAlarm struct {
 	SubscriberList    []Subscriber `form:"subscriberList" json:"subscriberList"`
 	IsDeleted         *int8        `form:"isDeleted" json:"isDeleted" binding:"omitempty,number,oneof=0 1"`
 }
+
+type GetAlarm struct {
+	PageInfo
+	Name              string  `form:"name" json:"name" binding:"omitempty"`
+	ProjectIdentifier string  `form:"projectIdentifier" json:"projectIdentifier" binding:"omitempty"`
+	Level             *int8   `form:"level" json:"level" binding:"omitempty,number,oneof=-1 0 1 2"`
+	Category          *int8   `form:"category" json:"category" binding:"omitempty,number,oneof=0 1 2 3 4"`
+	Rule              string  `form:"rule" json:"rule" binding:"omitempty"`
+	StartTime         string  `form:"startTime" json:"startTime" binding:"omitempty,datetime=15:04:05"`
+	EndTime           string  `form:"endTime" json:"endTime" binding:"omitempty,datetime=15:04:05"`
+	SilentPeriod      *int8   `form:"silentPeriod" json:"silentPeriod" binding:"omitempty,number,oneof=0 1 2 3 4 5 6 7 8 9"`
+	IsActive          *int8   `form:"isActive" json:"isActive" binding:"omitempty,number,oneof=0 1"`
+	CreateBy          *uint64 `form:"createBy" json:"createBy"`
+	IsDeleted         *int8   `form:"isDeleted" json:"isDeleted" binding:"omitempty,number,oneof=0 1"`
+}

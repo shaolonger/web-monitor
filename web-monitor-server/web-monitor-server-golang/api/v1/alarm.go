@@ -54,3 +54,21 @@ func UpdateAlarm(c *gin.Context) {
 		response.SuccessWithData(data, c)
 	}
 }
+
+func GetAlarm(c *gin.Context) {
+	var err error
+	var r validation.GetAlarm
+	err = c.ShouldBind(&r)
+	if err != nil {
+		global.WM_LOG.Error("查询预警失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+		return
+	}
+	if err, data := service.GetAlarm(r); err != nil {
+		global.WM_LOG.Error("查询预警失败", zap.Any("err", err))
+		response.FailWithError(err, c)
+	} else {
+		global.WM_LOG.Info("查询预警成功", zap.Any("data", data))
+		response.SuccessWithData(data, c)
+	}
+}

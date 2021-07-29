@@ -11,5 +11,6 @@ func InitAlarmRouterPrivate(Router *gin.RouterGroup) {
 	{
 		BaseRouter.PUT("add", v1.AddAlarm)        // 新增预警
 		BaseRouter.POST("update", v1.UpdateAlarm) // 编辑预警
+		BaseRouter.GET("get", v1.GetAlarm)        // 查询预警
 	}
 }

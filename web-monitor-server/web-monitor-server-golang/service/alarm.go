@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"math"
 	"time"
 	"web.monitor.com/global"
 	"web.monitor.com/model"
@@ -83,30 +84,39 @@ func UpdateAlarm(r validation.UpdateAlarm) (err error, data interface{}) {
 		}
 
 		// 编辑内容
+		// 预警名称
 		if r.Name != "" {
 			entity.Name = r.Name
 		}
+		// 项目标识
 		if r.ProjectIdentifier != "" {
 			entity.ProjectIdentifier = r.ProjectIdentifier
 		}
+		// 报警等级
 		if r.Level != nil {
 			entity.Level = *r.Level
 		}
+		// 过滤条件
 		if r.Category != nil {
 			entity.Category = *r.Category
 		}
+		// 预警规则
 		if r.Rule != "" {
 			entity.Rule = r.Rule
 		}
+		// 报警时段-开始时间
 		if r.StartTime != "" {
 			entity.StartTime = r.StartTime
 		}
+		// 报警时段-结束时间
 		if r.EndTime != "" {
 			entity.EndTime = r.EndTime
 		}
+		// 静默期
 		if r.SilentPeriod != nil {
 			entity.SilentPeriod = *r.SilentPeriod
 		}
+		// 是否启用
 		if r.IsActive != nil {
 			// 若状态改为启动，则先停止已有的定时任务，再重新启动对应的定时任务
 			// TODO 停止已有的定时任务
@@ -115,6 +125,7 @@ func UpdateAlarm(r validation.UpdateAlarm) (err error, data interface{}) {
 			}
 			entity.IsActive = *r.IsActive
 		}
+		// 是否已被删除
 		if r.IsDeleted != nil {
 			entity.IsDeleted = *r.IsDeleted
 		}
@@ -151,4 +162,68 @@ func UpdateAlarm(r validation.UpdateAlarm) (err error, data interface{}) {
 	}
 
 	return nil, entity
+}
+
+func GetAlarm(r validation.GetAlarm) (err error, data interface{}) {
+	limit := r.PageSize
+	offset := limit * (r.PageNum - 1)
+	db := global.WM_DB.Model(&model.AmsAlarm{})
+	var totalNum int64
+	var records []model.AmsAlarm
+
+	// 预警名称
+	if r.Name != "" {
+		db = db.Where("`name` = ?", r.Name)
+	}
+	// 项目标识
+	if r.ProjectIdentifier != "" {
+		db = db.Where("`project_identifier` = ?", r.ProjectIdentifier)
+	}
+	// 报警等级
+	if r.Level != nil {
+		db = db.Where("`level` = ?", r.Level)
+	}
+	// 过滤条件
+	if r.Category != nil {
+		db = db.Where("`category` = ?", r.Category)
+	}
+	// 预警规则
+	if r.Rule != "" {
+		db = db.Where("`rule` like ?", "%"+r.Rule+"%")
+	}
+	// 报警时段-开始时间
+	if r.StartTime != "" {
+		db = db.Where("`start_time` = ?", r.StartTime)
+	}
+	// 报警时段-结束时间
+	if r.EndTime != "" {
+		db = db.Where("`end_time` = ?", r.EndTime)
+	}
+	// 静默期
+	if r.SilentPeriod != nil {
+		db = db.Where("`silent_period` = ?", r.SilentPeriod)
+	}
+	// 是否启用
+	if r.IsActive != nil {
+		db = db.Where("`is_active` = ?", r.IsActive)
+	}
+	// 创建人ID
+	if r.CreateBy != nil {
+		db = db.Where("`create_by` = ?", r.CreateBy)
+	}
+	// 是否已被删除
+	if r.IsDeleted != nil {
+		db = db.Where("`is_deleted` = ?", r.IsDeleted)
+	}
+
+	err = db.Count(&totalNum).Error
+	err = db.Limit(limit).Offset(offset).Find(&records).Error
+	data = map[string]interface{}{
+		"totalNum":  totalNum,
+		"totalPage": math.Ceil(float64(totalNum) / float64(r.PageSize)),
+		"pageNum":   r.PageNum,
+		"pageSize":  r.PageSize,
+		"records":   records,
+	}
+	return err, data
 }
