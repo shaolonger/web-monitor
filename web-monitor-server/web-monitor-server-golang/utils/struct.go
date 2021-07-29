@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"reflect"
 )
@@ -24,4 +25,10 @@ func GetStringValueByField(s interface{}, field string) (error, string) {
 		f := reflect.Indirect(r).FieldByName(field)
 		return nil, string(f.String())
 	}
+}
+
+// StructToJson Struct转Json
+func StructToJson(s interface{}) (str string, err error) {
+	jsonStr, err := json.Marshal(s)
+	return string(jsonStr), err
 }

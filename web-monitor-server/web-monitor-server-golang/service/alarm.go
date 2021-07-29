@@ -9,6 +9,7 @@ import (
 	"web.monitor.com/global"
 	"web.monitor.com/model"
 	"web.monitor.com/model/validation"
+	"web.monitor.com/utils"
 )
 
 func AddAlarm(r validation.AddAlarm, userId uint64) (err error, data interface{}) {
@@ -51,17 +52,20 @@ func AddAlarm(r validation.AddAlarm, userId uint64) (err error, data interface{}
 			}
 		}
 
+		// 启动预警定时任务
+		if entity.IsActive == 1 {
+			err = startAlarmScheduler(tx, &entity)
+			if err != nil {
+				return err
+			}
+		}
+
 		return nil
 	})
 
 	if err != nil {
 		global.WM_LOG.Error("新增预警失败-事务回滚", zap.Any("err", err))
 		return err, nil
-	}
-
-	// 启动预警定时任务
-	if entity.IsActive == 1 {
-		// TODO 创建定时任务
 	}
 
 	return nil, entity
@@ -256,4 +260,31 @@ func DeleteAlarm(alarmId uint64) (err error, data interface{}) {
 	}
 
 	return nil, true
+}
+
+// 启动预警定时任务
+func startAlarmScheduler(tx *gorm.DB, entity *model.AmsAlarm) error {
+	params, err := utils.StructToJson(entity)
+	if err != nil {
+		global.WM_LOG.Error("启动预警定时任务失败", zap.Any("err", err))
+		return err
+	}
+
+	// 保存定时任务
+	err, schedulerEntity := AddScheduler(tx, params)
+	if err != nil {
+		return err
+	}
+
+	// 保存预警-定时任务关联表
+	alarmId := entity.Id
+	schedulerId := schedulerEntity.Id
+	err = AddAlarmSchedulerRelation(tx, alarmId, schedulerId)
+	if err != nil {
+		return err
+	}
+
+	// TODO 启动定时任务
+
+	return nil
 }
