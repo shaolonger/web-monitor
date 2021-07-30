@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ import (
 	"web.monitor.com/model"
 	"web.monitor.com/model/validation"
 	"web.monitor.com/utils"
+	"web.monitor.com/utils/schedule"
 )
 
 func AddAlarm(r validation.AddAlarm, userId uint64) (err error, data interface{}) {
@@ -284,7 +286,23 @@ func startAlarmScheduler(tx *gorm.DB, entity *model.AmsAlarm) error {
 		return err
 	}
 
-	// TODO 启动定时任务
+	// 创建定时任务并启动
+	s := schedule.Scheduler{
+		BeanName:       schedulerEntity.BeanName,
+		MethodName:     schedulerEntity.MethodName,
+		Params:         schedulerEntity.Params,
+		SchedulerId:    schedulerEntity.Id,
+		CronExpression: schedulerEntity.CronExpression,
+	}
+	err = s.Start(func(params string) error {
+		var alarm model.AmsAlarm
+		err = json.Unmarshal([]byte(params), &alarm)
+		if err != nil {
+			return err
+		}
 
-	return nil
+		return nil
+	})
+
+	return err
 }

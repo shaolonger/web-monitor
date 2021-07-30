@@ -13,6 +13,7 @@ require (
 	github.com/lestrrat-go/strftime v1.0.4 // indirect
 	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/onsi/gomega v1.13.0 // indirect
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/spf13/viper v1.7.1
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect

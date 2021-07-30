@@ -12,6 +12,7 @@ const (
 	CronExpression = "*/10 * * * * ?"
 )
 
+// AddScheduler 保存定时任务
 func AddScheduler(tx *gorm.DB, params string) (error, *model.TmsScheduler) {
 	db := tx.Model(&model.TmsScheduler{})
 	schedulerEntity := model.TmsScheduler{
