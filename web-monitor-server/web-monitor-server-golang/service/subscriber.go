@@ -37,6 +37,9 @@ func DeleteAllByAlarmId(tx *gorm.DB, alarmId uint64) (err error) {
 func GetAllByAlarmId(alarmId uint64) []*model.AmsSubscriber {
 	db := global.WM_DB.Model(&model.AmsSubscriber{})
 	var records []*model.AmsSubscriber
-	db.Where("`alarm_id` = ?", alarmId).Find(records)
+	db.Where("`alarm_id` = ?", alarmId).Find(&records)
+	if records == nil {
+		global.WM_LOG.Error("根据alarmId获取所有关联的subscriber失败", zap.Any("err", "找不到记录"))
+	}
 	return records
 }
