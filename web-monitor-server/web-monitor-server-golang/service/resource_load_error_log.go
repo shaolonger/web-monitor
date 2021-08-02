@@ -258,3 +258,19 @@ func GetResAllLogsBetweenStartTimeAndEndTime(projectIdentifier string, startTime
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// CountResDistinctCUuidByCreateTimeBetween 获取时间范围内的影响用户数
+func CountResDistinctCUuidByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsResourceLoadErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Distinct("c_uuid").Count(&count)
+	return count
+}
+
+// CountResByCreateTimeBetween 获取时间范围内的日志数
+func CountResByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsResourceLoadErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Count(&count)
+	return count
+}

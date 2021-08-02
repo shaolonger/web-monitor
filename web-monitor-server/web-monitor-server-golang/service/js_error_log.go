@@ -233,3 +233,19 @@ func GetJsAllLogsBetweenStartTimeAndEndTime(projectIdentifier string, startTime 
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// CountJsDistinctCUuidByCreateTimeBetween 获取时间范围内的影响用户数
+func CountJsDistinctCUuidByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Distinct("c_uuid").Count(&count)
+	return count
+}
+
+// CountJsByCreateTimeBetween 获取时间范围内的日志数
+func CountJsByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsJsErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Count(&count)
+	return count
+}

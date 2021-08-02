@@ -279,3 +279,19 @@ func GetHttpAllLogsBetweenStartTimeAndEndTime(projectIdentifier string, startTim
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// CountHttpDistinctCUuidByCreateTimeBetween 获取时间范围内的影响用户数
+func CountHttpDistinctCUuidByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsHttpErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Distinct("c_uuid").Count(&count)
+	return count
+}
+
+// CountHttpByCreateTimeBetween 获取时间范围内的日志数
+func CountHttpByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsHttpErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Count(&count)
+	return count
+}

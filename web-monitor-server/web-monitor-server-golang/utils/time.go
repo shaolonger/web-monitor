@@ -41,6 +41,11 @@ func GetDateBeforeOrAfterByDays(date time.Time, days int) time.Time {
 	return date.Add(time.Hour * time.Duration(24*days))
 }
 
+// GetDateBeforeOrAfterByMinutes 获取在参考日期相隔minutes分钟的日期
+func GetDateBeforeOrAfterByMinutes(date time.Time, minutes int) time.Time {
+	return date.Add(time.Minute * time.Duration(minutes))
+}
+
 // PassTimeToStrByDefaultLayout 获取当前时刻的字符串表示
 func PassTimeToStrByDefaultLayout(t time.Time) string {
 	return t.Format(DefaultLayout)

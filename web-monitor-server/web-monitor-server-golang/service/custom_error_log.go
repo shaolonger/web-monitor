@@ -233,3 +233,19 @@ func GetCusAllLogsBetweenStartTimeAndEndTime(projectIdentifier string, startTime
 	err = db.Find(&results).Error
 	return err, results
 }
+
+// CountCusDistinctCUuidByCreateTimeBetween 获取时间范围内的影响用户数
+func CountCusDistinctCUuidByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsCustomErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Distinct("c_uuid").Count(&count)
+	return count
+}
+
+// CountCusByCreateTimeBetween 获取时间范围内的日志数
+func CountCusByCreateTimeBetween(startTime time.Time, endTime time.Time) int64 {
+	var count int64
+	db := global.WM_DB.Model(&model.LmsCustomErrorLog{})
+	db.Where("`create_time` BETWEEN ? AND ?", startTime, endTime).Count(&count)
+	return count
+}
