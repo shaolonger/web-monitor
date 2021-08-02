@@ -1,8 +1,8 @@
 package service
 
 import (
-	"encoding/json"
 	"errors"
+	"fmt"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"math"
@@ -295,14 +295,60 @@ func startAlarmScheduler(tx *gorm.DB, entity *model.AmsAlarm) error {
 		CronExpression: schedulerEntity.CronExpression,
 	}
 	err = s.Start(func(params string) error {
-		var alarm model.AmsAlarm
-		err = json.Unmarshal([]byte(params), &alarm)
-		if err != nil {
-			return err
-		}
+		var errTemp error
+		state := 0
+		errorMsg := ""
+		timeBefore := time.Now()
 
-		return nil
+		global.WM_LOG.Info("定时任务开始执行", zap.Any("info", fmt.Sprintf("bean：%v，方法：%v，参数：%v", s.BeanName, s.MethodName, s.Params)))
+
+		// 要执行的任务
+		errTemp = schedule.StartAlarmSchedule(params)
+
+		if errTemp != nil {
+			errorMsg = errTemp.Error()
+			global.WM_LOG.Info("定时任务执行异常", zap.Any("info", fmt.Sprintf("bean：%v，方法：%v，参数：%v，异常：%v", s.BeanName, s.MethodName, s.Params, errTemp)))
+		} else {
+			state = 1
+		}
+		timeAfter := time.Now()
+		timeCost := timeAfter.Sub(timeBefore).Milliseconds()
+		global.WM_LOG.Info("定时任务执行结束", zap.Any("info", fmt.Sprintf("bean：%v，方法：%v，参数：%v，耗时：%v毫秒", s.BeanName, s.MethodName, s.Params, timeCost)))
+
+		// 保存定时任务执行记录
+		// 这里由于cron库的定时任务是通过goroutine启动的异步函数，因此下面保存无法用tx的方式，要么只能使用gorm的手动控制事务的方式
+		// gorm手动事务的文档地址：https://gorm.io/docs/transactions.html
+		db := global.WM_DB.Model(&model.TmsSchedulerRecord{})
+		record := model.TmsSchedulerRecord{
+			SchedulerId: s.SchedulerId,
+			State:       int8(state),
+			CreateTime:  time.Now(),
+			TimeCost:    int8(timeCost),
+			ErrorMsg:    errorMsg,
+		}
+		errTemp = db.Save(&record).Error
+
+		return errTemp
 	})
 
 	return err
+}
+
+// GetProjectNameByAlarmId 根据alarmId获取关联的项目名称
+func GetProjectNameByAlarmId(alarmId uint64) (error, string) {
+	db := global.WM_DB.Model(&model.AmsAlarm{})
+	var err error
+	var alarm model.AmsAlarm
+	err = db.Where("`id` = ?", alarmId).First(&alarm).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = errors.New("找不到预警信息")
+		}
+		return err, ""
+	}
+	err, projectName := GetProjectNameByProjectIdentifier(alarm.ProjectIdentifier)
+	if err != nil {
+		return err, ""
+	}
+	return nil, projectName
 }

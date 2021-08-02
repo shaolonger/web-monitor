@@ -115,6 +115,21 @@ func GetProjectByProjectIdentifier(r validation.GetProjectByProjectIdentifier) (
 	return err, projectRes
 }
 
+func GetProjectNameByProjectIdentifier(projectIdentifier string) (error, string) {
+	var project model.PmsProject
+	var err error
+	db := global.WM_DB.Model(&model.PmsProject{})
+	// 项目标识
+	if projectIdentifier != "" {
+		db = db.Where("`project_identifier` = ?", projectIdentifier)
+	}
+	err = db.First(&project).Error
+	if err != nil {
+		return err, ""
+	}
+	return err, project.ProjectName
+}
+
 func UpdateProject(r validation.UpdateProject) (err error, data interface{}) {
 	var project model.PmsProject
 

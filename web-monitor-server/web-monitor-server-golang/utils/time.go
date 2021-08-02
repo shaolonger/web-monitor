@@ -41,6 +41,21 @@ func GetDateBeforeOrAfterByDays(date time.Time, days int) time.Time {
 	return date.Add(time.Hour * time.Duration(24*days))
 }
 
+// PassTimeToStrByDefaultLayout 获取当前时刻的字符串表示
+func PassTimeToStrByDefaultLayout(t time.Time) string {
+	return t.Format(DefaultLayout)
+}
+
+// GetCurrentTimeByDefaultLayout 获取当前时刻的字符串表示
+func GetCurrentTimeByDefaultLayout() string {
+	return PassTimeToStrByDefaultLayout(time.Now())
+}
+
+// PassTimeToStrByLayout 获取当前时刻的字符串表示
+func PassTimeToStrByLayout(t time.Time, layout string) string {
+	return t.Format(layout)
+}
+
 // CheckIsTimeAfterByTimeStrAndLayout 判断两个时间字符串的先后
 //func CheckIsTimeAfterByTimeStrAndLayout(str1 string, str2 string, layout string) (error, bool) {
 //	t1, err := time.ParseInLocation(layout, str1, time.Local)

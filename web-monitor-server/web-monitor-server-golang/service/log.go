@@ -85,6 +85,13 @@ func ListLog(r validation.ListLog) (err error, data interface{}) {
 	return err, data
 }
 
+// CheckIsExceedAlarmThreshold
+// 根据预警规则，判断是否已超过预警阈值
+func CheckIsExceedAlarmThreshold(tableName string, ruleItem *validation.SchedulerRuleItem) *validation.AlarmScheduleResult {
+	// TODO 未完成
+	return nil
+}
+
 func setParamSqlBuilder(db *gorm.DB, key string, value string, op string) *gorm.DB {
 	if key == "" || value == "" || op == "" {
 		return db

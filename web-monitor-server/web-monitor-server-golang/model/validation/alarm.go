@@ -1,5 +1,7 @@
 package validation
 
+import "time"
+
 type AddAlarm struct {
 	Name              string       `form:"name" json:"name" binding:"required"`
 	ProjectIdentifier string       `form:"projectIdentifier" json:"projectIdentifier" binding:"required"`
@@ -42,4 +44,13 @@ type GetAlarm struct {
 	IsActive          *int8   `form:"isActive" json:"isActive" binding:"omitempty,number,oneof=0 1"`
 	CreateBy          *uint64 `form:"createBy" json:"createBy"`
 	IsDeleted         *int8   `form:"isDeleted" json:"isDeleted" binding:"omitempty,number,oneof=0 1"`
+}
+
+type AlarmScheduleResult struct {
+	IsExceedAlarmThreshold bool      `json:"isExceedAlarmThreshold"`
+	TargetInd              string    `json:"targetInd"`
+	ActualValue            float64   `json:"actualValue"`
+	ThresholdValue         float64   `json:"thresholdValue"`
+	StartTime              time.Time `json:"StartTime"`
+	EndTime                time.Time `json:"endTime"`
 }

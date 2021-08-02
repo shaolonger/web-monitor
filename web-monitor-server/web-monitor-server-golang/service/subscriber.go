@@ -32,3 +32,11 @@ func DeleteAllByAlarmId(tx *gorm.DB, alarmId uint64) (err error) {
 	err = db.Where("`alarm_id` = ?", alarmId).Delete(model.AmsSubscriber{}).Error
 	return err
 }
+
+// GetAllByAlarmId 根据alarmId获取所有关联的subscriber
+func GetAllByAlarmId(alarmId uint64) []*model.AmsSubscriber {
+	db := global.WM_DB.Model(&model.AmsSubscriber{})
+	var records []*model.AmsSubscriber
+	db.Where("`alarm_id` = ?", alarmId).Find(records)
+	return records
+}
