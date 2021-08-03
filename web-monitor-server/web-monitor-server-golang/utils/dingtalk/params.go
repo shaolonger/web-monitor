@@ -15,20 +15,20 @@ type AtParams struct {
 }
 
 // text类型的参数
-type textContent struct {
+type TextContent struct {
 	Content string `json:"content"`
 }
 type textParams struct {
 	At      AtParams    `json:"at"`
-	Text    textContent `json:"text"`
+	Text    TextContent `json:"text"`
 	Msgtype string      `json:"msgtype"`
 }
 
 // GetTextParams 获取text类型的参数
-func GetTextParams(textParams) *textParams {
+func GetTextParams() *textParams {
 	return &textParams{
 		At:      AtParams{},
-		Text:    textContent{},
+		Text:    TextContent{},
 		Msgtype: MsgtypeText,
 	}
 }

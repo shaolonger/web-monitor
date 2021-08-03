@@ -171,9 +171,14 @@ func handleResponse(response *http.Response) (err error, resp []byte) {
 }
 
 // NewClient 创建客户端
-func NewClient(config Config) *client {
-	return &client{
-		Config:     config,
+func NewClient(config *Config) (err error, c *client) {
+	if config.AccessToken == "" || config.KeyWord == "" {
+		err = errors.New("配置错误，AccessToken或Keyword不能为空")
+		return
+	}
+	c = &client{
+		Config:     *config,
 		HttpClient: http.DefaultClient,
 	}
+	return
 }
