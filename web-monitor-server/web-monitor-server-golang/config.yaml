@@ -35,3 +35,8 @@ redis:
   addr: 'localhost:6379'
   password: ''
   expiration: 60
+
+# 钉钉机器人推送
+dingtalk:
+  enable: true # 是否开启钉钉推送
+  keyword: 监控平台 # 钉钉推送的关键词
