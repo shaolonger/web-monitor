@@ -14,6 +14,7 @@ import (
 	"web.monitor.com/model"
 	"web.monitor.com/model/validation"
 	"web.monitor.com/utils"
+	"web.monitor.com/utils/dingtalk"
 )
 
 func AddAlarm(r validation.AddAlarm, userId uint64) (err error, data interface{}) {
@@ -391,7 +392,7 @@ func startAlarmSchedule(params string) error {
 			}
 		}
 		// 聚合分析
-		setResultListByTempList(tempList, resultList)
+		setResultListByTempList(&tempList, &resultList)
 	} else {
 		tableName := tableNameMap[category]
 		for _, ruleItem := range rule.Rules {
@@ -427,16 +428,16 @@ func startAlarmSchedule(params string) error {
 }
 
 // 当category为0时，即选择的过滤条件为全部，此时需要对各个表的计算结果进行聚合分析
-func setResultListByTempList(tempList []*validation.AlarmScheduleResult, resultList []*validation.AlarmScheduleResult) {
-	for _, tempItem := range tempList {
+func setResultListByTempList(tempList *[]*validation.AlarmScheduleResult, resultList *[]*validation.AlarmScheduleResult) {
+	for _, tempItem := range *tempList {
 		var resultItem *validation.AlarmScheduleResult
-		for _, tempRItem := range resultList {
+		for _, tempRItem := range *resultList {
 			if tempRItem.TargetInd == tempItem.TargetInd {
 				resultItem = tempRItem
 			}
 		}
 		if resultItem == nil {
-			resultList = append(resultList, tempItem)
+			*resultList = append(*resultList, tempItem)
 		} else {
 			thresholdValue := resultItem.ThresholdValue
 			oldActualValue := resultItem.ActualValue
@@ -460,7 +461,7 @@ func saveAlarmRecordAndNotifyAllSubscribers(alarm *model.AmsAlarm, resultList []
 	alarmRecord := model.AmsAlarmRecord{
 		AlarmId:    alarm.Id,
 		AlarmData:  string(alarmData),
-		CreateTime: time.Time{},
+		CreateTime: time.Now(),
 	}
 	err = AddAlarmRecord(&alarmRecord)
 	if err != nil {
@@ -538,7 +539,35 @@ func notifyAllSubscribers(alarmId uint64, alarmRecordId uint64, resultList []*va
 				subscriberList := strings.Split(subscriber.Subscriber, ",")
 				for _, accessToken := range subscriberList {
 					if accessToken != "" {
-						// TODO 发送钉钉推送
+
+						// config.yaml配置文件中,获取钉钉推送关键词
+						keyword := global.WM_CONFIG.Dingtalk.Keyword
+
+						// 从application配置文件中，获取是否开启钉钉推送
+						isEnableDingTalk := global.WM_CONFIG.Dingtalk.Enable
+						if isEnableDingTalk {
+							config := &dingtalk.Config{
+								AccessToken: accessToken,
+								KeyWord:     keyword,
+							}
+							err, client := dingtalk.NewClient(config)
+							if err != nil {
+								global.WM_LOG.Error("发送钉钉机器人通知失败", zap.Any("err", err))
+							}
+							params := dingtalk.GetTextParams()
+							params.Text = dingtalk.TextContent{
+								Content: keyword + "\n" + content.String(),
+							}
+							err = client.SendText(params)
+							if err != nil {
+								global.WM_LOG.Error("发送钉钉机器人通知失败", zap.Any("err", err))
+								subscriberNotifyRecord.State = 0
+							} else {
+								subscriberNotifyRecord.State = 1
+							}
+						} else {
+							subscriberNotifyRecord.State = 0
+						}
 						_ = AddSubscriberNotifyRecord(&subscriberNotifyRecord)
 					}
 				}
