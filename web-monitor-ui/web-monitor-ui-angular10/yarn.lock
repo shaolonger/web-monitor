@@ -1704,9 +1704,9 @@ async-limiter@~1.0.0:
   integrity sha1-3TeelPDbgxCwgpH51kwyCXZmF/0=
 
 async@^2.6.2:
-  version "2.6.3"
-  resolved "https://registry.npm.taobao.org/async/download/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
-  integrity sha1-1yYl4jRKNlbjo61Pp0n6gymdgv8=
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.6.4.tgz#706b7ff6084664cd7eae713f6f965433b5504221"
+  integrity sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==
   dependencies:
     lodash "^4.17.14"
 
@@ -4190,6 +4190,16 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.npm.taobao.org/hex-color-regex/download/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha1-TAb8y0YC/iYCs8k9+C1+fb8aio4=
 
+highlight.js@^10.0.0:
+  version "10.7.3"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.7.3.tgz#697272e3991356e40c3cac566a74eef681756531"
+  integrity sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==
+
+highlightjs-line-numbers.js@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/highlightjs-line-numbers.js/-/highlightjs-line-numbers.js-2.8.0.tgz#479ea8cff0c31fadc1578a66fa03e38b801f9ca6"
+  integrity sha512-TEf1gw0c8mb8nan0QwliqS7obT4cpUd9hzsGzsZLweteNnWea/VIqy5/aQqsa5wnz9lnvmtAkS1ZtDTjB/goYQ==
+
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/hmac-drbg/download/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
@@ -5299,9 +5309,9 @@ lodash.uniq@^4.5.0:
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
 lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19:
-  version "4.17.20"
-  resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.20.tgz?cache=0&sync_timestamp=1597335994883&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash%2Fdownload%2Flodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha1-tEqbYpe8tpjxxRo1RaKzs2jVnFI=
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-symbols@^3.0.0:
   version "3.0.0"
@@ -5770,6 +5780,15 @@ ngx-echarts@^5.1.2:
   version "5.1.2"
   resolved "https://registry.npm.taobao.org/ngx-echarts/download/ngx-echarts-5.1.2.tgz#ec5d0c7b78389e60eb7aa0ee1f6d784a982966d8"
   integrity sha1-7F0Me3g4nmDreqDuH214SpgpZtg=
+
+ngx-highlightjs@^4.1.2:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/ngx-highlightjs/-/ngx-highlightjs-4.1.4.tgz#630a68c080bd5a3651ac64c2b284d6e7174f6ae2"
+  integrity sha512-yh5p8J+mUNHMm5kQM1CAyRdLT2KiW631l/Rky+rkxwT6NZHG80yImWXZt7RG3heTQzd1wDOWMQ8JznF3KeUv5g==
+  dependencies:
+    highlight.js "^10.0.0"
+    highlightjs-line-numbers.js "^2.8.0"
+    tslib "^2.0.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
